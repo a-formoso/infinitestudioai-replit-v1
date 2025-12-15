@@ -9,6 +9,7 @@ import Academy from "@/pages/academy";
 import CourseLevel1 from "@/pages/course-level-1";
 import CourseLevel2 from "@/pages/course-level-2";
 import Dashboard from "@/pages/dashboard";
+import CoursePlayer from "@/pages/course-player";
 
 function Router() {
   return (
@@ -18,6 +19,7 @@ function Router() {
       <Route path="/course/level-1" component={CourseLevel1} />
       <Route path="/course/level-2" component={CourseLevel2} />
       <Route path="/dashboard" component={Dashboard} />
+      <Route path="/learn" component={CoursePlayer} />
       <Route component={NotFound} />
     </Switch>
   );
