@@ -1,9 +1,10 @@
 import { useState } from "react";
 import { Link } from "wouter";
-import { Play, Check, Circle, ChevronLeft, ChevronRight, Download, MessageSquare } from "lucide-react";
+import { Play, Check, Circle, ChevronLeft, ChevronRight, Download, MessageSquare, Maximize, Minimize } from "lucide-react";
 
 export default function CoursePlayer() {
   const [activeTab, setActiveTab] = useState("overview");
+  const [isFullscreen, setIsFullscreen] = useState(false);
 
   return (
     <div className="min-h-screen bg-obsidian text-offWhite font-sans antialiased selection:bg-electricBlue selection:text-white flex flex-col h-screen overflow-hidden">
@@ -26,23 +27,40 @@ export default function CoursePlayer() {
       <div className="flex flex-1 overflow-hidden">
           
           {/* MAIN CONTENT (SCROLLABLE) */}
-          <main className="flex-1 overflow-y-auto custom-scrollbar flex flex-col">
+          <main className="flex-1 overflow-y-auto custom-scrollbar flex flex-col relative">
               
               {/* VIDEO PLAYER AREA */}
-              <div className="aspect-video bg-black relative group w-full">
+              <div className={`${isFullscreen ? 'fixed inset-0 z-50 h-screen w-screen' : 'w-full max-w-5xl mx-auto aspect-video mt-8'} bg-black relative group transition-all duration-300 shadow-2xl`}>
                    {/* Placeholder Video Interface */}
-                   <div className="absolute inset-0 flex items-center justify-center">
-                        <div className="w-20 h-20 rounded-full bg-white/10 backdrop-blur-sm flex items-center justify-center border border-white/20 cursor-pointer hover:bg-electricBlue hover:border-electricBlue transition-all group-hover:scale-110">
+                   <div 
+                        className="absolute inset-0 flex items-center justify-center cursor-pointer"
+                        onClick={() => setIsFullscreen(true)}
+                   >
+                        <div className="w-20 h-20 rounded-full bg-white/10 backdrop-blur-sm flex items-center justify-center border border-white/20 hover:bg-electricBlue hover:border-electricBlue transition-all group-hover:scale-110">
                             <Play className="w-8 h-8 text-white fill-current ml-1" />
                         </div>
                    </div>
+                   
                    {/* Scrubber */}
-                   <div className="absolute bottom-0 left-0 right-0 h-1 bg-white/20 cursor-pointer">
+                   <div className="absolute bottom-0 left-0 right-0 h-1 bg-white/20 cursor-pointer z-10">
                         <div className="h-full bg-electricBlue w-1/3 relative">
                             <div className="absolute right-0 top-1/2 -translate-y-1/2 w-3 h-3 bg-white rounded-full shadow opacity-0 group-hover:opacity-100 transition-opacity"></div>
                         </div>
                    </div>
-                   <div className="absolute top-4 left-4 bg-black/50 px-2 py-1 text-[10px] font-mono text-white rounded">VEO_GENERATION_V3.MP4</div>
+
+                   {/* Video Meta Overlay */}
+                   <div className="absolute top-4 left-4 bg-black/50 px-2 py-1 text-[10px] font-mono text-white rounded pointer-events-none">VEO_GENERATION_V3.MP4</div>
+
+                   {/* Fullscreen Toggle */}
+                   <button 
+                      onClick={(e) => {
+                          e.stopPropagation();
+                          setIsFullscreen(!isFullscreen);
+                      }}
+                      className="absolute bottom-4 right-4 text-white/70 hover:text-white transition-colors z-20 p-2 hover:bg-white/10 rounded"
+                   >
+                      {isFullscreen ? <Minimize className="w-5 h-5" /> : <Maximize className="w-5 h-5" />}
+                   </button>
               </div>
 
               {/* CONTENT AREA */}
