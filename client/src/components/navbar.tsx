@@ -1,26 +1,27 @@
 import { Link } from "wouter";
 import { Button } from "@/components/ui/button";
+import { Infinity } from "lucide-react";
 
 export function Navbar() {
   return (
-    <nav className="fixed top-0 left-0 right-0 z-50 glass border-b border-white/5">
-      <div className="container mx-auto px-6 h-16 flex items-center justify-between">
-        <Link href="/" className="text-xl font-heading font-bold bg-clip-text text-transparent bg-linear-to-r from-white to-white/70 hover:to-primary transition-colors cursor-pointer">
-          Lumina
+    <nav className="fixed top-0 left-0 right-0 z-50 bg-background/80 backdrop-blur-md border-b border-white/5">
+      <div className="container mx-auto px-6 h-20 flex items-center justify-between">
+        <Link href="/">
+          <a className="flex items-center gap-2 text-xl font-heading font-bold tracking-wider text-white hover:text-primary transition-colors">
+            <Infinity className="w-6 h-6 text-primary" />
+            INFINITE STUDIO
+          </a>
         </Link>
 
-        <div className="hidden md:flex items-center space-x-8">
-          <a href="#features" className="text-sm font-medium text-muted-foreground hover:text-white transition-colors">Features</a>
-          <a href="#pricing" className="text-sm font-medium text-muted-foreground hover:text-white transition-colors">Pricing</a>
-          <a href="#about" className="text-sm font-medium text-muted-foreground hover:text-white transition-colors">About</a>
+        <div className="hidden md:flex items-center space-x-12 absolute left-1/2 transform -translate-x-1/2">
+          <a href="#work" className="text-xs font-medium tracking-widest text-muted-foreground hover:text-white transition-colors uppercase">Work</a>
+          <a href="#academy" className="text-xs font-medium tracking-widest text-muted-foreground hover:text-white transition-colors uppercase">Academy</a>
+          <a href="#assets" className="text-xs font-medium tracking-widest text-muted-foreground hover:text-white transition-colors uppercase">Assets</a>
         </div>
 
-        <div className="flex items-center gap-4">
-          <Link href="/login" className="text-sm font-medium text-white hover:text-primary transition-colors hidden sm:block">
-            Log in
-          </Link>
-          <Button className="bg-white text-black hover:bg-white/90 font-medium rounded-full px-6">
-            Get Started
+        <div className="flex items-center">
+          <Button variant="outline" className="rounded-none border-primary/50 text-primary hover:bg-primary hover:text-white uppercase text-xs font-bold tracking-widest px-6 h-10 transition-all duration-300">
+            Start Project
           </Button>
         </div>
       </div>
