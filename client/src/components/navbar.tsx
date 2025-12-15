@@ -11,17 +11,20 @@ export function Navbar() {
                   <span className="text-electricBlue text-2xl">∞</span> INFINITE STUDIO
               </a>
             </Link>
-            <div className="hidden md:flex gap-8 text-sm tracking-widest uppercase font-semibold">
-                <a href="#work" className="hover:text-electricBlue transition-colors duration-300">Work</a>
-                <a href="#academy" className="hover:text-signalOrange transition-colors duration-300">Academy</a>
-                <a href="#store" className="hover:text-white transition-colors duration-300 opacity-60">Assets</a>
-            </div>
-            <a href="#" className="hidden md:block border border-electricBlue text-electricBlue px-6 py-2 text-xs font-header font-bold uppercase hover:bg-electricBlue hover:text-white transition-all duration-300 tracking-wider">
-                Start Project
-            </a>
-             {/* Mobile Menu Button (Hidden on Desktop) */}
-             <div className="md:hidden text-white text-2xl cursor-pointer">
-                ☰
+            <div className="flex items-center gap-4">
+              <Link href="/dashboard" className="hidden md:block">
+                <div className="text-right cursor-pointer hover:opacity-80 transition-opacity">
+                    <div className="text-xs font-header font-bold text-white">ALEX DIRECTOR</div>
+                    <div className="text-[10px] font-mono text-gray-500">PRO MEMBER</div>
+                </div>
+              </Link>
+              <Link href="/dashboard">
+                <div className="w-10 h-10 rounded-full bg-gray-800 border border-white/20 overflow-hidden relative cursor-pointer hover:border-electricBlue transition-colors">
+                     {/* User Avatar Placeholder */}
+                     <div className="absolute inset-0 bg-linear-to-br from-blue-900 to-black"></div>
+                     <span className="absolute inset-0 flex items-center justify-center font-header text-white text-xs">AD</span>
+                </div>
+              </Link>
             </div>
         </div>
     </nav>
