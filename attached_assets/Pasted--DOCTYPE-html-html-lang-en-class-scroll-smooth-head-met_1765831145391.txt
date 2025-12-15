@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LEVEL 02 | INFINITE STUDIO</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&family=Syncopate:wght@400;700&display=swap" rel="stylesheet">
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        obsidian: '#0A0A0A',
+                        electricBlue: '#2962FF',
+                        signalOrange: '#FF3D00',
+                        offWhite: '#E0E0E0',
+                        glass: 'rgba(255, 255, 255, 0.05)',
+                        glassBorder: 'rgba(255, 255, 255, 0.1)',
+                    },
+                    fontFamily: {
+                        header: ['Syncopate', 'sans-serif'],
+                        body: ['Inter', 'sans-serif'],
+                    },
+                    backgroundImage: {
+                        'grid-pattern': "linear-gradient(to right, #1a1a1a 1px, transparent 1px), linear-gradient(to bottom, #1a1a1a 1px, transparent 1px)",
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        /* Hide scrollbar */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #0A0A0A; }
+        ::-webkit-scrollbar-thumb { background: #333; }
+    </style>
+</head>
+<body class="bg-obsidian text-offWhite font-body antialiased selection:bg-signalOrange selection:text-white overflow-x-hidden">
+
+    <!-- GRID OVERLAY -->
+    <div class="fixed inset-0 bg-grid-pattern bg-[size:40px_40px] opacity-20 pointer-events-none z-0"></div>
+
+    <!-- NAV -->
+    <nav class="fixed top-0 w-full z-50 glass-panel border-b-0 border-b-glassBorder">
+        <div class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
+            <a href="index.html" class="font-header font-bold text-xl tracking-widest text-white flex items-center gap-2 hover:opacity-80 transition-opacity">
+                <span class="text-electricBlue text-2xl">∞</span> INFINITE STUDIO
+            </a>
+            <a href="#" class="hidden md:block bg-signalOrange text-black px-6 py-2 text-xs font-header font-bold uppercase hover:bg-white transition-all duration-300 tracking-wider">
+                Enroll Now - $199
+            </a>
+        </div>
+    </nav>
+
+    <!-- HERO -->
+    <header class="relative pt-40 pb-20 px-6 max-w-7xl mx-auto z-10">
+        <div class="grid grid-cols-1 md:grid-cols-12 gap-12 items-end">
+            <div class="md:col-span-8">
+                <div class="inline-block border border-signalOrange/50 px-3 py-1 mb-6 text-[10px] font-mono text-signalOrange tracking-widest">
+                    COURSE LEVEL 02 // ADVANCED
+                </div>
+                <h1 class="font-header text-4xl md:text-6xl font-bold text-white leading-tight mb-6">
+                    ADVANCED AI<br>
+                    <span class="text-transparent bg-clip-text bg-gradient-to-r from-signalOrange to-yellow-500">CINEMATOGRAPHY</span>
+                </h1>
+                <p class="text-lg text-gray-400 max-w-2xl leading-relaxed font-light">
+                    You know how to generate. Now learn how to direct. Master the physics engine, compound camera moves, and the "Invisible Cut" in Veo 3.1.
+                </p>
+            </div>
+            <div class="md:col-span-4 flex flex-col justify-end">
+                <div class="glass-panel p-6 space-y-4 border-signalOrange/20">
+                    <div class="flex justify-between text-sm font-mono text-gray-400 border-b border-white/10 pb-2">
+                        <span>DURATION</span>
+                        <span class="text-white">6.0 HOURS</span>
+                    </div>
+                    <div class="flex justify-between text-sm font-mono text-gray-400 border-b border-white/10 pb-2">
+                        <span>SKILL LEVEL</span>
+                        <span class="text-white">ADVANCED / PRO</span>
+                    </div>
+                    <div class="flex justify-between text-sm font-mono text-gray-400 pb-2">
+                        <span>PREREQUISITE</span>
+                        <span class="text-white">LEVEL 01 OR EQUIV.</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- CURRICULUM GRID -->
+    <section class="py-20 border-t border-white/10 bg-black/50 relative z-10">
+        <div class="max-w-7xl mx-auto px-6">
+            <h2 class="font-header text-2xl text-white mb-12 border-l-4 border-signalOrange pl-4">DEEP DIVE MODULES</h2>
+            
+            <div class="space-y-6">
+                
+                <!-- Module 1 -->
+                <div class="glass-panel p-8 hover:border-signalOrange/30 transition-colors group grid grid-cols-1 md:grid-cols-12 gap-6 items-center">
+                    <div class="col-span-1 md:col-span-2 text-5xl font-header text-white/10 group-hover:text-signalOrange/20">01</div>
+                    <div class="col-span-1 md:col-span-4">
+                        <h3 class="font-header text-xl text-white">THE PHYSICS ENGINE</h3>
+                        <p class="text-xs text-signalOrange font-mono mt-1">CONTROLLING MASS & GRAVITY</p>
+                    </div>
+                    <div class="col-span-1 md:col-span-6 text-sm text-gray-400">
+                        The "Uncanny Valley" of motion. How to prompt for weight, fluid dynamics, crash physics, and momentum so objects don't float.
+                    </div>
+                </div>
+
+                <!-- Module 2 -->
+                <div class="glass-panel p-8 hover:border-signalOrange/30 transition-colors group grid grid-cols-1 md:grid-cols-12 gap-6 items-center">
+                    <div class="col-span-1 md:col-span-2 text-5xl font-header text-white/10 group-hover:text-signalOrange/20">02</div>
+                    <div class="col-span-1 md:col-span-4">
+                        <h3 class="font-header text-xl text-white">ADVANCED CAMERA</h3>
+                        <p class="text-xs text-signalOrange font-mono mt-1">COMPOUND MOVES</p>
+                    </div>
+                    <div class="col-span-1 md:col-span-6 text-sm text-gray-400">
+                        Beyond the Pan. Executing the "Dolly Zoom" (Vertigo Effect), Rack Focus, and Parallax shifts to force 3D depth perception.
+                    </div>
+                </div>
+
+                <!-- Module 3 -->
+                <div class="glass-panel p-8 hover:border-signalOrange/30 transition-colors group grid grid-cols-1 md:grid-cols-12 gap-6 items-center">
+                    <div class="col-span-1 md:col-span-2 text-5xl font-header text-white/10 group-hover:text-signalOrange/20">03</div>
+                    <div class="col-span-1 md:col-span-4">
+                        <h3 class="font-header text-xl text-white">COMPLEX ACTING</h3>
+                        <p class="text-xs text-signalOrange font-mono mt-1">TIMESTAMP PROMPTING</p>
+                    </div>
+                    <div class="col-span-1 md:col-span-6 text-sm text-gray-400">
+                        Directing micro-expressions. Using brackets [0:02] to sequence actions. Advanced "Ingredients" workflow for 10+ shot consistency.
+                    </div>
+                </div>
+
+                <!-- Module 4 -->
+                <div class="glass-panel p-8 hover:border-signalOrange/30 transition-colors group grid grid-cols-1 md:grid-cols-12 gap-6 items-center">
+                    <div class="col-span-1 md:col-span-2 text-5xl font-header text-white/10 group-hover:text-signalOrange/20">04</div>
+                    <div class="col-span-1 md:col-span-4">
+                        <h3 class="font-header text-xl text-white">THE INVISIBLE CUT</h3>
+                        <p class="text-xs text-signalOrange font-mono mt-1">SEAMLESS EDITING</p>
+                    </div>
+                    <div class="col-span-1 md:col-span-6 text-sm text-gray-400">
+                        Match cuts, masking, and the "Veo Bridge" technique to stitch two completely different generations into a continuous long take.
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- BOTTOM CTA -->
+    <section class="py-20 text-center px-6">
+        <h2 class="font-header text-3xl md:text-4xl text-white mb-8">BREAK THE SIMULATION</h2>
+        <button class="bg-signalOrange text-black font-header font-bold text-sm uppercase px-12 py-5 hover:bg-white transition-all duration-300 tracking-wider shadow-[0_0_30px_rgba(255,61,0,0.3)]">
+            Start Advanced Training - $199
+        </button>
+        <p class="text-xs text-gray-500 mt-6 font-mono">INCLUDES 'PHYSICS OF DREAMS' EBOOK • PROMPT LIBRARY ACCESS</p>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="bg-black border-t border-white/10 py-8 text-center">
+        <div class="text-[10px] text-gray-600 font-mono">
+            © 2025 INFINITE STUDIO. <a href="index.html" class="text-signalOrange hover:underline">RETURN TO DASHBOARD</a>
+        </div>
+    </footer>
+</body>
+</html>
