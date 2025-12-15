@@ -112,7 +112,7 @@ export default function Dashboard() {
                   
                   {/* Quick Downloads */}
                   <div className="glass-panel p-8">
-                      <h3 class="font-header text-sm text-white mb-6 border-b border-white/10 pb-4">MY ASSETS</h3>
+                      <h3 className="font-header text-sm text-white mb-6 border-b border-white/10 pb-4">MY ASSETS</h3>
                       <div className="space-y-4">
                           <a href="#" className="block p-4 border border-white/10 hover:border-purple-500/50 hover:bg-purple-500/5 transition-all group">
                               <div className="flex justify-between items-center mb-2">
