@@ -10,17 +10,23 @@ export default function CoursePlayer() {
     <div className="min-h-screen bg-obsidian text-offWhite font-sans antialiased selection:bg-electricBlue selection:text-white flex flex-col h-screen overflow-hidden">
       
       {/* TOP BAR */}
-      <header className="h-16 border-b border-white/10 flex items-center justify-between px-6 bg-obsidian z-20 shrink-0">
+      <header className="h-20 border-b border-white/10 flex items-center justify-between px-6 bg-obsidian z-20 shrink-0">
           <div className="flex items-center gap-6">
               <Link href="/dashboard" className="flex items-center gap-2 text-xs font-header font-bold text-gray-400 hover:text-white transition-colors">
                   <ChevronLeft className="w-4 h-4" /> DASHBOARD
               </Link>
               <div className="h-4 w-px bg-white/10"></div>
-              <h1 className="text-xs font-header font-bold text-white tracking-wider">MASTER THE GOOGLE ECOSYSTEM</h1>
+              <h1 className="text-sm font-header font-bold text-white tracking-wider">MASTER THE GOOGLE ECOSYSTEM</h1>
           </div>
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-6">
               <span className="text-[10px] font-mono text-electricBlue hidden md:block">3.2 THE "INGREDIENTS" WORKFLOW</span>
-              <div className="w-8 h-8 rounded-full bg-electricBlue flex items-center justify-center text-[10px] font-bold text-white border border-white/20">AD</div>
+              <div className="flex items-center gap-4">
+                  <div className="text-right hidden md:block">
+                      <div className="text-xs font-header font-bold text-white">ALEX DIRECTOR</div>
+                      <div className="text-[10px] font-mono text-gray-500">PRO MEMBER</div>
+                  </div>
+                  <div className="w-10 h-10 rounded-full bg-electricBlue flex items-center justify-center text-[10px] font-bold text-white border border-white/20">AD</div>
+              </div>
           </div>
       </header>
 
@@ -30,7 +36,7 @@ export default function CoursePlayer() {
           <main className="flex-1 overflow-y-auto custom-scrollbar flex flex-col relative">
               
               {/* VIDEO PLAYER AREA */}
-              <div className={`${isFullscreen ? 'fixed inset-0 z-50 h-screen w-screen' : 'w-full max-w-5xl mx-auto aspect-video mt-8'} bg-black relative group transition-all duration-300 shadow-2xl`}>
+              <div className={`${isFullscreen ? 'fixed inset-0 z-50 h-screen w-screen' : 'w-full max-w-6xl mx-auto aspect-video mt-8'} bg-black relative group transition-all duration-300 shadow-2xl`}>
                    {/* Placeholder Video Interface */}
                    <div 
                         className="absolute inset-0 flex items-center justify-center cursor-pointer"
@@ -64,7 +70,7 @@ export default function CoursePlayer() {
               </div>
 
               {/* CONTENT AREA */}
-              <div className="p-8 max-w-5xl mx-auto w-full">
+              <div className="p-8 max-w-6xl mx-auto w-full">
                   
                   {/* Title & Nav */}
                   <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-8 border-b border-white/10 pb-8">
@@ -176,11 +182,11 @@ export default function CoursePlayer() {
           </main>
 
           {/* RIGHT SIDEBAR (PLAYLIST) */}
-          <aside className="w-80 border-l border-white/10 bg-black/20 flex flex-col shrink-0">
+          <aside className="w-96 border-l border-white/10 bg-black/20 flex flex-col shrink-0">
               
               {/* Header */}
               <div className="p-6 border-b border-white/10">
-                  <h3 className="font-header text-xs font-bold text-gray-400 mb-4 tracking-wider">COURSE CONTENT</h3>
+                  <h3 className="font-header text-sm font-bold text-gray-400 mb-4 tracking-wider">COURSE CONTENT</h3>
                   <div className="flex justify-between text-[10px] font-mono text-gray-500 mb-2">
                       <span>15/25 COMPLETED</span>
                       <span className="text-electricBlue">65%</span>
@@ -197,17 +203,17 @@ export default function CoursePlayer() {
                   <div className="py-4">
                       <h4 className="px-6 text-[10px] font-header font-bold text-gray-500 mb-4 uppercase">MODULE 1: WRITER'S ROOM</h4>
                       <div className="space-y-1">
-                          <div className="px-6 py-3 flex gap-3 items-start opacity-50 hover:bg-white/5 cursor-pointer">
+                          <div className="px-6 py-4 flex gap-3 items-start opacity-50 hover:bg-white/5 cursor-pointer">
                               <Check className="w-4 h-4 text-electricBlue shrink-0 mt-0.5" />
                               <div>
-                                  <p className="text-xs text-white leading-tight mb-1">1.1 The Multimodal Script</p>
+                                  <p className="text-sm text-white leading-tight mb-1">1.1 The Multimodal Script</p>
                                   <span className="text-[10px] font-mono text-gray-500">12:04</span>
                               </div>
                           </div>
-                          <div className="px-6 py-3 flex gap-3 items-start opacity-50 hover:bg-white/5 cursor-pointer">
+                          <div className="px-6 py-4 flex gap-3 items-start opacity-50 hover:bg-white/5 cursor-pointer">
                               <Check className="w-4 h-4 text-electricBlue shrink-0 mt-0.5" />
                               <div>
-                                  <p className="text-xs text-white leading-tight mb-1">1.2 Context is King</p>
+                                  <p className="text-sm text-white leading-tight mb-1">1.2 Context is King</p>
                                   <span className="text-[10px] font-mono text-gray-500">08:45</span>
                               </div>
                           </div>
@@ -218,17 +224,17 @@ export default function CoursePlayer() {
                   <div className="py-4 border-t border-white/5">
                       <h4 className="px-6 text-[10px] font-header font-bold text-gray-500 mb-4 uppercase">MODULE 2: ART DEPT</h4>
                       <div className="space-y-1">
-                          <div className="px-6 py-3 flex gap-3 items-start opacity-50 hover:bg-white/5 cursor-pointer">
+                          <div className="px-6 py-4 flex gap-3 items-start opacity-50 hover:bg-white/5 cursor-pointer">
                               <Check className="w-4 h-4 text-electricBlue shrink-0 mt-0.5" />
                               <div>
-                                  <p className="text-xs text-white leading-tight mb-1">2.1 Intro to Nano Banano</p>
+                                  <p className="text-sm text-white leading-tight mb-1">2.1 Intro to Nano Banano</p>
                                   <span className="text-[10px] font-mono text-gray-500">15:20</span>
                               </div>
                           </div>
-                          <div className="px-6 py-3 flex gap-3 items-start opacity-50 hover:bg-white/5 cursor-pointer">
+                          <div className="px-6 py-4 flex gap-3 items-start opacity-50 hover:bg-white/5 cursor-pointer">
                               <Check className="w-4 h-4 text-electricBlue shrink-0 mt-0.5" />
                               <div>
-                                  <p className="text-xs text-white leading-tight mb-1">2.2 Character Sheet Workflow</p>
+                                  <p className="text-sm text-white leading-tight mb-1">2.2 Character Sheet Workflow</p>
                                   <span className="text-[10px] font-mono text-gray-500">22:10</span>
                               </div>
                           </div>
@@ -239,37 +245,37 @@ export default function CoursePlayer() {
                   <div className="py-4 border-t border-white/5">
                       <h4 className="px-6 text-[10px] font-header font-bold text-electricBlue mb-4 uppercase">MODULE 3: PRINCIPAL PHOTOGRAPHY</h4>
                       <div className="space-y-1">
-                          <div className="px-6 py-3 flex gap-3 items-start hover:bg-white/5 cursor-pointer opacity-50">
+                          <div className="px-6 py-4 flex gap-3 items-start hover:bg-white/5 cursor-pointer opacity-50">
                               <Check className="w-4 h-4 text-electricBlue shrink-0 mt-0.5" />
                               <div>
-                                  <p className="text-xs text-white leading-tight mb-1">3.1 Veo 3.1 Fundamentals</p>
+                                  <p className="text-sm text-white leading-tight mb-1">3.1 Veo 3.1 Fundamentals</p>
                                   <span className="text-[10px] font-mono text-gray-500">10:15</span>
                               </div>
                           </div>
                           
                           {/* Active Lesson */}
-                          <div className="px-6 py-4 flex gap-3 items-start bg-electricBlue/10 border-l-2 border-electricBlue cursor-pointer">
+                          <div className="px-6 py-5 flex gap-3 items-start bg-electricBlue/10 border-l-2 border-electricBlue cursor-pointer">
                               <div className="w-4 h-4 rounded-full bg-electricBlue flex items-center justify-center shrink-0 mt-0.5 shadow-[0_0_10px_rgba(41,98,255,0.5)]">
                                   <Play className="w-2 h-2 text-white fill-current" />
                               </div>
                               <div>
-                                  <p className="text-xs text-white font-bold leading-tight mb-1">3.2 The "Ingredients" Workflow</p>
+                                  <p className="text-sm text-white font-bold leading-tight mb-1">3.2 The "Ingredients" Workflow</p>
                                   <span className="text-[9px] font-mono text-electricBlue font-bold tracking-wider">12:45 • WATCHING NOW</span>
                               </div>
                           </div>
 
-                          <div className="px-6 py-3 flex gap-3 items-start hover:bg-white/5 cursor-pointer group">
+                          <div className="px-6 py-4 flex gap-3 items-start hover:bg-white/5 cursor-pointer group">
                               <Circle className="w-4 h-4 text-gray-600 shrink-0 mt-0.5 group-hover:text-gray-400" />
                               <div>
-                                  <p className="text-xs text-gray-400 leading-tight mb-1 group-hover:text-white transition-colors">3.3 The "Banano Sandwich" Method</p>
+                                  <p className="text-sm text-gray-400 leading-tight mb-1 group-hover:text-white transition-colors">3.3 The "Banano Sandwich" Method</p>
                                   <span className="text-[10px] font-mono text-gray-600">18:30</span>
                               </div>
                           </div>
                           
-                          <div className="px-6 py-3 flex gap-3 items-start hover:bg-white/5 cursor-pointer group">
+                          <div className="px-6 py-4 flex gap-3 items-start hover:bg-white/5 cursor-pointer group">
                               <Circle className="w-4 h-4 text-gray-600 shrink-0 mt-0.5 group-hover:text-gray-400" />
                               <div>
-                                  <p className="text-xs text-gray-400 leading-tight mb-1 group-hover:text-white transition-colors">3.4 Physics & Camera Control</p>
+                                  <p className="text-sm text-gray-400 leading-tight mb-1 group-hover:text-white transition-colors">3.4 Physics & Camera Control</p>
                                   <span className="text-[10px] font-mono text-gray-600">14:00</span>
                               </div>
                           </div>
