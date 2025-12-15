@@ -1,0 +1,121 @@
+ <!-- FOOTER CONTENT -->
+        <div class="max-w-7xl mx-auto px-6 pt-16 pb-8">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-12 mb-16">
+                <div class="col-span-1 md:col-span-1">
+                    <div class="font-header font-bold text-xl tracking-widest text-white flex items-center gap-2 mb-6">
+                        <span class="text-electricBlue text-2xl">∞</span> INFINITE
+                    </div>
+                    <p class="text-xs text-gray-500 leading-relaxed font-mono">
+                        A next-generation production house and educational platform built on the Google AI ecosystem.
+                        <br><br>
+                        London • New York • The Cloud
+                    </p>
+                </div>
+                <div>
+                    <h5 class="font-header text-xs text-white mb-6 tracking-widest border-b border-white/10 pb-2 inline-block">STUDIO</h5>
+                    <ul class="space-y-3 text-xs text-gray-400 font-mono">
+                        <li><a href="#" class="hover:text-electricBlue transition-colors">Selected Work</a></li>
+                        <li><a href="#" class="hover:text-electricBlue transition-colors">Services</a></li>
+                        <li><a href="#" class="hover:text-electricBlue transition-colors">About Us</a></li>
+                        <li><a href="#" class="hover:text-electricBlue transition-colors">Contact</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h5 class="font-header text-xs text-white mb-6 tracking-widest border-b border-white/10 pb-2 inline-block">ACADEMY</h5>
+                    <ul class="space-y-3 text-xs text-gray-400 font-mono">
+                        <li><a href="#" class="hover:text-signalOrange transition-colors">All Courses</a></li>
+                        <li><a href="#" class="hover:text-signalOrange transition-colors">Mentorship</a></li>
+                        <li><a href="#" class="hover:text-signalOrange transition-colors">Student Login</a></li>
+                        <li><a href="#" class="hover:text-signalOrange transition-colors">FAQ</a></li>
+                    </ul>
+                </div>
+                <div>
+                     <h5 class="font-header text-xs text-white mb-6 tracking-widest border-b border-white/10 pb-2 inline-block">CONNECT</h5>
+                     <div class="flex gap-4">
+                         <!-- Minimal Social Icons -->
+                         <a href="#" class="w-10 h-10 border border-white/10 flex items-center justify-center hover:bg-electricBlue hover:border-electricBlue hover:text-white text-gray-400 transition-all duration-300">𝕏</a>
+                         <a href="#" class="w-10 h-10 border border-white/10 flex items-center justify-center hover:bg-signalOrange hover:border-signalOrange hover:text-white text-gray-400 transition-all duration-300">▶</a>
+                         <a href="#" class="w-10 h-10 border border-white/10 flex items-center justify-center hover:bg-purple-600 hover:border-purple-600 hover:text-white text-gray-400 transition-all duration-300">●</a>
+                     </div>
+                </div>
+            </div>
+
+            <!-- THE LIVE TERMINAL -->
+            <div class="w-full bg-[#050505] border border-white/10 p-4 font-mono text-[10px] md:text-xs text-green-500 h-32 overflow-hidden relative shadow-inner shadow-black/50 rounded-sm mb-8">
+                <div class="absolute top-2 right-3 text-white/20 text-[8px] tracking-widest border border-white/10 px-1">LIVE SYSTEM LOG // V.2.4.1</div>
+                <div class="absolute top-2 left-3 text-electricBlue/50 text-[8px] tracking-widest">SERVER: LON-01</div>
+                
+                <div id="terminal-output" class="flex flex-col justify-end h-full pt-6">
+                    <!-- JS will inject lines here -->
+                </div>
+                 <!-- CRT Scanline effect for terminal -->
+                 <div class="absolute inset-0 bg-[linear-gradient(rgba(18,16,16,0)_50%,rgba(0,0,0,0.1)_50%),linear-gradient(90deg,rgba(255,0,0,0.06),rgba(0,255,0,0.02),rgba(0,0,255,0.06))] pointer-events-none z-20 bg-[length:100%_2px,3px_100%] opacity-30"></div>
+            </div>
+
+            <div class="border-t border-white/5 pt-6 flex flex-col md:flex-row justify-between items-center gap-4">
+                <div class="text-[10px] text-gray-600 font-mono">
+                    © 2025 INFINITE STUDIO. ALL SYSTEMS NOMINAL.
+                </div>
+                <div class="flex gap-6 text-[10px] text-gray-600 font-mono">
+                    <a href="#" class="hover:text-white transition-colors">PRIVACY_PROTOCOL</a>
+                    <a href="#" class="hover:text-white transition-colors">TERMS_OF_EXECUTION</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Terminal Script -->
+    <script>
+        const prompts = [
+            "> SYSTEM: Connecting to Veo 3.1 API endpoint...",
+            "> SYSTEM: Uploading 'Character_Sheet_Kaelen.png' as Ingredient [Context: 85%]...",
+            "> USER: 'Generate wide shot, rainy alley, neon noir style, volumetric fog'...",
+            "> VEO: Rendering Physics Simulation [Fluid Dynamics: Rain]... 45%",
+            "> GEMINI: Analyzing script for continuity errors in Scene 04...",
+            "> SYSTEM: Audio synchronization complete. 1080p render finishing...",
+            "> NANO BANANO: Inpainting costume details on frame 142 [Fixing Hands]...",
+            "> MUSIC FX: Generating synthwave stem [80 BPM, Key: D Minor]...",
+            "> FLOW: Stitching Scene 01 and Scene 02 with 'Morph Cut'...",
+            "> SYSTEM: Asset 'Cyberpunk_City_Pack_v2' ready for download."
+        ];
+
+        const terminalOutput = document.getElementById('terminal-output');
+        let lineIndex = 0;
+
+        function addLine() {
+            const line = document.createElement('div');
+            line.className = 'mb-1 leading-tight';
+            
+            // Color coding based on actor
+            let content = prompts[lineIndex];
+            let colorClass = 'text-electricBlue'; // Default
+
+            if(content.includes("ERROR")) colorClass = 'text-red-500';
+            else if(content.includes("SYSTEM")) colorClass = 'text-gray-500';
+            else if(content.includes("USER")) colorClass = 'text-white font-bold';
+            else if(content.includes("VEO")) colorClass = 'text-signalOrange';
+            else if(content.includes("GEMINI")) colorClass = 'text-purple-400';
+            else if(content.includes("NANO")) colorClass = 'text-yellow-400';
+            
+            // Typing effect simulation (simplified)
+            const time = new Date().toLocaleTimeString([], { hour12: false, hour: '2-digit', minute: '2-digit', second: '2-digit' });
+            line.innerHTML = `<span class="opacity-30 mr-2 text-[8px]">[${time}]</span><span class="${colorClass}">${content}</span>`;
+            
+            terminalOutput.appendChild(line);
+
+            // Keep only last 5 lines
+            if(terminalOutput.children.length > 5) {
+                terminalOutput.removeChild(terminalOutput.firstChild);
+            }
+
+            lineIndex = (lineIndex + 1) % prompts.length;
+        }
+
+        // Initial lines to fill box
+        for(let i=0; i<3; i++) {
+            setTimeout(addLine, i * 200);
+        }
+        
+        // Loop
+        setInterval(addLine, 2000);
+    </script>

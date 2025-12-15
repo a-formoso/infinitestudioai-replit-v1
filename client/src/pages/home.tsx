@@ -1,7 +1,59 @@
 import { Navbar } from "@/components/navbar";
 import { ArrowRight } from "lucide-react";
+import { useState, useEffect, useRef } from "react";
 
 export default function Home() {
+  const [lines, setLines] = useState<Array<{ time: string; content: string; colorClass: string }>>([]);
+  const terminalRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const prompts = [
+        "> SYSTEM: Connecting to Veo 3.1 API endpoint...",
+        "> SYSTEM: Uploading 'Character_Sheet_Kaelen.png' as Ingredient [Context: 85%]...",
+        "> USER: 'Generate wide shot, rainy alley, neon noir style, volumetric fog'...",
+        "> VEO: Rendering Physics Simulation [Fluid Dynamics: Rain]... 45%",
+        "> GEMINI: Analyzing script for continuity errors in Scene 04...",
+        "> SYSTEM: Audio synchronization complete. 1080p render finishing...",
+        "> NANO BANANO: Inpainting costume details on frame 142 [Fixing Hands]...",
+        "> MUSIC FX: Generating synthwave stem [80 BPM, Key: D Minor]...",
+        "> FLOW: Stitching Scene 01 and Scene 02 with 'Morph Cut'...",
+        "> SYSTEM: Asset 'Cyberpunk_City_Pack_v2' ready for download."
+    ];
+
+    let lineIndex = 0;
+
+    const addLine = () => {
+        const content = prompts[lineIndex];
+        let colorClass = 'text-electricBlue';
+
+        if(content.includes("ERROR")) colorClass = 'text-red-500';
+        else if(content.includes("SYSTEM")) colorClass = 'text-gray-500';
+        else if(content.includes("USER")) colorClass = 'text-white font-bold';
+        else if(content.includes("VEO")) colorClass = 'text-signalOrange';
+        else if(content.includes("GEMINI")) colorClass = 'text-purple-400';
+        else if(content.includes("NANO")) colorClass = 'text-yellow-400';
+        
+        const time = new Date().toLocaleTimeString([], { hour12: false, hour: '2-digit', minute: '2-digit', second: '2-digit' });
+        
+        setLines(prev => {
+            const newLines = [...prev, { time, content, colorClass }];
+            if (newLines.length > 5) return newLines.slice(newLines.length - 5);
+            return newLines;
+        });
+
+        lineIndex = (lineIndex + 1) % prompts.length;
+    };
+
+    // Initial lines
+    for(let i=0; i<3; i++) {
+        setTimeout(addLine, i * 200);
+    }
+    
+    // Loop
+    const interval = setInterval(addLine, 2000);
+    return () => clearInterval(interval);
+  }, []);
+
   return (
     <div className="min-h-screen bg-obsidian text-offWhite font-sans antialiased selection:bg-electricBlue selection:text-white overflow-x-hidden">
       
@@ -270,46 +322,67 @@ export default function Home() {
                       <div className="font-header font-bold text-xl tracking-widest text-white flex items-center gap-2 mb-6">
                           <span className="text-electricBlue text-2xl">∞</span> INFINITE
                       </div>
-                      <p className="text-gray-500 text-sm leading-relaxed">
-                          Pioneering the future of filmmaking through the Google Gemini Ecosystem.
+                      <p className="text-xs text-gray-500 leading-relaxed font-mono">
+                          A next-generation production house and educational platform built on the Google AI ecosystem.
+                          <br /><br />
+                          London • New York • The Cloud
                       </p>
                   </div>
                   
                   <div>
-                      <h4 className="font-header text-white font-bold mb-6">STUDIO</h4>
-                      <ul className="space-y-4 text-sm text-gray-500">
-                          <li className="hover:text-electricBlue cursor-pointer transition-colors">Work</li>
-                          <li className="hover:text-electricBlue cursor-pointer transition-colors">Services</li>
-                          <li className="hover:text-electricBlue cursor-pointer transition-colors">About</li>
-                          <li className="hover:text-electricBlue cursor-pointer transition-colors">Careers</li>
+                      <h5 className="font-header text-xs text-white mb-6 tracking-widest border-b border-white/10 pb-2 inline-block">STUDIO</h5>
+                      <ul className="space-y-3 text-xs text-gray-400 font-mono">
+                          <li><a href="#" className="hover:text-electricBlue transition-colors">Selected Work</a></li>
+                          <li><a href="#" className="hover:text-electricBlue transition-colors">Services</a></li>
+                          <li><a href="#" className="hover:text-electricBlue transition-colors">About Us</a></li>
+                          <li><a href="#" className="hover:text-electricBlue transition-colors">Contact</a></li>
                       </ul>
                   </div>
 
                   <div>
-                      <h4 className="font-header text-white font-bold mb-6">ACADEMY</h4>
-                      <ul className="space-y-4 text-sm text-gray-500">
-                          <li className="hover:text-signalOrange cursor-pointer transition-colors">Courses</li>
-                          <li className="hover:text-signalOrange cursor-pointer transition-colors">Mentorship</li>
-                          <li className="hover:text-signalOrange cursor-pointer transition-colors">Community</li>
-                          <li className="hover:text-signalOrange cursor-pointer transition-colors">Student Showcase</li>
+                      <h5 className="font-header text-xs text-white mb-6 tracking-widest border-b border-white/10 pb-2 inline-block">ACADEMY</h5>
+                      <ul className="space-y-3 text-xs text-gray-400 font-mono">
+                          <li><a href="#" className="hover:text-signalOrange transition-colors">All Courses</a></li>
+                          <li><a href="#" className="hover:text-signalOrange transition-colors">Mentorship</a></li>
+                          <li><a href="#" className="hover:text-signalOrange transition-colors">Student Login</a></li>
+                          <li><a href="#" className="hover:text-signalOrange transition-colors">FAQ</a></li>
                       </ul>
                   </div>
 
                   <div>
-                      <h4 className="font-header text-white font-bold mb-6">CONNECT</h4>
+                      <h5 className="font-header text-xs text-white mb-6 tracking-widest border-b border-white/10 pb-2 inline-block">CONNECT</h5>
                       <div className="flex gap-4">
-                          <div className="w-10 h-10 border border-white/20 flex items-center justify-center text-white hover:bg-white hover:text-black transition-all cursor-pointer">X</div>
-                          <div className="w-10 h-10 border border-white/20 flex items-center justify-center text-white hover:bg-white hover:text-black transition-all cursor-pointer">IG</div>
-                          <div className="w-10 h-10 border border-white/20 flex items-center justify-center text-white hover:bg-white hover:text-black transition-all cursor-pointer">YT</div>
+                          <a href="#" className="w-10 h-10 border border-white/10 flex items-center justify-center hover:bg-electricBlue hover:border-electricBlue hover:text-white text-gray-400 transition-all duration-300">𝕏</a>
+                          <a href="#" className="w-10 h-10 border border-white/10 flex items-center justify-center hover:bg-signalOrange hover:border-signalOrange hover:text-white text-gray-400 transition-all duration-300">▶</a>
+                          <a href="#" className="w-10 h-10 border border-white/10 flex items-center justify-center hover:bg-purple-600 hover:border-purple-600 hover:text-white text-gray-400 transition-all duration-300">●</a>
                       </div>
                   </div>
               </div>
 
-              <div className="border-t border-white/10 pt-8 flex flex-col md:flex-row justify-between items-center text-[10px] text-gray-600 font-mono uppercase tracking-widest">
-                  <div>© 2025 INFINITE STUDIO. ALL RIGHTS RESERVED.</div>
-                  <div className="flex gap-6 mt-4 md:mt-0">
-                      <span className="hover:text-white cursor-pointer transition-colors">PRIVACY POLICY</span>
-                      <span className="hover:text-white cursor-pointer transition-colors">TERMS OF SERVICE</span>
+              {/* THE LIVE TERMINAL */}
+              <div className="w-full bg-[#050505] border border-white/10 p-4 font-mono text-[10px] md:text-xs text-green-500 h-32 overflow-hidden relative shadow-inner shadow-black/50 rounded-sm mb-8">
+                  <div className="absolute top-2 right-3 text-white/20 text-[8px] tracking-widest border border-white/10 px-1">LIVE SYSTEM LOG // V.2.4.1</div>
+                  <div className="absolute top-2 left-3 text-electricBlue/50 text-[8px] tracking-widest">SERVER: LON-01</div>
+                  
+                  <div id="terminal-output" className="flex flex-col justify-end h-full pt-6" ref={terminalRef}>
+                      {lines.map((line, index) => (
+                          <div key={index} className="mb-1 leading-tight">
+                              <span className="opacity-30 mr-2 text-[8px]">[ {line.time} ]</span>
+                              <span className={line.colorClass}>{line.content}</span>
+                          </div>
+                      ))}
+                  </div>
+                   {/* CRT Scanline effect for terminal */}
+                   <div className="absolute inset-0 bg-[linear-gradient(rgba(18,16,16,0)_50%,rgba(0,0,0,0.1)_50%),linear-gradient(90deg,rgba(255,0,0,0.06),rgba(0,255,0,0.02),rgba(0,0,255,0.06))] pointer-events-none z-20 bg-[length:100%_2px,3px_100%] opacity-30"></div>
+              </div>
+
+              <div className="border-t border-white/5 pt-6 flex flex-col md:flex-row justify-between items-center gap-4">
+                  <div className="text-[10px] text-gray-600 font-mono">
+                      © 2025 INFINITE STUDIO. ALL SYSTEMS NOMINAL.
+                  </div>
+                  <div className="flex gap-6 text-[10px] text-gray-600 font-mono">
+                      <a href="#" className="hover:text-white transition-colors">PRIVACY_PROTOCOL</a>
+                      <a href="#" className="hover:text-white transition-colors">TERMS_OF_EXECUTION</a>
                   </div>
               </div>
           </div>
