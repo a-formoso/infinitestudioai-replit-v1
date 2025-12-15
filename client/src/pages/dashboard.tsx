@@ -37,31 +37,33 @@ export default function Dashboard() {
               <div className="lg:col-span-2 space-y-8">
                   
                   {/* Hero: Resume Learning */}
-                  <div className="glass-panel p-0 overflow-hidden relative group cursor-pointer border border-electricBlue/30 hover:border-electricBlue transition-all duration-300">
-                      <div className="h-64 bg-gray-900 relative">
-                          <div className="absolute inset-0 bg-gradient-to-br from-blue-900/40 to-black"></div>
-                          {/* Play Button Overlay */}
-                          <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 bg-black/40 backdrop-blur-sm">
-                              <div className="w-16 h-16 rounded-full bg-electricBlue flex items-center justify-center text-white pl-1 shadow-[0_0_30px_rgba(41,98,255,0.5)] transform group-hover:scale-110 transition-transform">▶</div>
-                          </div>
-                          <div className="absolute top-6 left-6">
-                              <span className="bg-electricBlue text-white text-[10px] font-bold px-2 py-1 uppercase tracking-wider">RESUME PLAYING</span>
-                          </div>
-                      </div>
-                      <div className="p-8 relative">
-                          <div className="flex justify-between items-start mb-4">
-                              <div>
-                                  <h3 className="font-header text-xl text-white mb-1">MASTER THE GOOGLE ECOSYSTEM</h3>
-                                  <p className="text-xs text-gray-400 font-mono">Module 3.2: The "Ingredients" Workflow</p>
-                              </div>
-                              <span className="text-electricBlue font-mono text-xl font-bold">65%</span>
-                          </div>
-                          {/* Progress Bar */}
-                          <div className="h-1 w-full bg-white/5 rounded-full overflow-hidden">
-                              <div className="h-full bg-electricBlue w-[65%] shadow-[0_0_10px_rgba(41,98,255,0.5)]"></div>
-                          </div>
-                      </div>
-                  </div>
+                  <Link href="/course/player">
+                    <div className="glass-panel p-0 overflow-hidden relative group cursor-pointer border border-electricBlue/30 hover:border-electricBlue transition-all duration-300">
+                        <div className="h-64 bg-gray-900 relative">
+                            <div className="absolute inset-0 bg-gradient-to-br from-blue-900/40 to-black"></div>
+                            {/* Play Button Overlay */}
+                            <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 bg-black/40 backdrop-blur-sm">
+                                <div className="w-16 h-16 rounded-full bg-electricBlue flex items-center justify-center text-white pl-1 shadow-[0_0_30px_rgba(41,98,255,0.5)] transform group-hover:scale-110 transition-transform">▶</div>
+                            </div>
+                            <div className="absolute top-6 left-6">
+                                <span className="bg-electricBlue text-white text-[10px] font-bold px-2 py-1 uppercase tracking-wider">RESUME PLAYING</span>
+                            </div>
+                        </div>
+                        <div className="p-8 relative">
+                            <div className="flex justify-between items-start mb-4">
+                                <div>
+                                    <h3 className="font-header text-xl text-white mb-1">MASTER THE GOOGLE ECOSYSTEM</h3>
+                                    <p className="text-xs text-gray-400 font-mono">Module 3.2: The "Ingredients" Workflow</p>
+                                </div>
+                                <span className="text-electricBlue font-mono text-xl font-bold">65%</span>
+                            </div>
+                            {/* Progress Bar */}
+                            <div className="h-1 w-full bg-white/5 rounded-full overflow-hidden">
+                                <div className="h-full bg-electricBlue w-[65%] shadow-[0_0_10px_rgba(41,98,255,0.5)]"></div>
+                            </div>
+                        </div>
+                    </div>
+                  </Link>
 
                   {/* My Courses List */}
                   <div className="glass-panel p-8">
