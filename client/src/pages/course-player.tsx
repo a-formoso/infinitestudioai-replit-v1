@@ -11,8 +11,8 @@ export default function CoursePlayer() {
           {/* GRID BACKGROUND OVERLAY */}
           <div className="fixed inset-0 bg-grid-pattern bg-[size:40px_40px] opacity-20 pointer-events-none z-0"></div>
           {/* TOP BAR */}
-          <header className="fixed top-0 w-full z-40 glass-panel border-b-0 border-b-glassBorder bg-obsidian/90 backdrop-blur-md h-20 flex items-center justify-between px-6 border-b border-white/10">
-              <div className="max-w-7xl mx-auto w-full flex justify-between items-center">
+          <header className="fixed top-0 w-full z-50 glass-panel border-b-0 border-b-glassBorder">
+              <div className="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
                 <div className="flex items-center gap-6">
                     <Link href="/dashboard" className="flex items-center gap-2 text-xs font-header font-bold text-gray-400 hover:text-white transition-colors">
                         <ChevronLeft className="w-4 h-4" /> DASHBOARD
