@@ -4,27 +4,26 @@ import { Infinity } from "lucide-react";
 
 export function Navbar() {
   return (
-    <nav className="fixed top-0 left-0 right-0 z-50 bg-background/80 backdrop-blur-md border-b border-white/5">
-      <div className="container mx-auto px-6 h-20 flex items-center justify-between">
-        <Link href="/">
-          <a className="flex items-center gap-2 text-xl font-heading font-bold tracking-wider text-white hover:text-primary transition-colors">
-            <Infinity className="w-6 h-6 text-primary" />
-            INFINITE STUDIO
-          </a>
-        </Link>
-
-        <div className="hidden md:flex items-center space-x-12 absolute left-1/2 transform -translate-x-1/2">
-          <a href="#work" className="text-xs font-medium tracking-widest text-muted-foreground hover:text-white transition-colors uppercase">Work</a>
-          <a href="#academy" className="text-xs font-medium tracking-widest text-muted-foreground hover:text-white transition-colors uppercase">Academy</a>
-          <a href="#assets" className="text-xs font-medium tracking-widest text-muted-foreground hover:text-white transition-colors uppercase">Assets</a>
+    <nav className="fixed top-0 w-full z-50 glass-panel border-b-0 border-b-glassBorder">
+        <div className="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
+            <Link href="/">
+              <a className="font-header font-bold text-xl tracking-widest text-white flex items-center gap-2 cursor-pointer">
+                  <span className="text-electricBlue text-2xl">∞</span> INFINITE STUDIO
+              </a>
+            </Link>
+            <div className="hidden md:flex gap-8 text-sm tracking-widest uppercase font-semibold">
+                <a href="#work" className="hover:text-electricBlue transition-colors duration-300">Work</a>
+                <a href="#academy" className="hover:text-signalOrange transition-colors duration-300">Academy</a>
+                <a href="#store" className="hover:text-white transition-colors duration-300 opacity-60">Assets</a>
+            </div>
+            <a href="#" className="hidden md:block border border-electricBlue text-electricBlue px-6 py-2 text-xs font-header font-bold uppercase hover:bg-electricBlue hover:text-white transition-all duration-300 tracking-wider">
+                Start Project
+            </a>
+             {/* Mobile Menu Button (Hidden on Desktop) */}
+             <div className="md:hidden text-white text-2xl cursor-pointer">
+                ☰
+            </div>
         </div>
-
-        <div className="flex items-center">
-          <Button variant="outline" className="rounded-none border-primary/50 text-primary hover:bg-primary hover:text-white uppercase text-xs font-bold tracking-widest px-6 h-10 transition-all duration-300">
-            Start Project
-          </Button>
-        </div>
-      </div>
     </nav>
   );
 }
