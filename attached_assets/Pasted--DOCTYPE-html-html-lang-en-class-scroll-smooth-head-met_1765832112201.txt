@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>COURSE DETAILS | INFINITE STUDIO</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&family=Syncopate:wght@400;700&display=swap" rel="stylesheet">
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        obsidian: '#0A0A0A',
+                        electricBlue: '#2962FF',
+                        signalOrange: '#FF3D00',
+                        offWhite: '#E0E0E0',
+                        glass: 'rgba(255, 255, 255, 0.05)',
+                        glassBorder: 'rgba(255, 255, 255, 0.1)',
+                    },
+                    fontFamily: {
+                        header: ['Syncopate', 'sans-serif'],
+                        body: ['Inter', 'sans-serif'],
+                    },
+                    backgroundImage: {
+                        'grid-pattern': "linear-gradient(to right, #1a1a1a 1px, transparent 1px), linear-gradient(to bottom, #1a1a1a 1px, transparent 1px)",
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        /* Hide scrollbar */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #0A0A0A; }
+        ::-webkit-scrollbar-thumb { background: #333; }
+        
+        .accordion-content {
+            transition: max-height 0.3s ease-out;
+            max-height: 0;
+            overflow: hidden;
+        }
+        .accordion-content.active {
+            max-height: 500px; /* Adjust based on content */
+        }
+    </style>
+</head>
+<body class="bg-obsidian text-offWhite font-body antialiased selection:bg-electricBlue selection:text-white overflow-x-hidden">
+
+    <!-- GRID OVERLAY -->
+    <div class="fixed inset-0 bg-grid-pattern bg-[size:40px_40px] opacity-20 pointer-events-none z-0"></div>
+
+    <!-- NAV -->
+    <nav class="fixed top-0 w-full z-50 glass-panel border-b-0 border-b-glassBorder">
+        <div class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
+            <a href="index.html" class="font-header font-bold text-xl tracking-widest text-white flex items-center gap-2 hover:opacity-80 transition-opacity">
+                <span class="text-electricBlue text-2xl">∞</span> INFINITE STUDIO
+            </a>
+            <a href="#" class="hidden md:block bg-electricBlue text-white px-6 py-2 text-xs font-header font-bold uppercase hover:bg-white hover:text-black transition-all duration-300 tracking-wider">
+                Get Access - $149
+            </a>
+        </div>
+    </nav>
+
+    <!-- HERO HEADER -->
+    <header class="relative pt-32 pb-20 px-6 max-w-7xl mx-auto z-10">
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+            <!-- Left: Text -->
+            <div>
+                <div class="inline-block border border-electricBlue/50 px-3 py-1 mb-6 text-[10px] font-mono text-electricBlue tracking-widest uppercase">
+                    Level 01 Certification
+                </div>
+                <h1 class="font-header text-3xl md:text-5xl font-bold text-white leading-tight mb-6">
+                    MASTER THE GOOGLE<br>
+                    <span class="text-transparent bg-clip-text bg-gradient-to-r from-electricBlue to-cyan-400">FILMMAKING ECOSYSTEM</span>
+                </h1>
+                <p class="text-base text-gray-400 leading-relaxed font-light mb-8 max-w-lg">
+                    Stop using fragmented tools. Learn to run a complete Hollywood-style studio from your browser using the integrated power of Gemini 3.0, Nano Banano, and Veo.
+                </p>
+                <div class="flex gap-4 mb-8 text-xs font-mono text-gray-500">
+                    <span class="flex items-center gap-2"><div class="w-2 h-2 bg-electricBlue rounded-full"></div> 4.5 HOURS CONTENT</span>
+                    <span class="flex items-center gap-2"><div class="w-2 h-2 bg-electricBlue rounded-full"></div> 25 LESSONS</span>
+                    <span class="flex items-center gap-2"><div class="w-2 h-2 bg-electricBlue rounded-full"></div> LIFETIME ACCESS</span>
+                </div>
+                <a href="#enroll" class="inline-block bg-white text-black px-8 py-4 text-sm font-header font-bold uppercase hover:bg-electricBlue hover:text-white transition-all duration-300 tracking-wider">
+                    Start Learning Now
+                </a>
+            </div>
+
+            <!-- Right: Video Preview Card -->
+            <div class="relative glass-panel p-2 group">
+                <div class="aspect-video bg-gray-900 relative overflow-hidden">
+                    <!-- Placeholder for Course Trailer -->
+                    <div class="absolute inset-0 bg-gradient-to-br from-blue-900/40 to-black flex items-center justify-center group-hover:scale-105 transition-transform duration-500">
+                        <div class="w-16 h-16 rounded-full bg-white/10 backdrop-blur-sm flex items-center justify-center border border-white/20 group-hover:bg-electricBlue group-hover:border-electricBlue transition-colors cursor-pointer">
+                            <span class="text-2xl ml-1">▶</span>
+                        </div>
+                    </div>
+                    <div class="absolute bottom-4 left-4 font-mono text-[10px] text-white bg-black/50 px-2 py-1">TRAILER_V1.MP4</div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- CONTENT SECTION -->
+    <section class="py-20 border-t border-white/10 bg-black/50 relative z-10">
+        <div class="max-w-7xl mx-auto px-6 grid grid-cols-1 lg:grid-cols-12 gap-12">
+            
+            <!-- Main Content (Left) -->
+            <div class="lg:col-span-8">
+                
+                <!-- WHAT YOU LEARN -->
+                <div class="mb-16">
+                    <h3 class="font-header text-xl text-white mb-8 border-l-4 border-electricBlue pl-4">WHAT YOU WILL LEARN</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div class="glass-panel p-6 hover:border-white/20 transition-colors">
+                            <div class="text-electricBlue mb-2 text-xl">01</div>
+                            <h4 class="font-bold text-white text-sm mb-2">The "Shared Brain" Workflow</h4>
+                            <p class="text-xs text-gray-400 leading-relaxed">How to make Gemini, Imagen, and Veo "talk" to each other for seamless production.</p>
+                        </div>
+                        <div class="glass-panel p-6 hover:border-white/20 transition-colors">
+                            <div class="text-electricBlue mb-2 text-xl">02</div>
+                            <h4 class="font-bold text-white text-sm mb-2">Character Consistency</h4>
+                            <p class="text-xs text-gray-400 leading-relaxed">Creating "Digital Actors" (Nano Banano) that look the same in every shot using Ingredient mapping.</p>
+                        </div>
+                        <div class="glass-panel p-6 hover:border-white/20 transition-colors">
+                            <div class="text-electricBlue mb-2 text-xl">03</div>
+                            <h4 class="font-bold text-white text-sm mb-2">The "Banano Sandwich"</h4>
+                            <p class="text-xs text-gray-400 leading-relaxed">Our proprietary technique for glitch-free video transitions using Frames-to-Video.</p>
+                        </div>
+                        <div class="glass-panel p-6 hover:border-white/20 transition-colors">
+                            <div class="text-electricBlue mb-2 text-xl">04</div>
+                            <h4 class="font-bold text-white text-sm mb-2">Physics Directing</h4>
+                            <p class="text-xs text-gray-400 leading-relaxed">Controlling camera movement, lighting, and fluid dynamics in Veo 3.1.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- CURRICULUM ACCORDION -->
+                <div class="mb-16">
+                    <h3 class="font-header text-xl text-white mb-8 border-l-4 border-white pl-4">CLASS SYLLABUS</h3>
+                    
+                    <div class="space-y-4">
+                        <!-- Module 1 -->
+                        <div class="border border-white/10 bg-white/5">
+                            <button class="w-full text-left p-6 flex justify-between items-center hover:bg-white/5 transition-colors" onclick="toggleAccordion(this)">
+                                <span class="font-header text-sm text-white">MODULE 1: THE WRITER'S ROOM</span>
+                                <span class="text-electricBlue text-xl">+</span>
+                            </button>
+                            <div class="accordion-content bg-black/30">
+                                <ul class="p-6 space-y-3 text-xs text-gray-400 font-mono">
+                                    <li class="flex gap-4"><span class="text-white">1.1</span> The Multimodal Script: Writing with Images</li>
+                                    <li class="flex gap-4"><span class="text-white">1.2</span> Context is King: Managing the 2M Token Window</li>
+                                    <li class="flex gap-4"><span class="text-white">1.3</span> Generating the "Visual Bible"</li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <!-- Module 2 -->
+                        <div class="border border-white/10 bg-white/5">
+                            <button class="w-full text-left p-6 flex justify-between items-center hover:bg-white/5 transition-colors" onclick="toggleAccordion(this)">
+                                <span class="font-header text-sm text-white">MODULE 2: THE ART DEPT</span>
+                                <span class="text-electricBlue text-xl">+</span>
+                            </button>
+                            <div class="accordion-content bg-black/30">
+                                <ul class="p-6 space-y-3 text-xs text-gray-400 font-mono">
+                                    <li class="flex gap-4"><span class="text-white">2.1</span> Introduction to Nano Banano (Gemini 2.5 Flash)</li>
+                                    <li class="flex gap-4"><span class="text-white">2.2</span> The Character Sheet Workflow</li>
+                                    <li class="flex gap-4"><span class="text-white">2.3</span> Inpainting & Virtual Set Design</li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <!-- Module 3 -->
+                        <div class="border border-white/10 bg-white/5">
+                            <button class="w-full text-left p-6 flex justify-between items-center hover:bg-white/5 transition-colors" onclick="toggleAccordion(this)">
+                                <span class="font-header text-sm text-white">MODULE 3: PRINCIPAL PHOTOGRAPHY</span>
+                                <span class="text-electricBlue text-xl">+</span>
+                            </button>
+                            <div class="accordion-content bg-black/30">
+                                <ul class="p-6 space-y-3 text-xs text-gray-400 font-mono">
+                                    <li class="flex gap-4"><span class="text-white">3.1</span> Veo 3.1 Fundamentals & Physics Engine</li>
+                                    <li class="flex gap-4"><span class="text-white">3.2</span> The "Ingredients" Workflow</li>
+                                    <li class="flex gap-4"><span class="text-white">3.3</span> CORE SKILL: The "Banano Sandwich" Method</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- Sidebar (Right) -->
+            <div class="lg:col-span-4 space-y-8">
+                
+                <!-- Sticky Enrollment Card -->
+                <div class="glass-panel p-8 sticky top-24 border-t-2 border-t-electricBlue">
+                    <div class="text-center mb-6">
+                        <span class="text-xs font-mono text-gray-400 line-through">$299</span>
+                        <div class="text-4xl font-header font-bold text-white">$149</div>
+                        <span class="text-[10px] font-mono text-electricBlue">LIMITED TIME LAUNCH PRICE</span>
+                    </div>
+                    
+                    <button class="w-full bg-electricBlue text-white font-header font-bold text-sm uppercase py-4 hover:bg-white hover:text-black transition-all duration-300 tracking-wider mb-4 shadow-[0_0_20px_rgba(41,98,255,0.3)]">
+                        Join the Studio
+                    </button>
+                    
+                    <p class="text-[10px] text-center text-gray-500 font-mono mb-6">30-Day Money Back Guarantee</p>
+                    
+                    <div class="space-y-4 pt-6 border-t border-white/10">
+                        <div class="flex items-center gap-3 text-xs text-gray-300">
+                            <div class="w-4 h-4 border border-electricBlue flex items-center justify-center text-[8px] text-electricBlue">✓</div>
+                            <span>4.5 Hours of HD Video</span>
+                        </div>
+                        <div class="flex items-center gap-3 text-xs text-gray-300">
+                            <div class="w-4 h-4 border border-electricBlue flex items-center justify-center text-[8px] text-electricBlue">✓</div>
+                            <span>Downloadable Prompt Library</span>
+                        </div>
+                        <div class="flex items-center gap-3 text-xs text-gray-300">
+                            <div class="w-4 h-4 border border-electricBlue flex items-center justify-center text-[8px] text-electricBlue">✓</div>
+                            <span>Private Discord Access</span>
+                        </div>
+                        <div class="flex items-center gap-3 text-xs text-gray-300">
+                            <div class="w-4 h-4 border border-electricBlue flex items-center justify-center text-[8px] text-electricBlue">✓</div>
+                            <span>Certificate of Completion</span>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="bg-black border-t border-white/10 py-8 text-center relative z-20">
+        <div class="text-[10px] text-gray-600 font-mono">
+            © 2025 INFINITE STUDIO. <a href="index.html" class="text-electricBlue hover:underline">RETURN TO DASHBOARD</a>
+        </div>
+    </footer>
+
+    <script>
+        function toggleAccordion(button) {
+            const content = button.nextElementSibling;
+            const icon = button.querySelector('span:last-child');
+            
+            if (content.style.maxHeight) {
+                content.style.maxHeight = null;
+                icon.textContent = '+';
+            } else {
+                content.style.maxHeight = content.scrollHeight + "px";
+                icon.textContent = '-';
+            }
+        }
+    </script>
+</body>
+</html>
