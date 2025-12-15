@@ -1,59 +1,8 @@
 import { Navbar } from "@/components/navbar";
+import { Footer } from "@/components/footer";
 import { ArrowRight } from "lucide-react";
-import { useState, useEffect, useRef } from "react";
 
 export default function Home() {
-  const [lines, setLines] = useState<Array<{ time: string; content: string; colorClass: string }>>([]);
-  const terminalRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    const prompts = [
-        "> SYSTEM: Connecting to Veo 3.1 API endpoint...",
-        "> SYSTEM: Uploading 'Character_Sheet_Kaelen.png' as Ingredient [Context: 85%]...",
-        "> USER: 'Generate wide shot, rainy alley, neon noir style, volumetric fog'...",
-        "> VEO: Rendering Physics Simulation [Fluid Dynamics: Rain]... 45%",
-        "> GEMINI: Analyzing script for continuity errors in Scene 04...",
-        "> SYSTEM: Audio synchronization complete. 1080p render finishing...",
-        "> NANO BANANO: Inpainting costume details on frame 142 [Fixing Hands]...",
-        "> MUSIC FX: Generating synthwave stem [80 BPM, Key: D Minor]...",
-        "> FLOW: Stitching Scene 01 and Scene 02 with 'Morph Cut'...",
-        "> SYSTEM: Asset 'Cyberpunk_City_Pack_v2' ready for download."
-    ];
-
-    let lineIndex = 0;
-
-    const addLine = () => {
-        const content = prompts[lineIndex];
-        let colorClass = 'text-electricBlue';
-
-        if(content.includes("ERROR")) colorClass = 'text-red-500';
-        else if(content.includes("SYSTEM")) colorClass = 'text-gray-500';
-        else if(content.includes("USER")) colorClass = 'text-white font-bold';
-        else if(content.includes("VEO")) colorClass = 'text-signalOrange';
-        else if(content.includes("GEMINI")) colorClass = 'text-purple-400';
-        else if(content.includes("NANO")) colorClass = 'text-yellow-400';
-        
-        const time = new Date().toLocaleTimeString([], { hour12: false, hour: '2-digit', minute: '2-digit', second: '2-digit' });
-        
-        setLines(prev => {
-            const newLines = [...prev, { time, content, colorClass }];
-            if (newLines.length > 5) return newLines.slice(newLines.length - 5);
-            return newLines;
-        });
-
-        lineIndex = (lineIndex + 1) % prompts.length;
-    };
-
-    // Initial lines
-    for(let i=0; i<3; i++) {
-        setTimeout(addLine, i * 200);
-    }
-    
-    // Loop
-    const interval = setInterval(addLine, 2000);
-    return () => clearInterval(interval);
-  }, []);
-
   return (
     <div className="min-h-screen bg-obsidian text-offWhite font-sans antialiased selection:bg-electricBlue selection:text-white overflow-x-hidden">
       
@@ -104,7 +53,7 @@ export default function Home() {
                       <div className="relative z-10">
                           <h2 className="font-header text-2xl text-white mb-2 group-hover:translate-x-2 transition-transform duration-300">THE ACADEMY</h2>
                           <p className="text-sm text-gray-400 mb-6 leading-relaxed">Stop prompting blindly. Master the Google Filmmaking Ecosystem from Gemini to Veo.</p>
-                          <a href="#academy" className="inline-block bg-signalOrange text-black px-6 py-3 font-header text-xs font-bold uppercase tracking-wider hover:bg-white hover:scale-105 transition-all duration-300">
+                          <a href="/academy" className="inline-block bg-signalOrange text-black px-6 py-3 font-header text-xs font-bold uppercase tracking-wider hover:bg-white hover:scale-105 transition-all duration-300">
                               View Courses
                           </a>
                       </div>
@@ -260,7 +209,7 @@ export default function Home() {
       </section>
 
       {/* ASSET STORE & FOOTER CONTAINER */}
-      <footer className="bg-black border-t border-white/10 relative z-20">
+      <div className="bg-black border-t border-white/10 relative z-20">
           
           {/* ASSET STORE (Added Here) */}
           <div id="store" className="max-w-7xl mx-auto px-6 py-16 border-b border-white/10">
@@ -314,79 +263,10 @@ export default function Home() {
                   </div>
               </div>
           </div>
+          
+      </div>
 
-          {/* FOOTER CONTENT */}
-          <div className="max-w-7xl mx-auto px-6 pt-16 pb-8">
-              <div className="grid grid-cols-1 md:grid-cols-4 gap-12 mb-16">
-                  <div className="col-span-1 md:col-span-1">
-                      <div className="font-header font-bold text-xl tracking-widest text-white flex items-center gap-2 mb-6">
-                          <span className="text-electricBlue text-2xl">∞</span> INFINITE
-                      </div>
-                      <p className="text-xs text-gray-500 leading-relaxed font-mono">
-                          A next-generation production house and educational platform built on the Google AI ecosystem.
-                          <br /><br />
-                          London • New York • The Cloud
-                      </p>
-                  </div>
-                  
-                  <div>
-                      <h5 className="font-header text-xs text-white mb-6 tracking-widest border-b border-white/10 pb-2 inline-block">STUDIO</h5>
-                      <ul className="space-y-3 text-xs text-gray-400 font-mono">
-                          <li><a href="#" className="hover:text-electricBlue transition-colors">Selected Work</a></li>
-                          <li><a href="#" className="hover:text-electricBlue transition-colors">Services</a></li>
-                          <li><a href="#" className="hover:text-electricBlue transition-colors">About Us</a></li>
-                          <li><a href="#" className="hover:text-electricBlue transition-colors">Contact</a></li>
-                      </ul>
-                  </div>
-
-                  <div>
-                      <h5 className="font-header text-xs text-white mb-6 tracking-widest border-b border-white/10 pb-2 inline-block">ACADEMY</h5>
-                      <ul className="space-y-3 text-xs text-gray-400 font-mono">
-                          <li><a href="#" className="hover:text-signalOrange transition-colors">All Courses</a></li>
-                          <li><a href="#" className="hover:text-signalOrange transition-colors">Mentorship</a></li>
-                          <li><a href="#" className="hover:text-signalOrange transition-colors">Student Login</a></li>
-                          <li><a href="#" className="hover:text-signalOrange transition-colors">FAQ</a></li>
-                      </ul>
-                  </div>
-
-                  <div>
-                      <h5 className="font-header text-xs text-white mb-6 tracking-widest border-b border-white/10 pb-2 inline-block">CONNECT</h5>
-                      <div className="flex gap-4">
-                          <a href="#" className="w-10 h-10 border border-white/10 flex items-center justify-center hover:bg-electricBlue hover:border-electricBlue hover:text-white text-gray-400 transition-all duration-300">𝕏</a>
-                          <a href="#" className="w-10 h-10 border border-white/10 flex items-center justify-center hover:bg-signalOrange hover:border-signalOrange hover:text-white text-gray-400 transition-all duration-300">▶</a>
-                          <a href="#" className="w-10 h-10 border border-white/10 flex items-center justify-center hover:bg-purple-600 hover:border-purple-600 hover:text-white text-gray-400 transition-all duration-300">●</a>
-                      </div>
-                  </div>
-              </div>
-
-              {/* THE LIVE TERMINAL */}
-              <div className="w-full bg-[#050505] border border-white/10 p-4 font-mono text-[10px] md:text-xs text-green-500 h-32 overflow-hidden relative shadow-inner shadow-black/50 rounded-sm mb-8">
-                  <div className="absolute top-2 right-3 text-white/20 text-[8px] tracking-widest border border-white/10 px-1">LIVE SYSTEM LOG // V.2.4.1</div>
-                  <div className="absolute top-2 left-3 text-electricBlue/50 text-[8px] tracking-widest">SERVER: LON-01</div>
-                  
-                  <div id="terminal-output" className="flex flex-col justify-end h-full pt-6" ref={terminalRef}>
-                      {lines.map((line, index) => (
-                          <div key={index} className="mb-1 leading-tight">
-                              <span className="opacity-30 mr-2 text-[8px]">[ {line.time} ]</span>
-                              <span className={line.colorClass}>{line.content}</span>
-                          </div>
-                      ))}
-                  </div>
-                   {/* CRT Scanline effect for terminal */}
-                   <div className="absolute inset-0 bg-[linear-gradient(rgba(18,16,16,0)_50%,rgba(0,0,0,0.1)_50%),linear-gradient(90deg,rgba(255,0,0,0.06),rgba(0,255,0,0.02),rgba(0,0,255,0.06))] pointer-events-none z-20 bg-[length:100%_2px,3px_100%] opacity-30"></div>
-              </div>
-
-              <div className="border-t border-white/5 pt-6 flex flex-col md:flex-row justify-between items-center gap-4">
-                  <div className="text-[10px] text-gray-600 font-mono">
-                      © 2025 INFINITE STUDIO. ALL SYSTEMS NOMINAL.
-                  </div>
-                  <div className="flex gap-6 text-[10px] text-gray-600 font-mono">
-                      <a href="#" className="hover:text-white transition-colors">PRIVACY_PROTOCOL</a>
-                      <a href="#" className="hover:text-white transition-colors">TERMS_OF_EXECUTION</a>
-                  </div>
-              </div>
-          </div>
-      </footer>
+      <Footer />
     </div>
   );
 }
