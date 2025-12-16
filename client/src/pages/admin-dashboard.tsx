@@ -972,6 +972,24 @@ export default function AdminDashboard() {
                             {currentLesson.notes}
                           </div>
                         </div>
+
+                        {currentLesson.keyPrompt && (
+                            <div className="bg-electricBlue/10 border border-electricBlue/20 p-6 rounded-lg mt-8">
+                                <h3 className="font-header text-sm text-electricBlue mb-3 flex items-center gap-2">
+                                    <div className="w-2 h-2 rounded-full bg-electricBlue animate-pulse"></div>
+                                    AI PROMPT
+                                </h3>
+                                <div className="font-mono text-xs text-white bg-black/50 p-4 rounded border border-white/10 select-all">
+                                    {currentLesson.keyPrompt}
+                                </div>
+                                <button 
+                                  onClick={() => navigator.clipboard.writeText(currentLesson.keyPrompt || "")}
+                                  className="mt-3 text-[10px] text-electricBlue hover:text-white transition-colors flex items-center gap-1 uppercase font-bold tracking-wider"
+                                >
+                                    Copy to Clipboard
+                                </button>
+                            </div>
+                        )}
                         
                         <div className="bg-white/5 border border-white/5 p-6 rounded-lg">
                           <h3 className="font-header text-sm text-white mb-4">DISCUSSION</h3>
