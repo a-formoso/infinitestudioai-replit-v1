@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ACCESS CONTROL | INFINITE STUDIO</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&family=Syncopate:wght@400;700&display=swap" rel="stylesheet">
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        obsidian: '#0A0A0A',
+                        electricBlue: '#2962FF',
+                        signalOrange: '#FF3D00',
+                        offWhite: '#E0E0E0',
+                        glass: 'rgba(255, 255, 255, 0.05)',
+                        glassBorder: 'rgba(255, 255, 255, 0.1)',
+                    },
+                    fontFamily: {
+                        header: ['Syncopate', 'sans-serif'],
+                        body: ['Inter', 'sans-serif'],
+                    },
+                    backgroundImage: {
+                        'grid-pattern': "linear-gradient(to right, #1a1a1a 1px, transparent 1px), linear-gradient(to bottom, #1a1a1a 1px, transparent 1px)",
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        /* Hide scrollbar */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #0A0A0A; }
+        ::-webkit-scrollbar-thumb { background: #333; }
+        
+        input {
+            background: rgba(0,0,0,0.5);
+            border: 1px solid rgba(255,255,255,0.1);
+            color: white;
+            padding: 1rem;
+            font-family: 'Inter', sans-serif;
+            width: 100%;
+            font-size: 0.875rem;
+            transition: all 0.3s ease;
+        }
+        input:focus {
+            outline: none;
+            border-color: #2962FF;
+            box-shadow: 0 0 15px rgba(41,98,255,0.2);
+        }
+    </style>
+</head>
+<body class="bg-obsidian text-offWhite font-body antialiased selection:bg-electricBlue selection:text-white overflow-hidden h-screen">
+
+    <!-- GRID OVERLAY -->
+    <div class="fixed inset-0 bg-grid-pattern bg-[size:40px_40px] opacity-20 pointer-events-none z-0"></div>
+
+    <div class="flex h-full w-full relative z-10">
+        
+        <!-- LEFT: CINEMATIC SIDEBAR (Hidden on Mobile) -->
+        <div class="hidden lg:flex w-1/2 bg-black relative items-center justify-center overflow-hidden">
+            <!-- Video Background Placeholder -->
+            <div class="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=2564&auto=format&fit=crop')] bg-cover bg-center opacity-60"></div>
+            <div class="absolute inset-0 bg-gradient-to-r from-black/80 to-transparent"></div>
+            
+            <div class="relative z-10 max-w-md p-12">
+                <div class="font-header font-bold text-4xl text-white mb-6 leading-tight">
+                    DIRECT THE<br>
+                    <span class="text-transparent bg-clip-text bg-gradient-to-r from-electricBlue to-cyan-400">ALGORITHM</span>
+                </div>
+                <p class="text-lg text-gray-300 font-light italic border-l-2 border-electricBlue pl-6">
+                    "The camera is an instrument that teaches people how to see without a camera."
+                </p>
+                <p class="text-xs text-gray-500 mt-4 font-mono pl-6">— Dorothea Lange (Reimagined for AI)</p>
+            </div>
+
+            <!-- Decorative Overlay Elements -->
+            <div class="absolute bottom-8 left-8 text-[10px] font-mono text-electricBlue animate-pulse">
+                SYSTEM STATUS: ONLINE
+            </div>
+        </div>
+
+        <!-- RIGHT: LOGIN FORM -->
+        <div class="w-full lg:w-1/2 flex flex-col justify-center items-center px-6 relative">
+            
+            <!-- Top Nav (Minimal) -->
+            <div class="absolute top-8 right-8">
+                <a href="index.html" class="text-xs font-header font-bold text-gray-500 hover:text-white transition-colors">BACK TO HOME →</a>
+            </div>
+
+            <div class="glass-panel p-8 md:p-12 w-full max-w-md">
+                <div class="text-center mb-10">
+                    <div class="font-header font-bold text-2xl tracking-widest text-white flex justify-center items-center gap-2 mb-2">
+                        <span class="text-electricBlue text-3xl">∞</span> INFINITE
+                    </div>
+                    <p class="text-xs text-gray-400 font-mono tracking-wider">STUDENT ACCESS PORTAL</p>
+                </div>
+
+                <form class="space-y-6">
+                    <div>
+                        <label class="block text-[10px] font-mono text-gray-500 mb-2 uppercase tracking-wider">Email Address</label>
+                        <input type="email" placeholder="director@studio.com" required>
+                    </div>
+                    <div>
+                        <div class="flex justify-between mb-2">
+                            <label class="block text-[10px] font-mono text-gray-500 uppercase tracking-wider">Password</label>
+                            <a href="#" class="text-[10px] text-electricBlue hover:underline">Forgot?</a>
+                        </div>
+                        <input type="password" placeholder="••••••••" required>
+                    </div>
+
+                    <button type="submit" class="w-full bg-white text-black font-header font-bold text-sm uppercase py-4 hover:bg-electricBlue hover:text-white transition-all duration-300 tracking-wider shadow-[0_0_20px_rgba(255,255,255,0.1)]">
+                        Initialize Session
+                    </button>
+                </form>
+
+                <div class="my-8 flex items-center gap-4">
+                    <div class="h-px bg-white/10 flex-grow"></div>
+                    <span class="text-[10px] text-gray-500 font-mono">OR ACCESS WITH</span>
+                    <div class="h-px bg-white/10 flex-grow"></div>
+                </div>
+
+                <div class="grid grid-cols-2 gap-4">
+                    <button class="border border-white/10 hover:border-white/30 bg-white/5 py-3 flex justify-center items-center gap-2 transition-all group">
+                        <svg class="w-4 h-4 fill-white group-hover:scale-110 transition-transform" viewBox="0 0 24 24"><path d="M12.545,10.239v3.821h5.445c-0.712,2.315-2.647,3.972-5.445,3.972c-3.332,0-6.033-2.701-6.033-6.032s2.701-6.032,6.033-6.032c1.498,0,2.866,0.549,3.921,1.453l2.814-2.814C17.503,2.988,15.139,2,12.545,2C7.021,2,2.543,6.477,2.543,12s4.478,10,10.002,10c8.396,0,10.249-7.85,9.426-11.748L12.545,10.239z"/></svg>
+                        <span class="text-[10px] font-bold text-gray-300 group-hover:text-white">GOOGLE</span>
+                    </button>
+                    <button class="border border-white/10 hover:border-white/30 bg-white/5 py-3 flex justify-center items-center gap-2 transition-all group">
+                        <svg class="w-4 h-4 fill-white group-hover:scale-110 transition-transform" viewBox="0 0 24 24"><path d="M17.05 20.28c-.98.95-2.05.8-3.08.35-1.09-.46-2.09-.48-3.24 0-1.44.62-2.2.44-3.06-.35C2.79 15.25 3.51 7.59 9.05 7.31c1.35.07 2.29.74 3.08.8 1.18-.24 2.31-.93 3.57-.84 1.51.12 2.65.72 3.4 1.8-3.1 1.88-2.61 5.75.3 6.97-.5 1.49-1.15 2.83-2.35 4.24zm-4.13-16c-1.39.06-2.8 1.03-3.23 2.53 1.57.17 3.06-.82 3.23-2.53z"/></svg>
+                        <span class="text-[10px] font-bold text-gray-300 group-hover:text-white">APPLE</span>
+                    </button>
+                </div>
+
+                <div class="mt-8 text-center">
+                    <p class="text-[10px] text-gray-500">
+                        New to the studio? <a href="course_level_1.html" class="text-electricBlue hover:underline">Apply for access</a>
+                    </p>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</body>
+</html>
