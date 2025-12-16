@@ -105,6 +105,8 @@ export default function Links() {
             {/* 1. LEAD MAGNET (FREE VALUE) */}
             <a
               href="https://drive.google.com/file/d/1NQ-Y6hhJ6h36BEJpZo-5UPL3P6nETE4l/view?usp=drive_link"
+              target="_blank"
+              rel="noopener noreferrer"
               className="glass-btn glow-gold rounded-xl p-4 flex items-center gap-4 group animate-fade-in-up"
               style={{ animationDelay: "0.2s" }}
             >
