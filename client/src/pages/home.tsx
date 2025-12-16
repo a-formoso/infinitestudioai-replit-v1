@@ -1,6 +1,6 @@
 import { Navbar } from "@/components/navbar";
 import { Footer } from "@/components/footer";
-import { ArrowRight } from "lucide-react";
+import { Play } from "lucide-react";
 import { Link } from "wouter";
 
 export default function Home() {
@@ -105,7 +105,7 @@ export default function Home() {
                           
                           <div className="absolute inset-0 flex items-center justify-center z-20">
                               <div className="w-20 h-20 rounded-full bg-electricBlue/20 backdrop-blur-sm flex items-center justify-center border border-electricBlue/50 group-hover:bg-electricBlue group-hover:scale-110 transition-all duration-300">
-                                  <ArrowRight className="w-8 h-8 text-white" />
+                                  <Play className="w-8 h-8 text-white ml-1" fill="white" />
                               </div>
                           </div>
 
@@ -129,7 +129,7 @@ export default function Home() {
                           
                           <div className="absolute inset-0 flex items-center justify-center z-20">
                               <div className="w-20 h-20 rounded-full bg-signalOrange/20 backdrop-blur-sm flex items-center justify-center border border-signalOrange/50 group-hover:bg-signalOrange group-hover:scale-110 transition-all duration-300">
-                                  <ArrowRight className="w-8 h-8 text-white" />
+                                  <Play className="w-8 h-8 text-white ml-1" fill="white" />
                               </div>
                           </div>
 
