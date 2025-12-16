@@ -1,9 +1,63 @@
+import { useState } from "react";
 import { Navbar } from "@/components/navbar";
 import { Footer } from "@/components/footer";
-import { Play } from "lucide-react";
+import { Play, ChevronLeft, ChevronRight } from "lucide-react";
 import { Link } from "wouter";
 
+const projects = [
+  {
+    id: 1,
+    title: "ECHO PROTOCOL",
+    category: "Sci-Fi Short Film",
+    description: "A cyberpunk detective navigates neon-soaked streets, hunting for answers in a world where memories can be stolen.",
+    image: "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=2564&auto=format&fit=crop",
+    duration: "2:34",
+    year: "2025",
+    accentColor: "electricBlue",
+  },
+  {
+    id: 2,
+    title: "AURUM DYNAMICS",
+    category: "Luxury Brand Commercial",
+    description: "A mesmerizing visual journey through liquid gold and obsidian, crafted for a luxury jewelry brand's global campaign.",
+    image: "https://images.unsplash.com/photo-1534447677768-be436bb09401?q=80&w=2694&auto=format&fit=crop",
+    duration: "1:45",
+    year: "2025",
+    accentColor: "signalOrange",
+  },
+  {
+    id: 3,
+    title: "NEURAL BLOOM",
+    category: "Experimental Art Film",
+    description: "An abstract exploration of consciousness, where neural networks blossom into organic patterns of light and color.",
+    image: "https://images.unsplash.com/photo-1620641788421-7a1c342ea42e?q=80&w=2574&auto=format&fit=crop",
+    duration: "3:12",
+    year: "2024",
+    accentColor: "purple-500",
+  },
+  {
+    id: 4,
+    title: "PHANTOM SIGNAL",
+    category: "Sci-Fi Short Film",
+    description: "A lone astronaut receives a mysterious transmission that challenges everything she knows about humanity's place in the cosmos.",
+    image: "https://images.unsplash.com/photo-1446776811953-b23d57bd21aa?q=80&w=2672&auto=format&fit=crop",
+    duration: "5:30",
+    year: "2025",
+    accentColor: "electricBlue",
+  },
+];
+
 export default function Home() {
+  const [currentSlide, setCurrentSlide] = useState(0);
+
+  const nextSlide = () => {
+    setCurrentSlide((prev) => (prev + 1) % projects.length);
+  };
+
+  const prevSlide = () => {
+    setCurrentSlide((prev) => (prev - 1 + projects.length) % projects.length);
+  };
+
   return (
       <div className="min-h-screen bg-obsidian text-offWhite font-sans antialiased selection:bg-electricBlue selection:text-white overflow-x-hidden">
           {/* GRID BACKGROUND OVERLAY */}
@@ -94,57 +148,81 @@ export default function Home() {
                       <Link href="/case-studies" className="text-xs font-header font-bold border-b border-signalOrange pb-1 hover:text-signalOrange transition-colors tracking-wider">VIEW ALL CASE STUDIES</Link>
                   </div>
 
-                  {/* Project Cards */}
-                  <div className="space-y-12">
-                      
-                      {/* Project 1 */}
-                      <Link href="/case-studies" className="group relative h-[450px] w-full glass-panel overflow-hidden cursor-pointer border border-white/5 hover:border-electricBlue/50 transition-all duration-500 block">
-                          <div className="absolute inset-0 bg-gray-800 group-hover:scale-105 transition-transform duration-700">
-                              <div className="w-full h-full bg-[url('https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=2564&auto=format&fit=crop')] bg-cover bg-center opacity-70 group-hover:opacity-50 transition-opacity duration-500"></div>
-                          </div>
-                          
-                          <div className="absolute inset-0 flex items-center justify-center z-20">
-                              <div className="w-20 h-20 rounded-full bg-electricBlue/20 backdrop-blur-sm flex items-center justify-center border border-electricBlue/50 group-hover:bg-electricBlue group-hover:scale-110 transition-all duration-300">
-                                  <Play className="w-8 h-8 text-white ml-1" fill="white" />
+                  {/* Project Carousel */}
+                  <div className="relative">
+                      {/* Left Arrow */}
+                      <button
+                        onClick={prevSlide}
+                        data-testid="carousel-prev"
+                        className="absolute left-0 top-1/2 -translate-y-1/2 z-30 w-12 h-12 md:w-16 md:h-16 glass-panel flex items-center justify-center border border-white/20 hover:border-electricBlue hover:bg-electricBlue/20 transition-all duration-300 -translate-x-1/2 md:-translate-x-6"
+                      >
+                        <ChevronLeft className="w-6 h-6 md:w-8 md:h-8 text-white" />
+                      </button>
+
+                      {/* Right Arrow */}
+                      <button
+                        onClick={nextSlide}
+                        data-testid="carousel-next"
+                        className="absolute right-0 top-1/2 -translate-y-1/2 z-30 w-12 h-12 md:w-16 md:h-16 glass-panel flex items-center justify-center border border-white/20 hover:border-electricBlue hover:bg-electricBlue/20 transition-all duration-300 translate-x-1/2 md:translate-x-6"
+                      >
+                        <ChevronRight className="w-6 h-6 md:w-8 md:h-8 text-white" />
+                      </button>
+
+                      {/* Carousel Container */}
+                      <div className="overflow-hidden">
+                        <div 
+                          className="flex transition-transform duration-500 ease-in-out"
+                          style={{ transform: `translateX(-${currentSlide * 100}%)` }}
+                        >
+                          {projects.map((project) => (
+                            <Link 
+                              key={project.id}
+                              href="/case-studies" 
+                              className="group relative h-[450px] w-full flex-shrink-0 glass-panel overflow-hidden cursor-pointer border border-white/5 hover:border-electricBlue/50 transition-all duration-500 block"
+                            >
+                              <div className="absolute inset-0 bg-gray-800 group-hover:scale-105 transition-transform duration-700">
+                                <div 
+                                  className="w-full h-full bg-cover bg-center opacity-70 group-hover:opacity-50 transition-opacity duration-500"
+                                  style={{ backgroundImage: `url('${project.image}')` }}
+                                ></div>
                               </div>
-                          </div>
-
-                          <div className="absolute top-4 left-4 z-10 flex items-center gap-3">
-                              <span className="bg-black/50 backdrop-blur-sm text-white text-[10px] font-mono px-2 py-1 border border-white/20">2:34</span>
-                              <span className="bg-black/50 backdrop-blur-sm text-gray-400 text-[10px] font-mono px-2 py-1 border border-white/20">2025</span>
-                          </div>
-
-                          <div className="absolute bottom-0 left-0 p-8 md:p-12 w-full bg-gradient-to-t from-black via-black/80 to-transparent">
-                              <h3 className="font-header text-3xl md:text-5xl text-white mb-2 group-hover:text-electricBlue transition-colors duration-300">ECHO PROTOCOL</h3>
-                              <p className="text-sm text-gray-400 font-mono tracking-wide border-l border-white/30 pl-3 mb-3">Sci-Fi Short Film</p>
-                              <p className="text-sm text-gray-500 max-w-xl leading-relaxed hidden md:block">A cyberpunk detective navigates neon-soaked streets, hunting for answers in a world where memories can be stolen.</p>
-                          </div>
-                      </Link>
-
-                      {/* Project 2 */}
-                      <Link href="/case-studies" className="group relative h-[450px] w-full glass-panel overflow-hidden cursor-pointer border border-white/5 hover:border-signalOrange/50 transition-all duration-500 block">
-                          <div className="absolute inset-0 bg-gray-800 group-hover:scale-105 transition-transform duration-700">
-                              <div className="w-full h-full bg-[url('https://images.unsplash.com/photo-1534447677768-be436bb09401?q=80&w=2694&auto=format&fit=crop')] bg-cover bg-center opacity-70 group-hover:opacity-50 transition-opacity duration-500"></div>
-                          </div>
-                          
-                          <div className="absolute inset-0 flex items-center justify-center z-20">
-                              <div className="w-20 h-20 rounded-full bg-signalOrange/20 backdrop-blur-sm flex items-center justify-center border border-signalOrange/50 group-hover:bg-signalOrange group-hover:scale-110 transition-all duration-300">
+                              
+                              <div className="absolute inset-0 flex items-center justify-center z-20">
+                                <div className={`w-20 h-20 rounded-full bg-${project.accentColor}/20 backdrop-blur-sm flex items-center justify-center border border-${project.accentColor}/50 group-hover:bg-${project.accentColor} group-hover:scale-110 transition-all duration-300`}>
                                   <Play className="w-8 h-8 text-white ml-1" fill="white" />
+                                </div>
                               </div>
-                          </div>
 
-                          <div className="absolute top-4 left-4 z-10 flex items-center gap-3">
-                              <span className="bg-black/50 backdrop-blur-sm text-white text-[10px] font-mono px-2 py-1 border border-white/20">1:45</span>
-                              <span className="bg-black/50 backdrop-blur-sm text-gray-400 text-[10px] font-mono px-2 py-1 border border-white/20">2025</span>
-                          </div>
+                              <div className="absolute top-4 left-4 z-10 flex items-center gap-3">
+                                <span className="bg-black/50 backdrop-blur-sm text-white text-[10px] font-mono px-2 py-1 border border-white/20">{project.duration}</span>
+                                <span className="bg-black/50 backdrop-blur-sm text-gray-400 text-[10px] font-mono px-2 py-1 border border-white/20">{project.year}</span>
+                              </div>
 
-                          <div className="absolute bottom-0 left-0 p-8 md:p-12 w-full bg-gradient-to-t from-black via-black/80 to-transparent">
-                              <h3 className="font-header text-3xl md:text-5xl text-white mb-2 group-hover:text-signalOrange transition-colors duration-300">AURUM DYNAMICS</h3>
-                              <p className="text-sm text-gray-400 font-mono tracking-wide border-l border-white/30 pl-3 mb-3">Luxury Brand Commercial</p>
-                              <p className="text-sm text-gray-500 max-w-xl leading-relaxed hidden md:block">A mesmerizing visual journey through liquid gold and obsidian, crafted for a luxury jewelry brand's global campaign.</p>
-                          </div>
-                      </Link>
+                              <div className="absolute bottom-0 left-0 p-8 md:p-12 w-full bg-gradient-to-t from-black via-black/80 to-transparent">
+                                <h3 className={`font-header text-3xl md:text-5xl text-white mb-2 group-hover:text-${project.accentColor} transition-colors duration-300`}>{project.title}</h3>
+                                <p className="text-sm text-gray-400 font-mono tracking-wide border-l border-white/30 pl-3 mb-3">{project.category}</p>
+                                <p className="text-sm text-gray-500 max-w-xl leading-relaxed hidden md:block">{project.description}</p>
+                              </div>
+                            </Link>
+                          ))}
+                        </div>
+                      </div>
 
+                      {/* Slide Indicators */}
+                      <div className="flex justify-center gap-2 mt-6">
+                        {projects.map((_, index) => (
+                          <button
+                            key={index}
+                            onClick={() => setCurrentSlide(index)}
+                            data-testid={`slide-indicator-${index}`}
+                            className={`w-2 h-2 rounded-full transition-all duration-300 ${
+                              index === currentSlide 
+                                ? "bg-electricBlue w-8" 
+                                : "bg-white/30 hover:bg-white/50"
+                            }`}
+                          />
+                        ))}
+                      </div>
                   </div>
               </div>
           </section>
