@@ -1,6 +1,7 @@
 import { Link } from "wouter";
 import { useState, useEffect, useRef } from "react";
-import { LayoutDashboard, BookOpen, Users, ShoppingBag, BarChart2, Plus, Download, Bold, Italic, Underline, Link as LinkIcon, Code, X, Search, Edit2, Trash2, ArrowUp, ArrowDown, ArrowLeft, ArrowRight, ZoomIn, ZoomOut, Move } from "lucide-react";
+import { LayoutDashboard, BookOpen, Users, ShoppingBag, BarChart2, Plus, Download, Bold, Italic, Underline, Link as LinkIcon, Code, X, Search, Edit2, Trash2, ArrowUp, ArrowDown, ArrowLeft, ArrowRight, ZoomIn, ZoomOut, Move, TrendingUp, DollarSign, Activity } from "lucide-react";
+import { LineChart, Line, AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, BarChart, Bar, PieChart, Pie, Cell } from 'recharts';
 
 const INITIAL_LESSONS = {
   "1.1": { id: "1.1", title: "The Multimodal Script", duration: "12:45", video: "multimodal_script_v3.mp4", notes: "Introduction to multimodal scripting techniques using Gemini 1.5 Pro.", keyPrompt: "Analyze this image as a Director of Photography...", resources: [{ name: "Visual_Bible_Template.pdf", size: "2.4 MB", type: "PDF" }] },
@@ -127,6 +128,207 @@ export default function AdminDashboard() {
     { id: "s2", initials: "MD", name: "Mike Davis", email: "mike.dfx@studio.net", avatarColor: "orange-900", enrolledCourse: "Advanced Cinematography (L2)", progress: 12, lastActive: "1 day ago", status: "ACTIVE" },
     { id: "s3", initials: "JD", name: "John Doe", email: "jdoe@gmail.com", avatarColor: "gray-700", enrolledCourse: "Master the Ecosystem (L1)", progress: 0, lastActive: "Never", status: "PENDING" },
   ]);
+
+  // Mock Data for Analytics
+  const salesData = [
+    { name: 'Jan', revenue: 4000, sales: 24 },
+    { name: 'Feb', revenue: 3000, sales: 18 },
+    { name: 'Mar', revenue: 2000, sales: 12 },
+    { name: 'Apr', revenue: 2780, sales: 20 },
+    { name: 'May', revenue: 1890, sales: 15 },
+    { name: 'Jun', revenue: 2390, sales: 28 },
+    { name: 'Jul', revenue: 3490, sales: 32 },
+  ];
+
+  const categoryData = [
+    { name: 'Textures', value: 3596, color: '#0088FE' },
+    { name: 'Characters', value: 4361, color: '#00C49F' },
+    { name: 'Audio', value: 1200, color: '#FFBB28' },
+    { name: 'Courses', value: 8500, color: '#FF8042' },
+  ];
+
+  const recentTransactions = [
+    { id: 1, user: "Jane Doe", item: "Neon Noir Textures", amount: "$29.00", date: "2 mins ago", type: "Asset" },
+    { id: 2, user: "John Smith", item: "Master Google Ecosystem", amount: "$149.00", date: "15 mins ago", type: "Course" },
+    { id: 3, user: "Alice Lee", item: "Sci-Fi Characters Vol 1", amount: "$49.00", date: "1 hour ago", type: "Asset" },
+    { id: 4, user: "Robert Johnson", item: "Advanced AI Cinematography", amount: "$199.00", date: "3 hours ago", type: "Course" },
+    { id: 5, user: "Mike Brown", item: "Cinematic SFX Pack", amount: "$19.00", date: "5 hours ago", type: "Asset" },
+  ];
+
+  const renderAnalytics = () => (
+    <div className="relative z-10 p-8 max-w-7xl mx-auto space-y-6">
+      <div className="flex justify-between items-center">
+        <h1 className="text-2xl font-header font-bold text-white tracking-widest">ANALYTICS OVERVIEW</h1>
+        <div className="flex gap-2">
+          <select className="bg-black/50 border border-white/10 text-white text-xs px-3 py-2 outline-none">
+            <option>Last 7 Days</option>
+            <option>Last 30 Days</option>
+            <option>This Year</option>
+          </select>
+          <button className="bg-neonPurple text-white px-3 py-2 text-xs font-bold flex items-center gap-2 hover:bg-white hover:text-black transition-colors">
+            <Download className="w-3 h-3" /> EXPORT REPORT
+          </button>
+        </div>
+      </div>
+
+      {/* KPI Cards */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+        <div className="glass-panel p-6 border border-white/10 relative overflow-hidden group hover:border-neonPurple/50 transition-colors">
+          <div className="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
+            <DollarSign className="w-16 h-16 text-neonPurple" />
+          </div>
+          <p className="text-[10px] font-mono text-gray-500 uppercase mb-1">Total Revenue</p>
+          <h3 className="text-2xl font-header text-white">$17,657</h3>
+          <div className="flex items-center gap-1 mt-2 text-[10px] text-green-500 font-mono">
+            <ArrowUp className="w-3 h-3" /> +12.5% <span className="text-gray-500">vs last month</span>
+          </div>
+        </div>
+
+        <div className="glass-panel p-6 border border-white/10 relative overflow-hidden group hover:border-electricBlue/50 transition-colors">
+          <div className="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
+            <ShoppingBag className="w-16 h-16 text-electricBlue" />
+          </div>
+          <p className="text-[10px] font-mono text-gray-500 uppercase mb-1">Total Sales</p>
+          <h3 className="text-2xl font-header text-white">482</h3>
+          <div className="flex items-center gap-1 mt-2 text-[10px] text-green-500 font-mono">
+            <ArrowUp className="w-3 h-3" /> +8.2% <span className="text-gray-500">vs last month</span>
+          </div>
+        </div>
+
+        <div className="glass-panel p-6 border border-white/10 relative overflow-hidden group hover:border-green-500/50 transition-colors">
+          <div className="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
+            <Users className="w-16 h-16 text-green-500" />
+          </div>
+          <p className="text-[10px] font-mono text-gray-500 uppercase mb-1">Active Students</p>
+          <h3 className="text-2xl font-header text-white">4,525</h3>
+          <div className="flex items-center gap-1 mt-2 text-[10px] text-green-500 font-mono">
+            <ArrowUp className="w-3 h-3" /> +24% <span className="text-gray-500">vs last month</span>
+          </div>
+        </div>
+
+        <div className="glass-panel p-6 border border-white/10 relative overflow-hidden group hover:border-orange-500/50 transition-colors">
+          <div className="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
+            <Activity className="w-16 h-16 text-orange-500" />
+          </div>
+          <p className="text-[10px] font-mono text-gray-500 uppercase mb-1">Conversion Rate</p>
+          <h3 className="text-2xl font-header text-white">3.2%</h3>
+          <div className="flex items-center gap-1 mt-2 text-[10px] text-red-500 font-mono">
+            <ArrowDown className="w-3 h-3" /> -0.4% <span className="text-gray-500">vs last month</span>
+          </div>
+        </div>
+      </div>
+
+      {/* Main Charts */}
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        {/* Revenue Chart */}
+        <div className="lg:col-span-2 glass-panel p-6 border border-white/10">
+          <h3 className="font-header text-sm text-white mb-6">REVENUE OVERVIEW</h3>
+          <div className="h-64 w-full">
+            <ResponsiveContainer width="100%" height="100%">
+              <AreaChart data={salesData}>
+                <defs>
+                  <linearGradient id="colorRevenue" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="5%" stopColor="#8b5cf6" stopOpacity={0.8}/>
+                    <stop offset="95%" stopColor="#8b5cf6" stopOpacity={0}/>
+                  </linearGradient>
+                </defs>
+                <CartesianGrid strokeDasharray="3 3" stroke="#ffffff10" vertical={false} />
+                <XAxis dataKey="name" stroke="#6b7280" fontSize={10} tickLine={false} axisLine={false} />
+                <YAxis stroke="#6b7280" fontSize={10} tickLine={false} axisLine={false} tickFormatter={(value) => `$${value}`} />
+                <Tooltip 
+                  contentStyle={{ backgroundColor: '#000', border: '1px solid #333', borderRadius: '4px' }}
+                  itemStyle={{ color: '#fff', fontSize: '12px' }}
+                  labelStyle={{ color: '#888', fontSize: '10px', marginBottom: '4px' }}
+                />
+                <Area type="monotone" dataKey="revenue" stroke="#8b5cf6" strokeWidth={2} fillOpacity={1} fill="url(#colorRevenue)" />
+              </AreaChart>
+            </ResponsiveContainer>
+          </div>
+        </div>
+
+        {/* Revenue Breakdown */}
+        <div className="glass-panel p-6 border border-white/10 flex flex-col">
+          <h3 className="font-header text-sm text-white mb-6">REVENUE BY SOURCE</h3>
+          <div className="h-48 w-full flex-grow relative">
+            <ResponsiveContainer width="100%" height="100%">
+              <PieChart>
+                <Pie
+                  data={categoryData}
+                  cx="50%"
+                  cy="50%"
+                  innerRadius={60}
+                  outerRadius={80}
+                  paddingAngle={5}
+                  dataKey="value"
+                >
+                  {categoryData.map((entry, index) => (
+                    <Cell key={`cell-${index}`} fill={index === 0 ? '#8b5cf6' : index === 1 ? '#00f0ff' : index === 2 ? '#10b981' : '#f97316'} />
+                  ))}
+                </Pie>
+                <Tooltip 
+                   contentStyle={{ backgroundColor: '#000', border: '1px solid #333', borderRadius: '4px' }}
+                   itemStyle={{ color: '#fff', fontSize: '12px' }}
+                />
+              </PieChart>
+            </ResponsiveContainer>
+            {/* Center Text */}
+            <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+              <div className="text-center">
+                <span className="block text-2xl font-bold text-white">45%</span>
+                <span className="text-[9px] text-gray-500 uppercase">Courses</span>
+              </div>
+            </div>
+          </div>
+          <div className="mt-6 space-y-3">
+            {categoryData.map((item, index) => (
+              <div key={index} className="flex items-center justify-between text-xs">
+                <div className="flex items-center gap-2">
+                  <div className={`w-2 h-2 rounded-full ${index === 0 ? 'bg-neonPurple' : index === 1 ? 'bg-electricBlue' : index === 2 ? 'bg-green-500' : 'bg-orange-500'}`}></div>
+                  <span className="text-gray-300">{item.name}</span>
+                </div>
+                <span className="font-mono text-white">${item.value.toLocaleString()}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      {/* Recent Transactions */}
+      <div className="glass-panel p-6 border border-white/10">
+        <h3 className="font-header text-sm text-white mb-6">RECENT TRANSACTIONS</h3>
+        <div className="overflow-x-auto">
+          <table className="w-full text-left border-collapse">
+            <thead>
+              <tr className="border-b border-white/10 text-[10px] text-gray-500 font-mono uppercase">
+                <th className="py-3 px-4 font-normal">Transaction ID</th>
+                <th className="py-3 px-4 font-normal">Customer</th>
+                <th className="py-3 px-4 font-normal">Item</th>
+                <th className="py-3 px-4 font-normal">Type</th>
+                <th className="py-3 px-4 font-normal text-right">Amount</th>
+                <th className="py-3 px-4 font-normal text-right">Time</th>
+              </tr>
+            </thead>
+            <tbody>
+              {recentTransactions.map((tx) => (
+                <tr key={tx.id} className="border-b border-white/5 hover:bg-white/5 transition-colors">
+                  <td className="py-3 px-4 text-xs font-mono text-gray-400">#TRX-{29384 + tx.id}</td>
+                  <td className="py-3 px-4 text-xs font-bold text-white">{tx.user}</td>
+                  <td className="py-3 px-4 text-xs text-gray-300">{tx.item}</td>
+                  <td className="py-3 px-4">
+                    <span className={`text-[10px] px-2 py-1 rounded ${tx.type === 'Course' ? 'bg-orange-500/20 text-orange-500' : 'bg-blue-500/20 text-blue-500'}`}>
+                      {tx.type}
+                    </span>
+                  </td>
+                  <td className="py-3 px-4 text-xs font-mono font-bold text-white text-right">{tx.amount}</td>
+                  <td className="py-3 px-4 text-[10px] text-gray-500 text-right">{tx.date}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  );
 
   const [isStudentModalOpen, setIsStudentModalOpen] = useState(false);
   const [editingStudent, setEditingStudent] = useState<Student | null>(null);
@@ -1945,14 +2147,7 @@ export default function AdminDashboard() {
         )}
         {activeTab === "students" && renderStudents()}
         {activeTab === "store" && renderAssetStore()}
-        {activeTab === "analytics" && (
-          <div className="relative z-10 p-8 flex items-center justify-center h-full">
-            <div className="text-center">
-              <BarChart2 className="w-16 h-16 text-gray-600 mx-auto mb-4" />
-              <h2 className="text-xl font-header text-gray-400">ANALYTICS MODULE COMING SOON</h2>
-            </div>
-          </div>
-        )}
+        {activeTab === "analytics" && renderAnalytics()}
         {/* DELETE CONFIRMATION MODAL */}
         {deleteConfirmation?.isOpen && (
           <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm animate-in fade-in duration-200">
