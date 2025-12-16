@@ -1,7 +1,11 @@
 import { Link } from "wouter";
-import { ArrowLeft } from "lucide-react";
+import { ArrowLeft, Copy, Check } from "lucide-react";
+import { useState } from "react";
+import { Footer } from "@/components/footer";
 
 export default function Privacy() {
+  const [copied, setCopied] = useState(false);
+
   const scrollToSection = (id: string) => {
     const element = document.getElementById(id);
     if (element) {
@@ -9,8 +13,14 @@ export default function Privacy() {
     }
   };
 
+  const copyEmail = () => {
+    navigator.clipboard.writeText("admin@infinitestudioai.com");
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
+  };
+
   return (
-    <div className="bg-black min-h-screen text-gray-300 font-sans selection:bg-electricBlue selection:text-white">
+    <div className="bg-black min-h-screen text-gray-300 font-sans selection:bg-electricBlue selection:text-white flex flex-col">
       {/* HEADER */}
       <nav className="fixed top-0 left-0 right-0 z-50 bg-black/80 backdrop-blur-md border-b border-white/10 h-16 flex items-center justify-between px-6 md:px-12">
         <div className="flex items-center gap-2 group cursor-pointer">
@@ -26,7 +36,7 @@ export default function Privacy() {
         </Link>
       </nav>
 
-      <div className="max-w-7xl mx-auto px-6 md:px-12 pt-32 pb-24">
+      <div className="flex-grow max-w-7xl mx-auto px-6 md:px-12 pt-32 pb-24">
         {/* DOCUMENT HEADER */}
         <div className="mb-24">
           <div className="flex items-center gap-2 mb-4">
@@ -107,7 +117,7 @@ export default function Privacy() {
             {/* 01. INTRODUCTION */}
             <section id="introduction" className="border-t border-white/10 pt-8">
               <h2 className="font-header text-xl text-white mb-8">01. INTRODUCTION</h2>
-              <div className="space-y-6 text-sm leading-relaxed text-gray-400">
+              <div className="space-y-6 text-sm leading-relaxed text-gray-400 font-body">
                 <p>
                   Infinite Studio AI ("we," "our," or "us") respects your privacy and is committed to protecting your personal data. This privacy protocol ("Privacy Policy") will inform you as to how we look after your personal data when you visit our website (regardless of where you visit it from) and tell you about your privacy rights and how the law protects you.
                 </p>
@@ -120,7 +130,7 @@ export default function Privacy() {
             {/* 02. DATA COLLECTION */}
             <section id="data-collection" className="border-t border-white/10 pt-8">
               <h2 className="font-header text-xl text-white mb-8">02. DATA COLLECTION PROTOCOLS</h2>
-              <div className="space-y-6 text-sm leading-relaxed text-gray-400">
+              <div className="space-y-6 text-sm leading-relaxed text-gray-400 font-body">
                 <p>
                   We may collect, use, store and transfer different kinds of personal data about you which we have grouped together follows:
                 </p>
@@ -136,7 +146,7 @@ export default function Privacy() {
             {/* 03. DATA USAGE */}
             <section id="data-usage" className="border-t border-white/10 pt-8">
               <h2 className="font-header text-xl text-white mb-8">03. DATA USAGE & PROCESSING</h2>
-              <div className="space-y-6 text-sm leading-relaxed text-gray-400">
+              <div className="space-y-6 text-sm leading-relaxed text-gray-400 font-body">
                 <p>
                   We will only use your personal data when the law allows us to. Most commonly, we will use your personal data in the following circumstances:
                 </p>
@@ -151,7 +161,7 @@ export default function Privacy() {
             {/* 04. THIRD PARTY */}
             <section id="third-party" className="border-t border-white/10 pt-8">
               <h2 className="font-header text-xl text-white mb-8">04. THIRD PARTY INTEGRATIONS</h2>
-              <div className="space-y-6 text-sm leading-relaxed text-gray-400">
+              <div className="space-y-6 text-sm leading-relaxed text-gray-400 font-body">
                 <p>
                   Our ecosystem relies on specific third-party tools to function. By using our services, you acknowledge that data may be processed by:
                 </p>
@@ -166,7 +176,7 @@ export default function Privacy() {
             {/* 05. COOKIES */}
             <section id="cookies" className="border-t border-white/10 pt-8">
               <h2 className="font-header text-xl text-white mb-8">05. COOKIES & TRACKING</h2>
-              <div className="space-y-6 text-sm leading-relaxed text-gray-400">
+              <div className="space-y-6 text-sm leading-relaxed text-gray-400 font-body">
                 <p>
                   We use cookies and similar tracking technologies to track the activity on our Service and hold certain information.
                 </p>
@@ -179,7 +189,7 @@ export default function Privacy() {
              {/* 06. RIGHTS */}
              <section id="rights" className="border-t border-white/10 pt-8">
               <h2 className="font-header text-xl text-white mb-8">06. YOUR RIGHTS</h2>
-              <div className="space-y-6 text-sm leading-relaxed text-gray-400">
+              <div className="space-y-6 text-sm leading-relaxed text-gray-400 font-body">
                 <p>
                   Under certain circumstances, you have rights under data protection laws in relation to your personal data, including the right to request access, correction, erasure, restriction, transfer, to object to processing, to portability of data and (where the lawful ground of processing is consent) to withdraw consent.
                 </p>
@@ -189,14 +199,27 @@ export default function Privacy() {
             {/* 07. CONTACT */}
             <section id="contact" className="border-t border-white/10 pt-8">
               <h2 className="font-header text-xl text-white mb-8">07. CONTACT PROTOCOL</h2>
-              <div className="space-y-6 text-sm leading-relaxed text-gray-400">
+              <div className="space-y-6 text-sm leading-relaxed text-gray-400 font-body">
                 <p>
                   If you have any questions about this privacy policy or our privacy practices, please contact our Data Protection Officer via email at:
                 </p>
                 <div className="mt-6">
-                  <a href="mailto:admin@infinitestudioai.com" className="inline-block border border-white/10 bg-white/5 px-6 py-4 text-electricBlue font-mono text-xs hover:bg-electricBlue/10 hover:border-electricBlue/50 transition-all">
-                    admin@infinitestudioai.com
-                  </a>
+                  <button 
+                    onClick={copyEmail}
+                    className="group inline-flex items-center gap-3 border border-white/10 bg-white/5 px-6 py-4 text-electricBlue font-mono text-xs hover:bg-electricBlue/10 hover:border-electricBlue/50 transition-all cursor-pointer relative overflow-hidden"
+                  >
+                    <span>admin@infinitestudioai.com</span>
+                    {copied ? (
+                      <Check className="w-3 h-3 text-green-500" />
+                    ) : (
+                      <Copy className="w-3 h-3 opacity-50 group-hover:opacity-100 transition-opacity" />
+                    )}
+                    {copied && (
+                      <span className="absolute inset-0 flex items-center justify-center bg-black/90 text-green-500 font-bold tracking-widest text-[10px]">
+                        COPIED TO CLIPBOARD
+                      </span>
+                    )}
+                  </button>
                 </div>
               </div>
             </section>
@@ -204,12 +227,14 @@ export default function Privacy() {
           </div>
         </div>
         
-        <div className="mt-32 border-t border-white/10 pt-8 text-center">
+        <div className="mt-32 border-t border-white/10 pt-8 text-center mb-12">
             <p className="text-[10px] font-mono text-gray-600 uppercase tracking-widest">
                 End of Document // ID: PRIV-001
             </p>
         </div>
       </div>
+      
+      <Footer />
     </div>
   );
 }
