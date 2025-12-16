@@ -98,6 +98,15 @@ export default function AdminDashboard() {
   
   const [editorCourseId, setEditorCourseId] = useState<string | null>(null);
 
+  const handleCourseListUpdate = (courseId: string, field: keyof Course, value: string) => {
+    setCoursesList(coursesList.map(c => {
+      if (c.id === courseId) {
+        return { ...c, [field]: value };
+      }
+      return c;
+    }));
+  };
+
   const handleCreateCourse = () => {
     setActiveTab("courses");
     setLessons({});
@@ -539,10 +548,24 @@ export default function AdminDashboard() {
                     <p className="text-[10px] text-gray-500 uppercase">Students</p>
                   </div>
                   <div className="text-right">
-                    <p className="text-xs text-green-400 font-bold">{course.price}</p>
+                    <input 
+                      type="text"
+                      value={course.price}
+                      onClick={(e) => e.stopPropagation()}
+                      onChange={(e) => handleCourseListUpdate(course.id, "price", e.target.value)}
+                      className="text-xs text-green-400 font-bold bg-transparent border-b border-transparent hover:border-white/20 focus:border-green-400 outline-none text-right w-16"
+                    />
                     <p className="text-[10px] text-gray-500 uppercase">Price</p>
                   </div>
-                  <span className={`px-3 py-1 rounded text-[10px] font-bold border ${course.status === 'LIVE' ? 'bg-green-500/10 text-green-500 border-green-500/20' : 'bg-yellow-500/10 text-yellow-500 border-yellow-500/20'}`}>{course.status}</span>
+                  <button
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      handleCourseListUpdate(course.id, "status", course.status === "LIVE" ? "DRAFT" : "LIVE");
+                    }}
+                    className={`px-3 py-1 rounded text-[10px] font-bold border hover:opacity-80 transition-opacity ${course.status === 'LIVE' ? 'bg-green-500/10 text-green-500 border-green-500/20' : 'bg-yellow-500/10 text-yellow-500 border-yellow-500/20'}`}
+                  >
+                    {course.status}
+                  </button>
                   <div className="flex gap-2">
                     <button 
                         onClick={(e) => { e.stopPropagation(); requestDeleteCourse(course.id); }}
