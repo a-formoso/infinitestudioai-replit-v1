@@ -5,6 +5,8 @@ import { LayoutDashboard, BookOpen, Users, ShoppingBag, BarChart2, Plus, Downloa
 export default function AdminDashboard() {
   const [activeTab, setActiveTab] = useState("dashboard");
   const [courseView, setCourseView] = useState<"list" | "editor">("list");
+  const [expandedCourseId, setExpandedCourseId] = useState<string | null>("course-1");
+  const [expandedModuleId, setExpandedModuleId] = useState<string | null>(null);
   const [logs, setLogs] = useState<string[]>([]);
   const terminalRef = useRef<HTMLDivElement>(null);
 
@@ -190,123 +192,242 @@ export default function AdminDashboard() {
     </div>
   );
 
-  const renderCourseList = () => (
-    <div className="relative z-10 p-8 max-w-7xl mx-auto">
-      {/* HEADER */}
-      <div className="flex justify-between items-end mb-8">
-        <div>
-          <h1 className="font-header text-2xl text-white mb-1">COURSE MANAGEMENT</h1>
-          <p className="text-xs text-gray-400 font-mono">Manage curriculum, uploads, and pricing.</p>
-        </div>
-        <div className="flex gap-4">
-          <button 
-            onClick={() => setCourseView('editor')}
-            className="bg-electricBlue text-white px-4 py-2 text-[10px] font-header font-bold uppercase hover:bg-white hover:text-black transition-colors"
-          >
-            + Create New Course
-          </button>
-        </div>
-      </div>
+  const renderCourseList = () => {
+    const toggleCourse = (id: string) => {
+      setExpandedCourseId(expandedCourseId === id ? null : id);
+      setExpandedModuleId(null); // Reset module selection when switching courses
+    };
 
-      {/* COURSE LIST */}
-      <div className="space-y-6">
-        
-        {/* Course Item 1 */}
-        <div className="glass-panel p-0 overflow-hidden border border-white/10 hover:border-electricBlue/30 transition-colors group">
-          <div className="p-6 flex items-center justify-between border-b border-white/5 bg-white/5">
-            <div className="flex items-center gap-4">
-              <div className="w-12 h-12 bg-gray-900 shrink-0 relative overflow-hidden rounded border border-white/10">
-                <div className="absolute inset-0 bg-gradient-to-br from-blue-900/40 to-black"></div>
-                <span className="absolute inset-0 flex items-center justify-center font-header text-white text-xs">L1</span>
-              </div>
-              <div>
-                <h3 className="font-header text-sm text-white">MASTER THE GOOGLE ECOSYSTEM</h3>
-                <p className="text-[10px] text-gray-400 font-mono">ID: #COURSE-001 • Last Updated: 2h ago</p>
-              </div>
-            </div>
-            <div className="flex items-center gap-6">
-              <div className="text-right">
-                <p className="text-xs text-white font-bold">3,420</p>
-                <p className="text-[10px] text-gray-500 uppercase">Students</p>
-              </div>
-              <div className="text-right">
-                <p className="text-xs text-green-400 font-bold">$149</p>
-                <p className="text-[10px] text-gray-500 uppercase">Price</p>
-              </div>
-              <span className="bg-green-500/10 text-green-500 px-3 py-1 rounded text-[10px] font-bold border border-green-500/20">LIVE</span>
-              <button className="text-gray-400 hover:text-white transition-colors">•••</button>
-            </div>
+    const toggleModule = (id: string) => {
+      setExpandedModuleId(expandedModuleId === id ? null : id);
+    };
+
+    return (
+      <div className="relative z-10 p-8 max-w-7xl mx-auto">
+        {/* HEADER */}
+        <div className="flex justify-between items-end mb-8">
+          <div>
+            <h1 className="font-header text-2xl text-white mb-1">COURSE MANAGEMENT</h1>
+            <p className="text-xs text-gray-400 font-mono">Manage curriculum, uploads, and pricing.</p>
           </div>
-          
-          {/* Modules (Collapsible) */}
-          <div className="bg-black/30 p-4 space-y-2">
-            <div className="flex justify-between items-center p-3 bg-white/5 rounded border border-white/5 hover:border-white/10 cursor-move">
-              <div className="flex items-center gap-3">
-                <span className="text-gray-600 text-xs">::</span>
-                <span className="text-xs text-gray-300 font-medium">Module 1: The Writer's Room</span>
-              </div>
-              <div className="flex gap-3 text-[10px]">
-                <span className="text-gray-500">3 Lessons</span>
-                <button onClick={() => setCourseView('editor')} className="text-electricBlue hover:underline">Edit</button>
-              </div>
-            </div>
-            <div className="flex justify-between items-center p-3 bg-white/5 rounded border border-white/5 hover:border-white/10 cursor-move">
-              <div className="flex items-center gap-3">
-                <span className="text-gray-600 text-xs">::</span>
-                <span className="text-xs text-gray-300 font-medium">Module 2: The Art Dept</span>
-              </div>
-              <div className="flex gap-3 text-[10px]">
-                <span className="text-gray-500">4 Lessons</span>
-                <button onClick={() => setCourseView('editor')} className="text-electricBlue hover:underline">Edit</button>
-              </div>
-            </div>
-            <div className="flex justify-between items-center p-3 bg-white/5 rounded border border-white/5 hover:border-white/10 cursor-move">
-              <div className="flex items-center gap-3">
-                <span className="text-gray-600 text-xs">::</span>
-                <span className="text-xs text-gray-300 font-medium">Module 3: Principal Photography</span>
-              </div>
-              <div className="flex gap-3 text-[10px]">
-                <span className="text-gray-500">5 Lessons</span>
-                <button onClick={() => setCourseView('editor')} className="text-electricBlue hover:underline">Edit</button>
-              </div>
-            </div>
-            <button className="w-full py-2 text-[10px] text-gray-500 hover:text-white hover:bg-white/5 border border-dashed border-white/10 rounded transition-colors">
-              + Add Module
+          <div className="flex gap-4">
+            <button 
+              onClick={() => setCourseView('editor')}
+              className="bg-electricBlue text-white px-4 py-2 text-[10px] font-header font-bold uppercase hover:bg-white hover:text-black transition-colors"
+            >
+              + Create New Course
             </button>
           </div>
         </div>
 
-        {/* Course Item 2 */}
-        <div className="glass-panel p-0 overflow-hidden border border-white/10 hover:border-signalOrange/30 transition-colors group opacity-80">
-          <div className="p-6 flex items-center justify-between border-b border-white/5 bg-white/5">
-            <div className="flex items-center gap-4">
-              <div className="w-12 h-12 bg-gray-900 shrink-0 relative overflow-hidden rounded border border-white/10">
-                <div className="absolute inset-0 bg-gradient-to-br from-orange-900/40 to-black"></div>
-                <span className="absolute inset-0 flex items-center justify-center font-header text-white text-xs">L2</span>
+        {/* COURSE LIST */}
+        <div className="space-y-6">
+          
+          {/* Course Item 1 */}
+          <div className={`glass-panel p-0 overflow-hidden border transition-colors group ${expandedCourseId === 'course-1' ? 'border-electricBlue/50' : 'border-white/10 hover:border-electricBlue/30'}`}>
+            <div 
+              className="p-6 flex items-center justify-between border-b border-white/5 bg-white/5 cursor-pointer"
+              onClick={() => toggleCourse('course-1')}
+            >
+              <div className="flex items-center gap-4">
+                <div className="w-12 h-12 bg-gray-900 shrink-0 relative overflow-hidden rounded border border-white/10">
+                  <div className="absolute inset-0 bg-gradient-to-br from-blue-900/40 to-black"></div>
+                  <span className="absolute inset-0 flex items-center justify-center font-header text-white text-xs">L1</span>
+                </div>
+                <div>
+                  <h3 className="font-header text-sm text-white">MASTER THE GOOGLE ECOSYSTEM</h3>
+                  <p className="text-[10px] text-gray-400 font-mono">ID: #COURSE-001 • Last Updated: 2h ago</p>
+                </div>
               </div>
-              <div>
-                <h3 className="font-header text-sm text-white">ADVANCED AI CINEMATOGRAPHY</h3>
-                <p className="text-[10px] text-gray-400 font-mono">ID: #COURSE-002 • Last Updated: 1d ago</p>
+              <div className="flex items-center gap-6">
+                <div className="text-right">
+                  <p className="text-xs text-white font-bold">3,420</p>
+                  <p className="text-[10px] text-gray-500 uppercase">Students</p>
+                </div>
+                <div className="text-right">
+                  <p className="text-xs text-green-400 font-bold">$149</p>
+                  <p className="text-[10px] text-gray-500 uppercase">Price</p>
+                </div>
+                <span className="bg-green-500/10 text-green-500 px-3 py-1 rounded text-[10px] font-bold border border-green-500/20">LIVE</span>
+                <button className="text-gray-400 hover:text-white transition-colors">
+                  {expandedCourseId === 'course-1' ? '▲' : '▼'}
+                </button>
               </div>
             </div>
-            <div className="flex items-center gap-6">
-              <div className="text-right">
-                <p class="text-xs text-white font-bold">1,105</p>
-                <p class="text-[10px] text-gray-500 uppercase">Students</p>
-              </div>
-              <div className="text-right">
-                <p class="text-xs text-green-400 font-bold">$199</p>
-                <p class="text-[10px] text-gray-500 uppercase">Price</p>
-              </div>
-              <span className="bg-yellow-500/10 text-yellow-500 px-3 py-1 rounded text-[10px] font-bold border border-yellow-500/20">DRAFT</span>
-              <button className="text-gray-400 hover:text-white transition-colors">•••</button>
-            </div>
-          </div>
-        </div>
+            
+            {/* Modules (Collapsible) */}
+            {expandedCourseId === 'course-1' && (
+              <div className="bg-black/30 p-4 space-y-2 animate-in slide-in-from-top-2 duration-200">
+                {/* Module 1 */}
+                <div className="bg-white/5 rounded border border-white/5 overflow-hidden">
+                  <div 
+                    className="flex justify-between items-center p-3 hover:bg-white/5 cursor-pointer"
+                    onClick={() => toggleModule('module-1')}
+                  >
+                    <div className="flex items-center gap-3">
+                      <span className="text-gray-600 text-xs">::</span>
+                      <span className="text-xs text-gray-300 font-medium">Module 1: The Writer's Room</span>
+                    </div>
+                    <div className="flex gap-3 text-[10px]">
+                      <span className="text-gray-500">3 Lessons</span>
+                      <button onClick={(e) => { e.stopPropagation(); setCourseView('editor'); }} className="text-electricBlue hover:underline">Edit</button>
+                    </div>
+                  </div>
+                  
+                  {/* Lessons for Module 1 */}
+                  {expandedModuleId === 'module-1' && (
+                    <div className="bg-black/20 border-t border-white/5 p-2 space-y-1">
+                      <div className="flex items-center justify-between p-2 pl-8 text-[10px] text-gray-400 hover:text-white hover:bg-white/5 rounded cursor-pointer">
+                        <span>1.1 The Multimodal Script</span>
+                        <span className="text-gray-600">12:45</span>
+                      </div>
+                      <div className="flex items-center justify-between p-2 pl-8 text-[10px] text-gray-400 hover:text-white hover:bg-white/5 rounded cursor-pointer">
+                        <span>1.2 Context is King</span>
+                        <span className="text-gray-600">08:30</span>
+                      </div>
+                      <div className="flex items-center justify-between p-2 pl-8 text-[10px] text-gray-400 hover:text-white hover:bg-white/5 rounded cursor-pointer">
+                        <span>1.3 Visual Bible (Editing)</span>
+                        <span className="text-gray-600">15:10</span>
+                      </div>
+                    </div>
+                  )}
+                </div>
 
+                {/* Module 2 */}
+                <div className="bg-white/5 rounded border border-white/5 overflow-hidden">
+                  <div 
+                    className="flex justify-between items-center p-3 hover:bg-white/5 cursor-pointer"
+                    onClick={() => toggleModule('module-2')}
+                  >
+                    <div className="flex items-center gap-3">
+                      <span className="text-gray-600 text-xs">::</span>
+                      <span className="text-xs text-gray-300 font-medium">Module 2: The Art Dept</span>
+                    </div>
+                    <div className="flex gap-3 text-[10px]">
+                      <span className="text-gray-500">4 Lessons</span>
+                      <button onClick={(e) => { e.stopPropagation(); setCourseView('editor'); }} className="text-electricBlue hover:underline">Edit</button>
+                    </div>
+                  </div>
+
+                  {/* Lessons for Module 2 */}
+                  {expandedModuleId === 'module-2' && (
+                    <div className="bg-black/20 border-t border-white/5 p-2 space-y-1">
+                      <div className="flex items-center justify-between p-2 pl-8 text-[10px] text-gray-400 hover:text-white hover:bg-white/5 rounded cursor-pointer">
+                        <span>2.1 Set Design AI</span>
+                        <span className="text-gray-600">10:20</span>
+                      </div>
+                      <div className="flex items-center justify-between p-2 pl-8 text-[10px] text-gray-400 hover:text-white hover:bg-white/5 rounded cursor-pointer">
+                        <span>2.2 Lighting Consistency</span>
+                        <span className="text-gray-600">14:15</span>
+                      </div>
+                      <div className="flex items-center justify-between p-2 pl-8 text-[10px] text-gray-400 hover:text-white hover:bg-white/5 rounded cursor-pointer">
+                        <span>2.3 Camera Movements</span>
+                        <span className="text-gray-600">09:45</span>
+                      </div>
+                      <div className="flex items-center justify-between p-2 pl-8 text-[10px] text-gray-400 hover:text-white hover:bg-white/5 rounded cursor-pointer">
+                        <span>2.4 Color Grading</span>
+                        <span className="text-gray-600">11:30</span>
+                      </div>
+                    </div>
+                  )}
+                </div>
+
+                {/* Module 3 */}
+                <div className="bg-white/5 rounded border border-white/5 overflow-hidden">
+                  <div 
+                    className="flex justify-between items-center p-3 hover:bg-white/5 cursor-pointer"
+                    onClick={() => toggleModule('module-3')}
+                  >
+                    <div className="flex items-center gap-3">
+                      <span className="text-gray-600 text-xs">::</span>
+                      <span className="text-xs text-gray-300 font-medium">Module 3: Principal Photography</span>
+                    </div>
+                    <div className="flex gap-3 text-[10px]">
+                      <span className="text-gray-500">5 Lessons</span>
+                      <button onClick={(e) => { e.stopPropagation(); setCourseView('editor'); }} className="text-electricBlue hover:underline">Edit</button>
+                    </div>
+                  </div>
+
+                  {/* Lessons for Module 3 */}
+                  {expandedModuleId === 'module-3' && (
+                    <div className="bg-black/20 border-t border-white/5 p-2 space-y-1">
+                      <div className="flex items-center justify-between p-2 pl-8 text-[10px] text-gray-400 hover:text-white hover:bg-white/5 rounded cursor-pointer">
+                        <span>3.1 Shot Prompting</span>
+                        <span className="text-gray-600">08:15</span>
+                      </div>
+                      <div className="flex items-center justify-between p-2 pl-8 text-[10px] text-gray-400 hover:text-white hover:bg-white/5 rounded cursor-pointer">
+                        <span>3.2 Camera Angles</span>
+                        <span className="text-gray-600">07:45</span>
+                      </div>
+                      <div className="flex items-center justify-between p-2 pl-8 text-[10px] text-gray-400 hover:text-white hover:bg-white/5 rounded cursor-pointer">
+                        <span>3.3 Movement Control</span>
+                        <span className="text-gray-600">13:20</span>
+                      </div>
+                      <div className="flex items-center justify-between p-2 pl-8 text-[10px] text-gray-400 hover:text-white hover:bg-white/5 rounded cursor-pointer">
+                        <span>3.4 Upscaling</span>
+                        <span className="text-gray-600">06:50</span>
+                      </div>
+                      <div className="flex items-center justify-between p-2 pl-8 text-[10px] text-gray-400 hover:text-white hover:bg-white/5 rounded cursor-pointer">
+                        <span>3.5 Final Export</span>
+                        <span className="text-gray-600">18:00</span>
+                      </div>
+                    </div>
+                  )}
+                </div>
+
+                <button className="w-full py-2 text-[10px] text-gray-500 hover:text-white hover:bg-white/5 border border-dashed border-white/10 rounded transition-colors">
+                  + Add Module
+                </button>
+              </div>
+            )}
+          </div>
+
+          {/* Course Item 2 */}
+          <div className={`glass-panel p-0 overflow-hidden border transition-colors group opacity-80 ${expandedCourseId === 'course-2' ? 'border-signalOrange/50' : 'border-white/10 hover:border-signalOrange/30'}`}>
+            <div 
+              className="p-6 flex items-center justify-between border-b border-white/5 bg-white/5 cursor-pointer"
+              onClick={() => toggleCourse('course-2')}
+            >
+              <div className="flex items-center gap-4">
+                <div className="w-12 h-12 bg-gray-900 shrink-0 relative overflow-hidden rounded border border-white/10">
+                  <div className="absolute inset-0 bg-gradient-to-br from-orange-900/40 to-black"></div>
+                  <span className="absolute inset-0 flex items-center justify-center font-header text-white text-xs">L2</span>
+                </div>
+                <div>
+                  <h3 className="font-header text-sm text-white">ADVANCED AI CINEMATOGRAPHY</h3>
+                  <p className="text-[10px] text-gray-400 font-mono">ID: #COURSE-002 • Last Updated: 1d ago</p>
+                </div>
+              </div>
+              <div className="flex items-center gap-6">
+                <div className="text-right">
+                  <p className="text-xs text-white font-bold">1,105</p>
+                  <p className="text-[10px] text-gray-500 uppercase">Students</p>
+                </div>
+                <div className="text-right">
+                  <p className="text-xs text-green-400 font-bold">$199</p>
+                  <p className="text-[10px] text-gray-500 uppercase">Price</p>
+                </div>
+                <span className="bg-yellow-500/10 text-yellow-500 px-3 py-1 rounded text-[10px] font-bold border border-yellow-500/20">DRAFT</span>
+                <button className="text-gray-400 hover:text-white transition-colors">
+                  {expandedCourseId === 'course-2' ? '▲' : '▼'}
+                </button>
+              </div>
+            </div>
+            
+            {/* Modules for Course 2 (Collapsible) */}
+            {expandedCourseId === 'course-2' && (
+              <div className="bg-black/30 p-4 space-y-2 animate-in slide-in-from-top-2 duration-200">
+                 <div className="p-4 text-center text-gray-500 text-xs font-mono border border-dashed border-white/10 rounded">
+                    No modules created yet. <button className="text-electricBlue hover:underline">Start building curriculum</button>
+                 </div>
+              </div>
+            )}
+          </div>
+
+        </div>
       </div>
-    </div>
-  );
+    );
+  };
 
   const renderCourseEditor = () => (
     <div className="relative z-10 p-8 max-w-7xl mx-auto">
