@@ -2,6 +2,27 @@ import { Link } from "wouter";
 import { useState, useEffect, useRef } from "react";
 import { LayoutDashboard, BookOpen, Users, ShoppingBag, BarChart2, Plus, Download, Bold, Italic, Underline, Link as LinkIcon, Code, X, Search, Edit2, Trash2 } from "lucide-react";
 
+const INITIAL_LESSONS = {
+  "1.1": { id: "1.1", title: "The Multimodal Script", duration: "12:45", video: "multimodal_script_v3.mp4", notes: "Introduction to multimodal scripting techniques using Gemini 1.5 Pro." },
+  "1.2": { id: "1.2", title: "Context is King", duration: "08:30", video: "context_king_final.mp4", notes: "Understanding the importance of context window in long-form generation." },
+  "1.3": { id: "1.3", title: "Visual Bible (Editing)", duration: "15:10", video: "visual_bible_v2.mp4", notes: "How to compile a visual bible from generated assets." },
+  "2.1": { id: "2.1", title: "Set Design AI", duration: "10:20", video: "set_design_ai.mp4", notes: "Using AI to generate consistent set designs." },
+  "2.2": { id: "2.2", title: "Lighting Consistency", duration: "14:15", video: "lighting_fix.mp4", notes: "maintaining lighting across multiple generated shots." },
+  "2.3": { id: "2.3", title: "Camera Movements", duration: "09:45", video: "camera_moves.mp4", notes: "Simulating dolly and crane shots." },
+  "2.4": { id: "2.4", title: "Color Grading", duration: "11:30", video: "color_grade_lut.mp4", notes: "Applying cinematic LUTs to generated video." },
+  "3.1": { id: "3.1", title: "Shot Prompting", duration: "08:15", video: "shot_prompting.mp4", notes: "Specific prompting techniques for camera angles." },
+  "3.2": { id: "3.2", title: "Camera Angles", duration: "07:45", video: "angles_master.mp4", notes: "Wide, medium, and close-up shot consistency." },
+  "3.3": { id: "3.3", title: "Movement Control", duration: "13:20", video: "movement_ctrl.mp4", notes: "Controlling character movement within the frame." },
+  "3.4": { id: "3.4", title: "Upscaling", duration: "06:50", video: "upscale_4k.mp4", notes: "Best practices for upscaling to 4K." },
+  "3.5": { id: "3.5", title: "Final Export", duration: "18:00", video: "export_settings.mp4", notes: "Codecs and wrappers for final delivery." }
+};
+
+const INITIAL_MODULES = [
+  { id: "module-1", title: "MODULE 1: WRITER'S ROOM", status: "Draft", lessons: ["1.1", "1.2", "1.3"] },
+  { id: "module-2", title: "MODULE 2: THE ART DEPT", status: "Draft", lessons: ["2.1", "2.2", "2.3", "2.4"] },
+  { id: "module-3", title: "MODULE 3: PRINCIPAL PHOTOGRAPHY", status: "Draft", lessons: ["3.1", "3.2", "3.3", "3.4", "3.5"] }
+];
+
 export default function AdminDashboard() {
   const [activeTab, setActiveTab] = useState("dashboard");
   const [courseView, setCourseView] = useState<"list" | "editor">("list");
@@ -9,30 +30,31 @@ export default function AdminDashboard() {
   const [expandedModuleId, setExpandedModuleId] = useState<string | null>(null);
   const [selectedLessonId, setSelectedLessonId] = useState<string>("1.1");
   const [logs, setLogs] = useState<string[]>([]);
+  const [editorCourseTitle, setEditorCourseTitle] = useState("MASTER THE GOOGLE ECOSYSTEM");
   const terminalRef = useRef<HTMLDivElement>(null);
 
   // State for Lessons Data
-  const [lessons, setLessons] = useState<Record<string, { id: string; title: string; duration: string; video: string; notes: string }>>({
-    "1.1": { id: "1.1", title: "The Multimodal Script", duration: "12:45", video: "multimodal_script_v3.mp4", notes: "Introduction to multimodal scripting techniques using Gemini 1.5 Pro." },
-    "1.2": { id: "1.2", title: "Context is King", duration: "08:30", video: "context_king_final.mp4", notes: "Understanding the importance of context window in long-form generation." },
-    "1.3": { id: "1.3", title: "Visual Bible (Editing)", duration: "15:10", video: "visual_bible_v2.mp4", notes: "How to compile a visual bible from generated assets." },
-    "2.1": { id: "2.1", title: "Set Design AI", duration: "10:20", video: "set_design_ai.mp4", notes: "Using AI to generate consistent set designs." },
-    "2.2": { id: "2.2", title: "Lighting Consistency", duration: "14:15", video: "lighting_fix.mp4", notes: "maintaining lighting across multiple generated shots." },
-    "2.3": { id: "2.3", title: "Camera Movements", duration: "09:45", video: "camera_moves.mp4", notes: "Simulating dolly and crane shots." },
-    "2.4": { id: "2.4", title: "Color Grading", duration: "11:30", video: "color_grade_lut.mp4", notes: "Applying cinematic LUTs to generated video." },
-    "3.1": { id: "3.1", title: "Shot Prompting", duration: "08:15", video: "shot_prompting.mp4", notes: "Specific prompting techniques for camera angles." },
-    "3.2": { id: "3.2", title: "Camera Angles", duration: "07:45", video: "angles_master.mp4", notes: "Wide, medium, and close-up shot consistency." },
-    "3.3": { id: "3.3", title: "Movement Control", duration: "13:20", video: "movement_ctrl.mp4", notes: "Controlling character movement within the frame." },
-    "3.4": { id: "3.4", title: "Upscaling", duration: "06:50", video: "upscale_4k.mp4", notes: "Best practices for upscaling to 4K." },
-    "3.5": { id: "3.5", title: "Final Export", duration: "18:00", video: "export_settings.mp4", notes: "Codecs and wrappers for final delivery." }
-  });
+  const [lessons, setLessons] = useState<Record<string, { id: string; title: string; duration: string; video: string; notes: string }>>(INITIAL_LESSONS);
 
   // State for Modules Structure
-  const [modules, setModules] = useState<{ id: string; title: string; status: string; lessons: string[] }[]>([
-    { id: "module-1", title: "MODULE 1: WRITER'S ROOM", status: "Draft", lessons: ["1.1", "1.2", "1.3"] },
-    { id: "module-2", title: "MODULE 2: THE ART DEPT", status: "Draft", lessons: ["2.1", "2.2", "2.3", "2.4"] },
-    { id: "module-3", title: "MODULE 3: PRINCIPAL PHOTOGRAPHY", status: "Draft", lessons: ["3.1", "3.2", "3.3", "3.4", "3.5"] }
-  ]);
+  const [modules, setModules] = useState<{ id: string; title: string; status: string; lessons: string[] }[]>(INITIAL_MODULES);
+
+  const handleCreateCourse = () => {
+    setActiveTab("courses");
+    setLessons({});
+    setModules([]);
+    setEditorCourseTitle("UNTITLED COURSE");
+    setSelectedLessonId("");
+    setCourseView('editor');
+  };
+
+  const handleEditCourse = () => {
+    setLessons(INITIAL_LESSONS);
+    setModules(INITIAL_MODULES);
+    setEditorCourseTitle("MASTER THE GOOGLE ECOSYSTEM");
+    setSelectedLessonId("1.1");
+    setCourseView('editor');
+  };
 
   const [deleteConfirmation, setDeleteConfirmation] = useState<{ isOpen: boolean; type: 'module' | 'lesson'; id: string; title: string; parentId?: string } | null>(null);
   
@@ -176,10 +198,7 @@ export default function AdminDashboard() {
         </div>
         <div className="flex gap-4">
           <button 
-            onClick={() => {
-              setActiveTab("courses");
-              setCourseView("editor");
-            }}
+            onClick={handleCreateCourse}
             className="flex items-center gap-2 bg-electricBlue text-white px-4 py-2 text-[10px] font-header font-bold uppercase hover:bg-white hover:text-black transition-colors"
           >
             <Plus className="w-3 h-3" /> New Course
@@ -330,7 +349,7 @@ export default function AdminDashboard() {
           </div>
           <div className="flex gap-4">
             <button 
-              onClick={() => setCourseView('editor')}
+              onClick={handleCreateCourse}
               className="bg-electricBlue text-white px-4 py-2 text-[10px] font-header font-bold uppercase hover:bg-white hover:text-black transition-colors"
             >
               + Create New Course
@@ -388,7 +407,7 @@ export default function AdminDashboard() {
                     </div>
                     <div className="flex gap-3 text-[10px]">
                       <span className="text-gray-500">3 Lessons</span>
-                      <button onClick={(e) => { e.stopPropagation(); setCourseView('editor'); }} className="text-electricBlue hover:underline">Edit</button>
+                      <button onClick={(e) => { e.stopPropagation(); handleEditCourse(); }} className="text-electricBlue hover:underline">Edit</button>
                     </div>
                   </div>
                   
@@ -397,7 +416,7 @@ export default function AdminDashboard() {
                     <div className="bg-black/20 border-t border-white/5 p-2 space-y-1">
                       <div 
                         className="flex items-center justify-between p-2 pl-8 text-[10px] text-gray-400 hover:text-white hover:bg-white/5 rounded cursor-pointer group/lesson"
-                        onClick={() => setCourseView('editor')}
+                        onClick={() => handleEditCourse()}
                       >
                         <span>1.1 The Multimodal Script</span>
                         <div className="flex items-center gap-2">
@@ -462,7 +481,7 @@ export default function AdminDashboard() {
                     </div>
                     <div className="flex gap-3 text-[10px]">
                       <span className="text-gray-500">4 Lessons</span>
-                      <button onClick={(e) => { e.stopPropagation(); setCourseView('editor'); }} className="text-electricBlue hover:underline">Edit</button>
+                      <button onClick={(e) => { e.stopPropagation(); handleEditCourse(); }} className="text-electricBlue hover:underline">Edit</button>
                     </div>
                   </div>
 
@@ -471,7 +490,7 @@ export default function AdminDashboard() {
                     <div className="bg-black/20 border-t border-white/5 p-2 space-y-1">
                       <div 
                         className="flex items-center justify-between p-2 pl-8 text-[10px] text-gray-400 hover:text-white hover:bg-white/5 rounded cursor-pointer group/lesson"
-                        onClick={() => setCourseView('editor')}
+                        onClick={() => handleEditCourse()}
                       >
                         <span>2.1 Set Design AI</span>
                         <div className="flex items-center gap-2">
@@ -553,7 +572,7 @@ export default function AdminDashboard() {
                     </div>
                     <div className="flex gap-3 text-[10px]">
                       <span className="text-gray-500">5 Lessons</span>
-                      <button onClick={(e) => { e.stopPropagation(); setCourseView('editor'); }} className="text-electricBlue hover:underline">Edit</button>
+                      <button onClick={(e) => { e.stopPropagation(); handleEditCourse(); }} className="text-electricBlue hover:underline">Edit</button>
                     </div>
                   </div>
 
@@ -562,7 +581,7 @@ export default function AdminDashboard() {
                     <div className="bg-black/20 border-t border-white/5 p-2 space-y-1">
                       <div 
                         className="flex items-center justify-between p-2 pl-8 text-[10px] text-gray-400 hover:text-white hover:bg-white/5 rounded cursor-pointer group/lesson"
-                        onClick={() => setCourseView('editor')}
+                        onClick={() => handleEditCourse()}
                       >
                         <span>3.1 Shot Prompting</span>
                         <div className="flex items-center gap-2">
@@ -713,7 +732,7 @@ export default function AdminDashboard() {
         <div className="flex items-center gap-2 text-[10px] font-mono text-gray-500 mb-2">
           <button onClick={() => setCourseView('list')} className="hover:text-white">COURSES</button>
           <span>/</span>
-          <a href="#" className="hover:text-white">MASTER THE GOOGLE ECOSYSTEM</a>
+          <a href="#" className="hover:text-white">{editorCourseTitle}</a>
           <span>/</span>
           <span className="text-electricBlue">EDIT CONTENT</span>
         </div>
