@@ -3,18 +3,18 @@ import { useState, useEffect, useRef } from "react";
 import { LayoutDashboard, BookOpen, Users, ShoppingBag, BarChart2, Plus, Download, Bold, Italic, Underline, Link as LinkIcon, Code, X, Search, Edit2, Trash2 } from "lucide-react";
 
 const INITIAL_LESSONS = {
-  "1.1": { id: "1.1", title: "The Multimodal Script", duration: "12:45", video: "multimodal_script_v3.mp4", notes: "Introduction to multimodal scripting techniques using Gemini 1.5 Pro." },
-  "1.2": { id: "1.2", title: "Context is King", duration: "08:30", video: "context_king_final.mp4", notes: "Understanding the importance of context window in long-form generation." },
-  "1.3": { id: "1.3", title: "Visual Bible (Editing)", duration: "15:10", video: "visual_bible_v2.mp4", notes: "How to compile a visual bible from generated assets." },
-  "2.1": { id: "2.1", title: "Set Design AI", duration: "10:20", video: "set_design_ai.mp4", notes: "Using AI to generate consistent set designs." },
-  "2.2": { id: "2.2", title: "Lighting Consistency", duration: "14:15", video: "lighting_fix.mp4", notes: "maintaining lighting across multiple generated shots." },
-  "2.3": { id: "2.3", title: "Camera Movements", duration: "09:45", video: "camera_moves.mp4", notes: "Simulating dolly and crane shots." },
-  "2.4": { id: "2.4", title: "Color Grading", duration: "11:30", video: "color_grade_lut.mp4", notes: "Applying cinematic LUTs to generated video." },
-  "3.1": { id: "3.1", title: "Shot Prompting", duration: "08:15", video: "shot_prompting.mp4", notes: "Specific prompting techniques for camera angles." },
-  "3.2": { id: "3.2", title: "Camera Angles", duration: "07:45", video: "angles_master.mp4", notes: "Wide, medium, and close-up shot consistency." },
-  "3.3": { id: "3.3", title: "Movement Control", duration: "13:20", video: "movement_ctrl.mp4", notes: "Controlling character movement within the frame." },
-  "3.4": { id: "3.4", title: "Upscaling", duration: "06:50", video: "upscale_4k.mp4", notes: "Best practices for upscaling to 4K." },
-  "3.5": { id: "3.5", title: "Final Export", duration: "18:00", video: "export_settings.mp4", notes: "Codecs and wrappers for final delivery." }
+  "1.1": { id: "1.1", title: "The Multimodal Script", duration: "12:45", video: "multimodal_script_v3.mp4", notes: "Introduction to multimodal scripting techniques using Gemini 1.5 Pro.", keyPrompt: "Analyze this image as a Director of Photography..." },
+  "1.2": { id: "1.2", title: "Context is King", duration: "08:30", video: "context_king_final.mp4", notes: "Understanding the importance of context window in long-form generation.", keyPrompt: "Summarize the key themes in this context..." },
+  "1.3": { id: "1.3", title: "Visual Bible (Editing)", duration: "15:10", video: "visual_bible_v2.mp4", notes: "How to compile a visual bible from generated assets.", keyPrompt: "Generate a visual style guide based on..." },
+  "2.1": { id: "2.1", title: "Set Design AI", duration: "10:20", video: "set_design_ai.mp4", notes: "Using AI to generate consistent set designs.", keyPrompt: "Create a mood board for a sci-fi set..." },
+  "2.2": { id: "2.2", title: "Lighting Consistency", duration: "14:15", video: "lighting_fix.mp4", notes: "maintaining lighting across multiple generated shots.", keyPrompt: "Describe the lighting setup in this scene..." },
+  "2.3": { id: "2.3", title: "Camera Movements", duration: "09:45", video: "camera_moves.mp4", notes: "Simulating dolly and crane shots.", keyPrompt: "Suggest camera movements for a dynamic action sequence..." },
+  "2.4": { id: "2.4", title: "Color Grading", duration: "11:30", video: "color_grade_lut.mp4", notes: "Applying cinematic LUTs to generated video.", keyPrompt: "Create a color grading preset for a noir film..." },
+  "3.1": { id: "3.1", title: "Shot Prompting", duration: "08:15", video: "shot_prompting.mp4", notes: "Specific prompting techniques for camera angles.", keyPrompt: "Generate a prompt for a low-angle shot..." },
+  "3.2": { id: "3.2", title: "Camera Angles", duration: "07:45", video: "angles_master.mp4", notes: "Wide, medium, and close-up shot consistency.", keyPrompt: "List 5 variations of a medium shot..." },
+  "3.3": { id: "3.3", title: "Movement Control", duration: "13:20", video: "movement_ctrl.mp4", notes: "Controlling character movement within the frame.", keyPrompt: "Describe the character's movement in this scene..." },
+  "3.4": { id: "3.4", title: "Upscaling", duration: "06:50", video: "upscale_4k.mp4", notes: "Best practices for upscaling to 4K.", keyPrompt: "Explain the upscaling process for 4K video..." },
+  "3.5": { id: "3.5", title: "Final Export", duration: "18:00", video: "export_settings.mp4", notes: "Codecs and wrappers for final delivery.", keyPrompt: "Recommended export settings for YouTube..." }
 };
 
 const INITIAL_MODULES: Module[] = [
@@ -29,6 +29,7 @@ interface Lesson {
   duration: string;
   video: string;
   notes: string;
+  keyPrompt?: string;
 }
 
 interface Module {
@@ -172,7 +173,7 @@ export default function AdminDashboard() {
 
   const handleAddLesson = (moduleId: string) => {
     const newLessonId = `${moduleId}.${Date.now().toString().slice(-4)}`;
-    const newLesson = { id: newLessonId, title: "New Lesson", duration: "00:00", video: "placeholder.mp4", notes: "Add notes here..." };
+    const newLesson = { id: newLessonId, title: "New Lesson", duration: "00:00", video: "placeholder.mp4", notes: "Add notes here...", keyPrompt: "Enter AI prompt here..." };
     
     setLessons({ ...lessons, [newLessonId]: newLesson });
     
@@ -806,7 +807,13 @@ export default function AdminDashboard() {
               />
               <br />
               <p className="mt-4"><b>Key Prompts:</b></p>
-              <p className="font-mono bg-white/5 p-2 rounded mt-2 text-xs text-electricBlue">"Analyze this image as a Director of Photography..."</p>
+              <textarea 
+                value={currentLesson.keyPrompt || ""}
+                onChange={(e) => handleLessonUpdate("keyPrompt", e.target.value)}
+                className="font-mono bg-white/5 p-2 rounded mt-2 text-xs text-electricBlue w-full border border-transparent focus:border-electricBlue outline-none resize-none"
+                placeholder="Enter AI prompt for students to use..."
+                rows={3}
+              />
             </div>
           </div>
 
