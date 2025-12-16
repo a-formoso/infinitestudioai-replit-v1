@@ -137,7 +137,7 @@ export default function Login() {
 
                 <div className="mt-8 text-center">
                     <p className="text-[10px] text-gray-500">
-                        New to the studio? <Link href="/course/level-1" className="text-electricBlue hover:underline">Apply for access</Link>
+                        New to the studio? <Link href="/register" className="text-electricBlue hover:underline">Create an account</Link>
                     </p>
                 </div>
             </div>
