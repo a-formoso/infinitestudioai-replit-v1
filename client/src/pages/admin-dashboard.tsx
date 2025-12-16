@@ -118,9 +118,17 @@ export default function AdminDashboard() {
 
   const [isStudentModalOpen, setIsStudentModalOpen] = useState(false);
   const [editingStudent, setEditingStudent] = useState<Student | null>(null);
+  const [studentModalMode, setStudentModalMode] = useState<"edit" | "view">("edit");
 
   const handleEditStudent = (student: Student) => {
     setEditingStudent({ ...student });
+    setStudentModalMode("edit");
+    setIsStudentModalOpen(true);
+  };
+
+  const handleViewStudent = (student: Student) => {
+    setEditingStudent({ ...student });
+    setStudentModalMode("view");
     setIsStudentModalOpen(true);
   };
 
@@ -1229,7 +1237,7 @@ export default function AdminDashboard() {
                 </td>
                 <td className="p-4 text-right">
                   <button onClick={() => handleEditStudent(student)} className="text-gray-500 hover:text-white mr-2">Edit</button>
-                  <button className="text-electricBlue hover:underline">View</button>
+                  <button onClick={() => handleViewStudent(student)} className="text-electricBlue hover:underline">View</button>
                 </td>
               </tr>
             ))}
@@ -1257,7 +1265,9 @@ export default function AdminDashboard() {
               <X className="w-4 h-4" />
             </button>
             
-            <h2 className="font-header text-xl text-white mb-6">EDIT STUDENT</h2>
+            <h2 className="font-header text-xl text-white mb-6">
+              {studentModalMode === "edit" ? "EDIT STUDENT" : "STUDENT PROFILE"}
+            </h2>
             
             <div className="space-y-4">
               <div>
@@ -1265,8 +1275,9 @@ export default function AdminDashboard() {
                 <input 
                   type="text" 
                   value={editingStudent.name}
+                  disabled={studentModalMode === "view"}
                   onChange={(e) => handleStudentFormChange("name", e.target.value)}
-                  className="bg-black/50 border border-white/10 text-white text-xs px-4 py-3 w-full focus:border-electricBlue outline-none"
+                  className={`bg-black/50 border border-white/10 text-white text-xs px-4 py-3 w-full focus:border-electricBlue outline-none ${studentModalMode === "view" ? "opacity-50 cursor-not-allowed" : ""}`}
                 />
               </div>
               
@@ -1275,8 +1286,9 @@ export default function AdminDashboard() {
                 <input 
                   type="email" 
                   value={editingStudent.email}
+                  disabled={studentModalMode === "view"}
                   onChange={(e) => handleStudentFormChange("email", e.target.value)}
-                  className="bg-black/50 border border-white/10 text-white text-xs px-4 py-3 w-full focus:border-electricBlue outline-none"
+                  className={`bg-black/50 border border-white/10 text-white text-xs px-4 py-3 w-full focus:border-electricBlue outline-none ${studentModalMode === "view" ? "opacity-50 cursor-not-allowed" : ""}`}
                 />
               </div>
 
@@ -1286,8 +1298,9 @@ export default function AdminDashboard() {
                   {(["ACTIVE", "PENDING", "INACTIVE"] as const).map(status => (
                     <button
                       key={status}
+                      disabled={studentModalMode === "view"}
                       onClick={() => handleStudentFormChange("status", status)}
-                      className={`flex-1 py-2 text-[10px] font-bold border ${editingStudent.status === status ? 'bg-white text-black border-white' : 'bg-transparent text-gray-500 border-white/10 hover:border-white/30'}`}
+                      className={`flex-1 py-2 text-[10px] font-bold border ${editingStudent.status === status ? 'bg-white text-black border-white' : 'bg-transparent text-gray-500 border-white/10 hover:border-white/30'} ${studentModalMode === "view" ? "cursor-not-allowed opacity-80" : ""}`}
                     >
                       {status}
                     </button>
@@ -1298,16 +1311,18 @@ export default function AdminDashboard() {
               <div className="pt-4 flex gap-3">
                 <button 
                   onClick={() => setIsStudentModalOpen(false)}
-                  className="flex-1 py-3 text-xs font-header font-bold text-gray-400 bg-white/5 hover:bg-white/10 transition-colors"
+                  className={`flex-1 py-3 text-xs font-header font-bold text-gray-400 bg-white/5 hover:bg-white/10 transition-colors ${studentModalMode === "view" ? "w-full" : ""}`}
                 >
-                  CANCEL
+                  {studentModalMode === "view" ? "CLOSE" : "CANCEL"}
                 </button>
-                <button 
-                  onClick={handleSaveStudent}
-                  className="flex-1 py-3 text-xs font-header font-bold text-black bg-electricBlue hover:bg-white transition-colors"
-                >
-                  SAVE CHANGES
-                </button>
+                {studentModalMode === "edit" && (
+                  <button 
+                    onClick={handleSaveStudent}
+                    className="flex-1 py-3 text-xs font-header font-bold text-black bg-electricBlue hover:bg-white transition-colors"
+                  >
+                    SAVE CHANGES
+                  </button>
+                )}
               </div>
             </div>
           </div>
