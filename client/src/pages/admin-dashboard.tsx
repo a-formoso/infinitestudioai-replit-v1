@@ -55,6 +55,47 @@ export default function AdminDashboard() {
     setSelectedLessonId(newLessonId);
   };
 
+  const handleDeleteLesson = (moduleId: string, lessonId: string, e: React.MouseEvent) => {
+    e.stopPropagation();
+    
+    // Remove from lessons state
+    const newLessons = { ...lessons };
+    delete newLessons[lessonId];
+    setLessons(newLessons);
+
+    // Remove from modules state
+    setModules(modules.map(m => {
+      if (m.id === moduleId) {
+        return { ...m, lessons: m.lessons.filter(id => id !== lessonId) };
+      }
+      return m;
+    }));
+
+    // If deleted lesson was selected, select the first lesson of the module or clear selection
+    if (selectedLessonId === lessonId) {
+      const module = modules.find(m => m.id === moduleId);
+      const remainingLessons = module?.lessons.filter(id => id !== lessonId) || [];
+      setSelectedLessonId(remainingLessons[0] || "");
+    }
+  };
+
+  const handleDeleteModule = (moduleId: string) => {
+    // Remove module and its lessons
+    const moduleToDelete = modules.find(m => m.id === moduleId);
+    if (!moduleToDelete) return;
+
+    const newLessons = { ...lessons };
+    moduleToDelete.lessons.forEach(lessonId => delete newLessons[lessonId]);
+    setLessons(newLessons);
+
+    setModules(modules.filter(m => m.id !== moduleId));
+    
+    // Clear selection if selected lesson belonged to deleted module
+    if (moduleToDelete.lessons.includes(selectedLessonId)) {
+        setSelectedLessonId("");
+    }
+  };
+
   const handleLessonUpdate = (field: string, value: string) => {
     if (!selectedLessonId) return;
     setLessons({
@@ -676,10 +717,19 @@ export default function AdminDashboard() {
           
           <div className="overflow-y-auto flex-grow p-2 space-y-2">
             {modules.map((module) => (
-              <div key={module.id} className="bg-white/5 rounded border border-white/5 mb-2">
+              <div key={module.id} className="bg-white/5 rounded border border-white/5 mb-2 group/module">
                 <div className="p-3 text-xs font-bold text-gray-300 flex justify-between cursor-pointer hover:bg-white/5">
                   <span className="uppercase">{module.title}</span>
-                  <span className="text-[10px] text-gray-500">{module.status}</span>
+                  <div className="flex items-center gap-2">
+                    <span className="text-[10px] text-gray-500 group-hover/module:hidden">{module.status}</span>
+                    <button 
+                      onClick={(e) => { e.stopPropagation(); handleDeleteModule(module.id); }}
+                      className="hidden group-hover/module:block text-red-500 hover:text-red-400"
+                      title="Delete Module"
+                    >
+                      <Trash2 className="w-3 h-3" />
+                    </button>
+                  </div>
                 </div>
                 <div className="pl-2 pr-2 pb-2 space-y-1">
                   {module.lessons.map((lessonId) => {
@@ -688,11 +738,20 @@ export default function AdminDashboard() {
                     return (
                       <div 
                         key={lessonId}
-                        className={`p-2 text-[10px] rounded cursor-pointer flex justify-between items-center group transition-colors ${selectedLessonId === lessonId ? 'bg-electricBlue/20 text-white border-l-2 border-electricBlue' : 'text-gray-400 hover:bg-electricBlue/10 hover:text-white border-l-2 border-transparent'}`}
+                        className={`p-2 text-[10px] rounded cursor-pointer flex justify-between items-center group/item transition-colors ${selectedLessonId === lessonId ? 'bg-electricBlue/20 text-white border-l-2 border-electricBlue' : 'text-gray-400 hover:bg-electricBlue/10 hover:text-white border-l-2 border-transparent'}`}
                         onClick={() => setSelectedLessonId(lessonId)}
                       >
                         <span className="truncate pr-2">{lesson.title}</span>
-                        <div className={`w-2 h-2 shrink-0 rounded-full ${selectedLessonId === lessonId ? 'bg-electricBlue animate-pulse' : 'bg-green-500'}`}></div>
+                        <div className="flex items-center gap-2">
+                          <div className={`w-2 h-2 shrink-0 rounded-full group-hover/item:hidden ${selectedLessonId === lessonId ? 'bg-electricBlue animate-pulse' : 'bg-green-500'}`}></div>
+                          <button 
+                            onClick={(e) => handleDeleteLesson(module.id, lessonId, e)}
+                            className="hidden group-hover/item:block text-red-500 hover:text-red-400"
+                            title="Delete Lesson"
+                          >
+                            <Trash2 className="w-3 h-3" />
+                          </button>
+                        </div>
                       </div>
                     );
                   })}
