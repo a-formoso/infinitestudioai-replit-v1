@@ -77,7 +77,7 @@ export default function Home() {
                   <span className="text-[10px] font-mono tracking-widest text-electricBlue">TECHNIQUES USED BY CREATORS AT:</span>
                   {/* Fake Logos for Mockup */}
                   <div className="font-header font-bold text-lg hover:text-white transition-colors">FLOW</div>
-                  <div className="font-header font-bold text-lg hover:text-white transition-colors">HBO</div>
+                  <div className="font-header font-bold text-lg hover:text-white transition-colors">Nano Banana</div>
                   <div className="font-header font-bold text-lg hover:text-white transition-colors">GOOGLE DEEPMIND</div>
                   <div className="font-header font-bold text-lg hover:text-white transition-colors">A24</div>
               </div>
