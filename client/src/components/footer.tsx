@@ -91,11 +91,11 @@ export function Footer() {
               <div>
                   <h5 className="font-header text-xs text-white mb-6 tracking-widest border-b border-white/10 pb-2 inline-block">CONNECT</h5>
                   <div className="flex gap-4">
-                      <a href="#" className="w-10 h-10 border border-white/10 flex items-center justify-center hover:bg-electricBlue hover:border-electricBlue hover:text-white text-gray-400 transition-all duration-300">
+                      <a href="#" className="w-10 h-10 border border-white/10 flex items-center justify-center hover:bg-[#FE2C55] hover:border-[#FE2C55] hover:text-white text-gray-400 transition-all duration-300">
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="currentColor" stroke="none"><path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-5.2 1.74 2.89 2.89 0 0 1 2.31-4.64 2.93 2.93 0 0 1 .88.13V9.4a6.84 6.84 0 0 0-1-.05A6.33 6.33 0 0 0 5 20.1a6.34 6.34 0 0 0 10.86-4.43v-7a8.16 8.16 0 0 0 4.77 1.52v-3.4a4.85 4.85 0 0 1-1-.1z"/></svg>
                       </a>
-                      <a href="#" className="w-10 h-10 border border-white/10 flex items-center justify-center hover:bg-signalOrange hover:border-signalOrange hover:text-white text-gray-400 transition-all duration-300">▶</a>
-                      <a href="#" className="w-10 h-10 border border-white/10 flex items-center justify-center hover:bg-neonPurple hover:border-neonPurple hover:text-white text-gray-400 transition-all duration-300">
+                      <a href="#" className="w-10 h-10 border border-white/10 flex items-center justify-center hover:bg-[#FF0000] hover:border-[#FF0000] hover:text-white text-gray-400 transition-all duration-300">▶</a>
+                      <a href="#" className="w-10 h-10 border border-white/10 flex items-center justify-center hover:bg-[#E1306C] hover:border-[#E1306C] hover:text-white text-gray-400 transition-all duration-300">
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-instagram"><rect width="20" height="20" x="2" y="2" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" x2="17.51" y1="6.5" y2="6.5"/></svg>
                       </a>
                   </div>
