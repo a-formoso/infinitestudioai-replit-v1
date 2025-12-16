@@ -72,6 +72,7 @@ interface Product {
   sales: number;
   revenue: string;
   status: "ACTIVE" | "DRAFT";
+  category: "TEXTURES" | "CHARACTER SHEETS" | "AUDIO PACKS" | "MISC";
   image: string;
   imagePosition: { x: number; y: number; zoom: number };
 }
@@ -163,6 +164,7 @@ export default function AdminDashboard() {
       sales: 124,
       revenue: "$3,596",
       status: "ACTIVE",
+      category: "TEXTURES",
       image: "https://images.unsplash.com/photo-1550684848-fac1c5b4e853?q=80&w=2670&auto=format&fit=crop",
       imagePosition: { x: 50, y: 50, zoom: 1 }
     },
@@ -173,6 +175,7 @@ export default function AdminDashboard() {
       sales: 89,
       revenue: "$4,361",
       status: "ACTIVE",
+      category: "CHARACTER SHEETS",
       image: "https://images.unsplash.com/photo-1535905557558-afc4877a26fc?q=80&w=2574&auto=format&fit=crop",
       imagePosition: { x: 50, y: 50, zoom: 1 }
     },
@@ -183,6 +186,7 @@ export default function AdminDashboard() {
       sales: 0,
       revenue: "Unreleased",
       status: "DRAFT",
+      category: "AUDIO PACKS",
       image: "",
       imagePosition: { x: 50, y: 50, zoom: 1 }
     }
@@ -190,6 +194,7 @@ export default function AdminDashboard() {
 
   const [isProductModalOpen, setIsProductModalOpen] = useState(false);
   const [editingProduct, setEditingProduct] = useState<Product | null>(null);
+  const [selectedProductCategory, setSelectedProductCategory] = useState<string>("ALL");
   const [isDragging, setIsDragging] = useState(false);
   const dragStartRef = useRef<{ x: number, y: number } | null>(null);
 
@@ -201,6 +206,7 @@ export default function AdminDashboard() {
       sales: 0,
       revenue: "$0",
       status: "DRAFT",
+      category: "MISC",
       image: "",
       imagePosition: { x: 50, y: 50, zoom: 1 }
     };
@@ -1512,15 +1518,26 @@ export default function AdminDashboard() {
 
       {/* FILTERS */}
       <div className="flex gap-4 mb-8 border-b border-white/10 pb-4">
-        <button className="text-xs font-bold text-white border-b-2 border-neonPurple pb-4 -mb-4.5">ALL PRODUCTS</button>
-        <button className="text-xs font-bold text-gray-500 hover:text-white transition-colors pb-4">TEXTURES</button>
-        <button className="text-xs font-bold text-gray-500 hover:text-white transition-colors pb-4">CHARACTER SHEETS</button>
-        <button className="text-xs font-bold text-gray-500 hover:text-white transition-colors pb-4">AUDIO PACKS</button>
+        {["ALL", "TEXTURES", "CHARACTER SHEETS", "AUDIO PACKS"].map((category) => (
+          <button 
+            key={category}
+            onClick={() => setSelectedProductCategory(category)}
+            className={`text-xs font-bold transition-colors pb-4 -mb-4.5 border-b-2 ${
+              selectedProductCategory === category 
+                ? "text-white border-neonPurple" 
+                : "text-gray-500 hover:text-white border-transparent"
+            }`}
+          >
+            {category === "ALL" ? "ALL PRODUCTS" : category}
+          </button>
+        ))}
       </div>
 
       {/* PRODUCT GRID */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {productsList.map((product) => (
+        {productsList
+          .filter(p => selectedProductCategory === "ALL" || p.category === selectedProductCategory)
+          .map((product) => (
           <div key={product.id} className={`glass-panel p-0 overflow-hidden border border-white/10 ${product.status === 'ACTIVE' ? 'hover:border-neonPurple/50' : 'hover:border-white/30 opacity-70'} transition-colors group relative`}>
             <div className="h-40 bg-gray-900 relative flex items-center justify-center border-b border-white/5 overflow-hidden">
               {product.image ? (
@@ -1611,6 +1628,20 @@ export default function AdminDashboard() {
                     <option value="ACTIVE">ACTIVE</option>
                   </select>
                 </div>
+              </div>
+
+              <div>
+                <label className="block text-[10px] font-mono text-gray-500 mb-2 uppercase">Category</label>
+                <select 
+                  value={editingProduct.category}
+                  onChange={(e) => handleProductFormChange("category", e.target.value)}
+                  className="bg-black/50 border border-white/10 text-white text-xs px-4 py-3 w-full focus:border-neonPurple outline-none appearance-none"
+                >
+                  <option value="TEXTURES">TEXTURES</option>
+                  <option value="CHARACTER SHEETS">CHARACTER SHEETS</option>
+                  <option value="AUDIO PACKS">AUDIO PACKS</option>
+                  <option value="MISC">MISC</option>
+                </select>
               </div>
 
               <div>
