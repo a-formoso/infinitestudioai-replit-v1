@@ -1,7 +1,67 @@
 import { Link } from "wouter";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+import { Mail, ArrowRight, Check, X, Lock } from "lucide-react";
+import { useToast } from "@/hooks/use-toast";
 
 export default function Links() {
+  const { toast } = useToast();
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [step, setStep] = useState<"email" | "code">("email");
+  const [email, setEmail] = useState("");
+  const [code, setCode] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+
+  const handleOpenModal = (e: React.MouseEvent) => {
+    e.preventDefault();
+    setIsModalOpen(true);
+    setStep("email");
+    setEmail("");
+    setCode("");
+  };
+
+  const handleSendCode = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!email) return;
+    
+    setIsLoading(true);
+    // Simulate API call
+    setTimeout(() => {
+      setIsLoading(false);
+      setStep("code");
+      toast({
+        title: "Verification Code Sent",
+        description: `We sent a code to ${email}. (Try 1234)`,
+        duration: 5000,
+      });
+    }, 1500);
+  };
+
+  const handleVerify = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!code) return;
+
+    setIsLoading(true);
+    // Simulate verification
+    setTimeout(() => {
+      setIsLoading(false);
+      if (code === "1234") {
+        setIsModalOpen(false);
+        toast({
+          title: "Success!",
+          description: "Download starting...",
+          className: "bg-green-500 border-green-600 text-white",
+        });
+        window.open("https://drive.google.com/file/d/1NQ-Y6hhJ6h36BEJpZo-5UPL3P6nETE4l/view?usp=drive_link", "_blank");
+      } else {
+        toast({
+          title: "Invalid Code",
+          description: "Please try again. (Hint: use 1234)",
+          variant: "destructive",
+        });
+      }
+    }, 1000);
+  };
+
   // Custom styles for this page
   const styles = `
     .glass-btn {
@@ -9,6 +69,13 @@ export default function Links() {
         backdrop-filter: blur(12px);
         border: 1px solid rgba(255, 255, 255, 0.1);
         transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .glass-modal {
+        background: rgba(10, 10, 10, 0.9);
+        backdrop-filter: blur(20px);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        box-shadow: 0 0 50px rgba(0,0,0,0.5);
     }
 
     /* Specific Glow Colors */
@@ -75,7 +142,7 @@ export default function Links() {
         <div className="scanlines"></div>
 
         {/* MAIN CONTAINER */}
-        <main className="w-full max-w-md px-6 py-12 relative z-10 flex flex-col gap-8">
+        <main className={`w-full max-w-md px-6 py-12 relative z-10 flex flex-col gap-8 transition-opacity duration-300 ${isModalOpen ? 'opacity-30 blur-sm pointer-events-none' : 'opacity-100'}`}>
           {/* HEADER / PROFILE */}
           <header className="text-center animate-fade-in-up" style={{ animationDelay: "0.1s" }}>
             <div className="w-24 h-24 mx-auto bg-black rounded-full border border-electricBlue/50 p-1 mb-6 relative group cursor-pointer overflow-hidden">
@@ -104,10 +171,9 @@ export default function Links() {
           <div className="flex flex-col gap-4 w-full">
             {/* 1. LEAD MAGNET (FREE VALUE) */}
             <a
-              href="https://drive.google.com/file/d/1NQ-Y6hhJ6h36BEJpZo-5UPL3P6nETE4l/view?usp=drive_link"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="glass-btn glow-gold rounded-xl p-4 flex items-center gap-4 group animate-fade-in-up"
+              href="#"
+              onClick={handleOpenModal}
+              className="glass-btn glow-gold rounded-xl p-4 flex items-center gap-4 group animate-fade-in-up cursor-pointer"
               style={{ animationDelay: "0.2s" }}
             >
               <div className="w-12 h-12 rounded-lg bg-gold/10 flex items-center justify-center shrink-0 border border-gold/20">
@@ -135,7 +201,7 @@ export default function Links() {
                 </p>
               </div>
               <div className="text-gold opacity-0 group-hover:opacity-100 transition-opacity">
-                →
+                <Lock className="w-4 h-4" />
               </div>
             </a>
 
@@ -176,7 +242,7 @@ export default function Links() {
                 </p>
               </div>
               <div className="text-electricBlue opacity-0 group-hover:opacity-100 transition-opacity">
-                →
+                <ArrowRight className="w-4 h-4" />
               </div>
             </Link>
 
@@ -211,7 +277,7 @@ export default function Links() {
                 </p>
               </div>
               <div className="text-neonPurple opacity-0 group-hover:opacity-100 transition-opacity">
-                →
+                <ArrowRight className="w-4 h-4" />
               </div>
             </Link>
 
@@ -246,7 +312,7 @@ export default function Links() {
                 </p>
               </div>
               <div className="text-signalOrange opacity-0 group-hover:opacity-100 transition-opacity">
-                →
+                <ArrowRight className="w-4 h-4" />
               </div>
             </Link>
           </div>
@@ -302,6 +368,91 @@ export default function Links() {
             </Link>
           </footer>
         </main>
+
+        {/* EMAIL CAPTURE MODAL */}
+        {isModalOpen && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+            <div 
+              className="absolute inset-0 bg-black/80 backdrop-blur-sm"
+              onClick={() => setIsModalOpen(false)}
+            ></div>
+            <div className="glass-modal w-full max-w-sm p-8 relative z-10 rounded-xl animate-fade-in-up">
+              <button 
+                onClick={() => setIsModalOpen(false)}
+                className="absolute top-4 right-4 text-gray-500 hover:text-white transition-colors"
+              >
+                <X className="w-5 h-5" />
+              </button>
+
+              <div className="flex flex-col items-center text-center mb-6">
+                <div className="w-16 h-16 bg-gold/10 rounded-full flex items-center justify-center mb-4 border border-gold/20 shadow-[0_0_30px_rgba(255,215,0,0.1)]">
+                   <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8 text-gold" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+                   </svg>
+                </div>
+                <h3 className="font-header text-lg text-white mb-2">UNLOCK THE EBOOK</h3>
+                <p className="text-xs text-gray-400 font-mono leading-relaxed">
+                  Enter your email to verify and receive the download link instantly.
+                </p>
+              </div>
+
+              {step === "email" ? (
+                <form onSubmit={handleSendCode} className="space-y-4">
+                  <div className="relative">
+                    <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-500" />
+                    <input 
+                      type="email" 
+                      placeholder="YOUR@EMAIL.COM"
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
+                      className="w-full bg-black/50 border border-white/10 text-white text-xs px-10 py-3 rounded outline-none focus:border-gold/50 transition-colors font-mono uppercase placeholder:text-gray-700"
+                      required
+                    />
+                  </div>
+                  <button 
+                    type="submit" 
+                    disabled={isLoading}
+                    className="w-full bg-gold text-black font-bold text-xs py-3 rounded hover:bg-white transition-colors flex items-center justify-center gap-2"
+                  >
+                    {isLoading ? "SENDING..." : "SEND VERIFICATION CODE"}
+                  </button>
+                </form>
+              ) : (
+                <form onSubmit={handleVerify} className="space-y-4 animate-in fade-in slide-in-from-right-4 duration-300">
+                  <div className="text-center mb-2">
+                    <p className="text-[10px] text-green-500 font-mono">CODE SENT TO {email}</p>
+                  </div>
+                  <div className="relative">
+                    <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-500" />
+                    <input 
+                      type="text" 
+                      placeholder="ENTER CODE (Try 1234)"
+                      value={code}
+                      onChange={(e) => setCode(e.target.value)}
+                      className="w-full bg-black/50 border border-white/10 text-white text-xs px-10 py-3 rounded outline-none focus:border-green-500/50 transition-colors font-mono text-center tracking-[0.5em] font-bold"
+                      required
+                      maxLength={4}
+                    />
+                  </div>
+                  <button 
+                    type="submit" 
+                    disabled={isLoading}
+                    className="w-full bg-green-500 text-black font-bold text-xs py-3 rounded hover:bg-white transition-colors flex items-center justify-center gap-2"
+                  >
+                    {isLoading ? "VERIFYING..." : "VERIFY & DOWNLOAD"}
+                  </button>
+                  <button 
+                    type="button" 
+                    onClick={() => setStep("email")}
+                    className="w-full text-[10px] text-gray-500 hover:text-white transition-colors underline"
+                  >
+                    CHANGE EMAIL
+                  </button>
+                </form>
+              )}
+            </div>
+          </div>
+        )}
       </div>
     </>
   );
