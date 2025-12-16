@@ -76,7 +76,7 @@ export default function Home() {
               <div className="mt-12 border-t border-white/10 pt-6 flex flex-wrap gap-8 md:gap-16 justify-center md:justify-start items-center opacity-40 grayscale hover:grayscale-0 transition-all duration-500 cursor-default">
                   <span className="text-[10px] font-mono tracking-widest text-electricBlue">TECHNIQUES USED BY CREATORS AT:</span>
                   {/* Fake Logos for Mockup */}
-                  <div className="font-header font-bold text-lg hover:text-white transition-colors">VEO</div>
+                  <div className="font-header font-bold text-lg hover:text-white transition-colors">GEMINI</div>
                   <div className="font-header font-bold text-lg hover:text-white transition-colors">NANO BANANA</div>
                   <div className="font-header font-bold text-lg hover:text-white transition-colors">VEO</div>
                   <div className="font-header font-bold text-lg hover:text-white transition-colors">FLOW</div>
