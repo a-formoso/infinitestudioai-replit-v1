@@ -84,7 +84,6 @@ export function Footer() {
                   <h5 className="font-header text-xs text-white mb-6 tracking-widest border-b border-white/10 pb-2 inline-block">ACADEMY</h5>
                   <ul className="space-y-3 text-xs text-gray-400 font-mono">
                       <li><a href="#" className="hover:text-signalOrange transition-colors">All Courses</a></li>
-                      <li><a href="#" className="hover:text-signalOrange transition-colors">Mentorship</a></li>
                       <li><Link href="/login" className="hover:text-signalOrange transition-colors">Student Login</Link></li>
                       <li><Link href="/support" className="hover:text-signalOrange transition-colors">Support Center</Link></li>
                   </ul>
