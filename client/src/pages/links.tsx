@@ -2,6 +2,10 @@ import { Link } from "wouter";
 import { useEffect } from "react";
 
 export default function LinksPage() {
+  useEffect(() => {
+    document.title = "LINKS | INFINITE STUDIO";
+  }, []);
+
   // Animation delay utility
   const getDelay = (index: number) => ({ animationDelay: `${0.1 + index * 0.1}s` });
 
