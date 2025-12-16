@@ -95,7 +95,9 @@ export function Footer() {
                   <div className="flex gap-4">
                       <a href="#" className="w-10 h-10 border border-white/10 flex items-center justify-center hover:bg-electricBlue hover:border-electricBlue hover:text-white text-gray-400 transition-all duration-300">𝕏</a>
                       <a href="#" className="w-10 h-10 border border-white/10 flex items-center justify-center hover:bg-signalOrange hover:border-signalOrange hover:text-white text-gray-400 transition-all duration-300">▶</a>
-                      <a href="#" className="w-10 h-10 border border-white/10 flex items-center justify-center hover:bg-purple-600 hover:border-purple-600 hover:text-white text-gray-400 transition-all duration-300">●</a>
+                      <a href="#" className="w-10 h-10 border border-white/10 flex items-center justify-center hover:bg-neonPurple hover:border-neonPurple hover:text-white text-gray-400 transition-all duration-300">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-instagram"><rect width="20" height="20" x="2" y="2" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" x2="17.51" y1="6.5" y2="6.5"/></svg>
+                      </a>
                   </div>
               </div>
           </div>
