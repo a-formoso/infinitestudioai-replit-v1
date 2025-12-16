@@ -11,6 +11,13 @@ export function Navbar() {
                   <span className="text-electricBlue text-2xl">∞</span> INFINITE STUDIO
               </a>
             </Link>
+
+            <div className="hidden md:flex items-center gap-8 absolute left-1/2 transform -translate-x-1/2">
+                <a href="/#work" className="text-xs font-header font-bold text-gray-400 hover:text-white transition-colors tracking-widest">STUDIO</a>
+                <a href="/#academy" className="text-xs font-header font-bold text-gray-400 hover:text-white transition-colors tracking-widest">ACADEMY</a>
+                <a href="/#store" className="text-xs font-header font-bold text-gray-400 hover:text-white transition-colors tracking-widest">ASSET STORE</a>
+            </div>
+
             <div className="flex items-center gap-4">
               <Link href="/dashboard" className="hidden md:block">
                 <div className="text-right cursor-pointer hover:opacity-80 transition-opacity">
