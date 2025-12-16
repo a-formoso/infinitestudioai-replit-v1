@@ -1645,7 +1645,7 @@ export default function AdminDashboard() {
                 </div>
                 {editingProduct.image && (
                   <div 
-                    className={`mt-2 h-64 w-full bg-gray-900 border border-white/5 rounded overflow-hidden relative group cursor-move ${isDragging ? 'border-neonPurple' : ''}`}
+                    className={`mt-2 h-40 w-full bg-gray-900 border border-white/5 rounded overflow-hidden relative group cursor-move ${isDragging ? 'border-neonPurple' : ''}`}
                     onMouseDown={handleMouseDown}
                     onMouseMove={handleMouseMove}
                     onMouseUp={handleMouseUp}
