@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SUPPORT | INFINITE STUDIO</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&family=Syncopate:wght@400;700&display=swap" rel="stylesheet">
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        obsidian: '#0A0A0A',
+                        electricBlue: '#2962FF',
+                        signalOrange: '#FF3D00',
+                        offWhite: '#E0E0E0',
+                        glass: 'rgba(255, 255, 255, 0.05)',
+                        glassBorder: 'rgba(255, 255, 255, 0.1)',
+                    },
+                    fontFamily: {
+                        header: ['Syncopate', 'sans-serif'],
+                        body: ['Inter', 'sans-serif'],
+                    },
+                    backgroundImage: {
+                        'grid-pattern': "linear-gradient(to right, #1a1a1a 1px, transparent 1px), linear-gradient(to bottom, #1a1a1a 1px, transparent 1px)",
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        /* Hide scrollbar */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #0A0A0A; }
+        ::-webkit-scrollbar-thumb { background: #333; }
+        
+        .faq-answer {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease-out;
+        }
+        .faq-item.active .faq-answer {
+            max-height: 200px; /* Adjust as needed */
+        }
+        .faq-item.active .faq-icon {
+            transform: rotate(45deg);
+            color: #2962FF;
+        }
+    </style>
+</head>
+<body class="bg-obsidian text-offWhite font-body antialiased selection:bg-electricBlue selection:text-white overflow-x-hidden min-h-screen flex flex-col">
+
+    <!-- GRID OVERLAY -->
+    <div class="fixed inset-0 bg-grid-pattern bg-[size:40px_40px] opacity-20 pointer-events-none z-0"></div>
+
+    <!-- NAV -->
+    <nav class="fixed top-0 w-full z-50 glass-panel border-b-0 border-b-glassBorder">
+        <div class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
+            <a href="index.html" class="font-header font-bold text-xl tracking-widest text-white flex items-center gap-2 hover:opacity-80 transition-opacity">
+                <span class="text-electricBlue text-2xl">∞</span> INFINITE STUDIO
+            </a>
+            <a href="index.html" class="text-xs font-header font-bold text-gray-500 hover:text-white transition-colors">BACK TO STUDIO</a>
+        </div>
+    </nav>
+
+    <!-- HEADER -->
+    <header class="pt-32 pb-12 px-6 max-w-4xl mx-auto z-10 text-center w-full">
+        <h1 class="font-header text-3xl md:text-5xl font-bold text-white mb-6">SYSTEM SUPPORT</h1>
+        
+        <!-- Search Bar -->
+        <div class="relative max-w-lg mx-auto">
+            <input type="text" placeholder="SEARCH KNOWLEDGE BASE..." class="w-full bg-white/5 border border-white/10 rounded-none px-6 py-4 text-xs font-mono text-white focus:outline-none focus:border-electricBlue focus:bg-black/50 transition-all">
+            <button class="absolute right-4 top-1/2 -translate-y-1/2 text-gray-500 hover:text-electricBlue">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /></svg>
+            </button>
+        </div>
+    </header>
+
+    <!-- FAQ GRID -->
+    <main class="flex-grow pb-20 px-6 max-w-7xl mx-auto w-full z-10 grid grid-cols-1 md:grid-cols-2 gap-12">
+        
+        <!-- LEFT COLUMN: ACADEMY FAQs -->
+        <div class="space-y-8">
+            <h2 class="font-header text-lg text-white border-b border-white/10 pb-4 flex justify-between items-center">
+                ACADEMY & COURSES
+                <span class="text-[10px] text-electricBlue font-mono">LEVEL 01</span>
+            </h2>
+
+            <div class="space-y-4">
+                
+                <!-- Item 1 -->
+                <div class="glass-panel p-6 cursor-pointer faq-item group hover:border-white/30 transition-colors" onclick="toggleFaq(this)">
+                    <div class="flex justify-between items-start">
+                        <h3 class="font-bold text-sm text-white pr-8">Is Veo 3.1 included in the course price?</h3>
+                        <span class="faq-icon text-gray-500 transition-transform duration-300 text-xl leading-none">+</span>
+                    </div>
+                    <div class="faq-answer">
+                        <p class="text-xs text-gray-400 mt-4 leading-relaxed font-mono">
+                            No. We teach you how to use Veo 3.1, but the tool itself requires a separate subscription from Google (Google One AI Premium or Workspace). We guide you through the setup process in Module 1.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Item 2 -->
+                <div class="glass-panel p-6 cursor-pointer faq-item group hover:border-white/30 transition-colors" onclick="toggleFaq(this)">
+                    <div class="flex justify-between items-start">
+                        <h3 class="font-bold text-sm text-white pr-8">Do I need a powerful PC?</h3>
+                        <span class="faq-icon text-gray-500 transition-transform duration-300 text-xl leading-none">+</span>
+                    </div>
+                    <div class="faq-answer">
+                        <p class="text-xs text-gray-400 mt-4 leading-relaxed font-mono">
+                            Not necessarily. Since Gemini and Veo are cloud-based tools, you can run them on any modern laptop (Mac or PC) with a good internet connection. However, for post-production (editing/color grading), a decent machine is recommended.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Item 3 -->
+                <div class="glass-panel p-6 cursor-pointer faq-item group hover:border-white/30 transition-colors" onclick="toggleFaq(this)">
+                    <div class="flex justify-between items-start">
+                        <h3 class="font-bold text-sm text-white pr-8">Is this suitable for beginners?</h3>
+                        <span class="faq-icon text-gray-500 transition-transform duration-300 text-xl leading-none">+</span>
+                    </div>
+                    <div class="faq-answer">
+                        <p class="text-xs text-gray-400 mt-4 leading-relaxed font-mono">
+                            Yes. Level 1 (Master the Ecosystem) starts from zero. We assume no prior knowledge of AI or filmmaking. Level 2 (Advanced Cinematography) requires Level 1 completion or a portfolio review.
+                        </p>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- RIGHT COLUMN: STUDIO & BILLING -->
+        <div class="space-y-8">
+            <h2 class="font-header text-lg text-white border-b border-white/10 pb-4 flex justify-between items-center">
+                SERVICES & BILLING
+                <span class="text-[10px] text-signalOrange font-mono">LEVEL 02</span>
+            </h2>
+
+            <div class="space-y-4">
+                
+                <!-- Item 4 -->
+                <div class="glass-panel p-6 cursor-pointer faq-item group hover:border-white/30 transition-colors" onclick="toggleFaq(this)">
+                    <div class="flex justify-between items-start">
+                        <h3 class="font-bold text-sm text-white pr-8">How do I hire the studio?</h3>
+                        <span class="faq-icon text-gray-500 transition-transform duration-300 text-xl leading-none">+</span>
+                    </div>
+                    <div class="faq-answer">
+                        <p class="text-xs text-gray-400 mt-4 leading-relaxed font-mono">
+                            Visit our <a href="hire_us.html" class="text-white underline">Services Page</a> and fill out the inquiry form. We typically respond within 24 hours to schedule a discovery call. Our minimum engagement starts at $5k.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Item 5 -->
+                <div class="glass-panel p-6 cursor-pointer faq-item group hover:border-white/30 transition-colors" onclick="toggleFaq(this)">
+                    <div class="flex justify-between items-start">
+                        <h3 class="font-bold text-sm text-white pr-8">What is the refund policy?</h3>
+                        <span class="faq-icon text-gray-500 transition-transform duration-300 text-xl leading-none">+</span>
+                    </div>
+                    <div class="faq-answer">
+                        <p class="text-xs text-gray-400 mt-4 leading-relaxed font-mono">
+                            We offer a 30-day money-back guarantee for all self-paced courses if you have completed less than 30% of the content. Digital Asset downloads (textures, prompts) are non-refundable due to their nature.
+                        </p>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- CONTACT CARD -->
+            <div class="glass-panel p-8 border border-white/20 mt-12">
+                <h3 class="font-header text-lg text-white mb-2">STILL NEED HELP?</h3>
+                <p class="text-xs text-gray-400 font-mono mb-6">Our support team is online.</p>
+                <a href="mailto:support@infinitestudio.ai" class="block w-full bg-white text-black text-center py-3 text-xs font-header font-bold uppercase hover:bg-electricBlue hover:text-white transition-all">
+                    Open Support Ticket
+                </a>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="bg-black border-t border-white/10 py-6 px-6 relative z-20 flex justify-between items-center">
+        <div class="text-[10px] text-gray-600 font-mono">
+            © 2025 INFINITE STUDIO
+        </div>
+        <div class="flex items-center gap-2">
+            <div class="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
+            <span class="text-[10px] text-green-500 font-mono tracking-wider">SUPPORT ONLINE</span>
+        </div>
+    </footer>
+
+    <script>
+        function toggleFaq(element) {
+            // Close all others
+            document.querySelectorAll('.faq-item').forEach(item => {
+                if(item !== element) item.classList.remove('active');
+            });
+            // Toggle current
+            element.classList.toggle('active');
+        }
+    </script>
+
+</body>
+</html>
