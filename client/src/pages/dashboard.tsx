@@ -1,14 +1,62 @@
 import { Navbar } from "@/components/navbar";
 import { Footer } from "@/components/footer";
 import { Link } from "wouter";
-import { useQuery } from "@tanstack/react-query";
-import { getEnrollments } from "@/lib/api";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { getEnrollments, getCurrentUser, updateProfile } from "@/lib/api";
+import { useState } from "react";
+import { useToast } from "@/hooks/use-toast";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
 
 export default function Dashboard() {
+  const { toast } = useToast();
+  const queryClient = useQueryClient();
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
+
   const { data, isLoading } = useQuery({
     queryKey: ["enrollments"],
     queryFn: getEnrollments,
   });
+
+  const { data: userData } = useQuery({
+    queryKey: ["currentUser"],
+    queryFn: getCurrentUser,
+  });
+
+  const user = userData?.data?.user;
+
+  const updateMutation = useMutation({
+    mutationFn: ({ username, email }: { username: string; email: string }) =>
+      updateProfile(username, email),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["currentUser"] });
+      toast({
+        title: "Profile updated",
+        description: "Your profile has been updated successfully.",
+      });
+      setIsDialogOpen(false);
+    },
+    onError: (error: any) => {
+      toast({
+        title: "Update failed",
+        description: error.message || "Failed to update profile",
+        variant: "destructive",
+      });
+    },
+  });
+
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const formData = new FormData(e.currentTarget);
+    const username = formData.get("username") as string;
+    const email = formData.get("email") as string;
+    updateMutation.mutate({ username, email });
+  };
 
   const enrollments = data?.data?.enrollments || [];
 
@@ -30,9 +78,53 @@ export default function Dashboard() {
                   <p className="text-sm text-gray-400 font-mono">Welcome back, Director. Systems online.</p>
               </div>
               <div className="flex gap-4">
-                  <button className="border border-white/20 text-white px-6 py-3 text-xs font-header font-bold uppercase hover:bg-white/10 transition-colors">
-                      Edit Profile
-                  </button>
+                  <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+                    <DialogTrigger asChild>
+                      <button 
+                        className="border border-white/20 text-white px-6 py-3 text-xs font-header font-bold uppercase hover:bg-white/10 transition-colors"
+                        data-testid="button-edit-profile"
+                      >
+                          Edit Profile
+                      </button>
+                    </DialogTrigger>
+                    <DialogContent className="bg-obsidian border-white/10 text-white max-w-md">
+                      <DialogHeader>
+                        <DialogTitle className="font-header text-xl text-white">EDIT PROFILE</DialogTitle>
+                      </DialogHeader>
+                      <form onSubmit={handleSubmit} className="space-y-6 mt-4">
+                        <div>
+                          <label className="block text-[10px] font-mono text-gray-500 mb-2 uppercase tracking-wider">Director Name</label>
+                          <input 
+                            type="text"
+                            name="username"
+                            defaultValue={user?.username || ""}
+                            data-testid="input-edit-username"
+                            className="w-full bg-black/50 border border-white/10 text-white p-4 font-body text-sm focus:outline-none focus:border-electricBlue transition-all"
+                            required
+                          />
+                        </div>
+                        <div>
+                          <label className="block text-[10px] font-mono text-gray-500 mb-2 uppercase tracking-wider">Email Address</label>
+                          <input 
+                            type="email"
+                            name="email"
+                            defaultValue={user?.email || ""}
+                            data-testid="input-edit-email"
+                            className="w-full bg-black/50 border border-white/10 text-white p-4 font-body text-sm focus:outline-none focus:border-electricBlue transition-all"
+                            required
+                          />
+                        </div>
+                        <button 
+                          type="submit"
+                          disabled={updateMutation.isPending}
+                          data-testid="button-save-profile"
+                          className="w-full bg-electricBlue text-white font-header font-bold text-sm uppercase py-4 hover:bg-white hover:text-black transition-all duration-300 tracking-wider disabled:opacity-50"
+                        >
+                          {updateMutation.isPending ? "SAVING..." : "Save Changes"}
+                        </button>
+                      </form>
+                    </DialogContent>
+                  </Dialog>
               </div>
           </div>
 

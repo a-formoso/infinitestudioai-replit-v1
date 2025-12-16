@@ -54,6 +54,13 @@ export async function getCurrentUser() {
   return apiFetch<{ user: any }>('/auth/me');
 }
 
+export async function updateProfile(username: string, email: string) {
+  return apiFetch<{ user: any }>('/auth/profile', {
+    method: 'PUT',
+    body: JSON.stringify({ username, email }),
+  });
+}
+
 // Courses
 export async function getCourses() {
   return apiFetch<{ courses: any[] }>('/courses');

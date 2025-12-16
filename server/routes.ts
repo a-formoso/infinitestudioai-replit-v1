@@ -110,6 +110,43 @@ export async function registerRoutes(
     res.json({ user: userWithoutPassword });
   });
   
+  // Update user profile
+  app.put("/api/auth/profile", async (req, res) => {
+    if (!req.session.userId) {
+      return res.status(401).json({ message: "Not authenticated" });
+    }
+    
+    try {
+      const { username, email } = req.body;
+      
+      // Check if email is taken by another user
+      if (email) {
+        const existingUser = await storage.getUserByEmail(email);
+        if (existingUser && existingUser.id !== req.session.userId) {
+          return res.status(400).json({ message: "Email already in use" });
+        }
+      }
+      
+      // Check if username is taken by another user
+      if (username) {
+        const existingUser = await storage.getUserByUsername(username);
+        if (existingUser && existingUser.id !== req.session.userId) {
+          return res.status(400).json({ message: "Username already taken" });
+        }
+      }
+      
+      const updatedUser = await storage.updateUser(req.session.userId, { username, email });
+      if (!updatedUser) {
+        return res.status(404).json({ message: "User not found" });
+      }
+      
+      const { password: _, ...userWithoutPassword } = updatedUser;
+      res.json({ user: userWithoutPassword });
+    } catch (error) {
+      res.status(500).json({ message: "Failed to update profile" });
+    }
+  });
+  
   // ===== Course Routes =====
   
   // Get all courses
