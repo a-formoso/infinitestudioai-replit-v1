@@ -1684,6 +1684,7 @@ export default function AdminDashboard() {
               </div>
             </div>
             <div className="p-6">
+              <p className="text-[9px] font-bold text-neonPurple mb-2 tracking-widest">{product.category}</p>
               <div className="flex justify-between items-start mb-2">
                 <h3 className="font-header text-sm text-white">{product.title}</h3>
                 <span className={`font-mono font-bold ${product.status === 'ACTIVE' ? 'text-neonPurple' : 'text-gray-500'}`}>{product.price}</span>
