@@ -104,7 +104,7 @@ export default function Links() {
           <div className="flex flex-col gap-4 w-full">
             {/* 1. LEAD MAGNET (FREE VALUE) */}
             <a
-              href="#"
+              href="https://drive.google.com/file/d/1NQ-Y6hhJ6h36BEJpZo-5UPL3P6nETE4l/view?usp=drive_link"
               className="glass-btn glow-gold rounded-xl p-4 flex items-center gap-4 group animate-fade-in-up"
               style={{ animationDelay: "0.2s" }}
             >
