@@ -76,7 +76,7 @@ export default function Privacy() {
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12">
           {/* SIDEBAR NAVIGATION */}
           <div className="lg:col-span-3 hidden lg:block">
-            <div className="sticky top-32 border border-white/10 rounded-sm p-6 bg-white/5 backdrop-blur-sm">
+            <div className="sticky top-32 border border-white/10 rounded-none p-6 bg-white/5 backdrop-blur-sm">
               <h3 className="font-header text-xs text-white mb-6 tracking-widest border-b border-white/10 pb-2">CONTENTS</h3>
               <ul className="space-y-4 text-[10px] font-mono text-gray-500 uppercase tracking-widest">
                 <li>
