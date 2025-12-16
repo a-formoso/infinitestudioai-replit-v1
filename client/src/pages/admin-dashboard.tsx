@@ -17,11 +17,39 @@ const INITIAL_LESSONS = {
   "3.5": { id: "3.5", title: "Final Export", duration: "18:00", video: "export_settings.mp4", notes: "Codecs and wrappers for final delivery." }
 };
 
-const INITIAL_MODULES = [
+const INITIAL_MODULES: Module[] = [
   { id: "module-1", title: "MODULE 1: WRITER'S ROOM", status: "Draft", lessons: ["1.1", "1.2", "1.3"] },
   { id: "module-2", title: "MODULE 2: THE ART DEPT", status: "Draft", lessons: ["2.1", "2.2", "2.3", "2.4"] },
   { id: "module-3", title: "MODULE 3: PRINCIPAL PHOTOGRAPHY", status: "Draft", lessons: ["3.1", "3.2", "3.3", "3.4", "3.5"] }
 ];
+
+interface Lesson {
+  id: string;
+  title: string;
+  duration: string;
+  video: string;
+  notes: string;
+}
+
+interface Module {
+  id: string;
+  title: string;
+  status: string;
+  lessons: string[];
+}
+
+interface Course {
+  id: string;
+  title: string;
+  code: string;
+  color: string;
+  lastUpdated: string;
+  students: string;
+  price: string;
+  status: string;
+  modules: Module[];
+  lessons: Record<string, Lesson>;
+}
 
 export default function AdminDashboard() {
   const [activeTab, setActiveTab] = useState("dashboard");
@@ -34,10 +62,39 @@ export default function AdminDashboard() {
   const terminalRef = useRef<HTMLDivElement>(null);
 
   // State for Lessons Data
-  const [lessons, setLessons] = useState<Record<string, { id: string; title: string; duration: string; video: string; notes: string }>>(INITIAL_LESSONS);
+  const [lessons, setLessons] = useState<Record<string, Lesson>>(INITIAL_LESSONS);
 
   // State for Modules Structure
-  const [modules, setModules] = useState<{ id: string; title: string; status: string; lessons: string[] }[]>(INITIAL_MODULES);
+  const [modules, setModules] = useState<Module[]>(INITIAL_MODULES);
+
+  const [coursesList, setCoursesList] = useState<Course[]>([
+    {
+      id: "course-1",
+      title: "MASTER THE GOOGLE ECOSYSTEM",
+      code: "L1",
+      color: "blue-900",
+      lastUpdated: "2h ago",
+      students: "3,420",
+      price: "$149",
+      status: "LIVE",
+      modules: INITIAL_MODULES,
+      lessons: INITIAL_LESSONS
+    },
+    {
+      id: "course-2",
+      title: "ADVANCED AI CINEMATOGRAPHY",
+      code: "L2",
+      color: "orange-900",
+      lastUpdated: "1d ago",
+      students: "1,105",
+      price: "$199",
+      status: "DRAFT",
+      modules: [],
+      lessons: {}
+    }
+  ]);
+  
+  const [editorCourseId, setEditorCourseId] = useState<string | null>(null);
 
   const handleCreateCourse = () => {
     setActiveTab("courses");
@@ -45,15 +102,54 @@ export default function AdminDashboard() {
     setModules([]);
     setEditorCourseTitle("UNTITLED COURSE");
     setSelectedLessonId("");
+    setEditorCourseId(null);
     setCourseView('editor');
   };
 
-  const handleEditCourse = () => {
-    setLessons(INITIAL_LESSONS);
-    setModules(INITIAL_MODULES);
-    setEditorCourseTitle("MASTER THE GOOGLE ECOSYSTEM");
-    setSelectedLessonId("1.1");
-    setCourseView('editor');
+  const handleEditCourse = (courseId: string) => {
+    const course = coursesList.find(c => c.id === courseId);
+    if (course) {
+      setLessons(course.lessons);
+      setModules(course.modules);
+      setEditorCourseTitle(course.title);
+      setEditorCourseId(courseId);
+      // Select first lesson if available
+      if (course.modules.length > 0 && course.modules[0].lessons.length > 0) {
+        setSelectedLessonId(course.modules[0].lessons[0]);
+      } else {
+        setSelectedLessonId("");
+      }
+      setCourseView('editor');
+    }
+  };
+  
+  const handleSaveCourse = () => {
+    if (editorCourseId) {
+      // Update existing course
+      setCoursesList(coursesList.map(c => {
+        if (c.id === editorCourseId) {
+          return { ...c, title: editorCourseTitle, modules, lessons, lastUpdated: "Just now" };
+        }
+        return c;
+      }));
+    } else {
+      // Create new course
+      const newCourseId = `course-${coursesList.length + 1}`;
+      const newCourse = {
+        id: newCourseId,
+        title: editorCourseTitle,
+        code: `L${coursesList.length + 1}`,
+        color: "purple-900",
+        lastUpdated: "Just now",
+        students: "0",
+        price: "$0",
+        status: "DRAFT",
+        modules,
+        lessons
+      };
+      setCoursesList([...coursesList, newCourse]);
+    }
+    setCourseView('list');
   };
 
   const [deleteConfirmation, setDeleteConfirmation] = useState<{ isOpen: boolean; type: 'module' | 'lesson'; id: string; title: string; parentId?: string } | null>(null);
@@ -357,365 +453,103 @@ export default function AdminDashboard() {
           </div>
         </div>
 
-        {/* COURSE LIST */}
+          {/* COURSE LIST */}
         <div className="space-y-6">
           
-          {/* Course Item 1 */}
-          <div className={`glass-panel p-0 overflow-hidden border transition-colors group ${expandedCourseId === 'course-1' ? 'border-electricBlue/50' : 'border-white/10 hover:border-electricBlue/30'}`}>
-            <div 
-              className="p-6 flex items-center justify-between border-b border-white/5 bg-white/5 cursor-pointer"
-              onClick={() => toggleCourse('course-1')}
-            >
-              <div className="flex items-center gap-4">
-                <div className="w-12 h-12 bg-gray-900 shrink-0 relative overflow-hidden rounded border border-white/10">
-                  <div className="absolute inset-0 bg-gradient-to-br from-blue-900/40 to-black"></div>
-                  <span className="absolute inset-0 flex items-center justify-center font-header text-white text-xs">L1</span>
+          {coursesList.map((course) => (
+            <div key={course.id} className={`glass-panel p-0 overflow-hidden border transition-colors group ${expandedCourseId === course.id ? 'border-electricBlue/50' : 'border-white/10 hover:border-electricBlue/30'} ${course.status === 'DRAFT' ? 'opacity-90' : ''}`}>
+              <div 
+                className="p-6 flex items-center justify-between border-b border-white/5 bg-white/5 cursor-pointer"
+                onClick={() => toggleCourse(course.id)}
+              >
+                <div className="flex items-center gap-4">
+                  <div className={`w-12 h-12 bg-gray-900 shrink-0 relative overflow-hidden rounded border border-white/10`}>
+                    <div className={`absolute inset-0 bg-gradient-to-br from-${course.color}/40 to-black`}></div>
+                    <span className="absolute inset-0 flex items-center justify-center font-header text-white text-xs">{course.code}</span>
+                  </div>
+                  <div>
+                    <h3 className="font-header text-sm text-white uppercase">{course.title}</h3>
+                    <p className="text-[10px] text-gray-400 font-mono">ID: #{course.id.toUpperCase()} • Last Updated: {course.lastUpdated}</p>
+                  </div>
                 </div>
-                <div>
-                  <h3 className="font-header text-sm text-white">MASTER THE GOOGLE ECOSYSTEM</h3>
-                  <p className="text-[10px] text-gray-400 font-mono">ID: #COURSE-001 • Last Updated: 2h ago</p>
+                <div className="flex items-center gap-6">
+                  <div className="text-right">
+                    <p className="text-xs text-white font-bold">{course.students}</p>
+                    <p className="text-[10px] text-gray-500 uppercase">Students</p>
+                  </div>
+                  <div className="text-right">
+                    <p className="text-xs text-green-400 font-bold">{course.price}</p>
+                    <p className="text-[10px] text-gray-500 uppercase">Price</p>
+                  </div>
+                  <span className={`px-3 py-1 rounded text-[10px] font-bold border ${course.status === 'LIVE' ? 'bg-green-500/10 text-green-500 border-green-500/20' : 'bg-yellow-500/10 text-yellow-500 border-yellow-500/20'}`}>{course.status}</span>
+                  <button className="text-gray-400 hover:text-white transition-colors">
+                    {expandedCourseId === course.id ? '▲' : '▼'}
+                  </button>
                 </div>
               </div>
-              <div className="flex items-center gap-6">
-                <div className="text-right">
-                  <p className="text-xs text-white font-bold">3,420</p>
-                  <p className="text-[10px] text-gray-500 uppercase">Students</p>
+              
+              {/* Modules (Collapsible) */}
+              {expandedCourseId === course.id && (
+                <div className="bg-black/30 p-4 space-y-2 animate-in slide-in-from-top-2 duration-200">
+                  {course.modules.length === 0 ? (
+                     <div className="p-4 text-center text-gray-500 text-xs font-mono border border-dashed border-white/10 rounded">
+                        No modules created yet. <button onClick={(e) => { e.stopPropagation(); handleEditCourse(course.id); }} className="text-electricBlue hover:underline">Start building curriculum</button>
+                     </div>
+                  ) : (
+                    course.modules.map((module) => (
+                      <div key={module.id} className="bg-white/5 rounded border border-white/5 overflow-hidden">
+                        <div 
+                          className="flex justify-between items-center p-3 hover:bg-white/5 cursor-pointer"
+                          onClick={() => toggleModule(module.id)}
+                        >
+                          <div className="flex items-center gap-3">
+                            <span className="text-gray-600 text-xs">::</span>
+                            <span className="text-xs text-gray-300 font-medium">{module.title}</span>
+                          </div>
+                          <div className="flex gap-3 text-[10px]">
+                            <span className="text-gray-500">{module.lessons.length} Lessons</span>
+                            <button onClick={(e) => { e.stopPropagation(); handleEditCourse(course.id); }} className="text-electricBlue hover:underline">Edit</button>
+                          </div>
+                        </div>
+                        
+                        {/* Lessons for Module */}
+                        {expandedModuleId === module.id && (
+                          <div className="bg-black/20 border-t border-white/5 p-2 space-y-1">
+                            {module.lessons.map((lessonId) => {
+                                const lesson = course.lessons ? course.lessons[lessonId] : lessons[lessonId];
+                                if (!lesson) return null;
+                                return (
+                                  <div 
+                                    key={lessonId}
+                                    className="flex items-center justify-between p-2 pl-8 text-[10px] text-gray-400 hover:text-white hover:bg-white/5 rounded cursor-pointer group/lesson"
+                                    onClick={() => handleEditCourse(course.id)}
+                                  >
+                                    <span>{lesson.title}</span>
+                                    <div className="flex items-center gap-2">
+                                      <span className="text-gray-600 group-hover/lesson:hidden">{lesson.duration}</span>
+                                      <div className="hidden group-hover/lesson:flex gap-1">
+                                        <button className="p-1 hover:bg-white/10 rounded text-electricBlue" title="Edit">
+                                          <Edit2 className="w-3 h-3" />
+                                        </button>
+                                      </div>
+                                    </div>
+                                  </div>
+                                );
+                            })}
+                          </div>
+                        )}
+                      </div>
+                    ))
+                  )}
+                  {course.modules.length > 0 && (
+                      <button onClick={(e) => { e.stopPropagation(); handleEditCourse(course.id); }} className="w-full py-2 text-[10px] text-gray-500 hover:text-white hover:bg-white/5 border border-dashed border-white/10 rounded transition-colors">
+                        + Edit Course Content
+                      </button>
+                  )}
                 </div>
-                <div className="text-right">
-                  <p className="text-xs text-green-400 font-bold">$149</p>
-                  <p className="text-[10px] text-gray-500 uppercase">Price</p>
-                </div>
-                <span className="bg-green-500/10 text-green-500 px-3 py-1 rounded text-[10px] font-bold border border-green-500/20">LIVE</span>
-                <button className="text-gray-400 hover:text-white transition-colors">
-                  {expandedCourseId === 'course-1' ? '▲' : '▼'}
-                </button>
-              </div>
+              )}
             </div>
-            
-            {/* Modules (Collapsible) */}
-            {expandedCourseId === 'course-1' && (
-              <div className="bg-black/30 p-4 space-y-2 animate-in slide-in-from-top-2 duration-200">
-                {/* Module 1 */}
-                <div className="bg-white/5 rounded border border-white/5 overflow-hidden">
-                  <div 
-                    className="flex justify-between items-center p-3 hover:bg-white/5 cursor-pointer"
-                    onClick={() => toggleModule('module-1')}
-                  >
-                    <div className="flex items-center gap-3">
-                      <span className="text-gray-600 text-xs">::</span>
-                      <span className="text-xs text-gray-300 font-medium">Module 1: The Writer's Room</span>
-                    </div>
-                    <div className="flex gap-3 text-[10px]">
-                      <span className="text-gray-500">3 Lessons</span>
-                      <button onClick={(e) => { e.stopPropagation(); handleEditCourse(); }} className="text-electricBlue hover:underline">Edit</button>
-                    </div>
-                  </div>
-                  
-                  {/* Lessons for Module 1 */}
-                  {expandedModuleId === 'module-1' && (
-                    <div className="bg-black/20 border-t border-white/5 p-2 space-y-1">
-                      <div 
-                        className="flex items-center justify-between p-2 pl-8 text-[10px] text-gray-400 hover:text-white hover:bg-white/5 rounded cursor-pointer group/lesson"
-                        onClick={() => handleEditCourse()}
-                      >
-                        <span>1.1 The Multimodal Script</span>
-                        <div className="flex items-center gap-2">
-                          <span className="text-gray-600 group-hover/lesson:hidden">12:45</span>
-                          <div className="hidden group-hover/lesson:flex gap-1">
-                            <button className="p-1 hover:bg-white/10 rounded text-electricBlue" title="Edit">
-                              <Edit2 className="w-3 h-3" />
-                            </button>
-                            <button className="p-1 hover:bg-white/10 rounded text-red-500" title="Delete" onClick={(e) => e.stopPropagation()}>
-                              <Trash2 className="w-3 h-3" />
-                            </button>
-                          </div>
-                        </div>
-                      </div>
-                      <div 
-                        className="flex items-center justify-between p-2 pl-8 text-[10px] text-gray-400 hover:text-white hover:bg-white/5 rounded cursor-pointer group/lesson"
-                        onClick={() => setCourseView('editor')}
-                      >
-                        <span>1.2 Context is King</span>
-                        <div className="flex items-center gap-2">
-                          <span className="text-gray-600 group-hover/lesson:hidden">08:30</span>
-                          <div className="hidden group-hover/lesson:flex gap-1">
-                            <button className="p-1 hover:bg-white/10 rounded text-electricBlue" title="Edit">
-                              <Edit2 className="w-3 h-3" />
-                            </button>
-                            <button className="p-1 hover:bg-white/10 rounded text-red-500" title="Delete" onClick={(e) => e.stopPropagation()}>
-                              <Trash2 className="w-3 h-3" />
-                            </button>
-                          </div>
-                        </div>
-                      </div>
-                      <div 
-                        className="flex items-center justify-between p-2 pl-8 text-[10px] text-gray-400 hover:text-white hover:bg-white/5 rounded cursor-pointer group/lesson"
-                        onClick={() => setCourseView('editor')}
-                      >
-                        <span>1.3 Visual Bible (Editing)</span>
-                        <div className="flex items-center gap-2">
-                          <span className="text-gray-600 group-hover/lesson:hidden">15:10</span>
-                          <div className="hidden group-hover/lesson:flex gap-1">
-                            <button className="p-1 hover:bg-white/10 rounded text-electricBlue" title="Edit">
-                              <Edit2 className="w-3 h-3" />
-                            </button>
-                            <button className="p-1 hover:bg-white/10 rounded text-red-500" title="Delete" onClick={(e) => e.stopPropagation()}>
-                              <Trash2 className="w-3 h-3" />
-                            </button>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  )}
-                </div>
-
-                {/* Module 2 */}
-                <div className="bg-white/5 rounded border border-white/5 overflow-hidden">
-                  <div 
-                    className="flex justify-between items-center p-3 hover:bg-white/5 cursor-pointer"
-                    onClick={() => toggleModule('module-2')}
-                  >
-                    <div className="flex items-center gap-3">
-                      <span className="text-gray-600 text-xs">::</span>
-                      <span className="text-xs text-gray-300 font-medium">Module 2: The Art Dept</span>
-                    </div>
-                    <div className="flex gap-3 text-[10px]">
-                      <span className="text-gray-500">4 Lessons</span>
-                      <button onClick={(e) => { e.stopPropagation(); handleEditCourse(); }} className="text-electricBlue hover:underline">Edit</button>
-                    </div>
-                  </div>
-
-                  {/* Lessons for Module 2 */}
-                  {expandedModuleId === 'module-2' && (
-                    <div className="bg-black/20 border-t border-white/5 p-2 space-y-1">
-                      <div 
-                        className="flex items-center justify-between p-2 pl-8 text-[10px] text-gray-400 hover:text-white hover:bg-white/5 rounded cursor-pointer group/lesson"
-                        onClick={() => handleEditCourse()}
-                      >
-                        <span>2.1 Set Design AI</span>
-                        <div className="flex items-center gap-2">
-                          <span className="text-gray-600 group-hover/lesson:hidden">10:20</span>
-                          <div className="hidden group-hover/lesson:flex gap-1">
-                            <button className="p-1 hover:bg-white/10 rounded text-electricBlue" title="Edit">
-                              <Edit2 className="w-3 h-3" />
-                            </button>
-                            <button className="p-1 hover:bg-white/10 rounded text-red-500" title="Delete" onClick={(e) => e.stopPropagation()}>
-                              <Trash2 className="w-3 h-3" />
-                            </button>
-                          </div>
-                        </div>
-                      </div>
-                      <div 
-                        className="flex items-center justify-between p-2 pl-8 text-[10px] text-gray-400 hover:text-white hover:bg-white/5 rounded cursor-pointer group/lesson"
-                        onClick={() => setCourseView('editor')}
-                      >
-                        <span>2.2 Lighting Consistency</span>
-                        <div className="flex items-center gap-2">
-                          <span className="text-gray-600 group-hover/lesson:hidden">14:15</span>
-                          <div className="hidden group-hover/lesson:flex gap-1">
-                            <button className="p-1 hover:bg-white/10 rounded text-electricBlue" title="Edit">
-                              <Edit2 className="w-3 h-3" />
-                            </button>
-                            <button className="p-1 hover:bg-white/10 rounded text-red-500" title="Delete" onClick={(e) => e.stopPropagation()}>
-                              <Trash2 className="w-3 h-3" />
-                            </button>
-                          </div>
-                        </div>
-                      </div>
-                      <div 
-                        className="flex items-center justify-between p-2 pl-8 text-[10px] text-gray-400 hover:text-white hover:bg-white/5 rounded cursor-pointer group/lesson"
-                        onClick={() => setCourseView('editor')}
-                      >
-                        <span>2.3 Camera Movements</span>
-                        <div className="flex items-center gap-2">
-                          <span className="text-gray-600 group-hover/lesson:hidden">09:45</span>
-                          <div className="hidden group-hover/lesson:flex gap-1">
-                            <button className="p-1 hover:bg-white/10 rounded text-electricBlue" title="Edit">
-                              <Edit2 className="w-3 h-3" />
-                            </button>
-                            <button className="p-1 hover:bg-white/10 rounded text-red-500" title="Delete" onClick={(e) => e.stopPropagation()}>
-                              <Trash2 className="w-3 h-3" />
-                            </button>
-                          </div>
-                        </div>
-                      </div>
-                      <div 
-                        className="flex items-center justify-between p-2 pl-8 text-[10px] text-gray-400 hover:text-white hover:bg-white/5 rounded cursor-pointer group/lesson"
-                        onClick={() => setCourseView('editor')}
-                      >
-                        <span>2.4 Color Grading</span>
-                        <div className="flex items-center gap-2">
-                          <span className="text-gray-600 group-hover/lesson:hidden">11:30</span>
-                          <div className="hidden group-hover/lesson:flex gap-1">
-                            <button className="p-1 hover:bg-white/10 rounded text-electricBlue" title="Edit">
-                              <Edit2 className="w-3 h-3" />
-                            </button>
-                            <button className="p-1 hover:bg-white/10 rounded text-red-500" title="Delete" onClick={(e) => e.stopPropagation()}>
-                              <Trash2 className="w-3 h-3" />
-                            </button>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  )}
-                </div>
-
-                {/* Module 3 */}
-                <div className="bg-white/5 rounded border border-white/5 overflow-hidden">
-                  <div 
-                    className="flex justify-between items-center p-3 hover:bg-white/5 cursor-pointer"
-                    onClick={() => toggleModule('module-3')}
-                  >
-                    <div className="flex items-center gap-3">
-                      <span className="text-gray-600 text-xs">::</span>
-                      <span className="text-xs text-gray-300 font-medium">Module 3: Principal Photography</span>
-                    </div>
-                    <div className="flex gap-3 text-[10px]">
-                      <span className="text-gray-500">5 Lessons</span>
-                      <button onClick={(e) => { e.stopPropagation(); handleEditCourse(); }} className="text-electricBlue hover:underline">Edit</button>
-                    </div>
-                  </div>
-
-                  {/* Lessons for Module 3 */}
-                  {expandedModuleId === 'module-3' && (
-                    <div className="bg-black/20 border-t border-white/5 p-2 space-y-1">
-                      <div 
-                        className="flex items-center justify-between p-2 pl-8 text-[10px] text-gray-400 hover:text-white hover:bg-white/5 rounded cursor-pointer group/lesson"
-                        onClick={() => handleEditCourse()}
-                      >
-                        <span>3.1 Shot Prompting</span>
-                        <div className="flex items-center gap-2">
-                          <span className="text-gray-600 group-hover/lesson:hidden">08:15</span>
-                          <div className="hidden group-hover/lesson:flex gap-1">
-                            <button className="p-1 hover:bg-white/10 rounded text-electricBlue" title="Edit">
-                              <Edit2 className="w-3 h-3" />
-                            </button>
-                            <button className="p-1 hover:bg-white/10 rounded text-red-500" title="Delete" onClick={(e) => e.stopPropagation()}>
-                              <Trash2 className="w-3 h-3" />
-                            </button>
-                          </div>
-                        </div>
-                      </div>
-                      <div 
-                        className="flex items-center justify-between p-2 pl-8 text-[10px] text-gray-400 hover:text-white hover:bg-white/5 rounded cursor-pointer group/lesson"
-                        onClick={() => setCourseView('editor')}
-                      >
-                        <span>3.2 Camera Angles</span>
-                        <div className="flex items-center gap-2">
-                          <span className="text-gray-600 group-hover/lesson:hidden">07:45</span>
-                          <div className="hidden group-hover/lesson:flex gap-1">
-                            <button className="p-1 hover:bg-white/10 rounded text-electricBlue" title="Edit">
-                              <Edit2 className="w-3 h-3" />
-                            </button>
-                            <button className="p-1 hover:bg-white/10 rounded text-red-500" title="Delete" onClick={(e) => e.stopPropagation()}>
-                              <Trash2 className="w-3 h-3" />
-                            </button>
-                          </div>
-                        </div>
-                      </div>
-                      <div 
-                        className="flex items-center justify-between p-2 pl-8 text-[10px] text-gray-400 hover:text-white hover:bg-white/5 rounded cursor-pointer group/lesson"
-                        onClick={() => setCourseView('editor')}
-                      >
-                        <span>3.3 Movement Control</span>
-                        <div className="flex items-center gap-2">
-                          <span className="text-gray-600 group-hover/lesson:hidden">13:20</span>
-                          <div className="hidden group-hover/lesson:flex gap-1">
-                            <button className="p-1 hover:bg-white/10 rounded text-electricBlue" title="Edit">
-                              <Edit2 className="w-3 h-3" />
-                            </button>
-                            <button className="p-1 hover:bg-white/10 rounded text-red-500" title="Delete" onClick={(e) => e.stopPropagation()}>
-                              <Trash2 className="w-3 h-3" />
-                            </button>
-                          </div>
-                        </div>
-                      </div>
-                      <div 
-                        className="flex items-center justify-between p-2 pl-8 text-[10px] text-gray-400 hover:text-white hover:bg-white/5 rounded cursor-pointer group/lesson"
-                        onClick={() => setCourseView('editor')}
-                      >
-                        <span>3.4 Upscaling</span>
-                        <div className="flex items-center gap-2">
-                          <span className="text-gray-600 group-hover/lesson:hidden">06:50</span>
-                          <div className="hidden group-hover/lesson:flex gap-1">
-                            <button className="p-1 hover:bg-white/10 rounded text-electricBlue" title="Edit">
-                              <Edit2 className="w-3 h-3" />
-                            </button>
-                            <button className="p-1 hover:bg-white/10 rounded text-red-500" title="Delete" onClick={(e) => e.stopPropagation()}>
-                              <Trash2 className="w-3 h-3" />
-                            </button>
-                          </div>
-                        </div>
-                      </div>
-                      <div 
-                        className="flex items-center justify-between p-2 pl-8 text-[10px] text-gray-400 hover:text-white hover:bg-white/5 rounded cursor-pointer group/lesson"
-                        onClick={() => setCourseView('editor')}
-                      >
-                        <span>3.5 Final Export</span>
-                        <div className="flex items-center gap-2">
-                          <span className="text-gray-600 group-hover/lesson:hidden">18:00</span>
-                          <div className="hidden group-hover/lesson:flex gap-1">
-                            <button className="p-1 hover:bg-white/10 rounded text-electricBlue" title="Edit">
-                              <Edit2 className="w-3 h-3" />
-                            </button>
-                            <button className="p-1 hover:bg-white/10 rounded text-red-500" title="Delete" onClick={(e) => e.stopPropagation()}>
-                              <Trash2 className="w-3 h-3" />
-                            </button>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  )}
-                </div>
-
-                <button className="w-full py-2 text-[10px] text-gray-500 hover:text-white hover:bg-white/5 border border-dashed border-white/10 rounded transition-colors">
-                  + Add Module
-                </button>
-              </div>
-            )}
-          </div>
-
-          {/* Course Item 2 */}
-          <div className={`glass-panel p-0 overflow-hidden border transition-colors group opacity-80 ${expandedCourseId === 'course-2' ? 'border-signalOrange/50' : 'border-white/10 hover:border-signalOrange/30'}`}>
-            <div 
-              className="p-6 flex items-center justify-between border-b border-white/5 bg-white/5 cursor-pointer"
-              onClick={() => toggleCourse('course-2')}
-            >
-              <div className="flex items-center gap-4">
-                <div className="w-12 h-12 bg-gray-900 shrink-0 relative overflow-hidden rounded border border-white/10">
-                  <div className="absolute inset-0 bg-gradient-to-br from-orange-900/40 to-black"></div>
-                  <span className="absolute inset-0 flex items-center justify-center font-header text-white text-xs">L2</span>
-                </div>
-                <div>
-                  <h3 className="font-header text-sm text-white">ADVANCED AI CINEMATOGRAPHY</h3>
-                  <p className="text-[10px] text-gray-400 font-mono">ID: #COURSE-002 • Last Updated: 1d ago</p>
-                </div>
-              </div>
-              <div className="flex items-center gap-6">
-                <div className="text-right">
-                  <p className="text-xs text-white font-bold">1,105</p>
-                  <p className="text-[10px] text-gray-500 uppercase">Students</p>
-                </div>
-                <div className="text-right">
-                  <p className="text-xs text-green-400 font-bold">$199</p>
-                  <p className="text-[10px] text-gray-500 uppercase">Price</p>
-                </div>
-                <span className="bg-yellow-500/10 text-yellow-500 px-3 py-1 rounded text-[10px] font-bold border border-yellow-500/20">DRAFT</span>
-                <button className="text-gray-400 hover:text-white transition-colors">
-                  {expandedCourseId === 'course-2' ? '▲' : '▼'}
-                </button>
-              </div>
-            </div>
-            
-            {/* Modules for Course 2 (Collapsible) */}
-            {expandedCourseId === 'course-2' && (
-              <div className="bg-black/30 p-4 space-y-2 animate-in slide-in-from-top-2 duration-200">
-                 <div className="p-4 text-center text-gray-500 text-xs font-mono border border-dashed border-white/10 rounded">
-                    No modules created yet. <button className="text-electricBlue hover:underline">Start building curriculum</button>
-                 </div>
-              </div>
-            )}
-          </div>
+          ))}
 
         </div>
       </div>
@@ -729,10 +563,15 @@ export default function AdminDashboard() {
     <div className="relative z-10 p-8 max-w-7xl mx-auto">
       {/* BREADCRUMBS & HEADER */}
       <div className="mb-8">
-        <div className="flex items-center gap-2 text-[10px] font-mono text-gray-500 mb-2">
+          <div className="flex items-center gap-2 text-[10px] font-mono text-gray-500 mb-2">
           <button onClick={() => setCourseView('list')} className="hover:text-white">COURSES</button>
           <span>/</span>
-          <a href="#" className="hover:text-white">{editorCourseTitle}</a>
+          <input 
+            type="text" 
+            value={editorCourseTitle}
+            onChange={(e) => setEditorCourseTitle(e.target.value)}
+            className="bg-transparent border-b border-transparent focus:border-electricBlue outline-none hover:border-white/20 text-white font-bold px-1 -mx-1"
+          />
           <span>/</span>
           <span className="text-electricBlue">EDIT CONTENT</span>
         </div>
@@ -741,7 +580,7 @@ export default function AdminDashboard() {
           <div className="flex gap-4">
             <button onClick={() => setCourseView('list')} className="text-gray-400 text-xs hover:text-white transition-colors underline">Cancel</button>
             <button className="text-gray-400 text-xs hover:text-white transition-colors underline">Preview</button>
-            <button onClick={() => setCourseView('list')} className="bg-green-500 text-black px-4 py-2 text-[10px] font-header font-bold uppercase hover:bg-white transition-colors">
+            <button onClick={handleSaveCourse} className="bg-green-500 text-black px-4 py-2 text-[10px] font-header font-bold uppercase hover:bg-white transition-colors">
               Save Changes
             </button>
           </div>
