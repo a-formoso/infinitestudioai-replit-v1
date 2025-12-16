@@ -11,19 +11,56 @@ export default function AdminDashboard() {
   const [logs, setLogs] = useState<string[]>([]);
   const terminalRef = useRef<HTMLDivElement>(null);
 
-  const lessonsData: Record<string, { title: string; duration: string; video: string; notes: string }> = {
-    "1.1": { title: "The Multimodal Script", duration: "12:45", video: "multimodal_script_v3.mp4", notes: "Introduction to multimodal scripting techniques using Gemini 1.5 Pro." },
-    "1.2": { title: "Context is King", duration: "08:30", video: "context_king_final.mp4", notes: "Understanding the importance of context window in long-form generation." },
-    "1.3": { title: "Visual Bible (Editing)", duration: "15:10", video: "visual_bible_v2.mp4", notes: "How to compile a visual bible from generated assets." },
-    "2.1": { title: "Set Design AI", duration: "10:20", video: "set_design_ai.mp4", notes: "Using AI to generate consistent set designs." },
-    "2.2": { title: "Lighting Consistency", duration: "14:15", video: "lighting_fix.mp4", notes: "maintaining lighting across multiple generated shots." },
-    "2.3": { title: "Camera Movements", duration: "09:45", video: "camera_moves.mp4", notes: "Simulating dolly and crane shots." },
-    "2.4": { title: "Color Grading", duration: "11:30", video: "color_grade_lut.mp4", notes: "Applying cinematic LUTs to generated video." },
-    "3.1": { title: "Shot Prompting", duration: "08:15", video: "shot_prompting.mp4", notes: "Specific prompting techniques for camera angles." },
-    "3.2": { title: "Camera Angles", duration: "07:45", video: "angles_master.mp4", notes: "Wide, medium, and close-up shot consistency." },
-    "3.3": { title: "Movement Control", duration: "13:20", video: "movement_ctrl.mp4", notes: "Controlling character movement within the frame." },
-    "3.4": { title: "Upscaling", duration: "06:50", video: "upscale_4k.mp4", notes: "Best practices for upscaling to 4K." },
-    "3.5": { title: "Final Export", duration: "18:00", video: "export_settings.mp4", notes: "Codecs and wrappers for final delivery." }
+  // State for Lessons Data
+  const [lessons, setLessons] = useState<Record<string, { id: string; title: string; duration: string; video: string; notes: string }>>({
+    "1.1": { id: "1.1", title: "The Multimodal Script", duration: "12:45", video: "multimodal_script_v3.mp4", notes: "Introduction to multimodal scripting techniques using Gemini 1.5 Pro." },
+    "1.2": { id: "1.2", title: "Context is King", duration: "08:30", video: "context_king_final.mp4", notes: "Understanding the importance of context window in long-form generation." },
+    "1.3": { id: "1.3", title: "Visual Bible (Editing)", duration: "15:10", video: "visual_bible_v2.mp4", notes: "How to compile a visual bible from generated assets." },
+    "2.1": { id: "2.1", title: "Set Design AI", duration: "10:20", video: "set_design_ai.mp4", notes: "Using AI to generate consistent set designs." },
+    "2.2": { id: "2.2", title: "Lighting Consistency", duration: "14:15", video: "lighting_fix.mp4", notes: "maintaining lighting across multiple generated shots." },
+    "2.3": { id: "2.3", title: "Camera Movements", duration: "09:45", video: "camera_moves.mp4", notes: "Simulating dolly and crane shots." },
+    "2.4": { id: "2.4", title: "Color Grading", duration: "11:30", video: "color_grade_lut.mp4", notes: "Applying cinematic LUTs to generated video." },
+    "3.1": { id: "3.1", title: "Shot Prompting", duration: "08:15", video: "shot_prompting.mp4", notes: "Specific prompting techniques for camera angles." },
+    "3.2": { id: "3.2", title: "Camera Angles", duration: "07:45", video: "angles_master.mp4", notes: "Wide, medium, and close-up shot consistency." },
+    "3.3": { id: "3.3", title: "Movement Control", duration: "13:20", video: "movement_ctrl.mp4", notes: "Controlling character movement within the frame." },
+    "3.4": { id: "3.4", title: "Upscaling", duration: "06:50", video: "upscale_4k.mp4", notes: "Best practices for upscaling to 4K." },
+    "3.5": { id: "3.5", title: "Final Export", duration: "18:00", video: "export_settings.mp4", notes: "Codecs and wrappers for final delivery." }
+  });
+
+  // State for Modules Structure
+  const [modules, setModules] = useState<{ id: string; title: string; status: string; lessons: string[] }[]>([
+    { id: "module-1", title: "MODULE 1: WRITER'S ROOM", status: "Draft", lessons: ["1.1", "1.2", "1.3"] },
+    { id: "module-2", title: "MODULE 2: THE ART DEPT", status: "Draft", lessons: ["2.1", "2.2", "2.3", "2.4"] },
+    { id: "module-3", title: "MODULE 3: PRINCIPAL PHOTOGRAPHY", status: "Draft", lessons: ["3.1", "3.2", "3.3", "3.4", "3.5"] }
+  ]);
+
+  const handleAddModule = () => {
+    const newId = `module-${modules.length + 1}`;
+    setModules([...modules, { id: newId, title: "NEW MODULE", status: "Draft", lessons: [] }]);
+  };
+
+  const handleAddLesson = (moduleId: string) => {
+    const newLessonId = `${moduleId}.${Date.now().toString().slice(-4)}`;
+    const newLesson = { id: newLessonId, title: "New Lesson", duration: "00:00", video: "placeholder.mp4", notes: "Add notes here..." };
+    
+    setLessons({ ...lessons, [newLessonId]: newLesson });
+    
+    setModules(modules.map(m => {
+      if (m.id === moduleId) {
+        return { ...m, lessons: [...m.lessons, newLessonId] };
+      }
+      return m;
+    }));
+    
+    setSelectedLessonId(newLessonId);
+  };
+
+  const handleLessonUpdate = (field: string, value: string) => {
+    if (!selectedLessonId) return;
+    setLessons({
+      ...lessons,
+      [selectedLessonId]: { ...lessons[selectedLessonId], [field]: value }
+    });
   };
 
   useEffect(() => {
@@ -602,7 +639,7 @@ export default function AdminDashboard() {
   };
 
   const renderCourseEditor = () => {
-    const currentLesson = lessonsData[selectedLessonId] || { title: "Select a Lesson", duration: "00:00", video: "placeholder.mp4", notes: "No lesson selected." };
+    const currentLesson = lessons[selectedLessonId] || { title: "Select a Lesson", duration: "00:00", video: "placeholder.mp4", notes: "No lesson selected." };
 
     return (
     <div className="relative z-10 p-8 max-w-7xl mx-auto">
@@ -634,45 +671,41 @@ export default function AdminDashboard() {
         <div className="lg:col-span-1 glass-panel p-0 overflow-hidden border border-white/10 h-[calc(100vh-200px)] flex flex-col">
           <div className="p-4 border-b border-white/10 bg-white/5 flex justify-between items-center">
             <h3 className="font-header text-xs text-white">CURRICULUM</h3>
-            <button className="text-electricBlue text-xs hover:underline">+ New Module</button>
+            <button onClick={handleAddModule} className="text-electricBlue text-xs hover:underline">+ New Module</button>
           </div>
           
           <div className="overflow-y-auto flex-grow p-2 space-y-2">
-            {/* Module 1 */}
-            <div className="bg-white/5 rounded border border-white/5">
-              <div className="p-3 text-xs font-bold text-gray-300 flex justify-between cursor-pointer hover:bg-white/5">
-                <span>MODULE 1: WRITER'S ROOM</span>
-                <span className="text-[10px] text-gray-500">Draft</span>
+            {modules.map((module) => (
+              <div key={module.id} className="bg-white/5 rounded border border-white/5 mb-2">
+                <div className="p-3 text-xs font-bold text-gray-300 flex justify-between cursor-pointer hover:bg-white/5">
+                  <span className="uppercase">{module.title}</span>
+                  <span className="text-[10px] text-gray-500">{module.status}</span>
+                </div>
+                <div className="pl-2 pr-2 pb-2 space-y-1">
+                  {module.lessons.map((lessonId) => {
+                    const lesson = lessons[lessonId];
+                    if (!lesson) return null;
+                    return (
+                      <div 
+                        key={lessonId}
+                        className={`p-2 text-[10px] rounded cursor-pointer flex justify-between items-center group transition-colors ${selectedLessonId === lessonId ? 'bg-electricBlue/20 text-white border-l-2 border-electricBlue' : 'text-gray-400 hover:bg-electricBlue/10 hover:text-white border-l-2 border-transparent'}`}
+                        onClick={() => setSelectedLessonId(lessonId)}
+                      >
+                        <span className="truncate pr-2">{lesson.title}</span>
+                        <div className={`w-2 h-2 shrink-0 rounded-full ${selectedLessonId === lessonId ? 'bg-electricBlue animate-pulse' : 'bg-green-500'}`}></div>
+                      </div>
+                    );
+                  })}
+                  {/* Add Lesson Button per Module */}
+                  <button 
+                    onClick={() => handleAddLesson(module.id)}
+                    className="w-full mt-2 py-1.5 border border-dashed border-white/10 text-[9px] text-gray-500 hover:text-white hover:border-white/30 rounded transition-colors"
+                  >
+                    + Add Lesson
+                  </button>
+                </div>
               </div>
-              <div className="pl-2 pr-2 pb-2 space-y-1">
-                <div 
-                  className={`p-2 text-[10px] rounded cursor-pointer flex justify-between items-center group transition-colors ${selectedLessonId === '1.1' ? 'bg-electricBlue/20 text-white border-l-2 border-electricBlue' : 'text-gray-400 hover:bg-electricBlue/10 hover:text-white border-l-2 border-transparent'}`}
-                  onClick={() => setSelectedLessonId('1.1')}
-                >
-                  <span>1.1 The Multimodal Script</span>
-                  <div className={`w-2 h-2 rounded-full ${selectedLessonId === '1.1' ? 'bg-electricBlue animate-pulse' : 'bg-green-500'}`}></div>
-                </div>
-                <div 
-                  className={`p-2 text-[10px] rounded cursor-pointer flex justify-between items-center group transition-colors ${selectedLessonId === '1.2' ? 'bg-electricBlue/20 text-white border-l-2 border-electricBlue' : 'text-gray-400 hover:bg-electricBlue/10 hover:text-white border-l-2 border-transparent'}`}
-                  onClick={() => setSelectedLessonId('1.2')}
-                >
-                  <span>1.2 Context is King</span>
-                  <div className={`w-2 h-2 rounded-full ${selectedLessonId === '1.2' ? 'bg-electricBlue animate-pulse' : 'bg-green-500'}`}></div>
-                </div>
-                <div 
-                  className={`p-2 text-[10px] rounded cursor-pointer flex justify-between items-center group transition-colors ${selectedLessonId === '1.3' ? 'bg-electricBlue/20 text-white border-l-2 border-electricBlue' : 'text-gray-400 hover:bg-electricBlue/10 hover:text-white border-l-2 border-transparent'}`}
-                  onClick={() => setSelectedLessonId('1.3')}
-                >
-                  <span>1.3 Visual Bible (Editing)</span>
-                  <div className={`w-2 h-2 rounded-full ${selectedLessonId === '1.3' ? 'bg-electricBlue animate-pulse' : 'bg-yellow-500'}`}></div>
-                </div>
-              </div>
-            </div>
-
-            {/* Add Lesson Button */}
-            <button className="w-full py-2 border border-dashed border-white/10 text-[10px] text-gray-500 hover:text-white hover:border-white/30 rounded transition-colors">
-              + Add Lesson to Module 1
-            </button>
+            ))}
           </div>
         </div>
 
@@ -684,18 +717,18 @@ export default function AdminDashboard() {
             <div>
               <label className="block text-[10px] font-mono text-gray-500 mb-2 uppercase">LESSON TITLE</label>
               <input 
-                key={selectedLessonId}
+                value={currentLesson.title} 
+                onChange={(e) => handleLessonUpdate("title", e.target.value)}
                 type="text" 
-                defaultValue={currentLesson.title} 
                 className="bg-black/50 border border-white/10 text-white text-sm px-4 py-3 w-full focus:border-electricBlue outline-none font-bold" 
               />
             </div>
             <div>
               <label className="block text-[10px] font-mono text-gray-500 mb-2 uppercase">DURATION (MIN)</label>
               <input 
-                key={selectedLessonId + 'dur'}
+                value={currentLesson.duration} 
+                onChange={(e) => handleLessonUpdate("duration", e.target.value)}
                 type="text" 
-                defaultValue={currentLesson.duration} 
                 className="bg-black/50 border border-white/10 text-white text-sm px-4 py-3 w-full focus:border-electricBlue outline-none font-mono" 
               />
             </div>
@@ -727,9 +760,13 @@ export default function AdminDashboard() {
                 <button className="hover:text-white"><LinkIcon className="w-4 h-4" /></button>
                 <button className="hover:text-white"><Code className="w-4 h-4" /></button>
               </div>
-              <p>{currentLesson.notes}</p>
+              <textarea 
+                value={currentLesson.notes}
+                onChange={(e) => handleLessonUpdate("notes", e.target.value)}
+                className="w-full bg-transparent border-none outline-none text-gray-300 min-h-[120px] resize-none"
+              />
               <br />
-              <p><b>Key Prompts:</b></p>
+              <p className="mt-4"><b>Key Prompts:</b></p>
               <p className="font-mono bg-white/5 p-2 rounded mt-2 text-xs text-electricBlue">"Analyze this image as a Director of Photography..."</p>
             </div>
           </div>
