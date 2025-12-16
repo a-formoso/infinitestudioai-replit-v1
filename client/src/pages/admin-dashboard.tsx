@@ -3,18 +3,18 @@ import { useState, useEffect, useRef } from "react";
 import { LayoutDashboard, BookOpen, Users, ShoppingBag, BarChart2, Plus, Download, Bold, Italic, Underline, Link as LinkIcon, Code, X, Search, Edit2, Trash2 } from "lucide-react";
 
 const INITIAL_LESSONS = {
-  "1.1": { id: "1.1", title: "The Multimodal Script", duration: "12:45", video: "multimodal_script_v3.mp4", notes: "Introduction to multimodal scripting techniques using Gemini 1.5 Pro.", keyPrompt: "Analyze this image as a Director of Photography..." },
-  "1.2": { id: "1.2", title: "Context is King", duration: "08:30", video: "context_king_final.mp4", notes: "Understanding the importance of context window in long-form generation.", keyPrompt: "Summarize the key themes in this context..." },
-  "1.3": { id: "1.3", title: "Visual Bible (Editing)", duration: "15:10", video: "visual_bible_v2.mp4", notes: "How to compile a visual bible from generated assets.", keyPrompt: "Generate a visual style guide based on..." },
-  "2.1": { id: "2.1", title: "Set Design AI", duration: "10:20", video: "set_design_ai.mp4", notes: "Using AI to generate consistent set designs.", keyPrompt: "Create a mood board for a sci-fi set..." },
-  "2.2": { id: "2.2", title: "Lighting Consistency", duration: "14:15", video: "lighting_fix.mp4", notes: "maintaining lighting across multiple generated shots.", keyPrompt: "Describe the lighting setup in this scene..." },
-  "2.3": { id: "2.3", title: "Camera Movements", duration: "09:45", video: "camera_moves.mp4", notes: "Simulating dolly and crane shots.", keyPrompt: "Suggest camera movements for a dynamic action sequence..." },
-  "2.4": { id: "2.4", title: "Color Grading", duration: "11:30", video: "color_grade_lut.mp4", notes: "Applying cinematic LUTs to generated video.", keyPrompt: "Create a color grading preset for a noir film..." },
-  "3.1": { id: "3.1", title: "Shot Prompting", duration: "08:15", video: "shot_prompting.mp4", notes: "Specific prompting techniques for camera angles.", keyPrompt: "Generate a prompt for a low-angle shot..." },
-  "3.2": { id: "3.2", title: "Camera Angles", duration: "07:45", video: "angles_master.mp4", notes: "Wide, medium, and close-up shot consistency.", keyPrompt: "List 5 variations of a medium shot..." },
-  "3.3": { id: "3.3", title: "Movement Control", duration: "13:20", video: "movement_ctrl.mp4", notes: "Controlling character movement within the frame.", keyPrompt: "Describe the character's movement in this scene..." },
-  "3.4": { id: "3.4", title: "Upscaling", duration: "06:50", video: "upscale_4k.mp4", notes: "Best practices for upscaling to 4K.", keyPrompt: "Explain the upscaling process for 4K video..." },
-  "3.5": { id: "3.5", title: "Final Export", duration: "18:00", video: "export_settings.mp4", notes: "Codecs and wrappers for final delivery.", keyPrompt: "Recommended export settings for YouTube..." }
+  "1.1": { id: "1.1", title: "The Multimodal Script", duration: "12:45", video: "multimodal_script_v3.mp4", notes: "Introduction to multimodal scripting techniques using Gemini 1.5 Pro.", keyPrompt: "Analyze this image as a Director of Photography...", resources: [{ name: "Visual_Bible_Template.pdf", size: "2.4 MB", type: "PDF" }] },
+  "1.2": { id: "1.2", title: "Context is King", duration: "08:30", video: "context_king_final.mp4", notes: "Understanding the importance of context window in long-form generation.", keyPrompt: "Summarize the key themes in this context...", resources: [] },
+  "1.3": { id: "1.3", title: "Visual Bible (Editing)", duration: "15:10", video: "visual_bible_v2.mp4", notes: "How to compile a visual bible from generated assets.", keyPrompt: "Generate a visual style guide based on...", resources: [{ name: "Editing_Workflow.pdf", size: "1.2 MB", type: "PDF" }] },
+  "2.1": { id: "2.1", title: "Set Design AI", duration: "10:20", video: "set_design_ai.mp4", notes: "Using AI to generate consistent set designs.", keyPrompt: "Create a mood board for a sci-fi set...", resources: [] },
+  "2.2": { id: "2.2", title: "Lighting Consistency", duration: "14:15", video: "lighting_fix.mp4", notes: "maintaining lighting across multiple generated shots.", keyPrompt: "Describe the lighting setup in this scene...", resources: [] },
+  "2.3": { id: "2.3", title: "Camera Movements", duration: "09:45", video: "camera_moves.mp4", notes: "Simulating dolly and crane shots.", keyPrompt: "Suggest camera movements for a dynamic action sequence...", resources: [] },
+  "2.4": { id: "2.4", title: "Color Grading", duration: "11:30", video: "color_grade_lut.mp4", notes: "Applying cinematic LUTs to generated video.", keyPrompt: "Create a color grading preset for a noir film...", resources: [{ name: "Cinematic_LUTs.zip", size: "15 MB", type: "ZIP" }] },
+  "3.1": { id: "3.1", title: "Shot Prompting", duration: "08:15", video: "shot_prompting.mp4", notes: "Specific prompting techniques for camera angles.", keyPrompt: "Generate a prompt for a low-angle shot...", resources: [] },
+  "3.2": { id: "3.2", title: "Camera Angles", duration: "07:45", video: "angles_master.mp4", notes: "Wide, medium, and close-up shot consistency.", keyPrompt: "List 5 variations of a medium shot...", resources: [] },
+  "3.3": { id: "3.3", title: "Movement Control", duration: "13:20", video: "movement_ctrl.mp4", notes: "Controlling character movement within the frame.", keyPrompt: "Describe the character's movement in this scene...", resources: [] },
+  "3.4": { id: "3.4", title: "Upscaling", duration: "06:50", video: "upscale_4k.mp4", notes: "Best practices for upscaling to 4K.", keyPrompt: "Explain the upscaling process for 4K video...", resources: [] },
+  "3.5": { id: "3.5", title: "Final Export", duration: "18:00", video: "export_settings.mp4", notes: "Codecs and wrappers for final delivery.", keyPrompt: "Recommended export settings for YouTube...", resources: [] }
 };
 
 const INITIAL_MODULES: Module[] = [
@@ -30,6 +30,7 @@ interface Lesson {
   video: string;
   notes: string;
   keyPrompt?: string;
+  resources: { name: string; size: string; type: string }[];
 }
 
 interface Module {
@@ -173,7 +174,7 @@ export default function AdminDashboard() {
 
   const handleAddLesson = (moduleId: string) => {
     const newLessonId = `${moduleId}.${Date.now().toString().slice(-4)}`;
-    const newLesson = { id: newLessonId, title: "New Lesson", duration: "00:00", video: "placeholder.mp4", notes: "Add notes here...", keyPrompt: "Enter AI prompt here..." };
+    const newLesson = { id: newLessonId, title: "New Lesson", duration: "00:00", video: "placeholder.mp4", notes: "Add notes here...", keyPrompt: "Enter AI prompt here...", resources: [] };
     
     setLessons({ ...lessons, [newLessonId]: newLesson });
     
@@ -263,6 +264,27 @@ export default function AdminDashboard() {
     setDeleteConfirmation(null);
   };
 
+  const handleAddResource = () => {
+    if (!selectedLessonId) return;
+    const newResource = { name: "New_Resource.pdf", size: "0 MB", type: "PDF" };
+    const updatedLesson = { 
+        ...lessons[selectedLessonId], 
+        resources: [...(lessons[selectedLessonId].resources || []), newResource] 
+    };
+    setLessons({ ...lessons, [selectedLessonId]: updatedLesson });
+  };
+
+  const handleRemoveResource = (index: number) => {
+    if (!selectedLessonId) return;
+    const updatedResources = [...(lessons[selectedLessonId].resources || [])];
+    updatedResources.splice(index, 1);
+    const updatedLesson = { 
+        ...lessons[selectedLessonId], 
+        resources: updatedResources
+    };
+    setLessons({ ...lessons, [selectedLessonId]: updatedLesson });
+  };
+  
   const handleLessonUpdate = (field: string, value: string) => {
     if (!selectedLessonId) return;
     setLessons({
@@ -821,18 +843,32 @@ export default function AdminDashboard() {
           <div>
             <div className="flex justify-between items-center mb-2">
               <label className="block text-[10px] font-mono text-gray-500 uppercase">DOWNLOADABLE RESOURCES</label>
-              <button className="text-[10px] text-electricBlue hover:underline flex items-center gap-1">
+              <button 
+                onClick={handleAddResource}
+                className="text-[10px] text-electricBlue hover:underline flex items-center gap-1"
+              >
                 <Plus className="w-3 h-3" /> Upload File
               </button>
             </div>
             <div className="space-y-2">
-              <div className="flex items-center justify-between p-3 bg-white/5 border border-white/5 rounded">
-                <div className="flex items-center gap-3">
-                  <div className="w-8 h-8 bg-gray-800 flex items-center justify-center text-[10px] font-bold text-gray-400">PDF</div>
-                  <span className="text-xs text-white">Visual_Bible_Template.pdf</span>
+              {(currentLesson.resources || []).length === 0 && (
+                  <p className="text-[10px] text-gray-600 font-mono italic p-2 border border-dashed border-white/5 rounded">No resources attached.</p>
+              )}
+              {(currentLesson.resources || []).map((resource, idx) => (
+                <div key={idx} className="flex items-center justify-between p-3 bg-white/5 border border-white/5 rounded group">
+                    <div className="flex items-center gap-3">
+                    <div className="w-8 h-8 bg-gray-800 flex items-center justify-center text-[10px] font-bold text-gray-400">{resource.type}</div>
+                    <span className="text-xs text-white">{resource.name}</span>
+                    <span className="text-[10px] text-gray-500">({resource.size})</span>
+                    </div>
+                    <button 
+                        onClick={() => handleRemoveResource(idx)}
+                        className="text-gray-500 hover:text-red-500 opacity-0 group-hover:opacity-100 transition-opacity"
+                    >
+                        <X className="w-4 h-4" />
+                    </button>
                 </div>
-                <button className="text-gray-500 hover:text-red-500"><X className="w-4 h-4" /></button>
-              </div>
+              ))}
             </div>
           </div>
 
@@ -1008,14 +1044,20 @@ export default function AdminDashboard() {
                         <div>
                           <h3 className="font-header text-xs text-gray-500 mb-4 uppercase">Resources</h3>
                           <div className="space-y-2">
-                            <button className="w-full flex items-center gap-3 p-3 bg-white/5 border border-white/5 hover:border-white/20 transition-colors rounded group text-left">
-                              <div className="w-8 h-8 bg-gray-800 flex items-center justify-center text-[10px] font-bold text-gray-400 group-hover:text-white">PDF</div>
-                              <div>
-                                <p className="text-xs text-white font-bold">Visual_Bible_Template.pdf</p>
-                                <p className="text-[10px] text-gray-500">2.4 MB</p>
-                              </div>
-                              <Download className="w-4 h-4 text-gray-500 ml-auto group-hover:text-white" />
-                            </button>
+                            {(currentLesson.resources || []).length > 0 ? (
+                                (currentLesson.resources || []).map((resource, idx) => (
+                                    <button key={idx} className="w-full flex items-center gap-3 p-3 bg-white/5 border border-white/5 hover:border-white/20 transition-colors rounded group text-left">
+                                    <div className="w-8 h-8 bg-gray-800 flex items-center justify-center text-[10px] font-bold text-gray-400 group-hover:text-white">{resource.type}</div>
+                                    <div>
+                                        <p className="text-xs text-white font-bold">{resource.name}</p>
+                                        <p className="text-[10px] text-gray-500">{resource.size}</p>
+                                    </div>
+                                    <Download className="w-4 h-4 text-gray-500 ml-auto group-hover:text-white" />
+                                    </button>
+                                ))
+                            ) : (
+                                <p className="text-[10px] text-gray-600 font-mono italic">No resources available for this lesson.</p>
+                            )}
                           </div>
                         </div>
                       </div>
