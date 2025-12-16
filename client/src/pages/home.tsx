@@ -247,7 +247,7 @@ export default function Home() {
                       </div>
                       <div className="px-6 pb-8">
                           <h3 className="font-header text-xl text-white mb-3 group-hover:text-electricBlue transition-colors leading-tight">MASTER THE GOOGLE ECOSYSTEM</h3>
-                          <p className="text-sm text-gray-400 mb-6 leading-relaxed">The foundational course. Learn the connected workflow of Gemini, Nano Banano (Gemini 3 Pro Preview), and Veo.</p>
+                          <p className="text-sm text-gray-400 mb-6 leading-relaxed">The foundational course. Learn the connected workflow of Gemini, Nano Banana (Gemini 3 Pro Preview), and Veo.</p>
                           <div className="flex justify-between items-center border-t border-white/10 pt-4">
                               <span className="font-mono text-xs text-electricBlue bg-electricBlue/10 px-2 py-1 rounded">4.5 HOURS</span>
                               <span className="font-header font-bold text-xl text-white group-hover:text-electricBlue transition-colors">$149</span>
@@ -298,7 +298,7 @@ export default function Home() {
                                <div className="absolute top-2 right-2 bg-purple-600 text-white text-[10px] font-bold px-2 py-1">NEW</div>
                           </div>
                           <h3 className="font-header text-sm text-white mb-1">CYBERPUNK TEXTURES VOL. 1</h3>
-                          <p className="text-xs text-gray-500 font-mono mb-4">50+ Nano Banano Generated Surfaces</p>
+                          <p className="text-xs text-gray-500 font-mono mb-4">50+ Nano Banana Generated Surfaces</p>
                           <div className="flex justify-between items-center">
                               <span className="text-white font-bold">$29</span>
                               <span className="text-[10px] text-purple-400 group-hover:translate-x-1 transition-transform">GET PACK →</span>

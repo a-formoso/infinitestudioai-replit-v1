@@ -123,7 +123,7 @@ export default function CoursePlayer() {
                                           In this lesson, we tackle the biggest problem in AI video: <span className="text-white font-bold">Character Consistency</span>.
                                       </p>
                                       <p>
-                                          You will learn how to use the "Ingredients" feature in Veo 3.1 effectively. We will take the character sheet we generated in Module 2 (Nano Banano) and upload it as a reference anchor. This prevents the dreaded "face melting" effect when the camera angles change.
+                                          You will learn how to use the "Ingredients" feature in Veo 3.1 effectively. We will take the character sheet we generated in Module 2 (Nano Banana) and upload it as a reference anchor. This prevents the dreaded "face melting" effect when the camera angles change.
                                       </p>
                                       
                                       <h3 className="text-white font-bold mt-8 mb-4">Key Takeaways:</h3>
@@ -232,7 +232,7 @@ export default function CoursePlayer() {
                                       <div className="px-6 py-3 flex gap-3 items-start opacity-50 hover:bg-white/5 cursor-pointer">
                                           <Check className="w-4 h-4 text-electricBlue shrink-0 mt-0.5" />
                                           <div>
-                                              <p className="text-xs text-white leading-tight mb-1">2.1 Intro to Nano Banano</p>
+                                              <p className="text-xs text-white leading-tight mb-1">2.1 Intro to Nano Banana</p>
                                               <span className="text-[10px] font-mono text-gray-500">15:20</span>
                                           </div>
                                       </div>

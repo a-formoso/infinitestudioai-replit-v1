@@ -32,7 +32,7 @@ export default function AssetStore() {
           <span className="text-transparent bg-clip-text bg-gradient-to-r from-neonPurple to-blue-500">LIBRARY</span>
         </h1>
         <p className="text-lg text-gray-400 max-w-2xl mx-auto leading-relaxed font-light mb-12">
-          Production-ready assets for Veo 3.1 & Nano Banano. High-fidelity character sheets, textures, and sound profiles pre-optimized for AI ingestion.
+          Production-ready assets for Veo 3.1 & Nano Banana. High-fidelity character sheets, textures, and sound profiles pre-optimized for AI ingestion.
         </p>
 
         {/* FILTERS */}
@@ -82,7 +82,7 @@ export default function AssetStore() {
                   <h3 className="font-header text-lg text-white group-hover:text-electricBlue transition-colors">NEON NOIR TEXTURES</h3>
                   <span className="font-mono text-white">$29</span>
                 </div>
-                <p className="text-xs text-gray-400 font-mono mb-4 border-b border-white/10 pb-4">100+ High-Res Cyberpunk environment textures generated with Nano Banano.</p>
+                <p className="text-xs text-gray-400 font-mono mb-4 border-b border-white/10 pb-4">100+ High-Res Cyberpunk environment textures generated with Nano Banana.</p>
                 <div className="flex justify-between items-center">
                   <span className="text-[10px] text-gray-500 font-header">4K JPG</span>
                   <button className="text-xs font-bold text-white hover:text-electricBlue transition-colors flex items-center gap-1">

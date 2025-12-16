@@ -79,7 +79,7 @@ export default function CourseLevel1() {
                       <span className="text-transparent bg-clip-text bg-gradient-to-r from-electricBlue to-cyan-400">FILMMAKING ECOSYSTEM</span>
                   </h1>
                   <p className="text-base text-gray-400 leading-relaxed font-light mb-8 max-w-lg">
-                      Stop using fragmented tools. Learn to run a complete Hollywood-style studio from your browser using the integrated power of Gemini 3.0, Nano Banano, and Veo.
+                      Stop using fragmented tools. Learn to run a complete Hollywood-style studio from your browser using the integrated power of Gemini 3.0, Nano Banana, and Veo.
                   </p>
                   <div className="flex flex-wrap gap-4 mb-8 text-xs font-mono text-gray-500">
                       <span className="flex items-center gap-2"><div className="w-2 h-2 bg-electricBlue rounded-full"></div> 4.5 HOURS CONTENT</span>
@@ -125,7 +125,7 @@ export default function CourseLevel1() {
                           <div className="glass-panel p-6 hover:border-white/20 transition-colors">
                               <div className="text-electricBlue mb-2 text-xl">02</div>
                               <h4 className="font-bold text-white text-sm mb-2">Character Consistency</h4>
-                              <p className="text-xs text-gray-400 leading-relaxed">Creating "Digital Actors" (Nano Banano) that look the same in every shot using Ingredient mapping.</p>
+                              <p className="text-xs text-gray-400 leading-relaxed">Creating "Digital Actors" (Nano Banana) that look the same in every shot using Ingredient mapping.</p>
                           </div>
                           <div className="glass-panel p-6 hover:border-white/20 transition-colors">
                               <div className="text-electricBlue mb-2 text-xl">03</div>
@@ -177,7 +177,7 @@ export default function CourseLevel1() {
                               <div className={`transition-all duration-300 ease-out overflow-hidden ${openModule === 2 ? 'max-h-[500px] opacity-100' : 'max-h-0 opacity-0'}`}>
                                   <div className="bg-black/30 p-6">
                                     <ul className="space-y-3 text-xs text-gray-400 font-mono">
-                                        <li className="flex gap-4"><span className="text-white">2.1</span> Introduction to Nano Banano (Gemini 2.5 Flash)</li>
+                                        <li className="flex gap-4"><span className="text-white">2.1</span> Introduction to Nano Banana (Gemini 2.5 Flash)</li>
                                         <li className="flex gap-4"><span className="text-white">2.2</span> The Character Sheet Workflow</li>
                                         <li className="flex gap-4"><span className="text-white">2.3</span> Inpainting & Virtual Set Design</li>
                                     </ul>

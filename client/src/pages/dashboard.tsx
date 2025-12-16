@@ -217,7 +217,7 @@ export default function Dashboard() {
                                   <span className="text-[10px] font-header text-purple-500">ZIP FILE</span>
                                   <span className="text-[10px] font-mono text-gray-500">240MB</span>
                               </div>
-                              <h4 className="text-sm font-bold text-white group-hover:text-purple-500 transition-colors">Nano Banano Texture Pack</h4>
+                              <h4 className="text-sm font-bold text-white group-hover:text-purple-500 transition-colors">Nano Banana Texture Pack</h4>
                               <p className="text-[10px] text-gray-400 mt-1">Version 2.1 • Updated Yesterday</p>
                           </a>
                           <a href="#" className="block p-4 border border-white/10 hover:border-white/30 hover:bg-white/5 transition-all group">
