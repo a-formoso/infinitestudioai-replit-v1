@@ -79,7 +79,7 @@ export default function Home() {
                   <div className="font-header font-bold text-lg hover:text-white transition-colors">VEO</div>
                   <div className="font-header font-bold text-lg hover:text-white transition-colors">NANO BANANA</div>
                   <div className="font-header font-bold text-lg hover:text-white transition-colors">VEO</div>
-                  <div className="font-header font-bold text-lg hover:text-white transition-colors">A24</div>
+                  <div className="font-header font-bold text-lg hover:text-white transition-colors">FLOW</div>
               </div>
           </header>
           {/* WORK SECTION */}
