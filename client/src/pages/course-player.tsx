@@ -1,3 +1,4 @@
+import { Footer } from "@/components/footer";
 import { useState } from "react";
 import { Link } from "wouter";
 import { Play, Check, Circle, ChevronLeft, ChevronRight, Download, MessageSquare, Maximize, Minimize } from "lucide-react";
@@ -291,6 +292,7 @@ export default function CoursePlayer() {
 
               </div>
           </main>
+          <Footer />
       </div>
   );
 }
