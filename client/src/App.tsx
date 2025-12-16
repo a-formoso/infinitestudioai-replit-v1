@@ -17,7 +17,6 @@ import Support from "@/pages/support";
 import About from "@/pages/about";
 import Login from "@/pages/login";
 import AdminDashboard from "@/pages/admin-dashboard";
-import AdminCourseEditor from "@/pages/admin-course-editor";
 
 function Router() {
   return (
@@ -27,7 +26,6 @@ function Router() {
       <Route path="/about" component={About} />
       <Route path="/login" component={Login} />
       <Route path="/admin" component={AdminDashboard} />
-      <Route path="/admin/course/edit" component={AdminCourseEditor} />
       <Route path="/store" component={AssetStore} />
       <Route path="/checkout" component={Checkout} />
       <Route path="/support" component={Support} />
