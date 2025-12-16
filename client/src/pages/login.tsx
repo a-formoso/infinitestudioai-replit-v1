@@ -1,13 +1,38 @@
 import { Link, useLocation } from "wouter";
 import { Footer } from "@/components/footer";
+import { useState } from "react";
+import { login } from "@/lib/api";
+import { useToast } from "@/hooks/use-toast";
 
 export default function Login() {
   const [, setLocation] = useLocation();
+  const { toast } = useToast();
+  const [isLoading, setIsLoading] = useState(false);
 
-  const handleLogin = (e: React.FormEvent) => {
+  const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    // Mock login - redirect to dashboard
-    setLocation("/dashboard");
+    setIsLoading(true);
+
+    const formData = new FormData(e.currentTarget);
+    const email = formData.get("email") as string;
+    const password = formData.get("password") as string;
+
+    const { data, error } = await login(email, password);
+
+    if (error) {
+      toast({
+        title: "Login failed",
+        description: error,
+        variant: "destructive",
+      });
+      setIsLoading(false);
+    } else {
+      toast({
+        title: "Welcome back!",
+        description: "Redirecting to dashboard...",
+      });
+      setLocation("/dashboard");
+    }
   };
 
   return (
@@ -60,7 +85,9 @@ export default function Login() {
                     <div>
                         <label className="block text-[10px] font-mono text-gray-500 mb-2 uppercase tracking-wider">Email Address</label>
                         <input 
-                            type="email" 
+                            type="email"
+                            name="email"
+                            data-testid="input-email"
                             placeholder="director@studio.com" 
                             required
                             className="w-full bg-black/50 border border-white/10 text-white p-4 font-body text-sm focus:outline-none focus:border-electricBlue focus:shadow-[0_0_15px_rgba(41,98,255,0.2)] transition-all"
@@ -72,15 +99,22 @@ export default function Login() {
                             <a href="#" className="text-[10px] text-electricBlue hover:underline">Forgot?</a>
                         </div>
                         <input 
-                            type="password" 
+                            type="password"
+                            name="password"
+                            data-testid="input-password"
                             placeholder="••••••••" 
                             required
                             className="w-full bg-black/50 border border-white/10 text-white p-4 font-body text-sm focus:outline-none focus:border-electricBlue focus:shadow-[0_0_15px_rgba(41,98,255,0.2)] transition-all"
                         />
                     </div>
 
-                    <button type="submit" className="w-full bg-white text-black font-header font-bold text-sm uppercase py-4 hover:bg-electricBlue hover:text-white transition-all duration-300 tracking-wider shadow-[0_0_20px_rgba(255,255,255,0.1)]">
-                        Initialize Session
+                    <button 
+                      type="submit" 
+                      data-testid="button-login"
+                      disabled={isLoading}
+                      className="w-full bg-white text-black font-header font-bold text-sm uppercase py-4 hover:bg-electricBlue hover:text-white transition-all duration-300 tracking-wider shadow-[0_0_20px_rgba(255,255,255,0.1)] disabled:opacity-50 disabled:cursor-not-allowed"
+                    >
+                        {isLoading ? "CONNECTING..." : "Initialize Session"}
                     </button>
                 </form>
 

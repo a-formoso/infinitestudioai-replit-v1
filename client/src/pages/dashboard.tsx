@@ -1,8 +1,17 @@
 import { Navbar } from "@/components/navbar";
 import { Footer } from "@/components/footer";
 import { Link } from "wouter";
+import { useQuery } from "@tanstack/react-query";
+import { getEnrollments } from "@/lib/api";
 
 export default function Dashboard() {
+  const { data, isLoading } = useQuery({
+    queryKey: ["enrollments"],
+    queryFn: getEnrollments,
+  });
+
+  const enrollments = data?.data?.enrollments || [];
+
   return (
     <div className="min-h-screen bg-obsidian text-offWhite font-sans antialiased selection:bg-electricBlue selection:text-white overflow-x-hidden flex flex-col">
       
@@ -68,43 +77,41 @@ export default function Dashboard() {
                   {/* My Courses List */}
                   <div className="glass-panel p-8">
                       <h3 className="font-header text-sm text-white mb-6 border-b border-white/10 pb-4">ENROLLED COURSES</h3>
-                      <div className="space-y-6">
-                          
-                          {/* Course Item 1 (Active) */}
-                          <div className="flex gap-4 items-center group cursor-pointer">
-                              <div className="w-16 h-16 bg-gray-800 shrink-0 relative overflow-hidden rounded border border-white/10 group-hover:border-electricBlue/50 transition-colors">
-                                  <div className="absolute inset-0 bg-gradient-to-br from-blue-900/40 to-black"></div>
-                              </div>
-                              <div className="flex-grow">
-                                  <h4 className="font-header text-sm text-white group-hover:text-electricBlue transition-colors">MASTER THE GOOGLE ECOSYSTEM</h4>
-                                  <div className="flex justify-between items-center mt-2">
-                                      <div className="w-32 h-1 bg-white/10 rounded-full overflow-hidden">
-                                          <div className="h-full bg-electricBlue w-[65%]"></div>
-                                      </div>
-                                      <span className="text-[10px] text-gray-500 font-mono">15/25 LESSONS</span>
+                      {isLoading ? (
+                        <div className="space-y-6">
+                          <div className="h-20 bg-white/5 animate-pulse rounded"></div>
+                          <div className="h-20 bg-white/5 animate-pulse rounded"></div>
+                        </div>
+                      ) : enrollments.length === 0 ? (
+                        <div className="text-center py-8">
+                          <p className="text-gray-400 text-sm mb-4">No enrollments yet</p>
+                          <Link href="/academy">
+                            <a className="text-electricBlue hover:underline text-xs font-header">Browse Courses →</a>
+                          </Link>
+                        </div>
+                      ) : (
+                        <div className="space-y-6">
+                          {enrollments.map((enrollment: any) => (
+                            <Link key={enrollment.id} href={`/course/${enrollment.course.slug}`}>
+                              <div className="flex gap-4 items-center group cursor-pointer" data-testid={`card-enrollment-${enrollment.course.slug}`}>
+                                  <div className={`w-16 h-16 bg-gray-800 shrink-0 relative overflow-hidden rounded border border-white/10 group-hover:border-${enrollment.course.color === 'electricBlue' ? 'electricBlue' : 'signalOrange'}/50 transition-colors`}>
+                                      <div className={`absolute inset-0 bg-gradient-to-br ${enrollment.course.color === 'electricBlue' ? 'from-blue-900/40' : 'from-orange-900/40'} to-black`}></div>
                                   </div>
-                              </div>
-                              <button className="text-white hover:text-electricBlue transition-colors">→</button>
-                          </div>
-
-                          {/* Course Item 2 (Not Started) */}
-                          <div className="flex gap-4 items-center group cursor-pointer opacity-70 hover:opacity-100 transition-opacity">
-                              <div className="w-16 h-16 bg-gray-800 shrink-0 relative overflow-hidden rounded border border-white/10 group-hover:border-signalOrange/50 transition-colors">
-                                  <div className="absolute inset-0 bg-gradient-to-br from-orange-900/40 to-black"></div>
-                              </div>
-                              <div className="flex-grow">
-                                  <h4 className="font-header text-sm text-white group-hover:text-signalOrange transition-colors">ADVANCED AI CINEMATOGRAPHY</h4>
-                                  <div className="flex justify-between items-center mt-2">
-                                      <div className="w-32 h-1 bg-white/10 rounded-full overflow-hidden">
-                                          <div className="h-full bg-signalOrange w-[0%]"></div>
+                                  <div className="flex-grow">
+                                      <h4 className={`font-header text-sm text-white group-hover:text-${enrollment.course.color === 'electricBlue' ? 'electricBlue' : 'signalOrange'} transition-colors`}>{enrollment.course.title}</h4>
+                                      <div className="flex justify-between items-center mt-2">
+                                          <div className="w-32 h-1 bg-white/10 rounded-full overflow-hidden">
+                                              <div className={`h-full bg-${enrollment.course.color === 'electricBlue' ? 'electricBlue' : 'signalOrange'} w-[${enrollment.progress.percentage}%]`}></div>
+                                          </div>
+                                          <span className="text-[10px] text-gray-500 font-mono">{enrollment.progress.completed}/{enrollment.progress.total} LESSONS</span>
                                       </div>
-                                      <span className="text-[10px] text-gray-500 font-mono">NOT STARTED</span>
                                   </div>
+                                  <button className={`text-white hover:text-${enrollment.course.color === 'electricBlue' ? 'electricBlue' : 'signalOrange'} transition-colors`}>→</button>
                               </div>
-                              <button className="text-white hover:text-signalOrange transition-colors">→</button>
-                          </div>
-
-                      </div>
+                            </Link>
+                          ))}
+                        </div>
+                      )}
                   </div>
 
               </div>

@@ -1,8 +1,17 @@
 import { Navbar } from "@/components/navbar";
 import { Footer } from "@/components/footer";
 import { Link } from "wouter";
+import { useQuery } from "@tanstack/react-query";
+import { getCourses } from "@/lib/api";
 
 export default function Academy() {
+  const { data, isLoading } = useQuery({
+    queryKey: ["courses"],
+    queryFn: getCourses,
+  });
+
+  const courses = data?.data?.courses || [];
+
   return (
     <div className="min-h-screen bg-obsidian text-offWhite font-sans antialiased selection:bg-signalOrange selection:text-white overflow-x-hidden">
       
@@ -58,47 +67,36 @@ export default function Academy() {
                   </h2>
                   
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                      {/* Course 1 Card */}
-                      <Link href="/course/level-1">
-                        <a className="glass-panel p-0 group cursor-pointer hover:border-electricBlue/50 transition-all duration-300 block">
-                            <div className="h-48 bg-gray-900 relative overflow-hidden">
-                                <div className="absolute inset-0 bg-gradient-to-br from-blue-900/40 to-black"></div>
-                                <div className="absolute bottom-4 left-4 font-header font-bold text-3xl text-white z-10">LEVEL 01</div>
-                                <div className="absolute top-4 right-4 bg-electricBlue text-white text-[10px] font-bold px-2 py-1">BESTSELLER</div>
-                            </div>
-                            <div className="p-8">
-                                <h3 className="font-header text-xl text-white mb-2 group-hover:text-electricBlue transition-colors">MASTER THE GOOGLE ECOSYSTEM</h3>
-                                <p className="text-xs text-gray-400 font-mono mb-4 leading-relaxed">
-                                    The foundation. Learn the connected workflow of Gemini 3.0, Nano Banano, and Veo to run a one-person studio.
-                                </p>
-                                <div className="flex justify-between items-center pt-4 border-t border-white/10">
-                                    <span className="text-xs font-mono text-white">4.5 HOURS • 25 LESSONS</span>
-                                    <span className="text-sm font-header font-bold text-white">$149</span>
+                      {isLoading ? (
+                        <>
+                          <div className="glass-panel p-0 animate-pulse h-96"></div>
+                          <div className="glass-panel p-0 animate-pulse h-96"></div>
+                        </>
+                      ) : (
+                        courses.map((course: any, index: number) => (
+                          <Link key={course.id} href={`/course/${course.slug}`}>
+                            <a className={`glass-panel p-0 group cursor-pointer hover:border-${course.color === 'electricBlue' ? 'electricBlue' : 'signalOrange'}/50 transition-all duration-300 block`} data-testid={`card-course-${course.slug}`}>
+                                <div className="h-48 bg-gray-900 relative overflow-hidden">
+                                    <div className={`absolute inset-0 bg-gradient-to-br ${course.color === 'electricBlue' ? 'from-blue-900/40' : 'from-orange-900/40'} to-black`}></div>
+                                    <div className="absolute bottom-4 left-4 font-header font-bold text-3xl text-white z-10">LEVEL {(index + 1).toString().padStart(2, '0')}</div>
+                                    {course.badge && (
+                                      <div className={`absolute top-4 right-4 ${course.color === 'electricBlue' ? 'bg-electricBlue text-white' : 'bg-signalOrange text-black'} text-[10px] font-bold px-2 py-1`}>{course.badge}</div>
+                                    )}
                                 </div>
-                            </div>
-                        </a>
-                      </Link>
-
-                      {/* Course 2 Card */}
-                      <Link href="/course/level-2">
-                        <a className="glass-panel p-0 group cursor-pointer hover:border-signalOrange/50 transition-all duration-300 block">
-                            <div className="h-48 bg-gray-900 relative overflow-hidden">
-                                <div className="absolute inset-0 bg-gradient-to-br from-orange-900/40 to-black"></div>
-                                <div className="absolute bottom-4 left-4 font-header font-bold text-3xl text-white z-10">LEVEL 02</div>
-                                <div className="absolute top-4 right-4 bg-signalOrange text-black text-[10px] font-bold px-2 py-1">ADVANCED</div>
-                            </div>
-                            <div className="p-8">
-                                <h3 className="font-header text-xl text-white mb-2 group-hover:text-signalOrange transition-colors">ADVANCED AI CINEMATOGRAPHY</h3>
-                                <p className="text-xs text-gray-400 font-mono mb-4 leading-relaxed">
-                                    Mastering physics, compound camera moves, and the "Invisible Cut" in Veo 3.1. Deep technical control.
-                                </p>
-                                <div className="flex justify-between items-center pt-4 border-t border-white/10">
-                                    <span className="text-xs font-mono text-white">6.0 HOURS • 30 LESSONS</span>
-                                    <span className="text-sm font-header font-bold text-white">$199</span>
+                                <div className="p-8">
+                                    <h3 className={`font-header text-xl text-white mb-2 group-hover:text-${course.color === 'electricBlue' ? 'electricBlue' : 'signalOrange'} transition-colors`} data-testid={`text-course-title-${course.slug}`}>{course.title}</h3>
+                                    <p className="text-xs text-gray-400 font-mono mb-4 leading-relaxed">
+                                        {course.shortDescription}
+                                    </p>
+                                    <div className="flex justify-between items-center pt-4 border-t border-white/10">
+                                        <span className="text-xs font-mono text-white">{course.duration} • {course.lessonsCount} LESSONS</span>
+                                        <span className="text-sm font-header font-bold text-white" data-testid={`text-price-${course.slug}`}>${parseFloat(course.price).toFixed(0)}</span>
+                                    </div>
                                 </div>
-                            </div>
-                        </a>
-                      </Link>
+                            </a>
+                          </Link>
+                        ))
+                      )}
                   </div>
               </div>
 

@@ -1,0 +1,109 @@
+type ApiResponse<T> = {
+  data?: T;
+  error?: string;
+};
+
+async function apiFetch<T>(
+  endpoint: string,
+  options?: RequestInit
+): Promise<ApiResponse<T>> {
+  try {
+    const response = await fetch(`/api${endpoint}`, {
+      ...options,
+      headers: {
+        'Content-Type': 'application/json',
+        ...options?.headers,
+      },
+      credentials: 'include',
+    });
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      return { error: data.message || 'An error occurred' };
+    }
+
+    return { data };
+  } catch (error) {
+    return { error: 'Network error occurred' };
+  }
+}
+
+// Auth
+export async function register(username: string, email: string, password: string) {
+  return apiFetch<{ user: any }>('/auth/register', {
+    method: 'POST',
+    body: JSON.stringify({ username, email, password }),
+  });
+}
+
+export async function login(email: string, password: string) {
+  return apiFetch<{ user: any }>('/auth/login', {
+    method: 'POST',
+    body: JSON.stringify({ email, password }),
+  });
+}
+
+export async function logout() {
+  return apiFetch<{ message: string }>('/auth/logout', {
+    method: 'POST',
+  });
+}
+
+export async function getCurrentUser() {
+  return apiFetch<{ user: any }>('/auth/me');
+}
+
+// Courses
+export async function getCourses() {
+  return apiFetch<{ courses: any[] }>('/courses');
+}
+
+export async function getCourseBySlug(slug: string) {
+  return apiFetch<{ course: any; lessons: any[] }>(`/courses/${slug}`);
+}
+
+// Enrollments
+export async function getEnrollments() {
+  return apiFetch<{ enrollments: any[] }>('/enrollments');
+}
+
+export async function enrollInCourse(courseId: string) {
+  return apiFetch<{ enrollment: any }>('/enrollments', {
+    method: 'POST',
+    body: JSON.stringify({ courseId }),
+  });
+}
+
+// Progress
+export async function updateProgress(enrollmentId: string, lessonId: string, completed: boolean) {
+  return apiFetch<{ progress: any }>('/progress', {
+    method: 'POST',
+    body: JSON.stringify({ enrollmentId, lessonId, completed }),
+  });
+}
+
+export async function getEnrollmentProgress(enrollmentId: string) {
+  return apiFetch<{ progress: any[] }>(`/enrollments/${enrollmentId}/progress`);
+}
+
+// Assets
+export async function getAssets() {
+  return apiFetch<{ assets: any[] }>('/assets');
+}
+
+export async function getAsset(id: string) {
+  return apiFetch<{ asset: any }>(`/assets/${id}`);
+}
+
+// Orders
+export async function createOrder(items: Array<{ itemType: string; itemId: string }>) {
+  return apiFetch<{ order: any; items: any[] }>('/orders', {
+    method: 'POST',
+    body: JSON.stringify({ items }),
+  });
+}
+
+export async function getOrders() {
+  return apiFetch<{ orders: any[] }>('/orders');
+}
