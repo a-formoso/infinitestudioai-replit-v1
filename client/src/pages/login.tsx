@@ -4,11 +4,13 @@ import { useState } from "react";
 import { login } from "@/lib/api";
 import { useToast } from "@/hooks/use-toast";
 import { useQueryClient } from "@tanstack/react-query";
+import { Eye, EyeOff } from "lucide-react";
 
 export default function Login() {
   const [, setLocation] = useLocation();
   const { toast } = useToast();
   const [isLoading, setIsLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
   const queryClient = useQueryClient();
 
   const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -101,14 +103,24 @@ export default function Login() {
                             <label className="block text-[10px] font-mono text-gray-500 uppercase tracking-wider">Password</label>
                             <a href="#" className="text-[10px] text-electricBlue hover:underline">Forgot?</a>
                         </div>
-                        <input 
-                            type="password"
-                            name="password"
-                            data-testid="input-password"
-                            placeholder="••••••••" 
-                            required
-                            className="w-full bg-black/50 border border-white/10 text-white p-4 font-body text-sm focus:outline-none focus:border-electricBlue focus:shadow-[0_0_15px_rgba(41,98,255,0.2)] transition-all"
-                        />
+                        <div className="relative">
+                          <input 
+                              type={showPassword ? "text" : "password"}
+                              name="password"
+                              data-testid="input-password"
+                              placeholder="••••••••" 
+                              required
+                              className="w-full bg-black/50 border border-white/10 text-white p-4 pr-12 font-body text-sm focus:outline-none focus:border-electricBlue focus:shadow-[0_0_15px_rgba(41,98,255,0.2)] transition-all"
+                          />
+                          <button
+                            type="button"
+                            onClick={() => setShowPassword(!showPassword)}
+                            data-testid="button-toggle-password"
+                            className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-500 hover:text-white transition-colors"
+                          >
+                            {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                          </button>
+                        </div>
                     </div>
 
                     <button 

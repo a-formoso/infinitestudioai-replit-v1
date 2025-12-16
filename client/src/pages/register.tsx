@@ -3,11 +3,14 @@ import { useState } from "react";
 import { register } from "@/lib/api";
 import { useToast } from "@/hooks/use-toast";
 import { useQueryClient } from "@tanstack/react-query";
+import { Eye, EyeOff } from "lucide-react";
 
 export default function Register() {
   const [, setLocation] = useLocation();
   const { toast } = useToast();
   const [isLoading, setIsLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const queryClient = useQueryClient();
 
   const handleRegister = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -124,27 +127,47 @@ export default function Register() {
                     </div>
                     <div>
                         <label className="block text-[10px] font-mono text-gray-500 mb-2 uppercase tracking-wider">Password</label>
-                        <input 
-                            type="password"
-                            name="password"
-                            data-testid="input-password"
-                            placeholder="••••••••" 
-                            required
-                            minLength={6}
-                            className="w-full bg-black/50 border border-white/10 text-white p-4 font-body text-sm focus:outline-none focus:border-signalOrange focus:shadow-[0_0_15px_rgba(255,107,0,0.2)] transition-all"
-                        />
+                        <div className="relative">
+                          <input 
+                              type={showPassword ? "text" : "password"}
+                              name="password"
+                              data-testid="input-password"
+                              placeholder="••••••••" 
+                              required
+                              minLength={6}
+                              className="w-full bg-black/50 border border-white/10 text-white p-4 pr-12 font-body text-sm focus:outline-none focus:border-signalOrange focus:shadow-[0_0_15px_rgba(255,107,0,0.2)] transition-all"
+                          />
+                          <button
+                            type="button"
+                            onClick={() => setShowPassword(!showPassword)}
+                            data-testid="button-toggle-password"
+                            className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-500 hover:text-white transition-colors"
+                          >
+                            {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                          </button>
+                        </div>
                     </div>
                     <div>
                         <label className="block text-[10px] font-mono text-gray-500 mb-2 uppercase tracking-wider">Confirm Password</label>
-                        <input 
-                            type="password"
-                            name="confirmPassword"
-                            data-testid="input-confirm-password"
-                            placeholder="••••••••" 
-                            required
-                            minLength={6}
-                            className="w-full bg-black/50 border border-white/10 text-white p-4 font-body text-sm focus:outline-none focus:border-signalOrange focus:shadow-[0_0_15px_rgba(255,107,0,0.2)] transition-all"
-                        />
+                        <div className="relative">
+                          <input 
+                              type={showConfirmPassword ? "text" : "password"}
+                              name="confirmPassword"
+                              data-testid="input-confirm-password"
+                              placeholder="••••••••" 
+                              required
+                              minLength={6}
+                              className="w-full bg-black/50 border border-white/10 text-white p-4 pr-12 font-body text-sm focus:outline-none focus:border-signalOrange focus:shadow-[0_0_15px_rgba(255,107,0,0.2)] transition-all"
+                          />
+                          <button
+                            type="button"
+                            onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                            data-testid="button-toggle-confirm-password"
+                            className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-500 hover:text-white transition-colors"
+                          >
+                            {showConfirmPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                          </button>
+                        </div>
                     </div>
 
                     <button 
