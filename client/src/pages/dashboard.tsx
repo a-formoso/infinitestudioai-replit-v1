@@ -33,9 +33,6 @@ export default function Dashboard() {
                   <button className="border border-white/20 text-white px-6 py-3 text-xs font-header font-bold uppercase hover:bg-white/10 transition-colors">
                       Edit Profile
                   </button>
-                  <button className="bg-electricBlue text-white px-6 py-3 text-xs font-header font-bold uppercase hover:bg-white hover:text-black transition-colors">
-                      Access Community
-                  </button>
               </div>
           </div>
 
