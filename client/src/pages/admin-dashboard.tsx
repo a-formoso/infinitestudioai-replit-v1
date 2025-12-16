@@ -1,6 +1,6 @@
 import { Link } from "wouter";
 import { useState, useEffect, useRef } from "react";
-import { LayoutDashboard, BookOpen, Users, ShoppingBag, BarChart2, Plus, Download, Bold, Italic, Underline, Link as LinkIcon, Code, X } from "lucide-react";
+import { LayoutDashboard, BookOpen, Users, ShoppingBag, BarChart2, Plus, Download, Bold, Italic, Underline, Link as LinkIcon, Code, X, Search } from "lucide-react";
 
 export default function AdminDashboard() {
   const [activeTab, setActiveTab] = useState("dashboard");
@@ -443,6 +443,139 @@ export default function AdminDashboard() {
     </div>
   );
 
+  const renderStudents = () => (
+    <div className="relative z-10 p-8 max-w-7xl mx-auto">
+      {/* HEADER */}
+      <div className="flex justify-between items-end mb-8">
+        <div>
+          <h1 className="font-header text-2xl text-white mb-1">STUDENT MANAGEMENT</h1>
+          <p className="text-xs text-gray-400 font-mono">Manage enrollments, progress, and support.</p>
+        </div>
+        <div className="flex gap-4">
+          <div className="relative">
+            <input type="text" placeholder="Search Students..." className="bg-black/50 border border-white/10 text-white text-xs px-4 py-2 w-64 rounded-full focus:border-electricBlue outline-none pl-10" />
+            <Search className="w-4 h-4 text-gray-500 absolute left-3 top-1/2 -translate-y-1/2" />
+          </div>
+          <button className="bg-electricBlue text-white px-4 py-2 text-[10px] font-header font-bold uppercase hover:bg-white hover:text-black transition-colors">
+            Invite Student
+          </button>
+        </div>
+      </div>
+
+      {/* STUDENTS TABLE */}
+      <div className="glass-panel p-0 overflow-hidden border border-white/10">
+        <table className="w-full text-left text-xs text-gray-400">
+          <thead className="bg-white/5 text-gray-200 font-header border-b border-white/10">
+            <tr>
+              <th className="p-4">Name / Email</th>
+              <th className="p-4">Enrolled Course</th>
+              <th className="p-4">Progress</th>
+              <th className="p-4">Last Active</th>
+              <th className="p-4">Status</th>
+              <th className="p-4 text-right">Actions</th>
+            </tr>
+          </thead>
+          <tbody className="divide-y divide-white/5 font-mono">
+            
+            {/* Student 1 */}
+            <tr className="hover:bg-white/5 transition-colors group cursor-pointer">
+              <td className="p-4">
+                <div className="flex items-center gap-3">
+                  <div className="w-8 h-8 rounded-full bg-purple-900 flex items-center justify-center text-white font-bold text-[10px]">SJ</div>
+                  <div>
+                    <p className="text-white font-bold">Sarah Jenkins</p>
+                    <p className="text-[10px] text-gray-500">sarah.j@example.com</p>
+                  </div>
+                </div>
+              </td>
+              <td className="p-4 text-white">Master the Ecosystem (L1)</td>
+              <td className="p-4">
+                <div className="flex items-center gap-2">
+                  <div className="w-24 h-1 bg-white/10 rounded-full overflow-hidden">
+                    <div className="h-full bg-green-500 w-[85%]"></div>
+                  </div>
+                  <span className="text-green-500">85%</span>
+                </div>
+              </td>
+              <td className="p-4">2 hours ago</td>
+              <td className="p-4"><span className="bg-green-500/20 text-green-500 px-2 py-1 rounded">ACTIVE</span></td>
+              <td className="p-4 text-right">
+                <button className="text-gray-500 hover:text-white mr-2">Edit</button>
+                <button className="text-electricBlue hover:underline">View</button>
+              </td>
+            </tr>
+
+            {/* Student 2 */}
+            <tr className="hover:bg-white/5 transition-colors group cursor-pointer">
+              <td className="p-4">
+                <div className="flex items-center gap-3">
+                  <div className="w-8 h-8 rounded-full bg-orange-900 flex items-center justify-center text-white font-bold text-[10px]">MD</div>
+                  <div>
+                    <p className="text-white font-bold">Mike Davis</p>
+                    <p className="text-[10px] text-gray-500">mike.dfx@studio.net</p>
+                  </div>
+                </div>
+              </td>
+              <td className="p-4 text-white">Advanced Cinematography (L2)</td>
+              <td className="p-4">
+                <div className="flex items-center gap-2">
+                  <div className="w-24 h-1 bg-white/10 rounded-full overflow-hidden">
+                    <div className="h-full bg-signalOrange w-[12%]"></div>
+                  </div>
+                  <span className="text-signalOrange">12%</span>
+                </div>
+              </td>
+              <td className="p-4">1 day ago</td>
+              <td className="p-4"><span className="bg-green-500/20 text-green-500 px-2 py-1 rounded">ACTIVE</span></td>
+              <td className="p-4 text-right">
+                <button className="text-gray-500 hover:text-white mr-2">Edit</button>
+                <button className="text-electricBlue hover:underline">View</button>
+              </td>
+            </tr>
+
+            {/* Student 3 */}
+            <tr className="hover:bg-white/5 transition-colors group cursor-pointer opacity-60">
+              <td className="p-4">
+                <div className="flex items-center gap-3">
+                  <div className="w-8 h-8 rounded-full bg-gray-700 flex items-center justify-center text-white font-bold text-[10px]">JD</div>
+                  <div>
+                    <p className="text-gray-300 font-bold">John Doe</p>
+                    <p className="text-[10px] text-gray-500">jdoe@gmail.com</p>
+                  </div>
+                </div>
+              </td>
+              <td className="p-4 text-gray-400">Master the Ecosystem (L1)</td>
+              <td className="p-4">
+                <div className="flex items-center gap-2">
+                  <div className="w-24 h-1 bg-white/10 rounded-full overflow-hidden">
+                    <div className="h-full bg-gray-500 w-[0%]"></div>
+                  </div>
+                  <span className="text-gray-500">0%</span>
+                </div>
+              </td>
+              <td className="p-4">Never</td>
+              <td className="p-4"><span className="bg-yellow-500/20 text-yellow-500 px-2 py-1 rounded">PENDING</span></td>
+              <td className="p-4 text-right">
+                <button className="text-gray-500 hover:text-white mr-2">Resend</button>
+                <button className="text-electricBlue hover:underline">View</button>
+              </td>
+            </tr>
+
+          </tbody>
+        </table>
+        
+        {/* Pagination */}
+        <div className="p-4 border-t border-white/10 flex justify-between items-center text-[10px] text-gray-500">
+          <span>Showing 3 of 1,204 Students</span>
+          <div className="flex gap-2">
+            <button className="px-3 py-1 bg-white/5 rounded hover:bg-white/10 text-white">Previous</button>
+            <button className="px-3 py-1 bg-white/5 rounded hover:bg-white/10 text-white">Next</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+
   return (
     <div className="bg-obsidian text-offWhite font-body antialiased selection:bg-electricBlue selection:text-white overflow-hidden h-screen flex">
       {/* SIDEBAR */}
@@ -510,14 +643,7 @@ export default function AdminDashboard() {
 
         {activeTab === "dashboard" && renderDashboard()}
         {activeTab === "courses" && (courseView === "list" ? renderCourseList() : renderCourseEditor())}
-        {activeTab === "students" && (
-          <div className="relative z-10 p-8 flex items-center justify-center h-full">
-            <div className="text-center">
-              <Users className="w-16 h-16 text-gray-600 mx-auto mb-4" />
-              <h2 className="text-xl font-header text-gray-400">STUDENTS MODULE COMING SOON</h2>
-            </div>
-          </div>
-        )}
+        {activeTab === "students" && renderStudents()}
         {activeTab === "store" && (
           <div className="relative z-10 p-8 flex items-center justify-center h-full">
             <div className="text-center">
