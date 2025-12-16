@@ -7,8 +7,24 @@ export default function AdminDashboard() {
   const [courseView, setCourseView] = useState<"list" | "editor">("list");
   const [expandedCourseId, setExpandedCourseId] = useState<string | null>("course-1");
   const [expandedModuleId, setExpandedModuleId] = useState<string | null>(null);
+  const [selectedLessonId, setSelectedLessonId] = useState<string>("1.1");
   const [logs, setLogs] = useState<string[]>([]);
   const terminalRef = useRef<HTMLDivElement>(null);
+
+  const lessonsData: Record<string, { title: string; duration: string; video: string; notes: string }> = {
+    "1.1": { title: "The Multimodal Script", duration: "12:45", video: "multimodal_script_v3.mp4", notes: "Introduction to multimodal scripting techniques using Gemini 1.5 Pro." },
+    "1.2": { title: "Context is King", duration: "08:30", video: "context_king_final.mp4", notes: "Understanding the importance of context window in long-form generation." },
+    "1.3": { title: "Visual Bible (Editing)", duration: "15:10", video: "visual_bible_v2.mp4", notes: "How to compile a visual bible from generated assets." },
+    "2.1": { title: "Set Design AI", duration: "10:20", video: "set_design_ai.mp4", notes: "Using AI to generate consistent set designs." },
+    "2.2": { title: "Lighting Consistency", duration: "14:15", video: "lighting_fix.mp4", notes: "maintaining lighting across multiple generated shots." },
+    "2.3": { title: "Camera Movements", duration: "09:45", video: "camera_moves.mp4", notes: "Simulating dolly and crane shots." },
+    "2.4": { title: "Color Grading", duration: "11:30", video: "color_grade_lut.mp4", notes: "Applying cinematic LUTs to generated video." },
+    "3.1": { title: "Shot Prompting", duration: "08:15", video: "shot_prompting.mp4", notes: "Specific prompting techniques for camera angles." },
+    "3.2": { title: "Camera Angles", duration: "07:45", video: "angles_master.mp4", notes: "Wide, medium, and close-up shot consistency." },
+    "3.3": { title: "Movement Control", duration: "13:20", video: "movement_ctrl.mp4", notes: "Controlling character movement within the frame." },
+    "3.4": { title: "Upscaling", duration: "06:50", video: "upscale_4k.mp4", notes: "Best practices for upscaling to 4K." },
+    "3.5": { title: "Final Export", duration: "18:00", video: "export_settings.mp4", notes: "Codecs and wrappers for final delivery." }
+  };
 
   useEffect(() => {
     const adminLogs = [
@@ -585,7 +601,10 @@ export default function AdminDashboard() {
     );
   };
 
-  const renderCourseEditor = () => (
+  const renderCourseEditor = () => {
+    const currentLesson = lessonsData[selectedLessonId] || { title: "Select a Lesson", duration: "00:00", video: "placeholder.mp4", notes: "No lesson selected." };
+
+    return (
     <div className="relative z-10 p-8 max-w-7xl mx-auto">
       {/* BREADCRUMBS & HEADER */}
       <div className="mb-8">
@@ -626,17 +645,26 @@ export default function AdminDashboard() {
                 <span className="text-[10px] text-gray-500">Draft</span>
               </div>
               <div className="pl-2 pr-2 pb-2 space-y-1">
-                <div className="p-2 text-[10px] text-gray-400 hover:bg-electricBlue/20 hover:text-white rounded cursor-pointer flex justify-between items-center group">
+                <div 
+                  className={`p-2 text-[10px] rounded cursor-pointer flex justify-between items-center group transition-colors ${selectedLessonId === '1.1' ? 'bg-electricBlue/20 text-white border-l-2 border-electricBlue' : 'text-gray-400 hover:bg-electricBlue/10 hover:text-white border-l-2 border-transparent'}`}
+                  onClick={() => setSelectedLessonId('1.1')}
+                >
                   <span>1.1 The Multimodal Script</span>
-                  <div className="w-2 h-2 rounded-full bg-green-500"></div>
+                  <div className={`w-2 h-2 rounded-full ${selectedLessonId === '1.1' ? 'bg-electricBlue animate-pulse' : 'bg-green-500'}`}></div>
                 </div>
-                <div className="p-2 text-[10px] text-gray-400 hover:bg-electricBlue/20 hover:text-white rounded cursor-pointer flex justify-between items-center group">
+                <div 
+                  className={`p-2 text-[10px] rounded cursor-pointer flex justify-between items-center group transition-colors ${selectedLessonId === '1.2' ? 'bg-electricBlue/20 text-white border-l-2 border-electricBlue' : 'text-gray-400 hover:bg-electricBlue/10 hover:text-white border-l-2 border-transparent'}`}
+                  onClick={() => setSelectedLessonId('1.2')}
+                >
                   <span>1.2 Context is King</span>
-                  <div className="w-2 h-2 rounded-full bg-green-500"></div>
+                  <div className={`w-2 h-2 rounded-full ${selectedLessonId === '1.2' ? 'bg-electricBlue animate-pulse' : 'bg-green-500'}`}></div>
                 </div>
-                <div className="p-2 text-[10px] bg-electricBlue/20 text-white rounded cursor-pointer flex justify-between items-center border-l-2 border-electricBlue">
+                <div 
+                  className={`p-2 text-[10px] rounded cursor-pointer flex justify-between items-center group transition-colors ${selectedLessonId === '1.3' ? 'bg-electricBlue/20 text-white border-l-2 border-electricBlue' : 'text-gray-400 hover:bg-electricBlue/10 hover:text-white border-l-2 border-transparent'}`}
+                  onClick={() => setSelectedLessonId('1.3')}
+                >
                   <span>1.3 Visual Bible (Editing)</span>
-                  <div className="w-2 h-2 rounded-full bg-yellow-500 animate-pulse"></div>
+                  <div className={`w-2 h-2 rounded-full ${selectedLessonId === '1.3' ? 'bg-electricBlue animate-pulse' : 'bg-yellow-500'}`}></div>
                 </div>
               </div>
             </div>
@@ -655,11 +683,21 @@ export default function AdminDashboard() {
           <div className="grid grid-cols-2 gap-6 mb-6">
             <div>
               <label className="block text-[10px] font-mono text-gray-500 mb-2 uppercase">LESSON TITLE</label>
-              <input type="text" defaultValue="Generating the Visual Bible" className="bg-black/50 border border-white/10 text-white text-sm px-4 py-3 w-full focus:border-electricBlue outline-none font-bold" />
+              <input 
+                key={selectedLessonId}
+                type="text" 
+                defaultValue={currentLesson.title} 
+                className="bg-black/50 border border-white/10 text-white text-sm px-4 py-3 w-full focus:border-electricBlue outline-none font-bold" 
+              />
             </div>
             <div>
               <label className="block text-[10px] font-mono text-gray-500 mb-2 uppercase">DURATION (MIN)</label>
-              <input type="text" defaultValue="12:45" className="bg-black/50 border border-white/10 text-white text-sm px-4 py-3 w-full focus:border-electricBlue outline-none font-mono" />
+              <input 
+                key={selectedLessonId + 'dur'}
+                type="text" 
+                defaultValue={currentLesson.duration} 
+                className="bg-black/50 border border-white/10 text-white text-sm px-4 py-3 w-full focus:border-electricBlue outline-none font-mono" 
+              />
             </div>
           </div>
 
@@ -669,7 +707,7 @@ export default function AdminDashboard() {
             <div className="h-48 bg-black/50 border-2 border-dashed border-white/10 rounded flex flex-col items-center justify-center cursor-pointer hover:border-electricBlue/50 transition-colors group relative overflow-hidden">
               {/* Placeholder for uploaded video state */}
               <div className="absolute inset-0 bg-gray-900 flex items-center justify-center">
-                <span className="text-xs font-mono text-white">Visual_Bible_Final_v2.mp4</span>
+                <span className="text-xs font-mono text-white">{currentLesson.video}</span>
               </div>
               <div className="absolute bottom-2 right-2 flex gap-2">
                 <button className="bg-black/80 text-white text-[10px] px-2 py-1 rounded border border-white/20 hover:border-white">Replace</button>
@@ -689,7 +727,7 @@ export default function AdminDashboard() {
                 <button className="hover:text-white"><LinkIcon className="w-4 h-4" /></button>
                 <button className="hover:text-white"><Code className="w-4 h-4" /></button>
               </div>
-              <p>In this lesson, we cover how to reverse-engineer a cinematic look using Gemini 3.0.</p>
+              <p>{currentLesson.notes}</p>
               <br />
               <p><b>Key Prompts:</b></p>
               <p className="font-mono bg-white/5 p-2 rounded mt-2 text-xs text-electricBlue">"Analyze this image as a Director of Photography..."</p>
@@ -719,6 +757,7 @@ export default function AdminDashboard() {
       </div>
     </div>
   );
+  };
 
   const renderStudents = () => (
     <div className="relative z-10 p-8 max-w-7xl mx-auto">
