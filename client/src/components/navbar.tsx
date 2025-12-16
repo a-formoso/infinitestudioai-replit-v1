@@ -21,7 +21,6 @@ export function Navbar() {
             <div className="flex items-center gap-4">
               <Link href="/dashboard" className="hidden md:block">
                 <div className="text-right cursor-pointer hover:opacity-80 transition-opacity">
-                    <div className="text-xs font-header font-bold text-white">ALEX DIRECTOR</div>
                     <div className="text-[10px] font-mono text-gray-500">PRO MEMBER</div>
                 </div>
               </Link>
