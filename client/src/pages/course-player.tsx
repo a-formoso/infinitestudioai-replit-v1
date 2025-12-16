@@ -33,7 +33,7 @@ export default function CoursePlayer() {
               </div>
           </header>
           {/* MAIN CONTENT CONTAINER */}
-          <main className="pt-32 pb-20 px-6 max-w-7xl mx-auto w-full z-10 relative">
+          <main className="pt-32 pb-20 px-6 max-w-7xl mx-auto w-full z-10 relative ml-[440.5px] mr-[440.5px]">
               
               <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
                   
