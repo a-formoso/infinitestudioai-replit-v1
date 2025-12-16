@@ -74,9 +74,9 @@ export function Footer() {
                   <h5 className="font-header text-xs text-white mb-6 tracking-widest border-b border-white/10 pb-2 inline-block">STUDIO</h5>
                   <ul className="space-y-3 text-xs text-gray-400 font-mono">
                       <li><a href="#" className="hover:text-electricBlue transition-colors">Selected Work</a></li>
-                      <li><a href="#" className="hover:text-electricBlue transition-colors">Services</a></li>
-                      <li><a href="#" className="hover:text-electricBlue transition-colors">About Us</a></li>
-                      <li><a href="#" className="hover:text-electricBlue transition-colors">Contact</a></li>
+                      <li><Link href="/hire" className="hover:text-electricBlue transition-colors">Services</Link></li>
+                      <li><Link href="/about" className="hover:text-electricBlue transition-colors">About Us</Link></li>
+                      <li><Link href="/hire" className="hover:text-electricBlue transition-colors">Contact</Link></li>
                   </ul>
               </div>
 

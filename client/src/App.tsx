@@ -14,12 +14,14 @@ import Hire from "@/pages/hire";
 import AssetStore from "@/pages/asset-store";
 import Checkout from "@/pages/checkout";
 import Support from "@/pages/support";
+import About from "@/pages/about";
 
 function Router() {
   return (
     <Switch>
       <Route path="/" component={Home} />
       <Route path="/hire" component={Hire} />
+      <Route path="/about" component={About} />
       <Route path="/store" component={AssetStore} />
       <Route path="/checkout" component={Checkout} />
       <Route path="/support" component={Support} />
