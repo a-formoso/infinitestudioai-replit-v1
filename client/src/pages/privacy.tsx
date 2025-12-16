@@ -203,21 +203,19 @@ export default function Privacy() {
                 <p>
                   If you have any questions about this privacy policy or our privacy practices, please contact our Data Protection Officer via email at:
                 </p>
-                <div className="mt-6">
+                <div className="mt-6 flex items-center gap-2">
+                  <div className="border border-white/10 bg-white/5 px-6 py-4 text-electricBlue font-mono text-xs select-all">
+                    admin@infinitestudioai.com
+                  </div>
                   <button 
                     onClick={copyEmail}
-                    className="group inline-flex items-center gap-3 border border-white/10 bg-white/5 px-6 py-4 text-electricBlue font-mono text-xs hover:bg-electricBlue/10 hover:border-electricBlue/50 transition-all cursor-pointer relative overflow-hidden"
+                    className="w-12 h-12 flex items-center justify-center border border-white/10 bg-white/5 hover:bg-electricBlue/10 hover:border-electricBlue/50 transition-all cursor-pointer relative"
+                    title="Copy Email Address"
                   >
-                    <span>admin@infinitestudioai.com</span>
                     {copied ? (
-                      <Check className="w-3 h-3 text-green-500" />
+                      <Check className="w-4 h-4 text-green-500 animate-in zoom-in duration-300" />
                     ) : (
-                      <Copy className="w-3 h-3 opacity-50 group-hover:opacity-100 transition-opacity" />
-                    )}
-                    {copied && (
-                      <span className="absolute inset-0 flex items-center justify-center bg-black/90 text-green-500 font-bold tracking-widest text-[10px]">
-                        COPIED TO CLIPBOARD
-                      </span>
+                      <Copy className="w-4 h-4 text-gray-400 hover:text-white transition-colors" />
                     )}
                   </button>
                 </div>
