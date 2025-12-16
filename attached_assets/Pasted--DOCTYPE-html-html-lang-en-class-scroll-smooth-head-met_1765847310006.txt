@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ASSET STORE | INFINITE STUDIO</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&family=Syncopate:wght@400;700&display=swap" rel="stylesheet">
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        obsidian: '#0A0A0A',
+                        electricBlue: '#2962FF',
+                        signalOrange: '#FF3D00',
+                        neonPurple: '#D500F9',
+                        offWhite: '#E0E0E0',
+                        glass: 'rgba(255, 255, 255, 0.05)',
+                        glassBorder: 'rgba(255, 255, 255, 0.1)',
+                    },
+                    fontFamily: {
+                        header: ['Syncopate', 'sans-serif'],
+                        body: ['Inter', 'sans-serif'],
+                    },
+                    backgroundImage: {
+                        'grid-pattern': "linear-gradient(to right, #1a1a1a 1px, transparent 1px), linear-gradient(to bottom, #1a1a1a 1px, transparent 1px)",
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        /* Hide scrollbar */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #0A0A0A; }
+        ::-webkit-scrollbar-thumb { background: #333; }
+        
+        .filter-btn.active {
+            background-color: white;
+            color: black;
+            border-color: white;
+        }
+    </style>
+</head>
+<body class="bg-obsidian text-offWhite font-body antialiased selection:bg-neonPurple selection:text-white overflow-x-hidden">
+
+    <!-- GRID OVERLAY -->
+    <div class="fixed inset-0 bg-grid-pattern bg-[size:40px_40px] opacity-20 pointer-events-none z-0"></div>
+
+    <!-- NAV -->
+    <nav class="fixed top-0 w-full z-50 glass-panel border-b-0 border-b-glassBorder">
+        <div class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
+            <a href="index.html" class="font-header font-bold text-xl tracking-widest text-white flex items-center gap-2 hover:opacity-80 transition-opacity">
+                <span class="text-electricBlue text-2xl">∞</span> INFINITE STUDIO
+            </a>
+            <div class="flex gap-6 items-center">
+                <a href="#" class="text-xs font-mono text-gray-400 hover:text-white transition-colors">CART (0)</a>
+                <a href="#" class="hidden md:block bg-neonPurple text-white px-6 py-2 text-xs font-header font-bold uppercase hover:bg-white hover:text-black transition-all duration-300 tracking-wider">
+                    All Access Pass
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- HERO -->
+    <header class="relative pt-40 pb-12 px-6 max-w-7xl mx-auto z-10 text-center">
+        <div class="inline-block border border-neonPurple/50 px-3 py-1 mb-6 text-[10px] font-mono text-neonPurple tracking-widest uppercase">
+            Official Studio Assets
+        </div>
+        <h1 class="font-header text-4xl md:text-6xl font-bold text-white leading-tight mb-6">
+            THE INGREDIENT<br>
+            <span class="text-transparent bg-clip-text bg-gradient-to-r from-neonPurple to-blue-500">LIBRARY</span>
+        </h1>
+        <p class="text-lg text-gray-400 max-w-2xl mx-auto leading-relaxed font-light mb-12">
+            Production-ready assets for Veo 3.1 & Nano Banano. High-fidelity character sheets, textures, and sound profiles pre-optimized for AI ingestion.
+        </p>
+
+        <!-- FILTERS -->
+        <div class="flex flex-wrap justify-center gap-4">
+            <button class="filter-btn active border border-white/20 px-6 py-2 rounded-full text-xs font-header font-bold hover:bg-white/10 transition-all">ALL</button>
+            <button class="filter-btn border border-white/20 px-6 py-2 rounded-full text-xs font-header font-bold hover:bg-white/10 transition-all">CHARACTER SHEETS</button>
+            <button class="filter-btn border border-white/20 px-6 py-2 rounded-full text-xs font-header font-bold hover:bg-white/10 transition-all">TEXTURES</button>
+            <button class="filter-btn border border-white/20 px-6 py-2 rounded-full text-xs font-header font-bold hover:bg-white/10 transition-all">AUDIO / SFX</button>
+            <button class="filter-btn border border-white/20 px-6 py-2 rounded-full text-xs font-header font-bold hover:bg-white/10 transition-all">PROMPTS</button>
+        </div>
+    </header>
+
+    <!-- STORE GRID -->
+    <section class="py-12 bg-black/50 relative z-10 border-t border-white/10">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                
+                <!-- Product 1: Character Pack -->
+                <div class="glass-panel p-0 group cursor-pointer hover:border-neonPurple/50 transition-all duration-300 overflow-hidden">
+                    <div class="aspect-[16/9] bg-gray-800 relative overflow-hidden">
+                        <div class="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1535905557558-afc4877a26fc?q=80&w=2574&auto=format&fit=crop')] bg-cover bg-center transition-transform duration-700 group-hover:scale-110 opacity-80 group-hover:opacity-100"></div>
+                        <div class="absolute top-4 left-4 bg-neonPurple text-white text-[10px] font-bold px-2 py-1 uppercase tracking-wider">Bestseller</div>
+                    </div>
+                    <div class="p-6">
+                        <div class="flex justify-between items-start mb-2">
+                            <h3 class="font-header text-lg text-white group-hover:text-neonPurple transition-colors">SCI-FI CHARACTERS VOL. 1</h3>
+                            <span class="font-mono text-white">$49</span>
+                        </div>
+                        <p class="text-xs text-gray-400 font-mono mb-4 border-b border-white/10 pb-4">50+ Consistent Character Sheets (Front/Side/45) ready for Veo Ingredients.</p>
+                        <div class="flex justify-between items-center">
+                            <span class="text-[10px] text-gray-500 font-header">PNG + PROMPT JSON</span>
+                            <button class="text-xs font-bold text-white hover:text-neonPurple transition-colors flex items-center gap-1">
+                                ADD TO CART <span>+</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Product 2: Texture Pack -->
+                <div class="glass-panel p-0 group cursor-pointer hover:border-electricBlue/50 transition-all duration-300 overflow-hidden">
+                    <div class="aspect-[16/9] bg-gray-800 relative overflow-hidden">
+                        <div class="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1550684848-fac1c5b4e853?q=80&w=2670&auto=format&fit=crop')] bg-cover bg-center transition-transform duration-700 group-hover:scale-110 opacity-80 group-hover:opacity-100"></div>
+                        <div class="absolute top-4 left-4 bg-electricBlue text-white text-[10px] font-bold px-2 py-1 uppercase tracking-wider">New</div>
+                    </div>
+                    <div class="p-6">
+                        <div class="flex justify-between items-start mb-2">
+                            <h3 class="font-header text-lg text-white group-hover:text-electricBlue transition-colors">NEON NOIR TEXTURES</h3>
+                            <span class="font-mono text-white">$29</span>
+                        </div>
+                        <p class="text-xs text-gray-400 font-mono mb-4 border-b border-white/10 pb-4">100+ High-Res Cyberpunk environment textures generated with Nano Banano.</p>
+                        <div class="flex justify-between items-center">
+                            <span class="text-[10px] text-gray-500 font-header">4K JPG</span>
+                            <button class="text-xs font-bold text-white hover:text-electricBlue transition-colors flex items-center gap-1">
+                                ADD TO CART <span>+</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Product 3: Audio Pack -->
+                <div class="glass-panel p-0 group cursor-pointer hover:border-signalOrange/50 transition-all duration-300 overflow-hidden">
+                    <div class="aspect-[16/9] bg-gray-800 relative overflow-hidden">
+                        <div class="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1511379938547-c1f69419868d?q=80&w=2670&auto=format&fit=crop')] bg-cover bg-center transition-transform duration-700 group-hover:scale-110 opacity-80 group-hover:opacity-100"></div>
+                    </div>
+                    <div class="p-6">
+                        <div class="flex justify-between items-start mb-2">
+                            <h3 class="font-header text-lg text-white group-hover:text-signalOrange transition-colors">CINEMATIC SFX PACK</h3>
+                            <span class="font-mono text-white">$19</span>
+                        </div>
+                        <p class="text-xs text-gray-400 font-mono mb-4 border-b border-white/10 pb-4">Pre-mixed Foley stems for Sci-Fi films. Impacts, Risers, and Ambience.</p>
+                        <div class="flex justify-between items-center">
+                            <span class="text-[10px] text-gray-500 font-header">WAV / MP3</span>
+                            <button class="text-xs font-bold text-white hover:text-signalOrange transition-colors flex items-center gap-1">
+                                ADD TO CART <span>+</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Product 4: Prompt Library -->
+                <div class="glass-panel p-0 group cursor-pointer hover:border-white/50 transition-all duration-300 overflow-hidden">
+                    <div class="aspect-[16/9] bg-gray-900 relative overflow-hidden flex items-center justify-center">
+                        <div class="font-mono text-xs text-green-500 opacity-70 p-8 leading-relaxed">
+                            > PROMPT: Cinematic wide...<br>
+                            > LENS: 35mm Anamorphic...<br>
+                            > LIGHT: Volumetric Fog...
+                        </div>
+                    </div>
+                    <div class="p-6">
+                        <div class="flex justify-between items-start mb-2">
+                            <h3 class="font-header text-lg text-white group-hover:text-gray-300 transition-colors">MASTER PROMPT LIBRARY</h3>
+                            <span class="font-mono text-white">$39</span>
+                        </div>
+                        <p class="text-xs text-gray-400 font-mono mb-4 border-b border-white/10 pb-4">500+ Curated Prompts for Veo 3.1 and Midjourney. Copy/Paste ready.</p>
+                        <div class="flex justify-between items-center">
+                            <span class="text-[10px] text-gray-500 font-header">PDF / NOTION</span>
+                            <button class="text-xs font-bold text-white hover:text-gray-300 transition-colors flex items-center gap-1">
+                                ADD TO CART <span>+</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="bg-black border-t border-white/10 py-8 text-center relative z-20">
+        <div class="text-[10px] text-gray-600 font-mono">
+            © 2025 INFINITE STUDIO. <a href="index.html" class="text-neonPurple hover:underline">RETURN TO DASHBOARD</a>
+        </div>
+    </footer>
+</body>
+</html>
