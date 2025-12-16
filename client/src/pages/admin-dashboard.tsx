@@ -53,6 +53,18 @@ interface Course {
   lessons: Record<string, Lesson>;
 }
 
+interface Student {
+  id: string;
+  initials: string;
+  name: string;
+  email: string;
+  avatarColor: string;
+  enrolledCourse: string;
+  progress: number;
+  lastActive: string;
+  status: "ACTIVE" | "PENDING" | "INACTIVE";
+}
+
 export default function AdminDashboard() {
   const [activeTab, setActiveTab] = useState("dashboard");
   const [courseView, setCourseView] = useState<"list" | "editor" | "preview">("list");
@@ -97,6 +109,32 @@ export default function AdminDashboard() {
   ]);
   
   const [editorCourseId, setEditorCourseId] = useState<string | null>(null);
+
+  const [studentsList, setStudentsList] = useState<Student[]>([
+    { id: "s1", initials: "SJ", name: "Sarah Jenkins", email: "sarah.j@example.com", avatarColor: "purple-900", enrolledCourse: "Master the Ecosystem (L1)", progress: 85, lastActive: "2 hours ago", status: "ACTIVE" },
+    { id: "s2", initials: "MD", name: "Mike Davis", email: "mike.dfx@studio.net", avatarColor: "orange-900", enrolledCourse: "Advanced Cinematography (L2)", progress: 12, lastActive: "1 day ago", status: "ACTIVE" },
+    { id: "s3", initials: "JD", name: "John Doe", email: "jdoe@gmail.com", avatarColor: "gray-700", enrolledCourse: "Master the Ecosystem (L1)", progress: 0, lastActive: "Never", status: "PENDING" },
+  ]);
+
+  const [isStudentModalOpen, setIsStudentModalOpen] = useState(false);
+  const [editingStudent, setEditingStudent] = useState<Student | null>(null);
+
+  const handleEditStudent = (student: Student) => {
+    setEditingStudent({ ...student });
+    setIsStudentModalOpen(true);
+  };
+
+  const handleSaveStudent = () => {
+    if (!editingStudent) return;
+    setStudentsList(studentsList.map(s => s.id === editingStudent.id ? editingStudent : s));
+    setIsStudentModalOpen(false);
+    setEditingStudent(null);
+  };
+
+  const handleStudentFormChange = (field: keyof Student, value: any) => {
+    if (!editingStudent) return;
+    setEditingStudent({ ...editingStudent, [field]: value });
+  };
 
   const handleCourseListUpdate = (courseId: string, field: keyof Course, value: string) => {
     setCoursesList(coursesList.map(c => {
@@ -1163,103 +1201,118 @@ export default function AdminDashboard() {
             </tr>
           </thead>
           <tbody className="divide-y divide-white/5 font-mono">
-            
-            {/* Student 1 */}
-            <tr className="hover:bg-white/5 transition-colors group cursor-pointer">
-              <td className="p-4">
-                <div className="flex items-center gap-3">
-                  <div className="w-8 h-8 rounded-full bg-purple-900 flex items-center justify-center text-white font-bold text-[10px]">SJ</div>
-                  <div>
-                    <p className="text-white font-bold">Sarah Jenkins</p>
-                    <p className="text-[10px] text-gray-500">sarah.j@example.com</p>
+            {studentsList.map((student) => (
+              <tr key={student.id} className={`hover:bg-white/5 transition-colors group cursor-pointer ${student.status === 'PENDING' ? 'opacity-60' : ''}`}>
+                <td className="p-4">
+                  <div className="flex items-center gap-3">
+                    <div className={`w-8 h-8 rounded-full bg-${student.avatarColor} flex items-center justify-center text-white font-bold text-[10px]`}>{student.initials}</div>
+                    <div>
+                      <p className={`text-${student.status === 'PENDING' ? 'gray-300' : 'white'} font-bold`}>{student.name}</p>
+                      <p className="text-[10px] text-gray-500">{student.email}</p>
+                    </div>
                   </div>
-                </div>
-              </td>
-              <td className="p-4 text-white">Master the Ecosystem (L1)</td>
-              <td className="p-4">
-                <div className="flex items-center gap-2">
-                  <div className="w-24 h-1 bg-white/10 rounded-full overflow-hidden">
-                    <div className="h-full bg-green-500 w-[85%]"></div>
+                </td>
+                <td className={`p-4 ${student.status === 'PENDING' ? 'text-gray-400' : 'text-white'}`}>{student.enrolledCourse}</td>
+                <td className="p-4">
+                  <div className="flex items-center gap-2">
+                    <div className="w-24 h-1 bg-white/10 rounded-full overflow-hidden">
+                      <div className={`h-full w-[${student.progress}%] ${student.progress > 50 ? 'bg-green-500' : student.progress > 0 ? 'bg-signalOrange' : 'bg-gray-500'}`} style={{ width: `${student.progress}%` }}></div>
+                    </div>
+                    <span className={`${student.progress > 50 ? 'text-green-500' : student.progress > 0 ? 'text-signalOrange' : 'text-gray-500'}`}>{student.progress}%</span>
                   </div>
-                  <span className="text-green-500">85%</span>
-                </div>
-              </td>
-              <td className="p-4">2 hours ago</td>
-              <td className="p-4"><span className="bg-green-500/20 text-green-500 px-2 py-1 rounded">ACTIVE</span></td>
-              <td className="p-4 text-right">
-                <button className="text-gray-500 hover:text-white mr-2">Edit</button>
-                <button className="text-electricBlue hover:underline">View</button>
-              </td>
-            </tr>
-
-            {/* Student 2 */}
-            <tr className="hover:bg-white/5 transition-colors group cursor-pointer">
-              <td className="p-4">
-                <div className="flex items-center gap-3">
-                  <div className="w-8 h-8 rounded-full bg-orange-900 flex items-center justify-center text-white font-bold text-[10px]">MD</div>
-                  <div>
-                    <p className="text-white font-bold">Mike Davis</p>
-                    <p className="text-[10px] text-gray-500">mike.dfx@studio.net</p>
-                  </div>
-                </div>
-              </td>
-              <td className="p-4 text-white">Advanced Cinematography (L2)</td>
-              <td className="p-4">
-                <div className="flex items-center gap-2">
-                  <div className="w-24 h-1 bg-white/10 rounded-full overflow-hidden">
-                    <div className="h-full bg-signalOrange w-[12%]"></div>
-                  </div>
-                  <span className="text-signalOrange">12%</span>
-                </div>
-              </td>
-              <td className="p-4">1 day ago</td>
-              <td className="p-4"><span className="bg-green-500/20 text-green-500 px-2 py-1 rounded">ACTIVE</span></td>
-              <td className="p-4 text-right">
-                <button className="text-gray-500 hover:text-white mr-2">Edit</button>
-                <button className="text-electricBlue hover:underline">View</button>
-              </td>
-            </tr>
-
-            {/* Student 3 */}
-            <tr className="hover:bg-white/5 transition-colors group cursor-pointer opacity-60">
-              <td className="p-4">
-                <div className="flex items-center gap-3">
-                  <div className="w-8 h-8 rounded-full bg-gray-700 flex items-center justify-center text-white font-bold text-[10px]">JD</div>
-                  <div>
-                    <p className="text-gray-300 font-bold">John Doe</p>
-                    <p className="text-[10px] text-gray-500">jdoe@gmail.com</p>
-                  </div>
-                </div>
-              </td>
-              <td className="p-4 text-gray-400">Master the Ecosystem (L1)</td>
-              <td className="p-4">
-                <div className="flex items-center gap-2">
-                  <div className="w-24 h-1 bg-white/10 rounded-full overflow-hidden">
-                    <div className="h-full bg-gray-500 w-[0%]"></div>
-                  </div>
-                  <span className="text-gray-500">0%</span>
-                </div>
-              </td>
-              <td className="p-4">Never</td>
-              <td className="p-4"><span className="bg-yellow-500/20 text-yellow-500 px-2 py-1 rounded">PENDING</span></td>
-              <td className="p-4 text-right">
-                <button className="text-gray-500 hover:text-white mr-2">Resend</button>
-                <button className="text-electricBlue hover:underline">View</button>
-              </td>
-            </tr>
-
+                </td>
+                <td className="p-4">{student.lastActive}</td>
+                <td className="p-4">
+                  <span className={`px-2 py-1 rounded ${student.status === 'ACTIVE' ? 'bg-green-500/20 text-green-500' : student.status === 'PENDING' ? 'bg-yellow-500/20 text-yellow-500' : 'bg-red-500/20 text-red-500'}`}>
+                    {student.status}
+                  </span>
+                </td>
+                <td className="p-4 text-right">
+                  <button onClick={() => handleEditStudent(student)} className="text-gray-500 hover:text-white mr-2">Edit</button>
+                  <button className="text-electricBlue hover:underline">View</button>
+                </td>
+              </tr>
+            ))}
           </tbody>
         </table>
         
         {/* Pagination */}
         <div className="p-4 border-t border-white/10 flex justify-between items-center text-[10px] text-gray-500">
-          <span>Showing 3 of 1,204 Students</span>
+          <span>Showing {studentsList.length} of 1,204 Students</span>
           <div className="flex gap-2">
             <button className="px-3 py-1 bg-white/5 rounded hover:bg-white/10 text-white">Previous</button>
             <button className="px-3 py-1 bg-white/5 rounded hover:bg-white/10 text-white">Next</button>
           </div>
         </div>
       </div>
+      
+      {/* Edit Student Modal */}
+      {isStudentModalOpen && editingStudent && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm animate-in fade-in duration-200">
+          <div className="glass-panel p-8 max-w-md w-full border border-white/10 relative">
+            <button 
+              onClick={() => setIsStudentModalOpen(false)}
+              className="absolute top-4 right-4 text-gray-500 hover:text-white"
+            >
+              <X className="w-4 h-4" />
+            </button>
+            
+            <h2 className="font-header text-xl text-white mb-6">EDIT STUDENT</h2>
+            
+            <div className="space-y-4">
+              <div>
+                <label className="block text-[10px] font-mono text-gray-500 mb-2 uppercase">Full Name</label>
+                <input 
+                  type="text" 
+                  value={editingStudent.name}
+                  onChange={(e) => handleStudentFormChange("name", e.target.value)}
+                  className="bg-black/50 border border-white/10 text-white text-xs px-4 py-3 w-full focus:border-electricBlue outline-none"
+                />
+              </div>
+              
+              <div>
+                <label className="block text-[10px] font-mono text-gray-500 mb-2 uppercase">Email Address</label>
+                <input 
+                  type="email" 
+                  value={editingStudent.email}
+                  onChange={(e) => handleStudentFormChange("email", e.target.value)}
+                  className="bg-black/50 border border-white/10 text-white text-xs px-4 py-3 w-full focus:border-electricBlue outline-none"
+                />
+              </div>
+
+              <div>
+                <label className="block text-[10px] font-mono text-gray-500 mb-2 uppercase">Status</label>
+                <div className="flex gap-2">
+                  {(["ACTIVE", "PENDING", "INACTIVE"] as const).map(status => (
+                    <button
+                      key={status}
+                      onClick={() => handleStudentFormChange("status", status)}
+                      className={`flex-1 py-2 text-[10px] font-bold border ${editingStudent.status === status ? 'bg-white text-black border-white' : 'bg-transparent text-gray-500 border-white/10 hover:border-white/30'}`}
+                    >
+                      {status}
+                    </button>
+                  ))}
+                </div>
+              </div>
+              
+              <div className="pt-4 flex gap-3">
+                <button 
+                  onClick={() => setIsStudentModalOpen(false)}
+                  className="flex-1 py-3 text-xs font-header font-bold text-gray-400 bg-white/5 hover:bg-white/10 transition-colors"
+                >
+                  CANCEL
+                </button>
+                <button 
+                  onClick={handleSaveStudent}
+                  className="flex-1 py-3 text-xs font-header font-bold text-black bg-electricBlue hover:bg-white transition-colors"
+                >
+                  SAVE CHANGES
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 
