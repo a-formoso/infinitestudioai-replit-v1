@@ -2,9 +2,11 @@ import { Link } from "wouter";
 import { ArrowLeft, Copy, Check } from "lucide-react";
 import { useState } from "react";
 import { Footer } from "@/components/footer";
+import { useToast } from "@/hooks/use-toast";
 
 export default function Privacy() {
   const [copied, setCopied] = useState(false);
+  const { toast } = useToast();
 
   const scrollToSection = (id: string) => {
     const element = document.getElementById(id);
@@ -16,6 +18,11 @@ export default function Privacy() {
   const copyEmail = () => {
     navigator.clipboard.writeText("admin@infinitestudioai.com");
     setCopied(true);
+    toast({
+      title: "Email Copied",
+      description: "Address copied to clipboard.",
+      className: "bg-black border border-white/10 text-white",
+    });
     setTimeout(() => setCopied(false), 2000);
   };
 
