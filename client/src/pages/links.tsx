@@ -53,6 +53,16 @@ export default function Links() {
     .bg-radial-glow {
         background: radial-gradient(circle at center, rgba(41, 98, 255, 0.15) 0%, transparent 70%);
     }
+
+    @keyframes fadeInUp {
+        from { opacity: 0; transform: translateY(20px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+
+    .animate-fade-in-up {
+        opacity: 0; /* Start hidden */
+        animation: fadeInUp 0.8s ease-out forwards;
+    }
   `;
 
   return (
@@ -67,7 +77,7 @@ export default function Links() {
         {/* MAIN CONTAINER */}
         <main className="w-full max-w-md px-6 py-12 relative z-10 flex flex-col gap-8">
           {/* HEADER / PROFILE */}
-          <header className="text-center animate-in fade-in slide-in-from-bottom-5 duration-700">
+          <header className="text-center animate-fade-in-up" style={{ animationDelay: "0.1s" }}>
             <div className="w-24 h-24 mx-auto bg-black rounded-full border border-electricBlue/50 p-1 mb-6 relative group cursor-pointer overflow-hidden">
               <div className="absolute inset-0 bg-gradient-to-tr from-blue-900 to-transparent opacity-50 group-hover:opacity-80 transition-opacity"></div>
               {/* Logo Character */}
@@ -95,8 +105,8 @@ export default function Links() {
             {/* 1. LEAD MAGNET (FREE VALUE) */}
             <a
               href="#"
-              className="glass-btn glow-gold rounded-xl p-4 flex items-center gap-4 group animate-in fade-in slide-in-from-bottom-5 duration-700 delay-200 fill-mode-forwards opacity-0"
-              style={{ animationDelay: "0.2s", animationFillMode: "forwards" }}
+              className="glass-btn glow-gold rounded-xl p-4 flex items-center gap-4 group animate-fade-in-up"
+              style={{ animationDelay: "0.2s" }}
             >
               <div className="w-12 h-12 rounded-lg bg-gold/10 flex items-center justify-center shrink-0 border border-gold/20">
                 <svg
@@ -130,8 +140,8 @@ export default function Links() {
             {/* 2. CORE COURSE (MAIN REVENUE) */}
             <Link
               href="/course/level-1"
-              className="glass-btn glow-blue rounded-xl p-4 flex items-center gap-4 group animate-in fade-in slide-in-from-bottom-5 duration-700 delay-300 fill-mode-forwards opacity-0"
-              style={{ animationDelay: "0.3s", animationFillMode: "forwards" }}
+              className="glass-btn glow-blue rounded-xl p-4 flex items-center gap-4 group animate-fade-in-up"
+              style={{ animationDelay: "0.3s" }}
             >
               <div className="w-12 h-12 rounded-lg bg-electricBlue/10 flex items-center justify-center shrink-0 border border-electricBlue/20">
                 <svg
@@ -171,8 +181,8 @@ export default function Links() {
             {/* 3. ASSET STORE (PASSIVE) */}
             <Link
               href="/store"
-              className="glass-btn glow-purple rounded-xl p-4 flex items-center gap-4 group animate-in fade-in slide-in-from-bottom-5 duration-700 delay-400 fill-mode-forwards opacity-0"
-              style={{ animationDelay: "0.4s", animationFillMode: "forwards" }}
+              className="glass-btn glow-purple rounded-xl p-4 flex items-center gap-4 group animate-fade-in-up"
+              style={{ animationDelay: "0.4s" }}
             >
               <div className="w-12 h-12 rounded-lg bg-neonPurple/10 flex items-center justify-center shrink-0 border border-neonPurple/20">
                 <svg
@@ -206,8 +216,8 @@ export default function Links() {
             {/* 4. SERVICES (HIGH TICKET) */}
             <Link
               href="/hire"
-              className="glass-btn glow-orange rounded-xl p-4 flex items-center gap-4 group animate-in fade-in slide-in-from-bottom-5 duration-700 delay-500 fill-mode-forwards opacity-0"
-              style={{ animationDelay: "0.5s", animationFillMode: "forwards" }}
+              className="glass-btn glow-orange rounded-xl p-4 flex items-center gap-4 group animate-fade-in-up"
+              style={{ animationDelay: "0.5s" }}
             >
               <div className="w-12 h-12 rounded-lg bg-signalOrange/10 flex items-center justify-center shrink-0 border border-signalOrange/20">
                 <svg
@@ -241,8 +251,8 @@ export default function Links() {
 
           {/* FOOTER SOCIALS */}
           <footer
-            className="mt-12 flex flex-col items-center gap-6 animate-in fade-in slide-in-from-bottom-5 duration-700 delay-700 fill-mode-forwards opacity-0"
-            style={{ animationDelay: "0.6s", animationFillMode: "forwards" }}
+            className="mt-12 flex flex-col items-center gap-6 animate-fade-in-up"
+            style={{ animationDelay: "0.6s" }}
           >
             <div className="flex gap-6">
               <a
