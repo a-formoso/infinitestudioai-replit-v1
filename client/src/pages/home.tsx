@@ -78,7 +78,7 @@ export default function Home() {
                   {/* Fake Logos for Mockup */}
                   <div className="font-header font-bold text-lg hover:text-white transition-colors">GEMINI</div>
                   <div className="font-header font-bold text-lg hover:text-white transition-colors">NANO BANANA</div>
-                  <div className="font-header font-bold text-lg hover:text-white transition-colors">GOOGLE DEEPMIND</div>
+                  <div className="font-header font-bold text-lg hover:text-white transition-colors">VEO</div>
                   <div className="font-header font-bold text-lg hover:text-white transition-colors">A24</div>
               </div>
           </header>
