@@ -2,9 +2,61 @@ import { Navbar } from "@/components/navbar";
 import { Footer } from "@/components/footer";
 import { useState } from "react";
 import { Check } from "lucide-react";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { useLocation } from "wouter";
+import { getCurrentUser, getCourseBySlug, enrollInCourse } from "@/lib/api";
+import { useToast } from "@/hooks/use-toast";
 
 export default function CourseLevel1() {
   const [openModule, setOpenModule] = useState<number | null>(null);
+  const [, setLocation] = useLocation();
+  const { toast } = useToast();
+  const queryClient = useQueryClient();
+
+  const { data: userData } = useQuery({
+    queryKey: ["currentUser"],
+    queryFn: getCurrentUser,
+  });
+
+  const { data: courseData } = useQuery({
+    queryKey: ["course", "level-1"],
+    queryFn: () => getCourseBySlug("level-1"),
+  });
+
+  const enrollMutation = useMutation({
+    mutationFn: (courseId: string) => enrollInCourse(courseId),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["enrollments"] });
+      toast({
+        title: "Enrolled successfully!",
+        description: "Welcome to the Google Ecosystem course. Redirecting to your dashboard...",
+      });
+      setTimeout(() => setLocation("/dashboard"), 1500);
+    },
+    onError: (error: any) => {
+      toast({
+        title: "Enrollment failed",
+        description: error.message || "Please try again",
+        variant: "destructive",
+      });
+    },
+  });
+
+  const handleEnroll = () => {
+    if (!userData?.data?.user) {
+      toast({
+        title: "Please log in",
+        description: "You need an account to enroll in courses.",
+      });
+      setLocation("/login");
+      return;
+    }
+
+    const courseId = courseData?.data?.course?.id;
+    if (courseId) {
+      enrollMutation.mutate(courseId.toString());
+    }
+  };
 
   const toggleModule = (index: number) => {
     setOpenModule(openModule === index ? null : index);
@@ -172,8 +224,13 @@ export default function CourseLevel1() {
                           <span className="text-[10px] font-mono text-electricBlue bg-electricBlue/10 px-2 py-1 rounded mt-2 inline-block">LIMITED TIME OFFER</span>
                       </div>
                       
-                      <button className="w-full bg-electricBlue text-white font-header font-bold text-sm uppercase py-4 hover:bg-white hover:text-black transition-all duration-300 tracking-wider mb-4 shadow-[0_0_20px_rgba(41,98,255,0.4)]">
-                          Enroll Now
+                      <button 
+                        onClick={handleEnroll}
+                        disabled={enrollMutation.isPending}
+                        data-testid="button-enroll"
+                        className="w-full bg-electricBlue text-white font-header font-bold text-sm uppercase py-4 hover:bg-white hover:text-black transition-all duration-300 tracking-wider mb-4 shadow-[0_0_20px_rgba(41,98,255,0.4)] disabled:opacity-50 disabled:cursor-not-allowed"
+                      >
+                          {enrollMutation.isPending ? "Enrolling..." : "Enroll Now"}
                       </button>
                       
                       <p className="text-[10px] text-gray-500 text-center font-mono mb-6">
