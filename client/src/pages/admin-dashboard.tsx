@@ -53,7 +53,7 @@ interface Course {
 
 export default function AdminDashboard() {
   const [activeTab, setActiveTab] = useState("dashboard");
-  const [courseView, setCourseView] = useState<"list" | "editor">("list");
+  const [courseView, setCourseView] = useState<"list" | "editor" | "preview">("list");
   const [expandedCourseId, setExpandedCourseId] = useState<string | null>("course-1");
   const [expandedModuleId, setExpandedModuleId] = useState<string | null>(null);
   const [selectedLessonId, setSelectedLessonId] = useState<string>("1.1");
@@ -612,7 +612,7 @@ export default function AdminDashboard() {
           <h1 className="font-header text-2xl text-white">COURSE EDITOR</h1>
           <div className="flex gap-4">
             <button onClick={() => setCourseView('list')} className="text-gray-400 text-xs hover:text-white transition-colors underline">Cancel</button>
-            <button className="text-gray-400 text-xs hover:text-white transition-colors underline">Preview</button>
+            <button onClick={() => setCourseView('preview')} className="text-gray-400 text-xs hover:text-white transition-colors underline">Preview</button>
             <button onClick={handleSaveCourse} className="bg-green-500 text-black px-4 py-2 text-[10px] font-header font-bold uppercase hover:bg-white transition-colors">
               Save Changes
             </button>
@@ -833,6 +833,180 @@ export default function AdminDashboard() {
       </div>
     </div>
   );
+  };
+
+  const renderCoursePreview = () => {
+    const currentLesson = lessons[selectedLessonId];
+    
+    return (
+      <div className="fixed inset-0 z-50 bg-black flex flex-col animate-in fade-in duration-300">
+        {/* Preview Header */}
+        <div className="h-16 border-b border-white/10 flex items-center justify-between px-8 bg-black/50 backdrop-blur-md sticky top-0 z-10">
+          <div className="flex items-center gap-4">
+            <button 
+              onClick={() => setCourseView('editor')}
+              className="flex items-center gap-2 text-xs font-header font-bold text-gray-400 hover:text-white transition-colors"
+            >
+              ← BACK TO EDITOR
+            </button>
+            <div className="h-4 w-px bg-white/10"></div>
+            <h2 className="text-sm font-header text-white tracking-widest">{editorCourseTitle}</h2>
+            <span className="text-[10px] bg-electricBlue/20 text-electricBlue px-2 py-0.5 rounded border border-electricBlue/30 font-mono">PREVIEW MODE</span>
+          </div>
+          <div className="flex items-center gap-4">
+            <div className="text-right hidden md:block">
+              <p className="text-[10px] text-gray-500 uppercase">Progress</p>
+              <div className="w-32 h-1 bg-white/10 rounded-full mt-1 overflow-hidden">
+                <div className="h-full bg-green-500 w-[0%]"></div>
+              </div>
+            </div>
+            <div className="w-8 h-8 rounded-full bg-gradient-to-br from-electricBlue to-purple-600 border border-white/20"></div>
+          </div>
+        </div>
+
+        {/* Preview Content */}
+        <div className="flex-grow flex overflow-hidden">
+          {/* Sidebar */}
+          <div className="w-80 border-r border-white/10 bg-black/50 overflow-y-auto hidden lg:block">
+            <div className="p-6">
+              <h3 className="font-header text-lg text-white mb-2">COURSE CONTENT</h3>
+              <p className="text-xs text-gray-500 font-mono mb-6">0% COMPLETED</p>
+              
+              <div className="space-y-4">
+                {modules.map((module, index) => (
+                  <div key={module.id} className="space-y-2">
+                    <h4 className="text-xs font-bold text-gray-400 uppercase tracking-wider flex items-center gap-2">
+                      <span className="w-5 h-5 rounded-full border border-gray-700 flex items-center justify-center text-[9px] font-mono">{index + 1}</span>
+                      {module.title}
+                    </h4>
+                    <div className="space-y-1 pl-2 border-l border-white/5 ml-2.5">
+                      {module.lessons.map((lessonId) => {
+                        const lesson = lessons[lessonId];
+                        if (!lesson) return null;
+                        const isSelected = selectedLessonId === lessonId;
+                        
+                        return (
+                          <div 
+                            key={lessonId}
+                            onClick={() => setSelectedLessonId(lessonId)}
+                            className={`p-3 rounded text-[11px] cursor-pointer flex items-center gap-3 transition-colors ${isSelected ? 'bg-white/10 text-white' : 'text-gray-500 hover:text-gray-300 hover:bg-white/5'}`}
+                          >
+                            <div className={`w-1.5 h-1.5 rounded-full ${isSelected ? 'bg-electricBlue animate-pulse' : 'bg-gray-700'}`}></div>
+                            <span className="truncate">{lesson.title}</span>
+                            <span className="ml-auto font-mono text-[9px] opacity-50">{lesson.duration}</span>
+                          </div>
+                        );
+                      })}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+
+          {/* Main Stage */}
+          <div className="flex-grow overflow-y-auto bg-[#050505]">
+            <div className="max-w-5xl mx-auto p-8 lg:p-12">
+              {currentLesson ? (
+                <div className="space-y-8">
+                  {/* Video Player */}
+                  <div className="aspect-video bg-black rounded-lg border border-white/10 overflow-hidden shadow-2xl relative group">
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity z-10 flex flex-col justify-end p-6">
+                      <div className="w-full bg-white/20 h-1 rounded-full overflow-hidden cursor-pointer">
+                        <div className="bg-electricBlue h-full w-[30%] relative">
+                          <div className="absolute right-0 top-1/2 -translate-y-1/2 w-3 h-3 bg-white rounded-full shadow-lg scale-0 group-hover:scale-100 transition-transform"></div>
+                        </div>
+                      </div>
+                      <div className="flex justify-between items-center mt-4">
+                        <div className="flex gap-4 text-white">
+                          <button>Play</button>
+                          <button>Rewind</button>
+                          <span className="text-xs font-mono">04:20 / {currentLesson.duration}</span>
+                        </div>
+                        <div className="flex gap-4 text-white">
+                          <button>Settings</button>
+                          <button>Fullscreen</button>
+                        </div>
+                      </div>
+                    </div>
+                    
+                    {currentLesson.video.startsWith('http') ? (
+                        <div className="w-full h-full flex items-center justify-center bg-gray-900">
+                            <div className="text-center">
+                                <LinkIcon className="w-12 h-12 text-gray-600 mx-auto mb-4" />
+                                <p className="text-gray-500 font-mono text-xs">External Content Linked</p>
+                                <a href={currentLesson.video} target="_blank" rel="noopener noreferrer" className="text-electricBlue hover:underline text-xs mt-2 block">{currentLesson.video}</a>
+                            </div>
+                        </div>
+                    ) : (
+                        <div className="w-full h-full flex items-center justify-center bg-gray-900">
+                            <p className="text-gray-600 font-mono text-xs">VIDEO PREVIEW: {currentLesson.video}</p>
+                        </div>
+                    )}
+                  </div>
+
+                  {/* Lesson Info */}
+                  <div>
+                    <div className="flex justify-between items-start mb-6">
+                      <div>
+                        <h1 className="text-2xl md:text-3xl font-header text-white mb-2">{currentLesson.title}</h1>
+                        <p className="text-sm text-gray-400 font-mono">Lesson {Object.keys(lessons).indexOf(selectedLessonId) + 1} • {currentLesson.duration}</p>
+                      </div>
+                      <button className="bg-green-500 text-black px-6 py-3 text-xs font-header font-bold uppercase hover:bg-white transition-colors">
+                        Mark Complete
+                      </button>
+                    </div>
+
+                    <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
+                      <div className="lg:col-span-2 space-y-8">
+                        <div className="prose prose-invert max-w-none">
+                          <h3 className="font-header text-lg text-white mb-4">LESSON NOTES</h3>
+                          <div className="text-gray-400 text-sm leading-relaxed whitespace-pre-wrap font-sans">
+                            {currentLesson.notes}
+                          </div>
+                        </div>
+                        
+                        <div className="bg-white/5 border border-white/5 p-6 rounded-lg">
+                          <h3 className="font-header text-sm text-white mb-4">DISCUSSION</h3>
+                          <div className="flex gap-4">
+                            <div className="w-8 h-8 rounded-full bg-gray-700 flex-shrink-0"></div>
+                            <input 
+                              type="text" 
+                              placeholder="Ask a question or share your thoughts..." 
+                              className="bg-black/50 border border-white/10 text-white text-xs px-4 py-2 w-full rounded focus:border-electricBlue outline-none"
+                            />
+                          </div>
+                        </div>
+                      </div>
+
+                      <div className="space-y-6">
+                        <div>
+                          <h3 className="font-header text-xs text-gray-500 mb-4 uppercase">Resources</h3>
+                          <div className="space-y-2">
+                            <button className="w-full flex items-center gap-3 p-3 bg-white/5 border border-white/5 hover:border-white/20 transition-colors rounded group text-left">
+                              <div className="w-8 h-8 bg-gray-800 flex items-center justify-center text-[10px] font-bold text-gray-400 group-hover:text-white">PDF</div>
+                              <div>
+                                <p className="text-xs text-white font-bold">Visual_Bible_Template.pdf</p>
+                                <p className="text-[10px] text-gray-500">2.4 MB</p>
+                              </div>
+                              <Download className="w-4 h-4 text-gray-500 ml-auto group-hover:text-white" />
+                            </button>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              ) : (
+                <div className="flex items-center justify-center h-full text-gray-500 font-mono text-xs">
+                  Select a lesson to preview content
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
+      </div>
+    );
   };
 
   const renderStudents = () => (
@@ -1124,7 +1298,11 @@ export default function AdminDashboard() {
         <div className="fixed inset-0 bg-grid-pattern bg-[size:40px_40px] opacity-20 pointer-events-none z-0"></div>
 
         {activeTab === "dashboard" && renderDashboard()}
-        {activeTab === "courses" && (courseView === "list" ? renderCourseList() : renderCourseEditor())}
+        {activeTab === "courses" && (
+          courseView === "list" ? renderCourseList() : 
+          courseView === "preview" ? renderCoursePreview() : 
+          renderCourseEditor()
+        )}
         {activeTab === "students" && renderStudents()}
         {activeTab === "store" && renderAssetStore()}
         {activeTab === "analytics" && (
