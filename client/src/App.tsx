@@ -10,11 +10,13 @@ import CourseLevel1 from "@/pages/course-level-1";
 import CourseLevel2 from "@/pages/course-level-2";
 import Dashboard from "@/pages/dashboard";
 import CoursePlayer from "@/pages/course-player";
+import Hire from "@/pages/hire";
 
 function Router() {
   return (
     <Switch>
       <Route path="/" component={Home} />
+      <Route path="/hire" component={Hire} />
       <Route path="/academy" component={Academy} />
       <Route path="/course/level-1" component={CourseLevel1} />
       <Route path="/course/level-2" component={CourseLevel2} />
