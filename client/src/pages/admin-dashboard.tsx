@@ -1540,7 +1540,7 @@ export default function AdminDashboard() {
               <div>
                 <label className="block text-[10px] font-mono text-gray-500 mb-2 uppercase">Cover Image</label>
                 
-                <div className="flex gap-2 items-start">
+                <div className="flex gap-2 items-stretch">
                   <div className="flex-grow">
                     <input 
                       type="text" 
