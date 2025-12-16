@@ -721,15 +721,47 @@ export default function AdminDashboard() {
 
           {/* Video Upload */}
           <div className="mb-8">
-            <label className="block text-[10px] font-mono text-gray-500 mb-2 uppercase">VIDEO SOURCE</label>
-            <div className="h-48 bg-black/50 border-2 border-dashed border-white/10 rounded flex flex-col items-center justify-center cursor-pointer hover:border-electricBlue/50 transition-colors group relative overflow-hidden">
-              {/* Placeholder for uploaded video state */}
-              <div className="absolute inset-0 bg-gray-900 flex items-center justify-center">
-                <span className="text-xs font-mono text-white">{currentLesson.video}</span>
-              </div>
-              <div className="absolute bottom-2 right-2 flex gap-2">
-                <button className="bg-black/80 text-white text-[10px] px-2 py-1 rounded border border-white/20 hover:border-white">Replace</button>
-              </div>
+            <div className="flex justify-between items-center mb-2">
+                <label className="block text-[10px] font-mono text-gray-500 uppercase">VIDEO SOURCE</label>
+                <span className="text-[10px] text-gray-500">Supports MP4, MOV or URL</span>
+            </div>
+            
+            <div className="space-y-3">
+                <div className="h-48 bg-black/50 border-2 border-dashed border-white/10 rounded flex flex-col items-center justify-center cursor-pointer hover:border-electricBlue/50 transition-colors group relative overflow-hidden">
+                {/* Placeholder for uploaded video state */}
+                <div className="absolute inset-0 bg-gray-900 flex items-center justify-center">
+                    {currentLesson.video.startsWith('http') ? (
+                         <div className="text-center">
+                            <LinkIcon className="w-8 h-8 text-electricBlue mx-auto mb-2" />
+                            <span className="text-xs font-mono text-white block max-w-xs truncate px-4">{currentLesson.video}</span>
+                            <span className="text-[10px] text-gray-500 mt-1 block">External Link Linked</span>
+                         </div>
+                    ) : (
+                        <div className="text-center">
+                             <div className="w-8 h-8 bg-white/10 rounded-full flex items-center justify-center mx-auto mb-2">
+                                <span className="text-xs font-bold text-white">MP4</span>
+                             </div>
+                             <span className="text-xs font-mono text-white">{currentLesson.video}</span>
+                        </div>
+                    )}
+                </div>
+                <div className="absolute bottom-2 right-2 flex gap-2">
+                    <button className="bg-black/80 text-white text-[10px] px-2 py-1 rounded border border-white/20 hover:border-white">Replace File</button>
+                </div>
+                </div>
+
+                <div className="relative group">
+                    <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                        <LinkIcon className="h-3.5 w-3.5 text-gray-500 group-focus-within:text-electricBlue transition-colors" />
+                    </div>
+                    <input 
+                        type="text" 
+                        placeholder="Or paste video URL (YouTube, Vimeo, etc.)" 
+                        value={currentLesson.video.startsWith('http') ? currentLesson.video : ''}
+                        onChange={(e) => handleLessonUpdate("video", e.target.value)}
+                        className="bg-black/50 border border-white/10 text-white text-xs px-4 py-2.5 pl-9 w-full focus:border-electricBlue outline-none font-mono rounded transition-colors placeholder:text-gray-600"
+                    />
+                </div>
             </div>
           </div>
 
