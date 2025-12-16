@@ -1,6 +1,6 @@
 import { Link } from "wouter";
 import { useState, useEffect, useRef } from "react";
-import { LayoutDashboard, BookOpen, Users, ShoppingBag, BarChart2, Plus, Download, Bold, Italic, Underline, Link as LinkIcon, Code, X, Search, Edit2, Trash2 } from "lucide-react";
+import { LayoutDashboard, BookOpen, Users, ShoppingBag, BarChart2, Plus, Download, Bold, Italic, Underline, Link as LinkIcon, Code, X, Search, Edit2, Trash2, ArrowUp, ArrowDown, ArrowLeft, ArrowRight } from "lucide-react";
 
 const INITIAL_LESSONS = {
   "1.1": { id: "1.1", title: "The Multimodal Script", duration: "12:45", video: "multimodal_script_v3.mp4", notes: "Introduction to multimodal scripting techniques using Gemini 1.5 Pro.", keyPrompt: "Analyze this image as a Director of Photography...", resources: [{ name: "Visual_Bible_Template.pdf", size: "2.4 MB", type: "PDF" }] },
@@ -73,6 +73,7 @@ interface Product {
   revenue: string;
   status: "ACTIVE" | "DRAFT";
   image: string;
+  imagePosition: { x: number; y: number };
 }
 
 export default function AdminDashboard() {
@@ -162,7 +163,8 @@ export default function AdminDashboard() {
       sales: 124,
       revenue: "$3,596",
       status: "ACTIVE",
-      image: "https://images.unsplash.com/photo-1550684848-fac1c5b4e853?q=80&w=2670&auto=format&fit=crop"
+      image: "https://images.unsplash.com/photo-1550684848-fac1c5b4e853?q=80&w=2670&auto=format&fit=crop",
+      imagePosition: { x: 50, y: 50 }
     },
     {
       id: "p2",
@@ -171,7 +173,8 @@ export default function AdminDashboard() {
       sales: 89,
       revenue: "$4,361",
       status: "ACTIVE",
-      image: "https://images.unsplash.com/photo-1535905557558-afc4877a26fc?q=80&w=2574&auto=format&fit=crop"
+      image: "https://images.unsplash.com/photo-1535905557558-afc4877a26fc?q=80&w=2574&auto=format&fit=crop",
+      imagePosition: { x: 50, y: 50 }
     },
     {
       id: "p3",
@@ -180,7 +183,8 @@ export default function AdminDashboard() {
       sales: 0,
       revenue: "Unreleased",
       status: "DRAFT",
-      image: ""
+      image: "",
+      imagePosition: { x: 50, y: 50 }
     }
   ]);
 
@@ -195,7 +199,8 @@ export default function AdminDashboard() {
       sales: 0,
       revenue: "$0",
       status: "DRAFT",
-      image: ""
+      image: "",
+      imagePosition: { x: 50, y: 50 }
     };
     setEditingProduct(newProduct);
     setIsProductModalOpen(true);
@@ -1424,6 +1429,24 @@ export default function AdminDashboard() {
     e.target.value = '';
   };
 
+  const handleImagePositionChange = (direction: 'up' | 'down' | 'left' | 'right') => {
+    if (!editingProduct) return;
+    
+    const currentPos = editingProduct.imagePosition || { x: 50, y: 50 };
+    let { x, y } = currentPos;
+    
+    const STEP = 5;
+    
+    switch (direction) {
+      case 'up': y = Math.max(0, y - STEP); break;
+      case 'down': y = Math.min(100, y + STEP); break;
+      case 'left': x = Math.max(0, x - STEP); break;
+      case 'right': x = Math.min(100, x + STEP); break;
+    }
+    
+    setEditingProduct({ ...editingProduct, imagePosition: { x, y } });
+  };
+
   const renderAssetStore = () => (
     <div className="relative z-10 p-8 max-w-7xl mx-auto">
       {/* HEADER */}
@@ -1456,7 +1479,13 @@ export default function AdminDashboard() {
           <div key={product.id} className={`glass-panel p-0 overflow-hidden border border-white/10 ${product.status === 'ACTIVE' ? 'hover:border-neonPurple/50' : 'hover:border-white/30 opacity-70'} transition-colors group relative`}>
             <div className="h-40 bg-gray-900 relative flex items-center justify-center border-b border-white/5 overflow-hidden">
               {product.image ? (
-                <div className="absolute inset-0 bg-cover bg-center opacity-60 group-hover:opacity-80 transition-opacity" style={{ backgroundImage: `url('${product.image}')` }}></div>
+                <div 
+                  className="absolute inset-0 bg-cover opacity-60 group-hover:opacity-80 transition-opacity" 
+                  style={{ 
+                    backgroundImage: `url('${product.image}')`,
+                    backgroundPosition: `${product.imagePosition?.x || 50}% ${product.imagePosition?.y || 50}%`
+                  }}
+                ></div>
               ) : (
                 <div className="text-white/20 text-4xl font-header">+</div>
               )}
@@ -1568,10 +1597,37 @@ export default function AdminDashboard() {
                   </div>
                 </div>
                 {editingProduct.image && (
-                  <div className="mt-2 h-20 w-full bg-gray-900 border border-white/5 rounded overflow-hidden relative">
-                    <img src={editingProduct.image} alt="Preview" className="w-full h-full object-cover opacity-60" />
-                    <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-                      <span className="text-[10px] bg-black/50 px-2 py-1 rounded text-white font-mono">PREVIEW</span>
+                  <div className="mt-2 h-48 w-full bg-gray-900 border border-white/5 rounded overflow-hidden relative group">
+                    <img 
+                      src={editingProduct.image} 
+                      alt="Preview" 
+                      className="w-full h-full object-cover opacity-60"
+                      style={{ objectPosition: `${editingProduct.imagePosition?.x || 50}% ${editingProduct.imagePosition?.y || 50}%` }}
+                    />
+                    
+                    {/* Position Controls Overlay */}
+                    <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity bg-black/40">
+                      <div className="grid grid-cols-3 gap-1">
+                        <div></div>
+                        <button onClick={(e) => { e.preventDefault(); handleImagePositionChange('up'); }} className="p-1 bg-black/80 text-white hover:bg-neonPurple rounded"><ArrowUp className="w-4 h-4" /></button>
+                        <div></div>
+                        
+                        <button onClick={(e) => { e.preventDefault(); handleImagePositionChange('left'); }} className="p-1 bg-black/80 text-white hover:bg-neonPurple rounded"><ArrowLeft className="w-4 h-4" /></button>
+                        <div className="flex items-center justify-center w-6 h-6 rounded-full border border-white/20 bg-black/50">
+                           <div className="w-1 h-1 bg-white rounded-full"></div>
+                        </div>
+                        <button onClick={(e) => { e.preventDefault(); handleImagePositionChange('right'); }} className="p-1 bg-black/80 text-white hover:bg-neonPurple rounded"><ArrowRight className="w-4 h-4" /></button>
+                        
+                        <div></div>
+                        <button onClick={(e) => { e.preventDefault(); handleImagePositionChange('down'); }} className="p-1 bg-black/80 text-white hover:bg-neonPurple rounded"><ArrowDown className="w-4 h-4" /></button>
+                        <div></div>
+                      </div>
+                    </div>
+                    
+                    <div className="absolute bottom-2 right-2 pointer-events-none">
+                      <span className="text-[10px] bg-black/50 px-2 py-1 rounded text-white font-mono">
+                        POS: {editingProduct.imagePosition?.x || 50}% {editingProduct.imagePosition?.y || 50}%
+                      </span>
                     </div>
                   </div>
                 )}
