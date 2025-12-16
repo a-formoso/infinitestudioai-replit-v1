@@ -1,12 +1,29 @@
 import { Link } from "wouter";
 import { Footer } from "@/components/footer";
+import { Copy, Check } from "lucide-react";
+import { useState } from "react";
+import { useToast } from "@/hooks/use-toast";
 
 export default function Terms() {
+  const [copied, setCopied] = useState(false);
+  const { toast } = useToast();
+
   const scrollToSection = (id: string) => {
     const element = document.getElementById(id);
     if (element) {
       element.scrollIntoView({ behavior: 'smooth' });
     }
+  };
+
+  const copyEmail = () => {
+    navigator.clipboard.writeText("admin@infinitestudioai.com");
+    setCopied(true);
+    toast({
+      title: "Email Copied",
+      description: "Address copied to clipboard.",
+      className: "bg-black border border-white/10 text-white",
+    });
+    setTimeout(() => setCopied(false), 2000);
   };
 
   return (
@@ -95,6 +112,11 @@ export default function Terms() {
                 <li>
                   <button onClick={() => scrollToSection('termination')} className="hover:text-electricBlue transition-colors text-left w-full">
                     7.0 Termination Protocol
+                  </button>
+                </li>
+                <li>
+                  <button onClick={() => scrollToSection('contact')} className="hover:text-electricBlue transition-colors text-left w-full">
+                    8.0 Contact Protocol
                   </button>
                 </li>
               </ul>
@@ -195,6 +217,32 @@ export default function Terms() {
                 <p>
                   All provisions of the Terms which by their nature should survive termination shall survive termination, including, without limitation, ownership provisions, warranty disclaimers, indemnity and limitations of liability.
                 </p>
+              </div>
+            </section>
+
+            {/* 8.0 CONTACT */}
+            <section id="contact" className="border-t border-white/10 pt-8">
+              <h2 className="font-header text-xl text-white mb-8">8.0 CONTACT PROTOCOL</h2>
+              <div className="space-y-6 text-sm leading-relaxed text-gray-400 font-body">
+                <p>
+                  If you have any questions about these Terms of Execution, please contact our Legal Department via email at:
+                </p>
+                <div className="mt-6 flex items-center gap-2">
+                  <div className="border border-white/10 bg-white/5 px-6 py-4 text-electricBlue font-mono text-xs select-all">
+                    admin@infinitestudioai.com
+                  </div>
+                  <button 
+                    onClick={copyEmail}
+                    className="w-12 h-12 flex items-center justify-center border border-white/10 bg-white/5 hover:bg-electricBlue/10 hover:border-electricBlue/50 transition-all cursor-pointer relative"
+                    title="Copy Email Address"
+                  >
+                    {copied ? (
+                      <Check className="w-4 h-4 text-green-500 animate-in zoom-in duration-300" />
+                    ) : (
+                      <Copy className="w-4 h-4 text-gray-400 hover:text-white transition-colors" />
+                    )}
+                  </button>
+                </div>
               </div>
             </section>
 
