@@ -265,13 +265,27 @@ export default function AdminDashboard() {
   };
 
   const handleAddResource = () => {
-    if (!selectedLessonId) return;
-    const newResource = { name: "New_Resource.pdf", size: "0 MB", type: "PDF" };
+    // This function will be triggered by the file input
+  };
+
+  const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (!selectedLessonId || !e.target.files || e.target.files.length === 0) return;
+    
+    const file = e.target.files[0];
+    // In a real app, this would upload to server. Here we just mock the file data
+    const fileSize = (file.size / (1024 * 1024)).toFixed(1) + " MB";
+    const fileType = file.name.split('.').pop()?.toUpperCase() || "FILE";
+    
+    const newResource = { name: file.name, size: fileSize, type: fileType };
+    
     const updatedLesson = { 
         ...lessons[selectedLessonId], 
         resources: [...(lessons[selectedLessonId].resources || []), newResource] 
     };
     setLessons({ ...lessons, [selectedLessonId]: updatedLesson });
+    
+    // Reset input
+    e.target.value = '';
   };
 
   const handleRemoveResource = (index: number) => {
@@ -843,12 +857,20 @@ export default function AdminDashboard() {
           <div>
             <div className="flex justify-between items-center mb-2">
               <label className="block text-[10px] font-mono text-gray-500 uppercase">DOWNLOADABLE RESOURCES</label>
-              <button 
-                onClick={handleAddResource}
-                className="text-[10px] text-electricBlue hover:underline flex items-center gap-1"
-              >
-                <Plus className="w-3 h-3" /> Upload File
-              </button>
+              <div className="relative">
+                <input 
+                    type="file" 
+                    id="resource-upload" 
+                    className="hidden" 
+                    onChange={handleFileUpload}
+                />
+                <label 
+                    htmlFor="resource-upload"
+                    className="text-[10px] text-electricBlue hover:underline flex items-center gap-1 cursor-pointer"
+                >
+                    <Plus className="w-3 h-3" /> Upload File
+                </label>
+              </div>
             </div>
             <div className="space-y-2">
               {(currentLesson.resources || []).length === 0 && (
