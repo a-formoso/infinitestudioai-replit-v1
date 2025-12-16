@@ -1412,6 +1412,18 @@ export default function AdminDashboard() {
     </div>
   );
 
+  const handleProductImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (!editingProduct || !e.target.files || e.target.files.length === 0) return;
+    
+    const file = e.target.files[0];
+    const imageUrl = URL.createObjectURL(file);
+    
+    setEditingProduct({ ...editingProduct, image: imageUrl });
+    
+    // Reset the input value so the same file can be selected again if needed
+    e.target.value = '';
+  };
+
   const renderAssetStore = () => (
     <div className="relative z-10 p-8 max-w-7xl mx-auto">
       {/* HEADER */}
@@ -1526,14 +1538,43 @@ export default function AdminDashboard() {
               </div>
 
               <div>
-                <label className="block text-[10px] font-mono text-gray-500 mb-2 uppercase">Cover Image URL</label>
-                <input 
-                  type="text" 
-                  value={editingProduct.image}
-                  onChange={(e) => handleProductFormChange("image", e.target.value)}
-                  placeholder="https://..."
-                  className="bg-black/50 border border-white/10 text-white text-xs px-4 py-3 w-full focus:border-neonPurple outline-none font-mono"
-                />
+                <label className="block text-[10px] font-mono text-gray-500 mb-2 uppercase">Cover Image</label>
+                
+                <div className="flex gap-2 items-start">
+                  <div className="flex-grow">
+                    <input 
+                      type="text" 
+                      value={editingProduct.image}
+                      onChange={(e) => handleProductFormChange("image", e.target.value)}
+                      placeholder="https://..."
+                      className="bg-black/50 border border-white/10 text-white text-xs px-4 py-3 w-full focus:border-neonPurple outline-none font-mono"
+                    />
+                  </div>
+                  <div className="relative">
+                    <input 
+                        type="file" 
+                        id="product-image-upload" 
+                        className="hidden" 
+                        accept="image/*"
+                        onChange={handleProductImageUpload}
+                    />
+                    <label 
+                        htmlFor="product-image-upload"
+                        className="h-full bg-white/5 border border-white/10 text-white hover:bg-white/10 px-4 flex items-center justify-center cursor-pointer transition-colors"
+                        title="Upload Image"
+                    >
+                        <Plus className="w-4 h-4" />
+                    </label>
+                  </div>
+                </div>
+                {editingProduct.image && (
+                  <div className="mt-2 h-20 w-full bg-gray-900 border border-white/5 rounded overflow-hidden relative">
+                    <img src={editingProduct.image} alt="Preview" className="w-full h-full object-cover opacity-60" />
+                    <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+                      <span className="text-[10px] bg-black/50 px-2 py-1 rounded text-white font-mono">PREVIEW</span>
+                    </div>
+                  </div>
+                )}
               </div>
               
               <div className="pt-4 flex gap-3">
