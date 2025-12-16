@@ -1,6 +1,6 @@
 import { Link } from "wouter";
 import { useState, useEffect, useRef } from "react";
-import { LayoutDashboard, BookOpen, Users, ShoppingBag, BarChart2, Plus, Download, Bold, Italic, Underline, Link as LinkIcon, Code, X, Search, Edit2, Trash2, FileText } from "lucide-react";
+import { LayoutDashboard, BookOpen, Users, ShoppingBag, BarChart2, Plus, Download, Bold, Italic, Underline, Link as LinkIcon, Code, X, Search, Edit2, Trash2 } from "lucide-react";
 
 const INITIAL_LESSONS = {
   "1.1": { id: "1.1", title: "The Multimodal Script", duration: "12:45", video: "multimodal_script_v3.mp4", notes: "Introduction to multimodal scripting techniques using Gemini 1.5 Pro.", keyPrompt: "Analyze this image as a Director of Photography...", resources: [{ name: "Visual_Bible_Template.pdf", size: "2.4 MB", type: "PDF" }] },
@@ -73,7 +73,6 @@ interface Product {
   revenue: string;
   status: "ACTIVE" | "DRAFT";
   image: string;
-  resourceFile?: string; // e.g. "pack.zip"
 }
 
 export default function AdminDashboard() {
@@ -163,8 +162,7 @@ export default function AdminDashboard() {
       sales: 124,
       revenue: "$3,596",
       status: "ACTIVE",
-      image: "https://images.unsplash.com/photo-1550684848-fac1c5b4e853?q=80&w=2670&auto=format&fit=crop",
-      resourceFile: "textures_pack_v2.zip"
+      image: "https://images.unsplash.com/photo-1550684848-fac1c5b4e853?q=80&w=2670&auto=format&fit=crop"
     },
     {
       id: "p2",
@@ -173,8 +171,7 @@ export default function AdminDashboard() {
       sales: 89,
       revenue: "$4,361",
       status: "ACTIVE",
-      image: "https://images.unsplash.com/photo-1535905557558-afc4877a26fc?q=80&w=2574&auto=format&fit=crop",
-      resourceFile: "characters_vol1.zip"
+      image: "https://images.unsplash.com/photo-1535905557558-afc4877a26fc?q=80&w=2574&auto=format&fit=crop"
     },
     {
       id: "p3",
@@ -183,8 +180,7 @@ export default function AdminDashboard() {
       sales: 0,
       revenue: "Unreleased",
       status: "DRAFT",
-      image: "",
-      resourceFile: ""
+      image: ""
     }
   ]);
 
@@ -199,8 +195,7 @@ export default function AdminDashboard() {
       sales: 0,
       revenue: "$0",
       status: "DRAFT",
-      image: "",
-      resourceFile: ""
+      image: ""
     };
     setEditingProduct(newProduct);
     setIsProductModalOpen(true);
@@ -1417,19 +1412,6 @@ export default function AdminDashboard() {
     </div>
   );
 
-  const handleProductResourceUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (!editingProduct || !e.target.files || e.target.files.length === 0) return;
-    
-    const file = e.target.files[0];
-    // In a real app, we would upload the file to a server here.
-    // For mockup, we'll just store the file name.
-    
-    setEditingProduct({ ...editingProduct, resourceFile: file.name });
-    
-    // Reset the input value so the same file can be selected again if needed
-    e.target.value = '';
-  };
-
   const handleProductImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (!editingProduct || !e.target.files || e.target.files.length === 0) return;
     
@@ -1592,35 +1574,9 @@ export default function AdminDashboard() {
                       <span className="text-[10px] bg-black/50 px-2 py-1 rounded text-white font-mono">PREVIEW</span>
                     </div>
                   </div>
-              <div>
-                <label className="block text-[10px] font-mono text-gray-500 mb-2 uppercase">Product Resource File</label>
-                
-                <div className="flex gap-2 items-center bg-black/50 border border-white/10 px-4 py-3">
-                  <div className="flex-grow flex items-center gap-3 overflow-hidden">
-                    <FileText className="w-4 h-4 text-neonPurple flex-shrink-0" />
-                    <span className={`text-xs font-mono truncate ${editingProduct.resourceFile ? "text-white" : "text-gray-500 italic"}`}>
-                      {editingProduct.resourceFile || "No file uploaded"}
-                    </span>
-                  </div>
-                  
-                  <div className="relative flex-shrink-0">
-                    <input 
-                        type="file" 
-                        id="product-resource-upload" 
-                        className="hidden" 
-                        onChange={handleProductResourceUpload}
-                    />
-                    <label 
-                        htmlFor="product-resource-upload"
-                        className="text-[10px] font-bold bg-white/10 text-white hover:bg-white/20 px-3 py-1.5 rounded cursor-pointer transition-colors border border-white/10 uppercase"
-                    >
-                        {editingProduct.resourceFile ? "Change File" : "Upload File"}
-                    </label>
-                  </div>
-                </div>
-                <p className="text-[10px] text-gray-600 mt-1 font-mono">Supported formats: .zip, .rar, .pdf, .obj, .fbx</p>
+                )}
               </div>
-
+              
               <div className="pt-4 flex gap-3">
                 <button 
                   onClick={() => setIsProductModalOpen(false)}
