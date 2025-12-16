@@ -34,6 +34,8 @@ export default function AdminDashboard() {
     { id: "module-3", title: "MODULE 3: PRINCIPAL PHOTOGRAPHY", status: "Draft", lessons: ["3.1", "3.2", "3.3", "3.4", "3.5"] }
   ]);
 
+  const [deleteConfirmation, setDeleteConfirmation] = useState<{ isOpen: boolean; type: 'module' | 'lesson'; id: string; parentId?: string } | null>(null);
+  
   const handleAddModule = () => {
     const newId = `module-${modules.length + 1}`;
     setModules([...modules, { id: newId, title: "NEW MODULE", status: "Draft", lessons: [] }]);
@@ -55,45 +57,54 @@ export default function AdminDashboard() {
     setSelectedLessonId(newLessonId);
   };
 
-  const handleDeleteLesson = (moduleId: string, lessonId: string, e: React.MouseEvent) => {
+  const requestDeleteLesson = (moduleId: string, lessonId: string, e: React.MouseEvent) => {
     e.stopPropagation();
-    
-    // Remove from lessons state
-    const newLessons = { ...lessons };
-    delete newLessons[lessonId];
-    setLessons(newLessons);
-
-    // Remove from modules state
-    setModules(modules.map(m => {
-      if (m.id === moduleId) {
-        return { ...m, lessons: m.lessons.filter(id => id !== lessonId) };
-      }
-      return m;
-    }));
-
-    // If deleted lesson was selected, select the first lesson of the module or clear selection
-    if (selectedLessonId === lessonId) {
-      const module = modules.find(m => m.id === moduleId);
-      const remainingLessons = module?.lessons.filter(id => id !== lessonId) || [];
-      setSelectedLessonId(remainingLessons[0] || "");
-    }
+    setDeleteConfirmation({ isOpen: true, type: 'lesson', id: lessonId, parentId: moduleId });
   };
 
-  const handleDeleteModule = (moduleId: string) => {
-    // Remove module and its lessons
-    const moduleToDelete = modules.find(m => m.id === moduleId);
-    if (!moduleToDelete) return;
+  const requestDeleteModule = (moduleId: string) => {
+    setDeleteConfirmation({ isOpen: true, type: 'module', id: moduleId });
+  };
 
-    const newLessons = { ...lessons };
-    moduleToDelete.lessons.forEach(lessonId => delete newLessons[lessonId]);
-    setLessons(newLessons);
+  const confirmDelete = () => {
+    if (!deleteConfirmation) return;
 
-    setModules(modules.filter(m => m.id !== moduleId));
-    
-    // Clear selection if selected lesson belonged to deleted module
-    if (moduleToDelete.lessons.includes(selectedLessonId)) {
-        setSelectedLessonId("");
+    if (deleteConfirmation.type === 'lesson' && deleteConfirmation.parentId) {
+       const moduleId = deleteConfirmation.parentId;
+       const lessonId = deleteConfirmation.id;
+       
+        const newLessons = { ...lessons };
+        delete newLessons[lessonId];
+        setLessons(newLessons);
+
+        setModules(modules.map(m => {
+          if (m.id === moduleId) {
+            return { ...m, lessons: m.lessons.filter(id => id !== lessonId) };
+          }
+          return m;
+        }));
+
+        if (selectedLessonId === lessonId) {
+          const module = modules.find(m => m.id === moduleId);
+          const remainingLessons = module?.lessons.filter(id => id !== lessonId) || [];
+          setSelectedLessonId(remainingLessons[0] || "");
+        }
+    } else if (deleteConfirmation.type === 'module') {
+        const moduleId = deleteConfirmation.id;
+        const moduleToDelete = modules.find(m => m.id === moduleId);
+        if (moduleToDelete) {
+            const newLessons = { ...lessons };
+            moduleToDelete.lessons.forEach(lessonId => delete newLessons[lessonId]);
+            setLessons(newLessons);
+
+            setModules(modules.filter(m => m.id !== moduleId));
+            
+            if (moduleToDelete.lessons.includes(selectedLessonId)) {
+                setSelectedLessonId("");
+            }
+        }
     }
+    setDeleteConfirmation(null);
   };
 
   const handleLessonUpdate = (field: string, value: string) => {
@@ -723,7 +734,7 @@ export default function AdminDashboard() {
                   <div className="flex items-center gap-2">
                     <span className="text-[10px] text-gray-500 group-hover/module:hidden">{module.status}</span>
                     <button 
-                      onClick={(e) => { e.stopPropagation(); handleDeleteModule(module.id); }}
+                      onClick={(e) => { e.stopPropagation(); requestDeleteModule(module.id); }}
                       className="hidden group-hover/module:block text-red-500 hover:text-red-400"
                       title="Delete Module"
                     >
@@ -745,7 +756,7 @@ export default function AdminDashboard() {
                         <div className="flex items-center gap-2">
                           <div className={`w-2 h-2 shrink-0 rounded-full group-hover/item:hidden ${selectedLessonId === lessonId ? 'bg-electricBlue animate-pulse' : 'bg-green-500'}`}></div>
                           <button 
-                            onClick={(e) => handleDeleteLesson(module.id, lessonId, e)}
+                            onClick={(e) => requestDeleteLesson(module.id, lessonId, e)}
                             className="hidden group-hover/item:block text-red-500 hover:text-red-400"
                             title="Delete Lesson"
                           >
@@ -1152,6 +1163,44 @@ export default function AdminDashboard() {
             <div className="text-center">
               <BarChart2 className="w-16 h-16 text-gray-600 mx-auto mb-4" />
               <h2 className="text-xl font-header text-gray-400">ANALYTICS MODULE COMING SOON</h2>
+            </div>
+          </div>
+        )}
+        {/* DELETE CONFIRMATION MODAL */}
+        {deleteConfirmation?.isOpen && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm animate-in fade-in duration-200">
+            <div className="bg-[#0a0a0a] border border-white/10 p-6 max-w-sm w-full shadow-2xl relative">
+              <button 
+                onClick={() => setDeleteConfirmation(null)}
+                className="absolute top-4 right-4 text-gray-500 hover:text-white"
+              >
+                <X className="w-4 h-4" />
+              </button>
+              
+              <div className="flex flex-col items-center text-center mb-6">
+                <div className="w-12 h-12 bg-red-500/10 rounded-full flex items-center justify-center mb-4 text-red-500 border border-red-500/20">
+                  <Trash2 className="w-6 h-6" />
+                </div>
+                <h3 className="font-header text-lg text-white mb-2">CONFIRM DELETION</h3>
+                <p className="text-xs font-mono text-gray-400">
+                  Are you sure you want to delete this {deleteConfirmation.type}? This action cannot be undone.
+                </p>
+              </div>
+
+              <div className="flex gap-3">
+                <button 
+                  onClick={() => setDeleteConfirmation(null)}
+                  className="flex-1 py-3 text-xs font-header font-bold text-gray-400 bg-white/5 hover:bg-white/10 transition-colors"
+                >
+                  CANCEL
+                </button>
+                <button 
+                  onClick={confirmDelete}
+                  className="flex-1 py-3 text-xs font-header font-bold text-black bg-red-500 hover:bg-white transition-colors"
+                >
+                  DELETE
+                </button>
+              </div>
             </div>
           </div>
         )}
