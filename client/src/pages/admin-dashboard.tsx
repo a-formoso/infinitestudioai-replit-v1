@@ -152,7 +152,7 @@ export default function AdminDashboard() {
     setCourseView('list');
   };
 
-  const [deleteConfirmation, setDeleteConfirmation] = useState<{ isOpen: boolean; type: 'module' | 'lesson'; id: string; title: string; parentId?: string } | null>(null);
+  const [deleteConfirmation, setDeleteConfirmation] = useState<{ isOpen: boolean; type: 'module' | 'lesson' | 'course'; id: string; title: string; parentId?: string } | null>(null);
   
   const [editingModuleId, setEditingModuleId] = useState<string | null>(null);
 
@@ -208,6 +208,16 @@ export default function AdminDashboard() {
     });
   };
 
+  const requestDeleteCourse = (courseId: string) => {
+    const course = coursesList.find(c => c.id === courseId);
+    setDeleteConfirmation({
+      isOpen: true,
+      type: 'course',
+      id: courseId,
+      title: course ? course.title : 'Course'
+    });
+  };
+
   const confirmDelete = () => {
     if (!deleteConfirmation) return;
 
@@ -245,6 +255,9 @@ export default function AdminDashboard() {
                 setSelectedLessonId("");
             }
         }
+    } else if (deleteConfirmation.type === 'course') {
+      const courseId = deleteConfirmation.id;
+      setCoursesList(coursesList.filter(c => c.id !== courseId));
     }
     setDeleteConfirmation(null);
   };
@@ -493,9 +506,18 @@ export default function AdminDashboard() {
                     <p className="text-[10px] text-gray-500 uppercase">Price</p>
                   </div>
                   <span className={`px-3 py-1 rounded text-[10px] font-bold border ${course.status === 'LIVE' ? 'bg-green-500/10 text-green-500 border-green-500/20' : 'bg-yellow-500/10 text-yellow-500 border-yellow-500/20'}`}>{course.status}</span>
-                  <button className="text-gray-400 hover:text-white transition-colors">
-                    {expandedCourseId === course.id ? '▲' : '▼'}
-                  </button>
+                  <div className="flex gap-2">
+                    <button 
+                        onClick={(e) => { e.stopPropagation(); requestDeleteCourse(course.id); }}
+                        className="text-gray-400 hover:text-red-500 transition-colors p-1"
+                        title="Delete Course"
+                    >
+                        <Trash2 className="w-4 h-4" />
+                    </button>
+                    <button className="text-gray-400 hover:text-white transition-colors p-1">
+                        {expandedCourseId === course.id ? '▲' : '▼'}
+                    </button>
+                  </div>
                 </div>
               </div>
               
