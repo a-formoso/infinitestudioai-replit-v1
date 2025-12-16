@@ -754,146 +754,155 @@ export default function AdminDashboard() {
         </div>
 
         {/* RIGHT: CONTENT EDITOR */}
-        <div className="lg:col-span-2 glass-panel p-8 border border-white/10 relative">
-          
-          {/* Lesson Metadata */}
-          <div className="grid grid-cols-2 gap-6 mb-6">
-            <div>
-              <label className="block text-[10px] font-mono text-gray-500 mb-2 uppercase">LESSON TITLE</label>
-              <input 
-                value={currentLesson.title} 
-                onChange={(e) => handleLessonUpdate("title", e.target.value)}
-                type="text" 
-                className="bg-black/50 border border-white/10 text-white text-sm px-4 py-3 w-full focus:border-electricBlue outline-none font-bold" 
-              />
+        <div className="lg:col-span-2 glass-panel p-8 border border-white/10 relative min-h-[600px]">
+          {!selectedLessonId ? (
+            <div className="flex flex-col items-center justify-center h-full text-gray-500 space-y-4">
+              <div className="w-20 h-20 rounded-full bg-white/5 flex items-center justify-center mb-2">
+                <Edit2 className="w-8 h-8 opacity-20" />
+              </div>
+              <p className="font-mono text-xs uppercase tracking-widest">Select a lesson from the curriculum to edit</p>
             </div>
-            <div>
-              <label className="block text-[10px] font-mono text-gray-500 mb-2 uppercase">DURATION (MIN)</label>
-              <input 
-                value={currentLesson.duration} 
-                onChange={(e) => handleLessonUpdate("duration", e.target.value)}
-                type="text" 
-                className="bg-black/50 border border-white/10 text-white text-sm px-4 py-3 w-full focus:border-electricBlue outline-none font-mono" 
-              />
-            </div>
-          </div>
+          ) : (
+            <>
+              {/* Lesson Metadata */}
+              <div className="grid grid-cols-2 gap-6 mb-6">
+                <div>
+                  <label className="block text-[10px] font-mono text-gray-500 mb-2 uppercase">LESSON TITLE</label>
+                  <input 
+                    value={currentLesson.title} 
+                    onChange={(e) => handleLessonUpdate("title", e.target.value)}
+                    type="text" 
+                    className="bg-black/50 border border-white/10 text-white text-sm px-4 py-3 w-full focus:border-electricBlue outline-none font-bold" 
+                  />
+                </div>
+                <div>
+                  <label className="block text-[10px] font-mono text-gray-500 mb-2 uppercase">DURATION (MIN)</label>
+                  <input 
+                    value={currentLesson.duration} 
+                    onChange={(e) => handleLessonUpdate("duration", e.target.value)}
+                    type="text" 
+                    className="bg-black/50 border border-white/10 text-white text-sm px-4 py-3 w-full focus:border-electricBlue outline-none font-mono" 
+                  />
+                </div>
+              </div>
 
-          {/* Video Upload */}
-          <div className="mb-8">
-            <div className="flex justify-between items-center mb-2">
-                <label className="block text-[10px] font-mono text-gray-500 uppercase">VIDEO SOURCE</label>
-                <span className="text-[10px] text-gray-500">Supports MP4, MOV or URL</span>
-            </div>
-            
-            <div className="space-y-3">
-                <div className="h-48 bg-black/50 border-2 border-dashed border-white/10 rounded flex flex-col items-center justify-center cursor-pointer hover:border-electricBlue/50 transition-colors group relative overflow-hidden">
-                {/* Placeholder for uploaded video state */}
-                <div className="absolute inset-0 bg-gray-900 flex items-center justify-center">
-                    {currentLesson.video.startsWith('http') ? (
-                         <div className="text-center">
-                            <LinkIcon className="w-8 h-8 text-electricBlue mx-auto mb-2" />
-                            <span className="text-xs font-mono text-white block max-w-xs truncate px-4">{currentLesson.video}</span>
-                            <span className="text-[10px] text-gray-500 mt-1 block">External Link Linked</span>
-                         </div>
-                    ) : (
-                        <div className="text-center">
-                             <div className="w-8 h-8 bg-white/10 rounded-full flex items-center justify-center mx-auto mb-2">
-                                <span className="text-xs font-bold text-white">MP4</span>
+              {/* Video Upload */}
+              <div className="mb-8">
+                <div className="flex justify-between items-center mb-2">
+                    <label className="block text-[10px] font-mono text-gray-500 uppercase">VIDEO SOURCE</label>
+                    <span className="text-[10px] text-gray-500">Supports MP4, MOV or URL</span>
+                </div>
+                
+                <div className="space-y-3">
+                    <div className="h-48 bg-black/50 border-2 border-dashed border-white/10 rounded flex flex-col items-center justify-center cursor-pointer hover:border-electricBlue/50 transition-colors group relative overflow-hidden">
+                    {/* Placeholder for uploaded video state */}
+                    <div className="absolute inset-0 bg-gray-900 flex items-center justify-center">
+                        {currentLesson.video.startsWith('http') ? (
+                             <div className="text-center">
+                                <LinkIcon className="w-8 h-8 text-electricBlue mx-auto mb-2" />
+                                <span className="text-xs font-mono text-white block max-w-xs truncate px-4">{currentLesson.video}</span>
+                                <span className="text-[10px] text-gray-500 mt-1 block">External Link Linked</span>
                              </div>
-                             <span className="text-xs font-mono text-white">{currentLesson.video}</span>
+                        ) : (
+                            <div className="text-center">
+                                 <div className="w-8 h-8 bg-white/10 rounded-full flex items-center justify-center mx-auto mb-2">
+                                    <span className="text-xs font-bold text-white">MP4</span>
+                                 </div>
+                                 <span className="text-xs font-mono text-white">{currentLesson.video}</span>
+                            </div>
+                        )}
+                    </div>
+                    <div className="absolute bottom-2 right-2 flex gap-2">
+                        <button className="bg-black/80 text-white text-[10px] px-2 py-1 rounded border border-white/20 hover:border-white">Replace File</button>
+                    </div>
+                    </div>
+
+                    <div className="relative group">
+                        <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                            <LinkIcon className="h-3.5 w-3.5 text-gray-500 group-focus-within:text-electricBlue transition-colors" />
                         </div>
-                    )}
-                </div>
-                <div className="absolute bottom-2 right-2 flex gap-2">
-                    <button className="bg-black/80 text-white text-[10px] px-2 py-1 rounded border border-white/20 hover:border-white">Replace File</button>
-                </div>
-                </div>
-
-                <div className="relative group">
-                    <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                        <LinkIcon className="h-3.5 w-3.5 text-gray-500 group-focus-within:text-electricBlue transition-colors" />
+                        <input 
+                            type="text" 
+                            placeholder="Or paste video URL (YouTube, Vimeo, etc.)" 
+                            value={currentLesson.video.startsWith('http') ? currentLesson.video : ''}
+                            onChange={(e) => handleLessonUpdate("video", e.target.value)}
+                            className="bg-black/50 border border-white/10 text-white text-xs px-4 py-2.5 pl-9 w-full focus:border-electricBlue outline-none font-mono rounded transition-colors placeholder:text-gray-600"
+                        />
                     </div>
+                </div>
+              </div>
+
+              {/* Description Editor (Rich Text Mockup) */}
+              <div className="mb-8">
+                <label className="block text-[10px] font-mono text-gray-500 mb-2 uppercase">LESSON NOTES</label>
+                <div className="bg-black/50 border border-white/10 min-h-[200px] p-4 text-sm text-gray-300 font-sans">
+                  <div className="flex gap-2 border-b border-white/10 pb-2 mb-4 text-gray-500">
+                    <button className="hover:text-white"><Bold className="w-4 h-4" /></button>
+                    <button className="hover:text-white"><Italic className="w-4 h-4" /></button>
+                    <button className="hover:text-white"><Underline className="w-4 h-4" /></button>
+                    <span className="w-px bg-white/10 h-4"></span>
+                    <button className="hover:text-white"><LinkIcon className="w-4 h-4" /></button>
+                    <button className="hover:text-white"><Code className="w-4 h-4" /></button>
+                  </div>
+                  <textarea 
+                    value={currentLesson.notes}
+                    onChange={(e) => handleLessonUpdate("notes", e.target.value)}
+                    className="w-full bg-transparent border-none outline-none text-gray-300 min-h-[120px] resize-none"
+                  />
+                  <br />
+                  <p className="mt-4"><b>Key Prompts:</b></p>
+                  <textarea 
+                    value={currentLesson.keyPrompt || ""}
+                    onChange={(e) => handleLessonUpdate("keyPrompt", e.target.value)}
+                    className="font-mono bg-white/5 p-2 rounded mt-2 text-xs text-electricBlue w-full border border-transparent focus:border-electricBlue outline-none resize-none"
+                    placeholder="Enter AI prompt for students to use..."
+                    rows={3}
+                  />
+                </div>
+              </div>
+
+              {/* Attachments */}
+              <div>
+                <div className="flex justify-between items-center mb-2">
+                  <label className="block text-[10px] font-mono text-gray-500 uppercase">DOWNLOADABLE RESOURCES</label>
+                  <div className="relative">
                     <input 
-                        type="text" 
-                        placeholder="Or paste video URL (YouTube, Vimeo, etc.)" 
-                        value={currentLesson.video.startsWith('http') ? currentLesson.video : ''}
-                        onChange={(e) => handleLessonUpdate("video", e.target.value)}
-                        className="bg-black/50 border border-white/10 text-white text-xs px-4 py-2.5 pl-9 w-full focus:border-electricBlue outline-none font-mono rounded transition-colors placeholder:text-gray-600"
+                        type="file" 
+                        id="resource-upload" 
+                        className="hidden" 
+                        onChange={handleFileUpload}
                     />
-                </div>
-            </div>
-          </div>
-
-          {/* Description Editor (Rich Text Mockup) */}
-          <div className="mb-8">
-            <label className="block text-[10px] font-mono text-gray-500 mb-2 uppercase">LESSON NOTES</label>
-            <div className="bg-black/50 border border-white/10 min-h-[200px] p-4 text-sm text-gray-300 font-sans">
-              <div className="flex gap-2 border-b border-white/10 pb-2 mb-4 text-gray-500">
-                <button className="hover:text-white"><Bold className="w-4 h-4" /></button>
-                <button className="hover:text-white"><Italic className="w-4 h-4" /></button>
-                <button className="hover:text-white"><Underline className="w-4 h-4" /></button>
-                <span className="w-px bg-white/10 h-4"></span>
-                <button className="hover:text-white"><LinkIcon className="w-4 h-4" /></button>
-                <button className="hover:text-white"><Code className="w-4 h-4" /></button>
-              </div>
-              <textarea 
-                value={currentLesson.notes}
-                onChange={(e) => handleLessonUpdate("notes", e.target.value)}
-                className="w-full bg-transparent border-none outline-none text-gray-300 min-h-[120px] resize-none"
-              />
-              <br />
-              <p className="mt-4"><b>Key Prompts:</b></p>
-              <textarea 
-                value={currentLesson.keyPrompt || ""}
-                onChange={(e) => handleLessonUpdate("keyPrompt", e.target.value)}
-                className="font-mono bg-white/5 p-2 rounded mt-2 text-xs text-electricBlue w-full border border-transparent focus:border-electricBlue outline-none resize-none"
-                placeholder="Enter AI prompt for students to use..."
-                rows={3}
-              />
-            </div>
-          </div>
-
-          {/* Attachments */}
-          <div>
-            <div className="flex justify-between items-center mb-2">
-              <label className="block text-[10px] font-mono text-gray-500 uppercase">DOWNLOADABLE RESOURCES</label>
-              <div className="relative">
-                <input 
-                    type="file" 
-                    id="resource-upload" 
-                    className="hidden" 
-                    onChange={handleFileUpload}
-                />
-                <label 
-                    htmlFor="resource-upload"
-                    className="text-[10px] text-electricBlue hover:underline flex items-center gap-1 cursor-pointer"
-                >
-                    <Plus className="w-3 h-3" /> Upload File
-                </label>
-              </div>
-            </div>
-            <div className="space-y-2">
-              {(currentLesson.resources || []).length === 0 && (
-                  <p className="text-[10px] text-gray-600 font-mono italic p-2 border border-dashed border-white/5 rounded">No resources attached.</p>
-              )}
-              {(currentLesson.resources || []).map((resource, idx) => (
-                <div key={idx} className="flex items-center justify-between p-3 bg-white/5 border border-white/5 rounded group">
-                    <div className="flex items-center gap-3">
-                    <div className="w-8 h-8 bg-gray-800 flex items-center justify-center text-[10px] font-bold text-gray-400">{resource.type}</div>
-                    <span className="text-xs text-white">{resource.name}</span>
-                    <span className="text-[10px] text-gray-500">({resource.size})</span>
-                    </div>
-                    <button 
-                        onClick={() => handleRemoveResource(idx)}
-                        className="text-gray-500 hover:text-red-500 opacity-0 group-hover:opacity-100 transition-opacity"
+                    <label 
+                        htmlFor="resource-upload"
+                        className="text-[10px] text-electricBlue hover:underline flex items-center gap-1 cursor-pointer"
                     >
-                        <X className="w-4 h-4" />
-                    </button>
+                        <Plus className="w-3 h-3" /> Upload File
+                    </label>
+                  </div>
                 </div>
-              ))}
-            </div>
-          </div>
-
+                <div className="space-y-2">
+                  {(currentLesson.resources || []).length === 0 && (
+                      <p className="text-[10px] text-gray-600 font-mono italic p-2 border border-dashed border-white/5 rounded">No resources attached.</p>
+                  )}
+                  {(currentLesson.resources || []).map((resource, idx) => (
+                    <div key={idx} className="flex items-center justify-between p-3 bg-white/5 border border-white/5 rounded group">
+                        <div className="flex items-center gap-3">
+                        <div className="w-8 h-8 bg-gray-800 flex items-center justify-center text-[10px] font-bold text-gray-400">{resource.type}</div>
+                        <span className="text-xs text-white">{resource.name}</span>
+                        <span className="text-[10px] text-gray-500">({resource.size})</span>
+                        </div>
+                        <button 
+                            onClick={() => handleRemoveResource(idx)}
+                            className="text-gray-500 hover:text-red-500 opacity-0 group-hover:opacity-100 transition-opacity"
+                        >
+                            <X className="w-4 h-4" />
+                        </button>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </>
+          )}
         </div>
       </div>
     </div>
