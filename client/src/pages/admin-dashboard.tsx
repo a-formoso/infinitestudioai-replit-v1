@@ -72,7 +72,7 @@ interface Product {
   sales: number;
   revenue: string;
   status: "ACTIVE" | "DRAFT";
-  category: "TEXTURES" | "CHARACTER SHEETS" | "AUDIO PACKS" | "MISC";
+  category: string;
   image: string;
   imagePosition: { x: number; y: number; zoom: number };
 }
@@ -192,11 +192,55 @@ export default function AdminDashboard() {
     }
   ]);
 
+  const [categories, setCategories] = useState<string[]>(["TEXTURES", "CHARACTER SHEETS", "AUDIO PACKS", "MISC"]);
   const [isProductModalOpen, setIsProductModalOpen] = useState(false);
   const [editingProduct, setEditingProduct] = useState<Product | null>(null);
   const [selectedProductCategory, setSelectedProductCategory] = useState<string>("ALL");
   const [isDragging, setIsDragging] = useState(false);
   const dragStartRef = useRef<{ x: number, y: number } | null>(null);
+  const [newCategoryName, setNewCategoryName] = useState("");
+  const [isCategoryManagerOpen, setIsCategoryManagerOpen] = useState(false);
+  const [editingCategoryIndex, setEditingCategoryIndex] = useState<number | null>(null);
+  const [editingCategoryName, setEditingCategoryName] = useState("");
+
+  const handleAddCategory = () => {
+    if (newCategoryName && !categories.includes(newCategoryName)) {
+      setCategories([...categories, newCategoryName]);
+      setNewCategoryName("");
+    }
+  };
+
+  const handleDeleteCategory = (index: number) => {
+    const categoryToDelete = categories[index];
+    const newCategories = categories.filter((_, i) => i !== index);
+    setCategories(newCategories);
+    
+    // Update products that were in this category to MISC
+    setProductsList(productsList.map(p => 
+      p.category === categoryToDelete ? { ...p, category: "MISC" } : p
+    ));
+  };
+
+  const handleEditCategoryStart = (index: number) => {
+    setEditingCategoryIndex(index);
+    setEditingCategoryName(categories[index]);
+  };
+
+  const handleEditCategorySave = (index: number) => {
+    if (editingCategoryName && !categories.includes(editingCategoryName)) {
+      const oldCategoryName = categories[index];
+      const newCategories = [...categories];
+      newCategories[index] = editingCategoryName;
+      setCategories(newCategories);
+      
+      // Update products to new category name
+      setProductsList(productsList.map(p => 
+        p.category === oldCategoryName ? { ...p, category: editingCategoryName } : p
+      ));
+    }
+    setEditingCategoryIndex(null);
+    setEditingCategoryName("");
+  };
 
   const handleAddProduct = () => {
     const newProduct: Product = {
@@ -1517,21 +1561,103 @@ export default function AdminDashboard() {
       </div>
 
       {/* FILTERS */}
-      <div className="flex gap-4 mb-8 border-b border-white/10 pb-4">
-        {["ALL", "TEXTURES", "CHARACTER SHEETS", "AUDIO PACKS"].map((category) => (
+      <div className="flex gap-4 mb-8 border-b border-white/10 pb-4 items-center">
+        <div className="flex gap-4 overflow-x-auto no-scrollbar">
           <button 
-            key={category}
-            onClick={() => setSelectedProductCategory(category)}
-            className={`text-xs font-bold transition-colors pb-4 -mb-4.5 border-b-2 ${
-              selectedProductCategory === category 
+            onClick={() => setSelectedProductCategory("ALL")}
+            className={`text-xs font-bold transition-colors pb-4 -mb-4.5 border-b-2 whitespace-nowrap ${
+              selectedProductCategory === "ALL" 
                 ? "text-white border-neonPurple" 
                 : "text-gray-500 hover:text-white border-transparent"
             }`}
           >
-            {category === "ALL" ? "ALL PRODUCTS" : category}
+            ALL PRODUCTS
           </button>
-        ))}
+          {categories.map((category) => (
+            <button 
+              key={category}
+              onClick={() => setSelectedProductCategory(category)}
+              className={`text-xs font-bold transition-colors pb-4 -mb-4.5 border-b-2 whitespace-nowrap ${
+                selectedProductCategory === category 
+                  ? "text-white border-neonPurple" 
+                  : "text-gray-500 hover:text-white border-transparent"
+              }`}
+            >
+              {category}
+            </button>
+          ))}
+        </div>
+        <div className="ml-auto pl-4 border-l border-white/10">
+           <button 
+             onClick={() => setIsCategoryManagerOpen(true)}
+             className="text-[10px] font-mono text-gray-500 hover:text-white flex items-center gap-1 transition-colors"
+           >
+             <Edit2 className="w-3 h-3" /> MANAGE CATEGORIES
+           </button>
+        </div>
       </div>
+
+      {/* Category Manager Modal */}
+      {isCategoryManagerOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm animate-in fade-in duration-200">
+          <div className="glass-panel p-6 max-w-sm w-full border border-white/10 relative">
+            <button 
+              onClick={() => setIsCategoryManagerOpen(false)}
+              className="absolute top-4 right-4 text-gray-500 hover:text-white"
+            >
+              <X className="w-4 h-4" />
+            </button>
+            
+            <h2 className="font-header text-lg text-white mb-6">MANAGE CATEGORIES</h2>
+            
+            <div className="space-y-4 mb-6">
+               <div className="flex gap-2">
+                 <input 
+                   type="text" 
+                   value={newCategoryName}
+                   onChange={(e) => setNewCategoryName(e.target.value.toUpperCase())}
+                   placeholder="NEW CATEGORY NAME"
+                   className="flex-grow bg-black/50 border border-white/10 text-white text-xs px-3 py-2 focus:border-neonPurple outline-none font-bold placeholder:font-normal"
+                 />
+                 <button 
+                   onClick={handleAddCategory}
+                   disabled={!newCategoryName}
+                   className="bg-white/10 hover:bg-white/20 text-white p-2 rounded disabled:opacity-50 disabled:cursor-not-allowed"
+                 >
+                   <Plus className="w-4 h-4" />
+                 </button>
+               </div>
+               
+               <div className="space-y-2 max-h-60 overflow-y-auto pr-2">
+                 {categories.map((category, index) => (
+                   <div key={index} className="flex items-center justify-between bg-white/5 p-2 rounded border border-white/5 group">
+                     {editingCategoryIndex === index ? (
+                       <div className="flex items-center gap-2 w-full">
+                         <input 
+                           type="text" 
+                           value={editingCategoryName}
+                           onChange={(e) => setEditingCategoryName(e.target.value.toUpperCase())}
+                           className="flex-grow bg-black border border-neonPurple text-white text-[10px] px-2 py-1 outline-none font-bold"
+                           autoFocus
+                         />
+                         <button onClick={() => handleEditCategorySave(index)} className="text-green-500 hover:text-green-400"><Code className="w-3 h-3" /></button> {/* Using Code icon as Check replacement temporarily */}
+                       </div>
+                     ) : (
+                       <>
+                         <span className="text-[10px] font-bold text-gray-300">{category}</span>
+                         <div className="flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                           <button onClick={() => handleEditCategoryStart(index)} className="text-gray-500 hover:text-white"><Edit2 className="w-3 h-3" /></button>
+                           <button onClick={() => handleDeleteCategory(index)} className="text-gray-500 hover:text-red-500"><Trash2 className="w-3 h-3" /></button>
+                         </div>
+                       </>
+                     )}
+                   </div>
+                 ))}
+               </div>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* PRODUCT GRID */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -1632,16 +1758,24 @@ export default function AdminDashboard() {
 
               <div>
                 <label className="block text-[10px] font-mono text-gray-500 mb-2 uppercase">Category</label>
-                <select 
-                  value={editingProduct.category}
-                  onChange={(e) => handleProductFormChange("category", e.target.value)}
-                  className="bg-black/50 border border-white/10 text-white text-xs px-4 py-3 w-full focus:border-neonPurple outline-none appearance-none"
-                >
-                  <option value="TEXTURES">TEXTURES</option>
-                  <option value="CHARACTER SHEETS">CHARACTER SHEETS</option>
-                  <option value="AUDIO PACKS">AUDIO PACKS</option>
-                  <option value="MISC">MISC</option>
-                </select>
+                <div className="flex gap-2">
+                  <select 
+                    value={editingProduct.category}
+                    onChange={(e) => handleProductFormChange("category", e.target.value)}
+                    className="flex-grow bg-black/50 border border-white/10 text-white text-xs px-4 py-3 focus:border-neonPurple outline-none appearance-none"
+                  >
+                    {categories.map(cat => (
+                      <option key={cat} value={cat}>{cat}</option>
+                    ))}
+                  </select>
+                  <button 
+                    onClick={() => setIsCategoryManagerOpen(true)}
+                    className="bg-white/5 border border-white/10 text-white hover:bg-white/10 px-3 flex items-center justify-center transition-colors"
+                    title="Manage Categories"
+                  >
+                    <Edit2 className="w-3 h-3" />
+                  </button>
+                </div>
               </div>
 
               <div>
