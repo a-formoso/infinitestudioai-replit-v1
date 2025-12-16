@@ -84,7 +84,7 @@
                     <span class="text-transparent bg-clip-text bg-gradient-to-r from-electricBlue to-cyan-400">FILMMAKING ECOSYSTEM</span>
                 </h1>
                 <p class="text-base text-gray-400 leading-relaxed font-light mb-8 max-w-lg">
-                    Stop using fragmented tools. Learn to run a complete Hollywood-style studio from your browser using the integrated power of Gemini 3.0, Nano Banano, and Veo.
+                    Stop using fragmented tools. Learn to run a complete Hollywood-style studio from your browser using the integrated power of Gemini 3.0, Nano Banana, and Veo.
                 </p>
                 <div class="flex gap-4 mb-8 text-xs font-mono text-gray-500">
                     <span class="flex items-center gap-2"><div class="w-2 h-2 bg-electricBlue rounded-full"></div> 4.5 HOURS CONTENT</span>
@@ -130,11 +130,11 @@
                         <div class="glass-panel p-6 hover:border-white/20 transition-colors">
                             <div class="text-electricBlue mb-2 text-xl">02</div>
                             <h4 class="font-bold text-white text-sm mb-2">Character Consistency</h4>
-                            <p class="text-xs text-gray-400 leading-relaxed">Creating "Digital Actors" (Nano Banano) that look the same in every shot using Ingredient mapping.</p>
+                            <p class="text-xs text-gray-400 leading-relaxed">Creating "Digital Actors" (Nano Banana) that look the same in every shot using Ingredient mapping.</p>
                         </div>
                         <div class="glass-panel p-6 hover:border-white/20 transition-colors">
                             <div class="text-electricBlue mb-2 text-xl">03</div>
-                            <h4 class="font-bold text-white text-sm mb-2">The "Banano Sandwich"</h4>
+                            <h4 class="font-bold text-white text-sm mb-2">The "Banana Sandwich"</h4>
                             <p class="text-xs text-gray-400 leading-relaxed">Our proprietary technique for glitch-free video transitions using Frames-to-Video.</p>
                         </div>
                         <div class="glass-panel p-6 hover:border-white/20 transition-colors">
@@ -173,7 +173,7 @@
                             </button>
                             <div class="accordion-content bg-black/30">
                                 <ul class="p-6 space-y-3 text-xs text-gray-400 font-mono">
-                                    <li class="flex gap-4"><span class="text-white">2.1</span> Introduction to Nano Banano (Gemini 2.5 Flash)</li>
+                                    <li class="flex gap-4"><span class="text-white">2.1</span> Introduction to Nano Banana (Gemini 2.5 Flash)</li>
                                     <li class="flex gap-4"><span class="text-white">2.2</span> The Character Sheet Workflow</li>
                                     <li class="flex gap-4"><span class="text-white">2.3</span> Inpainting & Virtual Set Design</li>
                                 </ul>
@@ -190,7 +190,7 @@
                                 <ul class="p-6 space-y-3 text-xs text-gray-400 font-mono">
                                     <li class="flex gap-4"><span class="text-white">3.1</span> Veo 3.1 Fundamentals & Physics Engine</li>
                                     <li class="flex gap-4"><span class="text-white">3.2</span> The "Ingredients" Workflow</li>
-                                    <li class="flex gap-4"><span class="text-white">3.3</span> CORE SKILL: The "Banano Sandwich" Method</li>
+                                    <li class="flex gap-4"><span class="text-white">3.3</span> CORE SKILL: The "Banana Sandwich" Method</li>
                                 </ul>
                             </div>
                         </div>

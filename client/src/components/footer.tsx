@@ -14,7 +14,7 @@ export function Footer() {
         "> VEO: Rendering Physics Simulation [Fluid Dynamics: Rain]... 45%",
         "> GEMINI: Analyzing script for continuity errors in Scene 04...",
         "> SYSTEM: Audio synchronization complete. 1080p render finishing...",
-        "> NANO BANANO: Inpainting costume details on frame 142 [Fixing Hands]...",
+        "> NANO BANANA: Inpainting costume details on frame 142 [Fixing Hands]...",
         "> MUSIC FX: Generating synthwave stem [80 BPM, Key: D Minor]...",
         "> FLOW: Stitching Scene 01 and Scene 02 with 'Morph Cut'...",
         "> SYSTEM: Asset 'Cyberpunk_City_Pack_v2' ready for download."

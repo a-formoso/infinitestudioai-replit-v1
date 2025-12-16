@@ -272,7 +272,7 @@ export default function CoursePlayer() {
                                       <div className="px-6 py-3 flex gap-3 items-start hover:bg-white/5 cursor-pointer group">
                                           <Circle className="w-4 h-4 text-gray-600 shrink-0 mt-0.5 group-hover:text-gray-400" />
                                           <div>
-                                              <p className="text-xs text-gray-400 leading-tight mb-1 group-hover:text-white transition-colors">3.3 The "Banano Sandwich" Method</p>
+                                              <p className="text-xs text-gray-400 leading-tight mb-1 group-hover:text-white transition-colors">3.3 The "Banana Sandwich" Method</p>
                                               <span className="text-[10px] font-mono text-gray-600">18:30</span>
                                           </div>
                                       </div>

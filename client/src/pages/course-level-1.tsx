@@ -129,7 +129,7 @@ export default function CourseLevel1() {
                           </div>
                           <div className="glass-panel p-6 hover:border-white/20 transition-colors">
                               <div className="text-electricBlue mb-2 text-xl">03</div>
-                              <h4 className="font-bold text-white text-sm mb-2">The "Banano Sandwich"</h4>
+                              <h4 className="font-bold text-white text-sm mb-2">The "Banana Sandwich"</h4>
                               <p className="text-xs text-gray-400 leading-relaxed">Our proprietary technique for glitch-free video transitions using Frames-to-Video.</p>
                           </div>
                           <div className="glass-panel p-6 hover:border-white/20 transition-colors">
@@ -199,7 +199,7 @@ export default function CourseLevel1() {
                                     <ul className="space-y-3 text-xs text-gray-400 font-mono">
                                         <li className="flex gap-4"><span className="text-white">3.1</span> Veo 3.1 Fundamentals & Physics Engine</li>
                                         <li className="flex gap-4"><span className="text-white">3.2</span> The "Ingredients" Workflow</li>
-                                        <li className="flex gap-4"><span className="text-white">3.3</span> CORE SKILL: The "Banano Sandwich" Method</li>
+                                        <li className="flex gap-4"><span className="text-white">3.3</span> CORE SKILL: The "Banana Sandwich" Method</li>
                                     </ul>
                                   </div>
                               </div>

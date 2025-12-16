@@ -12,8 +12,10 @@ async function seed() {
         {
           title: "MASTER THE GOOGLE ECOSYSTEM",
           slug: "level-1",
-          description: "Stop using fragmented tools. Learn to run a complete Hollywood-style studio from your browser using the integrated power of Gemini 3.0, Nano Banano, and Veo.",
-          shortDescription: "The foundation. Learn the connected workflow of Gemini 3.0, Nano Banano, and Veo to run a one-person studio.",
+          description:
+            "Stop using fragmented tools. Learn to run a complete Hollywood-style studio from your browser using the integrated power of Gemini 3.0, Nano Banana, and Veo.",
+          shortDescription:
+            "The foundation. Learn the connected workflow of Gemini 3.0, Nano Banana, and Veo to run a one-person studio.",
           price: "149.00",
           level: "Beginner",
           duration: "4.5 HOURS",
@@ -24,8 +26,10 @@ async function seed() {
         {
           title: "ADVANCED AI CINEMATOGRAPHY",
           slug: "level-2",
-          description: "Mastering physics, compound camera moves, and the uncanny valley in Veo 3.1. Deep dive into motion control.",
-          shortDescription: "Mastering physics, compound camera moves, and the \"Invisible Cut\" in Veo 3.1. Deep technical control.",
+          description:
+            "Mastering physics, compound camera moves, and the uncanny valley in Veo 3.1. Deep dive into motion control.",
+          shortDescription:
+            'Mastering physics, compound camera moves, and the "Invisible Cut" in Veo 3.1. Deep technical control.',
           price: "199.00",
           level: "Advanced",
           duration: "6.0 HOURS",
@@ -68,14 +72,14 @@ async function seed() {
         videoUrl: null,
         duration: 18,
       },
-      
+
       // Module 2: The Casting Department
       {
         courseId: course1.id,
         moduleNumber: 2,
         moduleName: "THE CASTING DEPARTMENT",
         lessonNumber: 1,
-        title: "Nano Banano's Ingredient System Explained",
+        title: "Nano Banana's Ingredient System Explained",
         videoUrl: null,
         duration: 14,
       },
@@ -97,7 +101,7 @@ async function seed() {
         videoUrl: null,
         duration: 16,
       },
-      
+
       // Module 3: Production Pipeline
       {
         courseId: course1.id,
@@ -158,7 +162,7 @@ async function seed() {
         videoUrl: null,
         duration: 18,
       },
-      
+
       // Module 2: Lighting & Atmospherics
       {
         courseId: course2.id,
@@ -195,40 +199,47 @@ async function seed() {
     await db.insert(assets).values([
       {
         title: "SCI-FI CHARACTERS VOL. 1",
-        description: "50+ Consistent Character Sheets (Front/Side/45) ready for Veo Ingredients.",
+        description:
+          "50+ Consistent Character Sheets (Front/Side/45) ready for Veo Ingredients.",
         price: "49.00",
         category: "Character Sheets",
         badge: "Bestseller",
-        imageUrl: "https://images.unsplash.com/photo-1535905557558-afc4877a26fc?q=80&w=2574&auto=format&fit=crop",
+        imageUrl:
+          "https://images.unsplash.com/photo-1535905557558-afc4877a26fc?q=80&w=2574&auto=format&fit=crop",
         fileFormat: "PNG + PROMPT JSON",
         fileSize: "240MB",
         color: "neonPurple",
       },
       {
         title: "NEON NOIR TEXTURES",
-        description: "100+ High-Res Cyberpunk environment textures generated with Nano Banano.",
+        description:
+          "100+ High-Res Cyberpunk environment textures generated with Nano Banano.",
         price: "29.00",
         category: "Textures",
         badge: "New",
-        imageUrl: "https://images.unsplash.com/photo-1550684848-fac1c5b4e853?q=80&w=2670&auto=format&fit=crop",
+        imageUrl:
+          "https://images.unsplash.com/photo-1550684848-fac1c5b4e853?q=80&w=2670&auto=format&fit=crop",
         fileFormat: "4K JPG",
         fileSize: "850MB",
         color: "electricBlue",
       },
       {
         title: "CINEMATIC SFX PACK",
-        description: "Pre-mixed Foley stems for Sci-Fi films. Impacts, Risers, and Ambience.",
+        description:
+          "Pre-mixed Foley stems for Sci-Fi films. Impacts, Risers, and Ambience.",
         price: "19.00",
         category: "Audio / SFX",
         badge: null,
-        imageUrl: "https://images.unsplash.com/photo-1511379938547-c1f69419868d?q=80&w=2670&auto=format&fit=crop",
+        imageUrl:
+          "https://images.unsplash.com/photo-1511379938547-c1f69419868d?q=80&w=2670&auto=format&fit=crop",
         fileFormat: "WAV / MP3",
         fileSize: "1.2GB",
         color: "signalOrange",
       },
       {
         title: "MASTER PROMPT LIBRARY",
-        description: "500+ Production-Ready Prompts for Veo, categorized by genre and shot type.",
+        description:
+          "500+ Production-Ready Prompts for Veo, categorized by genre and shot type.",
         price: "39.00",
         category: "Prompts",
         badge: null,
@@ -239,22 +250,26 @@ async function seed() {
       },
       {
         title: "CYBERPUNK TEXTURES VOL. 1",
-        description: "Grungy neon surfaces, holographic overlays, and rain-soaked streets.",
+        description:
+          "Grungy neon surfaces, holographic overlays, and rain-soaked streets.",
         price: "34.00",
         category: "Textures",
         badge: "NEW",
-        imageUrl: "https://images.unsplash.com/photo-1563089145-599997674d42?q=80&w=2670&auto=format&fit=crop",
+        imageUrl:
+          "https://images.unsplash.com/photo-1563089145-599997674d42?q=80&w=2670&auto=format&fit=crop",
         fileFormat: "PNG 4K",
         fileSize: "680MB",
         color: "purple",
       },
       {
         title: "FANTASY ENVIRONMENT PACK",
-        description: "Ethereal forests, ancient ruins, and mystical landscapes for Veo workflows.",
+        description:
+          "Ethereal forests, ancient ruins, and mystical landscapes for Veo workflows.",
         price: "44.00",
         category: "Textures",
         badge: null,
-        imageUrl: "https://images.unsplash.com/photo-1518709268805-4e9042af9f23?q=80&w=2670&auto=format&fit=crop",
+        imageUrl:
+          "https://images.unsplash.com/photo-1518709268805-4e9042af9f23?q=80&w=2670&auto=format&fit=crop",
         fileFormat: "PNG + EXR",
         fileSize: "1.5GB",
         color: "green",
