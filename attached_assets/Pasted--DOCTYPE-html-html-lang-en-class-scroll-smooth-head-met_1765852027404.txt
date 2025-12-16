@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+
+<html lang="en" class="scroll-smooth">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>ADMIN DASHBOARD | INFINITE STUDIO</title>
+
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&family=Syncopate:wght@400;700&display=swap" rel="stylesheet">
+
+
+
+    <script>
+
+        tailwind.config = {
+
+            theme: {
+
+                extend: {
+
+                    colors: {
+
+                        obsidian: '#0A0A0A',
+
+                        electricBlue: '#2962FF',
+
+                        signalOrange: '#FF3D00',
+
+                        neonPurple: '#D500F9',
+
+                        offWhite: '#E0E0E0',
+
+                        glass: 'rgba(255, 255, 255, 0.05)',
+
+                        glassBorder: 'rgba(255, 255, 255, 0.1)',
+
+                    },
+
+                    fontFamily: {
+
+                        header: ['Syncopate', 'sans-serif'],
+
+                        body: ['Inter', 'sans-serif'],
+
+                    },
+
+                    backgroundImage: {
+
+                        'grid-pattern': "linear-gradient(to right, #1a1a1a 1px, transparent 1px), linear-gradient(to bottom, #1a1a1a 1px, transparent 1px)",
+
+                    }
+
+                }
+
+            }
+
+        }
+
+    </script>
+
+
+
+    <style>
+
+        .glass-panel {
+
+            background: rgba(255, 255, 255, 0.03);
+
+            backdrop-filter: blur(10px);
+
+            border: 1px solid rgba(255, 255, 255, 0.1);
+
+        }
+
+        /* Hide scrollbar */
+
+        ::-webkit-scrollbar { width: 8px; }
+
+        ::-webkit-scrollbar-track { background: #0A0A0A; }
+
+        ::-webkit-scrollbar-thumb { background: #333; }
+
+        
+
+        .stat-card:hover {
+
+            border-color: rgba(255,255,255,0.3);
+
+            transform: translateY(-2px);
+
+            transition: all 0.3s ease;
+
+        }
+
+    </style>
+
+</head>
+
+<body class="bg-obsidian text-offWhite font-body antialiased selection:bg-electricBlue selection:text-white overflow-hidden h-screen flex">
+
+
+
+    <!-- SIDEBAR -->
+
+    <aside class="w-64 bg-black border-r border-white/10 flex flex-col justify-between hidden md:flex">
+
+        <div>
+
+            <div class="p-6 border-b border-white/10">
+
+                <a href="index.html" class="font-header font-bold text-lg tracking-widest text-white flex items-center gap-2">
+
+                    <span class="text-electricBlue text-xl">∞</span> ADMIN
+
+                </a>
+
+            </div>
+
+            
+
+            <nav class="p-4 space-y-2">
+
+                <p class="text-[10px] font-mono text-gray-500 px-4 py-2 uppercase tracking-widest">Main Menu</p>
+
+                <a href="#" class="block px-4 py-3 text-gray-400 text-xs font-header font-bold rounded hover:bg-white/5 hover:text-white transition-colors">
+
+                    DASHBOARD
+
+                </a>
+
+                <a href="#" class="block px-4 py-3 bg-white/10 text-white text-xs font-header font-bold rounded hover:bg-white/20 transition-colors border-l-2 border-electricBlue">
+
+                    COURSES
+
+                </a>
+
+                <a href="#" class="block px-4 py-3 text-gray-400 text-xs font-header font-bold rounded hover:bg-white/5 hover:text-white transition-colors">
+
+                    STUDENTS
+
+                </a>
+
+                <a href="#" class="block px-4 py-3 text-gray-400 text-xs font-header font-bold rounded hover:bg-white/5 hover:text-white transition-colors">
+
+                    ASSET STORE
+
+                </a>
+
+                <a href="#" class="block px-4 py-3 text-gray-400 text-xs font-header font-bold rounded hover:bg-white/5 hover:text-white transition-colors">
+
+                    ANALYTICS
+
+                </a>
+
+            </nav>
+
+        </div>
+
+
+
+        <div class="p-4 border-t border-white/10">
+
+            <div class="flex items-center gap-3">
+
+                <div class="w-8 h-8 rounded-full bg-gray-800 border border-white/20 relative overflow-hidden">
+
+                     <div class="absolute inset-0 bg-gradient-to-br from-blue-900 to-black"></div>
+
+                     <span class="absolute inset-0 flex items-center justify-center font-header text-white text-[10px]">AD</span>
+
+                </div>
+
+                <div>
+
+                    <p class="text-xs font-bold text-white">ALEX DIRECTOR</p>
+
+                    <p class="text-[10px] text-green-500 font-mono">SYSTEM ADMIN</p>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </aside>
+
+
+
+    <!-- MAIN CONTENT -->
+
+    <main class="flex-grow overflow-y-auto relative">
+
+        <!-- GRID OVERLAY -->
+
+        <div class="fixed inset-0 bg-grid-pattern bg-[size:40px_40px] opacity-20 pointer-events-none z-0"></div>
+
+
+
+        <div class="relative z-10 p-8 max-w-7xl mx-auto">
+
+            
+
+            <!-- BREADCRUMBS & HEADER -->
+
+            <div class="mb-8">
+
+                <div class="flex items-center gap-2 text-[10px] font-mono text-gray-500 mb-2">
+
+                    <a href="#" class="hover:text-white">COURSES</a>
+
+                    <span>/</span>
+
+                    <a href="#" class="hover:text-white">MASTER THE GOOGLE ECOSYSTEM</a>
+
+                    <span>/</span>
+
+                    <span class="text-electricBlue">EDIT CONTENT</span>
+
+                </div>
+
+                <div class="flex justify-between items-end">
+
+                    <h1 class="font-header text-2xl text-white">COURSE EDITOR</h1>
+
+                    <div class="flex gap-4">
+
+                        <button class="text-gray-400 text-xs hover:text-white transition-colors underline">Preview</button>
+
+                        <button class="bg-green-500 text-black px-4 py-2 text-[10px] font-header font-bold uppercase hover:bg-white transition-colors">
+
+                            Save Changes
+
+                        </button>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+
+            <!-- EDITOR LAYOUT -->
+
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+
+                
+
+                <!-- LEFT: STRUCTURE TREE -->
+
+                <div class="lg:col-span-1 glass-panel p-0 overflow-hidden border border-white/10 h-[calc(100vh-200px)] flex flex-col">
+
+                    <div class="p-4 border-b border-white/10 bg-white/5 flex justify-between items-center">
+
+                        <h3 class="font-header text-xs text-white">CURRICULUM</h3>
+
+                        <button class="text-electricBlue text-xs hover:underline">+ New Module</button>
+
+                    </div>
+
+                    
+
+                    <div class="overflow-y-auto flex-grow p-2 space-y-2">
+
+                        <!-- Module 1 -->
+
+                        <div class="bg-white/5 rounded border border-white/5">
+
+                            <div class="p-3 text-xs font-bold text-gray-300 flex justify-between cursor-pointer hover:bg-white/5">
+
+                                <span>MODULE 1: WRITER'S ROOM</span>
+
+                                <span class="text-[10px] text-gray-500">Draft</span>
+
+                            </div>
+
+                            <div class="pl-2 pr-2 pb-2 space-y-1">
+
+                                <div class="p-2 text-[10px] text-gray-400 hover:bg-electricBlue/20 hover:text-white rounded cursor-pointer flex justify-between items-center group">
+
+                                    <span>1.1 The Multimodal Script</span>
+
+                                    <div class="w-2 h-2 rounded-full bg-green-500"></div>
+
+                                </div>
+
+                                <div class="p-2 text-[10px] text-gray-400 hover:bg-electricBlue/20 hover:text-white rounded cursor-pointer flex justify-between items-center group">
+
+                                    <span>1.2 Context is King</span>
+
+                                    <div class="w-2 h-2 rounded-full bg-green-500"></div>
+
+                                </div>
+
+                                <div class="p-2 text-[10px] bg-electricBlue/20 text-white rounded cursor-pointer flex justify-between items-center border-l-2 border-electricBlue">
+
+                                    <span>1.3 Visual Bible (Editing)</span>
+
+                                    <div class="w-2 h-2 rounded-full bg-yellow-500 animate-pulse"></div>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+
+
+                        <!-- Add Lesson Button -->
+
+                        <button class="w-full py-2 border border-dashed border-white/10 text-[10px] text-gray-500 hover:text-white hover:border-white/30 rounded transition-colors">
+
+                            + Add Lesson to Module 1
+
+                        </button>
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- RIGHT: CONTENT EDITOR -->
+
+                <div class="lg:col-span-2 glass-panel p-8 border border-white/10 relative">
+
+                    
+
+                    <!-- Lesson Metadata -->
+
+                    <div class="grid grid-cols-2 gap-6 mb-6">
+
+                        <div>
+
+                            <label class="block text-[10px] font-mono text-gray-500 mb-2 uppercase">LESSON TITLE</label>
+
+                            <input type="text" value="Generating the Visual Bible" class="bg-black/50 border border-white/10 text-white text-sm px-4 py-3 w-full focus:border-electricBlue outline-none font-bold">
+
+                        </div>
+
+                        <div>
+
+                            <label class="block text-[10px] font-mono text-gray-500 mb-2 uppercase">DURATION (MIN)</label>
+
+                            <input type="text" value="12:45" class="bg-black/50 border border-white/10 text-white text-sm px-4 py-3 w-full focus:border-electricBlue outline-none font-mono">
+
+                        </div>
+
+                    </div>
+
+
+
+                    <!-- Video Upload -->
+
+                    <div class="mb-8">
+
+                        <label class="block text-[10px] font-mono text-gray-500 mb-2 uppercase">VIDEO SOURCE</label>
+
+                        <div class="h-48 bg-black/50 border-2 border-dashed border-white/10 rounded flex flex-col items-center justify-center cursor-pointer hover:border-electricBlue/50 transition-colors group relative overflow-hidden">
+
+                            <!-- Placeholder for uploaded video state -->
+
+                            <div class="absolute inset-0 bg-gray-900 flex items-center justify-center">
+
+                                <span class="text-xs font-mono text-white">Visual_Bible_Final_v2.mp4</span>
+
+                            </div>
+
+                            <div class="absolute bottom-2 right-2 flex gap-2">
+
+                                <button class="bg-black/80 text-white text-[10px] px-2 py-1 rounded border border-white/20 hover:border-white">Replace</button>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+
+                    <!-- Description Editor (Rich Text Mockup) -->
+
+                    <div class="mb-8">
+
+                        <label class="block text-[10px] font-mono text-gray-500 mb-2 uppercase">LESSON NOTES</label>
+
+                        <div class="bg-black/50 border border-white/10 min-h-[200px] p-4 text-sm text-gray-300 font-sans">
+
+                            <div class="flex gap-2 border-b border-white/10 pb-2 mb-4 text-gray-500">
+
+                                <button class="hover:text-white"><b>B</b></button>
+
+                                <button class="hover:text-white"><i>I</i></button>
+
+                                <button class="hover:text-white"><u>U</u></button>
+
+                                <span class="w-px bg-white/10 h-4"></span>
+
+                                <button class="hover:text-white">Link</button>
+
+                                <button class="hover:text-white">Code</button>
+
+                            </div>
+
+                            <p>In this lesson, we cover how to reverse-engineer a cinematic look using Gemini 3.0.</p>
+
+                            <br>
+
+                            <p><b>Key Prompts:</b></p>
+
+                            <p class="font-mono bg-white/5 p-2 rounded mt-2 text-xs text-electricBlue">"Analyze this image as a Director of Photography..."</p>
+
+                        </div>
+
+                    </div>
+
+
+
+                    <!-- Attachments -->
+
+                    <div>
+
+                        <div class="flex justify-between items-center mb-2">
+
+                            <label class="block text-[10px] font-mono text-gray-500 uppercase">DOWNLOADABLE RESOURCES</label>
+
+                            <button class="text-[10px] text-electricBlue hover:underline">+ Upload File</button>
+
+                        </div>
+
+                        <div class="space-y-2">
+
+                            <div class="flex items-center justify-between p-3 bg-white/5 border border-white/5 rounded">
+
+                                <div class="flex items-center gap-3">
+
+                                    <div class="w-8 h-8 bg-gray-800 flex items-center justify-center text-[10px] font-bold text-gray-400">PDF</div>
+
+                                    <span class="text-xs text-white">Visual_Bible_Template.pdf</span>
+
+                                </div>
+
+                                <button class="text-gray-500 hover:text-red-500">×</button>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+
+                </div>
+
+
+
+            </div>
+
+        </div>
+
+    </main>
+
+
+
+    <!-- (Same Scripts as before) -->
+
+
+
+</body>
+
+</html>
