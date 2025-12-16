@@ -1,6 +1,6 @@
 import { Link } from "wouter";
 import { useState, useEffect, useRef } from "react";
-import { LayoutDashboard, BookOpen, Users, ShoppingBag, BarChart2, Plus, Download, Bold, Italic, Underline, Link as LinkIcon, Code, X, Search } from "lucide-react";
+import { LayoutDashboard, BookOpen, Users, ShoppingBag, BarChart2, Plus, Download, Bold, Italic, Underline, Link as LinkIcon, Code, X, Search, Edit2, Trash2 } from "lucide-react";
 
 export default function AdminDashboard() {
   const [activeTab, setActiveTab] = useState("dashboard");
@@ -277,17 +277,56 @@ export default function AdminDashboard() {
                   {/* Lessons for Module 1 */}
                   {expandedModuleId === 'module-1' && (
                     <div className="bg-black/20 border-t border-white/5 p-2 space-y-1">
-                      <div className="flex items-center justify-between p-2 pl-8 text-[10px] text-gray-400 hover:text-white hover:bg-white/5 rounded cursor-pointer">
+                      <div 
+                        className="flex items-center justify-between p-2 pl-8 text-[10px] text-gray-400 hover:text-white hover:bg-white/5 rounded cursor-pointer group/lesson"
+                        onClick={() => setCourseView('editor')}
+                      >
                         <span>1.1 The Multimodal Script</span>
-                        <span className="text-gray-600">12:45</span>
+                        <div className="flex items-center gap-2">
+                          <span className="text-gray-600 group-hover/lesson:hidden">12:45</span>
+                          <div className="hidden group-hover/lesson:flex gap-1">
+                            <button className="p-1 hover:bg-white/10 rounded text-electricBlue" title="Edit">
+                              <Edit2 className="w-3 h-3" />
+                            </button>
+                            <button className="p-1 hover:bg-white/10 rounded text-red-500" title="Delete" onClick={(e) => e.stopPropagation()}>
+                              <Trash2 className="w-3 h-3" />
+                            </button>
+                          </div>
+                        </div>
                       </div>
-                      <div className="flex items-center justify-between p-2 pl-8 text-[10px] text-gray-400 hover:text-white hover:bg-white/5 rounded cursor-pointer">
+                      <div 
+                        className="flex items-center justify-between p-2 pl-8 text-[10px] text-gray-400 hover:text-white hover:bg-white/5 rounded cursor-pointer group/lesson"
+                        onClick={() => setCourseView('editor')}
+                      >
                         <span>1.2 Context is King</span>
-                        <span className="text-gray-600">08:30</span>
+                        <div className="flex items-center gap-2">
+                          <span className="text-gray-600 group-hover/lesson:hidden">08:30</span>
+                          <div className="hidden group-hover/lesson:flex gap-1">
+                            <button className="p-1 hover:bg-white/10 rounded text-electricBlue" title="Edit">
+                              <Edit2 className="w-3 h-3" />
+                            </button>
+                            <button className="p-1 hover:bg-white/10 rounded text-red-500" title="Delete" onClick={(e) => e.stopPropagation()}>
+                              <Trash2 className="w-3 h-3" />
+                            </button>
+                          </div>
+                        </div>
                       </div>
-                      <div className="flex items-center justify-between p-2 pl-8 text-[10px] text-gray-400 hover:text-white hover:bg-white/5 rounded cursor-pointer">
+                      <div 
+                        className="flex items-center justify-between p-2 pl-8 text-[10px] text-gray-400 hover:text-white hover:bg-white/5 rounded cursor-pointer group/lesson"
+                        onClick={() => setCourseView('editor')}
+                      >
                         <span>1.3 Visual Bible (Editing)</span>
-                        <span className="text-gray-600">15:10</span>
+                        <div className="flex items-center gap-2">
+                          <span className="text-gray-600 group-hover/lesson:hidden">15:10</span>
+                          <div className="hidden group-hover/lesson:flex gap-1">
+                            <button className="p-1 hover:bg-white/10 rounded text-electricBlue" title="Edit">
+                              <Edit2 className="w-3 h-3" />
+                            </button>
+                            <button className="p-1 hover:bg-white/10 rounded text-red-500" title="Delete" onClick={(e) => e.stopPropagation()}>
+                              <Trash2 className="w-3 h-3" />
+                            </button>
+                          </div>
+                        </div>
                       </div>
                     </div>
                   )}
@@ -312,21 +351,73 @@ export default function AdminDashboard() {
                   {/* Lessons for Module 2 */}
                   {expandedModuleId === 'module-2' && (
                     <div className="bg-black/20 border-t border-white/5 p-2 space-y-1">
-                      <div className="flex items-center justify-between p-2 pl-8 text-[10px] text-gray-400 hover:text-white hover:bg-white/5 rounded cursor-pointer">
+                      <div 
+                        className="flex items-center justify-between p-2 pl-8 text-[10px] text-gray-400 hover:text-white hover:bg-white/5 rounded cursor-pointer group/lesson"
+                        onClick={() => setCourseView('editor')}
+                      >
                         <span>2.1 Set Design AI</span>
-                        <span className="text-gray-600">10:20</span>
+                        <div className="flex items-center gap-2">
+                          <span className="text-gray-600 group-hover/lesson:hidden">10:20</span>
+                          <div className="hidden group-hover/lesson:flex gap-1">
+                            <button className="p-1 hover:bg-white/10 rounded text-electricBlue" title="Edit">
+                              <Edit2 className="w-3 h-3" />
+                            </button>
+                            <button className="p-1 hover:bg-white/10 rounded text-red-500" title="Delete" onClick={(e) => e.stopPropagation()}>
+                              <Trash2 className="w-3 h-3" />
+                            </button>
+                          </div>
+                        </div>
                       </div>
-                      <div className="flex items-center justify-between p-2 pl-8 text-[10px] text-gray-400 hover:text-white hover:bg-white/5 rounded cursor-pointer">
+                      <div 
+                        className="flex items-center justify-between p-2 pl-8 text-[10px] text-gray-400 hover:text-white hover:bg-white/5 rounded cursor-pointer group/lesson"
+                        onClick={() => setCourseView('editor')}
+                      >
                         <span>2.2 Lighting Consistency</span>
-                        <span className="text-gray-600">14:15</span>
+                        <div className="flex items-center gap-2">
+                          <span className="text-gray-600 group-hover/lesson:hidden">14:15</span>
+                          <div className="hidden group-hover/lesson:flex gap-1">
+                            <button className="p-1 hover:bg-white/10 rounded text-electricBlue" title="Edit">
+                              <Edit2 className="w-3 h-3" />
+                            </button>
+                            <button className="p-1 hover:bg-white/10 rounded text-red-500" title="Delete" onClick={(e) => e.stopPropagation()}>
+                              <Trash2 className="w-3 h-3" />
+                            </button>
+                          </div>
+                        </div>
                       </div>
-                      <div className="flex items-center justify-between p-2 pl-8 text-[10px] text-gray-400 hover:text-white hover:bg-white/5 rounded cursor-pointer">
+                      <div 
+                        className="flex items-center justify-between p-2 pl-8 text-[10px] text-gray-400 hover:text-white hover:bg-white/5 rounded cursor-pointer group/lesson"
+                        onClick={() => setCourseView('editor')}
+                      >
                         <span>2.3 Camera Movements</span>
-                        <span className="text-gray-600">09:45</span>
+                        <div className="flex items-center gap-2">
+                          <span className="text-gray-600 group-hover/lesson:hidden">09:45</span>
+                          <div className="hidden group-hover/lesson:flex gap-1">
+                            <button className="p-1 hover:bg-white/10 rounded text-electricBlue" title="Edit">
+                              <Edit2 className="w-3 h-3" />
+                            </button>
+                            <button className="p-1 hover:bg-white/10 rounded text-red-500" title="Delete" onClick={(e) => e.stopPropagation()}>
+                              <Trash2 className="w-3 h-3" />
+                            </button>
+                          </div>
+                        </div>
                       </div>
-                      <div className="flex items-center justify-between p-2 pl-8 text-[10px] text-gray-400 hover:text-white hover:bg-white/5 rounded cursor-pointer">
+                      <div 
+                        className="flex items-center justify-between p-2 pl-8 text-[10px] text-gray-400 hover:text-white hover:bg-white/5 rounded cursor-pointer group/lesson"
+                        onClick={() => setCourseView('editor')}
+                      >
                         <span>2.4 Color Grading</span>
-                        <span className="text-gray-600">11:30</span>
+                        <div className="flex items-center gap-2">
+                          <span className="text-gray-600 group-hover/lesson:hidden">11:30</span>
+                          <div className="hidden group-hover/lesson:flex gap-1">
+                            <button className="p-1 hover:bg-white/10 rounded text-electricBlue" title="Edit">
+                              <Edit2 className="w-3 h-3" />
+                            </button>
+                            <button className="p-1 hover:bg-white/10 rounded text-red-500" title="Delete" onClick={(e) => e.stopPropagation()}>
+                              <Trash2 className="w-3 h-3" />
+                            </button>
+                          </div>
+                        </div>
                       </div>
                     </div>
                   )}
@@ -351,25 +442,90 @@ export default function AdminDashboard() {
                   {/* Lessons for Module 3 */}
                   {expandedModuleId === 'module-3' && (
                     <div className="bg-black/20 border-t border-white/5 p-2 space-y-1">
-                      <div className="flex items-center justify-between p-2 pl-8 text-[10px] text-gray-400 hover:text-white hover:bg-white/5 rounded cursor-pointer">
+                      <div 
+                        className="flex items-center justify-between p-2 pl-8 text-[10px] text-gray-400 hover:text-white hover:bg-white/5 rounded cursor-pointer group/lesson"
+                        onClick={() => setCourseView('editor')}
+                      >
                         <span>3.1 Shot Prompting</span>
-                        <span className="text-gray-600">08:15</span>
+                        <div className="flex items-center gap-2">
+                          <span className="text-gray-600 group-hover/lesson:hidden">08:15</span>
+                          <div className="hidden group-hover/lesson:flex gap-1">
+                            <button className="p-1 hover:bg-white/10 rounded text-electricBlue" title="Edit">
+                              <Edit2 className="w-3 h-3" />
+                            </button>
+                            <button className="p-1 hover:bg-white/10 rounded text-red-500" title="Delete" onClick={(e) => e.stopPropagation()}>
+                              <Trash2 className="w-3 h-3" />
+                            </button>
+                          </div>
+                        </div>
                       </div>
-                      <div className="flex items-center justify-between p-2 pl-8 text-[10px] text-gray-400 hover:text-white hover:bg-white/5 rounded cursor-pointer">
+                      <div 
+                        className="flex items-center justify-between p-2 pl-8 text-[10px] text-gray-400 hover:text-white hover:bg-white/5 rounded cursor-pointer group/lesson"
+                        onClick={() => setCourseView('editor')}
+                      >
                         <span>3.2 Camera Angles</span>
-                        <span className="text-gray-600">07:45</span>
+                        <div className="flex items-center gap-2">
+                          <span className="text-gray-600 group-hover/lesson:hidden">07:45</span>
+                          <div className="hidden group-hover/lesson:flex gap-1">
+                            <button className="p-1 hover:bg-white/10 rounded text-electricBlue" title="Edit">
+                              <Edit2 className="w-3 h-3" />
+                            </button>
+                            <button className="p-1 hover:bg-white/10 rounded text-red-500" title="Delete" onClick={(e) => e.stopPropagation()}>
+                              <Trash2 className="w-3 h-3" />
+                            </button>
+                          </div>
+                        </div>
                       </div>
-                      <div className="flex items-center justify-between p-2 pl-8 text-[10px] text-gray-400 hover:text-white hover:bg-white/5 rounded cursor-pointer">
+                      <div 
+                        className="flex items-center justify-between p-2 pl-8 text-[10px] text-gray-400 hover:text-white hover:bg-white/5 rounded cursor-pointer group/lesson"
+                        onClick={() => setCourseView('editor')}
+                      >
                         <span>3.3 Movement Control</span>
-                        <span className="text-gray-600">13:20</span>
+                        <div className="flex items-center gap-2">
+                          <span className="text-gray-600 group-hover/lesson:hidden">13:20</span>
+                          <div className="hidden group-hover/lesson:flex gap-1">
+                            <button className="p-1 hover:bg-white/10 rounded text-electricBlue" title="Edit">
+                              <Edit2 className="w-3 h-3" />
+                            </button>
+                            <button className="p-1 hover:bg-white/10 rounded text-red-500" title="Delete" onClick={(e) => e.stopPropagation()}>
+                              <Trash2 className="w-3 h-3" />
+                            </button>
+                          </div>
+                        </div>
                       </div>
-                      <div className="flex items-center justify-between p-2 pl-8 text-[10px] text-gray-400 hover:text-white hover:bg-white/5 rounded cursor-pointer">
+                      <div 
+                        className="flex items-center justify-between p-2 pl-8 text-[10px] text-gray-400 hover:text-white hover:bg-white/5 rounded cursor-pointer group/lesson"
+                        onClick={() => setCourseView('editor')}
+                      >
                         <span>3.4 Upscaling</span>
-                        <span className="text-gray-600">06:50</span>
+                        <div className="flex items-center gap-2">
+                          <span className="text-gray-600 group-hover/lesson:hidden">06:50</span>
+                          <div className="hidden group-hover/lesson:flex gap-1">
+                            <button className="p-1 hover:bg-white/10 rounded text-electricBlue" title="Edit">
+                              <Edit2 className="w-3 h-3" />
+                            </button>
+                            <button className="p-1 hover:bg-white/10 rounded text-red-500" title="Delete" onClick={(e) => e.stopPropagation()}>
+                              <Trash2 className="w-3 h-3" />
+                            </button>
+                          </div>
+                        </div>
                       </div>
-                      <div className="flex items-center justify-between p-2 pl-8 text-[10px] text-gray-400 hover:text-white hover:bg-white/5 rounded cursor-pointer">
+                      <div 
+                        className="flex items-center justify-between p-2 pl-8 text-[10px] text-gray-400 hover:text-white hover:bg-white/5 rounded cursor-pointer group/lesson"
+                        onClick={() => setCourseView('editor')}
+                      >
                         <span>3.5 Final Export</span>
-                        <span className="text-gray-600">18:00</span>
+                        <div className="flex items-center gap-2">
+                          <span className="text-gray-600 group-hover/lesson:hidden">18:00</span>
+                          <div className="hidden group-hover/lesson:flex gap-1">
+                            <button className="p-1 hover:bg-white/10 rounded text-electricBlue" title="Edit">
+                              <Edit2 className="w-3 h-3" />
+                            </button>
+                            <button className="p-1 hover:bg-white/10 rounded text-red-500" title="Delete" onClick={(e) => e.stopPropagation()}>
+                              <Trash2 className="w-3 h-3" />
+                            </button>
+                          </div>
+                        </div>
                       </div>
                     </div>
                   )}
