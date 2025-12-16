@@ -91,7 +91,7 @@ export default function Home() {
                           <p className="text-electricBlue font-mono text-xs mb-2 tracking-widest">/// SELECTED WORKS</p>
                           <h2 className="font-header text-4xl font-bold text-white">PRODUCTION</h2>
                       </div>
-                      <a href="#" className="text-xs font-header font-bold border-b border-signalOrange pb-1 hover:text-signalOrange transition-colors tracking-wider">VIEW ALL CASE STUDIES</a>
+                      <Link href="/case-studies" className="text-xs font-header font-bold border-b border-signalOrange pb-1 hover:text-signalOrange transition-colors tracking-wider">VIEW ALL CASE STUDIES</Link>
                   </div>
 
                   {/* Project Cards */}
