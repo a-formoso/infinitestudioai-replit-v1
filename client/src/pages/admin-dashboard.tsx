@@ -34,7 +34,7 @@ export default function AdminDashboard() {
     { id: "module-3", title: "MODULE 3: PRINCIPAL PHOTOGRAPHY", status: "Draft", lessons: ["3.1", "3.2", "3.3", "3.4", "3.5"] }
   ]);
 
-  const [deleteConfirmation, setDeleteConfirmation] = useState<{ isOpen: boolean; type: 'module' | 'lesson'; id: string; parentId?: string } | null>(null);
+  const [deleteConfirmation, setDeleteConfirmation] = useState<{ isOpen: boolean; type: 'module' | 'lesson'; id: string; title: string; parentId?: string } | null>(null);
   
   const handleAddModule = () => {
     const newId = `module-${modules.length + 1}`;
@@ -59,11 +59,24 @@ export default function AdminDashboard() {
 
   const requestDeleteLesson = (moduleId: string, lessonId: string, e: React.MouseEvent) => {
     e.stopPropagation();
-    setDeleteConfirmation({ isOpen: true, type: 'lesson', id: lessonId, parentId: moduleId });
+    const lesson = lessons[lessonId];
+    setDeleteConfirmation({ 
+      isOpen: true, 
+      type: 'lesson', 
+      id: lessonId, 
+      title: lesson ? lesson.title : 'Lesson',
+      parentId: moduleId 
+    });
   };
 
   const requestDeleteModule = (moduleId: string) => {
-    setDeleteConfirmation({ isOpen: true, type: 'module', id: moduleId });
+    const module = modules.find(m => m.id === moduleId);
+    setDeleteConfirmation({ 
+      isOpen: true, 
+      type: 'module', 
+      id: moduleId,
+      title: module ? module.title : 'Module'
+    });
   };
 
   const confirmDelete = () => {
@@ -1183,7 +1196,7 @@ export default function AdminDashboard() {
                 </div>
                 <h3 className="font-header text-lg text-white mb-2">CONFIRM DELETION</h3>
                 <p className="text-xs font-mono text-gray-400">
-                  Are you sure you want to delete this {deleteConfirmation.type}? This action cannot be undone.
+                  Are you sure you want to delete <span className="text-white font-bold">"{deleteConfirmation.title}"</span>? This action cannot be undone.
                 </p>
               </div>
 
