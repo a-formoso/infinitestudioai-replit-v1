@@ -124,7 +124,7 @@ export function Footer() {
                   © 2025 INFINITE STUDIO. ALL SYSTEMS NOMINAL.
               </div>
               <div className="flex gap-6 text-[10px] text-gray-600 font-mono">
-                  <Link href="/privacy" className="hover:text-white transition-colors">PRIVACY_PROTOCOL</Link>
+                  <a href="#" className="hover:text-white transition-colors">PRIVACY_PROTOCOL</a>
                   <a href="#" className="hover:text-white transition-colors">TERMS_OF_EXECUTION</a>
               </div>
           </div>
