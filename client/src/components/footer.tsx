@@ -101,7 +101,7 @@ export function Footer() {
           </div>
 
           {/* THE LIVE TERMINAL */}
-          <div className="w-full bg-[#050505] border border-white/10 p-4 font-mono text-[10px] md:text-xs text-green-500 h-32 overflow-hidden relative shadow-inner shadow-black/50 rounded-sm mb-8">
+          <div className="w-full bg-[#050505] border border-white/10 p-4 font-mono text-[10px] md:text-xs text-green-500 h-32 overflow-hidden relative shadow-inner shadow-black/50 rounded-none mb-8">
               <div className="absolute top-2 right-3 text-white/20 text-[8px] tracking-widest border border-white/10 px-1">LIVE SYSTEM LOG // V.2.4.1</div>
               <div className="absolute top-2 left-3 text-electricBlue/50 text-[8px] tracking-widest">SERVER: LON-01</div>
               
