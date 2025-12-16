@@ -97,7 +97,7 @@ export default function Login() {
                     </button>
                     <button className="border border-white/10 hover:border-white/30 bg-white/5 py-3 flex justify-center items-center gap-2 transition-all group">
                         <svg className="w-4 h-4 fill-white group-hover:scale-110 transition-transform" viewBox="0 0 24 24"><path d="M17.05 20.28c-.98.95-2.05.8-3.08.35-1.09-.46-2.09-.48-3.24 0-1.44.62-2.2.44-3.06-.35C2.79 15.25 3.51 7.59 9.05 7.31c1.35.07 2.29.74 3.08.8 1.18-.24 2.31-.93 3.57-.84 1.51.12 2.65.72 3.4 1.8-3.1 1.88-2.61 5.75.3 6.97-.5 1.49-1.15 2.83-2.35 4.24zm-4.13-16c-1.39.06-2.8 1.03-3.23 2.53 1.57.17 3.06-.82 3.23-2.53z"/></svg>
-                        <span class="text-[10px] font-bold text-gray-300 group-hover:text-white">APPLE</span>
+                        <span className="text-[10px] font-bold text-gray-300 group-hover:text-white">APPLE</span>
                     </button>
                 </div>
 

@@ -16,6 +16,7 @@ import Checkout from "@/pages/checkout";
 import Support from "@/pages/support";
 import About from "@/pages/about";
 import Login from "@/pages/login";
+import AdminDashboard from "@/pages/admin-dashboard";
 
 function Router() {
   return (
@@ -24,6 +25,7 @@ function Router() {
       <Route path="/hire" component={Hire} />
       <Route path="/about" component={About} />
       <Route path="/login" component={Login} />
+      <Route path="/admin" component={AdminDashboard} />
       <Route path="/store" component={AssetStore} />
       <Route path="/checkout" component={Checkout} />
       <Route path="/support" component={Support} />

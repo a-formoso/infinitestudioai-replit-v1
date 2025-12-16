@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ADMIN DASHBOARD | INFINITE STUDIO</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&family=Syncopate:wght@400;700&display=swap" rel="stylesheet">
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        obsidian: '#0A0A0A',
+                        electricBlue: '#2962FF',
+                        signalOrange: '#FF3D00',
+                        neonPurple: '#D500F9',
+                        offWhite: '#E0E0E0',
+                        glass: 'rgba(255, 255, 255, 0.05)',
+                        glassBorder: 'rgba(255, 255, 255, 0.1)',
+                    },
+                    fontFamily: {
+                        header: ['Syncopate', 'sans-serif'],
+                        body: ['Inter', 'sans-serif'],
+                    },
+                    backgroundImage: {
+                        'grid-pattern': "linear-gradient(to right, #1a1a1a 1px, transparent 1px), linear-gradient(to bottom, #1a1a1a 1px, transparent 1px)",
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        /* Hide scrollbar */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #0A0A0A; }
+        ::-webkit-scrollbar-thumb { background: #333; }
+        
+        .stat-card:hover {
+            border-color: rgba(255,255,255,0.3);
+            transform: translateY(-2px);
+            transition: all 0.3s ease;
+        }
+    </style>
+</head>
+<body class="bg-obsidian text-offWhite font-body antialiased selection:bg-electricBlue selection:text-white overflow-hidden h-screen flex">
+
+    <!-- SIDEBAR -->
+    <aside class="w-64 bg-black border-r border-white/10 flex flex-col justify-between hidden md:flex">
+        <div>
+            <div class="p-6 border-b border-white/10">
+                <a href="index.html" class="font-header font-bold text-lg tracking-widest text-white flex items-center gap-2">
+                    <span class="text-electricBlue text-xl">∞</span> ADMIN
+                </a>
+            </div>
+            
+            <nav class="p-4 space-y-2">
+                <p class="text-[10px] font-mono text-gray-500 px-4 py-2 uppercase tracking-widest">Main Menu</p>
+                <a href="#" class="block px-4 py-3 bg-white/10 text-white text-xs font-header font-bold rounded hover:bg-white/20 transition-colors border-l-2 border-electricBlue">
+                    DASHBOARD
+                </a>
+                <a href="#" class="block px-4 py-3 text-gray-400 text-xs font-header font-bold rounded hover:bg-white/5 hover:text-white transition-colors">
+                    COURSES
+                </a>
+                <a href="#" class="block px-4 py-3 text-gray-400 text-xs font-header font-bold rounded hover:bg-white/5 hover:text-white transition-colors">
+                    STUDENTS
+                </a>
+                <a href="#" class="block px-4 py-3 text-gray-400 text-xs font-header font-bold rounded hover:bg-white/5 hover:text-white transition-colors">
+                    ASSET STORE
+                </a>
+                <a href="#" class="block px-4 py-3 text-gray-400 text-xs font-header font-bold rounded hover:bg-white/5 hover:text-white transition-colors">
+                    ANALYTICS
+                </a>
+            </nav>
+        </div>
+
+        <div class="p-4 border-t border-white/10">
+            <div class="flex items-center gap-3">
+                <div class="w-8 h-8 rounded-full bg-gray-800 border border-white/20 relative overflow-hidden">
+                     <div class="absolute inset-0 bg-gradient-to-br from-blue-900 to-black"></div>
+                     <span class="absolute inset-0 flex items-center justify-center font-header text-white text-[10px]">AD</span>
+                </div>
+                <div>
+                    <p class="text-xs font-bold text-white">ALEX DIRECTOR</p>
+                    <p class="text-[10px] text-green-500 font-mono">SYSTEM ADMIN</p>
+                </div>
+            </div>
+        </div>
+    </aside>
+
+    <!-- MAIN CONTENT -->
+    <main class="flex-grow overflow-y-auto relative">
+        <!-- GRID OVERLAY -->
+        <div class="fixed inset-0 bg-grid-pattern bg-[size:40px_40px] opacity-20 pointer-events-none z-0"></div>
+
+        <div class="relative z-10 p-8 max-w-7xl mx-auto">
+            
+            <!-- HEADER -->
+            <div class="flex justify-between items-end mb-8">
+                <div>
+                    <h1 class="font-header text-2xl text-white mb-1">SYSTEM OVERVIEW</h1>
+                    <p class="text-xs text-gray-400 font-mono">Last Sync: Just now</p>
+                </div>
+                <div class="flex gap-4">
+                    <button class="bg-electricBlue text-white px-4 py-2 text-[10px] font-header font-bold uppercase hover:bg-white hover:text-black transition-colors">
+                        + New Course
+                    </button>
+                    <button class="border border-white/20 text-white px-4 py-2 text-[10px] font-header font-bold uppercase hover:bg-white/10 transition-colors">
+                        Export Report
+                    </button>
+                </div>
+            </div>
+
+            <!-- STATS GRID -->
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+                <!-- Stat 1 -->
+                <div class="glass-panel p-6 stat-card cursor-pointer">
+                    <div class="flex justify-between items-start mb-4">
+                        <span class="text-[10px] font-mono text-gray-400 uppercase">Total Revenue</span>
+                        <span class="text-green-500 text-xs font-mono">+12%</span>
+                    </div>
+                    <h2 class="font-header text-3xl text-white">$124,500</h2>
+                    <div class="w-full h-1 bg-white/10 mt-4 rounded-full overflow-hidden">
+                        <div class="h-full bg-green-500 w-[75%]"></div>
+                    </div>
+                </div>
+
+                <!-- Stat 2 -->
+                <div class="glass-panel p-6 stat-card cursor-pointer">
+                    <div class="flex justify-between items-start mb-4">
+                        <span class="text-[10px] font-mono text-gray-400 uppercase">Active Students</span>
+                        <span class="text-electricBlue text-xs font-mono">+54</span>
+                    </div>
+                    <h2 class="font-header text-3xl text-white">5,204</h2>
+                    <div class="w-full h-1 bg-white/10 mt-4 rounded-full overflow-hidden">
+                        <div class="h-full bg-electricBlue w-[60%]"></div>
+                    </div>
+                </div>
+
+                <!-- Stat 3 -->
+                <div class="glass-panel p-6 stat-card cursor-pointer">
+                    <div class="flex justify-between items-start mb-4">
+                        <span class="text-[10px] font-mono text-gray-400 uppercase">Asset Downloads</span>
+                        <span class="text-neonPurple text-xs font-mono">NEW</span>
+                    </div>
+                    <h2 class="font-header text-3xl text-white">12.5K</h2>
+                    <div class="w-full h-1 bg-white/10 mt-4 rounded-full overflow-hidden">
+                        <div class="h-full bg-neonPurple w-[85%]"></div>
+                    </div>
+                </div>
+
+                <!-- Stat 4 -->
+                <div class="glass-panel p-6 stat-card cursor-pointer">
+                    <div class="flex justify-between items-start mb-4">
+                        <span class="text-[10px] font-mono text-gray-400 uppercase">Server Load</span>
+                        <span class="text-signalOrange text-xs font-mono">STABLE</span>
+                    </div>
+                    <h2 class="font-header text-3xl text-white">24%</h2>
+                    <div class="w-full h-1 bg-white/10 mt-4 rounded-full overflow-hidden">
+                        <div class="h-full bg-signalOrange w-[24%]"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- CONTENT GRID -->
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                
+                <!-- Recent Sales (Table) -->
+                <div class="lg:col-span-2 glass-panel p-0 overflow-hidden">
+                    <div class="p-6 border-b border-white/10 flex justify-between items-center">
+                        <h3 class="font-header text-sm text-white">RECENT TRANSACTIONS</h3>
+                        <a href="#" class="text-[10px] font-mono text-electricBlue hover:underline">VIEW ALL</a>
+                    </div>
+                    <table class="w-full text-left text-xs text-gray-400">
+                        <thead class="bg-white/5 text-gray-200 font-header border-b border-white/10">
+                            <tr>
+                                <th class="p-4">Customer</th>
+                                <th class="p-4">Product</th>
+                                <th class="p-4">Status</th>
+                                <th class="p-4 text-right">Amount</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-white/5 font-mono">
+                            <tr class="hover:bg-white/5 transition-colors">
+                                <td class="p-4 text-white">sarah_j_films</td>
+                                <td class="p-4">Level 01 Certification</td>
+                                <td class="p-4"><span class="bg-green-500/20 text-green-500 px-2 py-1 rounded">PAID</span></td>
+                                <td class="p-4 text-right">$149.00</td>
+                            </tr>
+                            <tr class="hover:bg-white/5 transition-colors">
+                                <td class="p-4 text-white">mike_vfx_pro</td>
+                                <td class="p-4">Advanced Cinematography</td>
+                                <td class="p-4"><span class="bg-green-500/20 text-green-500 px-2 py-1 rounded">PAID</span></td>
+                                <td class="p-4 text-right">$199.00</td>
+                            </tr>
+                            <tr class="hover:bg-white/5 transition-colors">
+                                <td class="p-4 text-white">studio_asset_bot</td>
+                                <td class="p-4">Nano Texture Pack</td>
+                                <td class="p-4"><span class="bg-green-500/20 text-green-500 px-2 py-1 rounded">PAID</span></td>
+                                <td class="p-4 text-right">$29.00</td>
+                            </tr>
+                            <tr class="hover:bg-white/5 transition-colors">
+                                <td class="p-4 text-white">guest_user_22</td>
+                                <td class="p-4">Level 01 Certification</td>
+                                <td class="p-4"><span class="bg-red-500/20 text-red-500 px-2 py-1 rounded">FAILED</span></td>
+                                <td class="p-4 text-right">$149.00</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- System Logs (Live Terminal Feed) -->
+                <div class="glass-panel p-0 overflow-hidden flex flex-col h-full bg-black/50 border border-white/10">
+                    <div class="p-4 border-b border-white/10 bg-[#050505]">
+                        <h3 class="font-header text-xs text-white flex items-center gap-2">
+                            <div class="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
+                            LIVE SYSTEM LOGS
+                        </h3>
+                    </div>
+                    <div class="p-4 font-mono text-[10px] space-y-2 text-gray-400 overflow-y-auto flex-grow" id="admin-terminal">
+                        <!-- JS will populate -->
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </main>
+
+    <script>
+        const adminLogs = [
+            "[SYS] New user registration: ID #9942",
+            "[PAYMENT] Stripe Webhook received: success",
+            "[EMAIL] Welcome sequence triggered for user #9942",
+            "[VEO] Rendering preview for Asset Store item #04",
+            "[SYS] Database backup complete (145ms)",
+            "[SEC] Failed login attempt from IP 192.168.x.x",
+            "[CMS] Course content updated: Module 3.2",
+            "[ANALYTICS] Daily traffic report generated"
+        ];
+
+        const terminal = document.getElementById('admin-terminal');
+        
+        function addLog() {
+            const log = adminLogs[Math.floor(Math.random() * adminLogs.length)];
+            const div = document.createElement('div');
+            const time = new Date().toLocaleTimeString([], { hour12: false });
+            div.innerHTML = `<span class="text-gray-600">[${time}]</span> <span class="text-green-400">></span> ${log}`;
+            terminal.appendChild(div);
+            terminal.scrollTop = terminal.scrollHeight;
+            
+            if(terminal.children.length > 15) terminal.removeChild(terminal.firstChild);
+        }
+
+        // Fill initial
+        for(let i=0; i<8; i++) addLog();
+        
+        // Loop
+        setInterval(addLog, 1500);
+    </script>
+
+</body>
+</html>
