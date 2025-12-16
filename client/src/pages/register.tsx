@@ -12,6 +12,9 @@ export default function Register() {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const queryClient = useQueryClient();
+  
+  const searchParams = new URLSearchParams(window.location.search);
+  const redirectUrl = searchParams.get("redirect") || "/dashboard";
 
   const handleRegister = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -58,7 +61,7 @@ export default function Register() {
         title: "Account created!",
         description: "Welcome to Infinite Studio. Redirecting...",
       });
-      setLocation("/dashboard");
+      setLocation(redirectUrl);
     }
   };
 

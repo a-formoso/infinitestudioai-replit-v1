@@ -44,11 +44,7 @@ export default function CourseLevel2() {
 
   const handleEnroll = () => {
     if (!userData?.data?.user) {
-      toast({
-        title: "Please log in",
-        description: "You need an account to enroll in courses.",
-      });
-      setLocation("/login");
+      setLocation("/checkout?course=level-2");
       return;
     }
 

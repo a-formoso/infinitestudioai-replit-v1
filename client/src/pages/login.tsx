@@ -12,6 +12,9 @@ export default function Login() {
   const [isLoading, setIsLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const queryClient = useQueryClient();
+  
+  const searchParams = new URLSearchParams(window.location.search);
+  const redirectUrl = searchParams.get("redirect") || "/dashboard";
 
   const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -34,9 +37,9 @@ export default function Login() {
       await queryClient.invalidateQueries({ queryKey: ["currentUser"] });
       toast({
         title: "Welcome back!",
-        description: "Redirecting to dashboard...",
+        description: "Redirecting...",
       });
-      setLocation("/dashboard");
+      setLocation(redirectUrl);
     }
   };
 
