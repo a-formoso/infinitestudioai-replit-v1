@@ -1,6 +1,7 @@
 import { Navbar } from "@/components/navbar";
 import { Footer } from "@/components/footer";
 import { ArrowRight } from "lucide-react";
+import { Link } from "wouter";
 
 export default function Home() {
   return (
@@ -160,7 +161,7 @@ export default function Home() {
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                   {/* Course 1 */}
-                  <div className="glass-panel p-1 hover:border-electricBlue/50 transition-all duration-300 group cursor-pointer">
+                  <Link href="/course/level-1" className="glass-panel p-1 hover:border-electricBlue/50 transition-all duration-300 group cursor-pointer block">
                       <div className="bg-gray-900 h-56 mb-6 relative overflow-hidden">
                           <div className="absolute inset-0 bg-gradient-to-br from-blue-900/40 to-black"></div>
                           {/* Abstract course graphic */}
@@ -178,10 +179,10 @@ export default function Home() {
                               <span className="font-header font-bold text-xl text-white group-hover:text-electricBlue transition-colors">$149</span>
                           </div>
                       </div>
-                  </div>
+                  </Link>
 
                   {/* Course 2 */}
-                  <div className="glass-panel p-1 hover:border-signalOrange/50 transition-all duration-300 group cursor-pointer">
+                  <Link href="/course/level-2" className="glass-panel p-1 hover:border-signalOrange/50 transition-all duration-300 group cursor-pointer block">
                       <div className="bg-gray-900 h-56 mb-6 relative overflow-hidden">
                           <div className="absolute inset-0 bg-gradient-to-br from-orange-900/40 to-black"></div>
                            {/* Abstract course graphic */}
@@ -199,7 +200,7 @@ export default function Home() {
                               <span className="font-header font-bold text-xl text-white group-hover:text-signalOrange transition-colors">$199</span>
                           </div>
                       </div>
-                  </div>
+                  </Link>
               </div>
           </section>
           {/* ASSET STORE & FOOTER CONTAINER */}
