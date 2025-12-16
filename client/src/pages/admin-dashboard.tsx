@@ -576,6 +576,96 @@ export default function AdminDashboard() {
     </div>
   );
 
+  const renderAssetStore = () => (
+    <div className="relative z-10 p-8 max-w-7xl mx-auto">
+      {/* HEADER */}
+      <div className="flex justify-between items-end mb-8">
+        <div>
+          <h1 className="font-header text-2xl text-white mb-1">DIGITAL ASSETS</h1>
+          <p className="text-xs text-gray-400 font-mono">Manage product files, pricing, and licenses.</p>
+        </div>
+        <div className="flex gap-4">
+          <button className="bg-neonPurple text-white px-4 py-2 text-[10px] font-header font-bold uppercase hover:bg-white hover:text-black transition-colors">
+            + Add New Product
+          </button>
+        </div>
+      </div>
+
+      {/* FILTERS */}
+      <div className="flex gap-4 mb-8 border-b border-white/10 pb-4">
+        <button className="text-xs font-bold text-white border-b-2 border-neonPurple pb-4 -mb-4.5">ALL PRODUCTS</button>
+        <button className="text-xs font-bold text-gray-500 hover:text-white transition-colors pb-4">TEXTURES</button>
+        <button className="text-xs font-bold text-gray-500 hover:text-white transition-colors pb-4">CHARACTER SHEETS</button>
+        <button className="text-xs font-bold text-gray-500 hover:text-white transition-colors pb-4">AUDIO PACKS</button>
+      </div>
+
+      {/* PRODUCT GRID */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        
+        {/* Product Card 1 */}
+        <div className="glass-panel p-0 overflow-hidden border border-white/10 hover:border-neonPurple/50 transition-colors group relative">
+          <div className="h-40 bg-gray-900 relative">
+            <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1550684848-fac1c5b4e853?q=80&w=2670&auto=format&fit=crop')] bg-cover bg-center opacity-60 group-hover:opacity-80 transition-opacity"></div>
+            <div className="absolute top-2 right-2 bg-green-500 text-black text-[10px] font-bold px-2 py-1 rounded">ACTIVE</div>
+          </div>
+          <div className="p-6">
+            <div className="flex justify-between items-start mb-2">
+              <h3 className="font-header text-sm text-white">NEON NOIR TEXTURES</h3>
+              <span className="font-mono text-neonPurple font-bold">$29</span>
+            </div>
+            <p className="text-[10px] text-gray-400 mb-4">124 Sales • $3,596 Revenue</p>
+            
+            <div className="flex gap-2">
+              <button className="flex-1 bg-white/10 hover:bg-white/20 text-white text-[10px] py-2 rounded border border-white/10 transition-colors">Edit Details</button>
+              <button className="flex-1 bg-white/10 hover:bg-white/20 text-white text-[10px] py-2 rounded border border-white/10 transition-colors">Update Files</button>
+            </div>
+          </div>
+        </div>
+
+        {/* Product Card 2 */}
+        <div className="glass-panel p-0 overflow-hidden border border-white/10 hover:border-neonPurple/50 transition-colors group relative">
+          <div className="h-40 bg-gray-900 relative">
+            <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1535905557558-afc4877a26fc?q=80&w=2574&auto=format&fit=crop')] bg-cover bg-center opacity-60 group-hover:opacity-80 transition-opacity"></div>
+            <div className="absolute top-2 right-2 bg-green-500 text-black text-[10px] font-bold px-2 py-1 rounded">ACTIVE</div>
+          </div>
+          <div className="p-6">
+            <div className="flex justify-between items-start mb-2">
+              <h3 className="font-header text-sm text-white">SCI-FI CHARACTERS VOL. 1</h3>
+              <span className="font-mono text-neonPurple font-bold">$49</span>
+            </div>
+            <p className="text-[10px] text-gray-400 mb-4">89 Sales • $4,361 Revenue</p>
+            
+            <div className="flex gap-2">
+              <button className="flex-1 bg-white/10 hover:bg-white/20 text-white text-[10px] py-2 rounded border border-white/10 transition-colors">Edit Details</button>
+              <button className="flex-1 bg-white/10 hover:bg-white/20 text-white text-[10px] py-2 rounded border border-white/10 transition-colors">Update Files</button>
+            </div>
+          </div>
+        </div>
+
+        {/* Product Card 3 (Draft) */}
+        <div className="glass-panel p-0 overflow-hidden border border-white/10 hover:border-white/30 transition-colors group relative opacity-70">
+          <div className="h-40 bg-gray-900 relative flex items-center justify-center border-b border-white/5">
+            <div className="text-white/20 text-4xl font-header">+</div>
+            <div className="absolute top-2 right-2 bg-yellow-500 text-black text-[10px] font-bold px-2 py-1 rounded">DRAFT</div>
+          </div>
+          <div className="p-6">
+            <div className="flex justify-between items-start mb-2">
+              <h3 className="font-header text-sm text-white">CINEMATIC SFX PACK</h3>
+              <span className="font-mono text-gray-500 font-bold">$19</span>
+            </div>
+            <p className="text-[10px] text-gray-400 mb-4">0 Sales • Unreleased</p>
+            
+            <div className="flex gap-2">
+              <button className="flex-1 bg-neonPurple/20 text-neonPurple hover:bg-neonPurple/30 text-[10px] py-2 rounded border border-neonPurple/30 transition-colors">Publish</button>
+              <button className="flex-1 bg-white/10 hover:bg-white/20 text-white text-[10px] py-2 rounded border border-white/10 transition-colors">Edit</button>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  );
+
   return (
     <div className="bg-obsidian text-offWhite font-body antialiased selection:bg-electricBlue selection:text-white overflow-hidden h-screen flex">
       {/* SIDEBAR */}
@@ -644,14 +734,7 @@ export default function AdminDashboard() {
         {activeTab === "dashboard" && renderDashboard()}
         {activeTab === "courses" && (courseView === "list" ? renderCourseList() : renderCourseEditor())}
         {activeTab === "students" && renderStudents()}
-        {activeTab === "store" && (
-          <div className="relative z-10 p-8 flex items-center justify-center h-full">
-            <div className="text-center">
-              <ShoppingBag className="w-16 h-16 text-gray-600 mx-auto mb-4" />
-              <h2 className="text-xl font-header text-gray-400">STORE MANAGEMENT COMING SOON</h2>
-            </div>
-          </div>
-        )}
+        {activeTab === "store" && renderAssetStore()}
         {activeTab === "analytics" && (
           <div className="relative z-10 p-8 flex items-center justify-center h-full">
             <div className="text-center">
