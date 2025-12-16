@@ -1,6 +1,6 @@
 import { Link } from "wouter";
 import { useState, useEffect, useRef } from "react";
-import { LayoutDashboard, BookOpen, Users, ShoppingBag, BarChart2, Plus, Download, Bold, Italic, Underline, Link as LinkIcon, Code, X, Search, Edit2, Trash2, ArrowUp, ArrowDown, ArrowLeft, ArrowRight } from "lucide-react";
+import { LayoutDashboard, BookOpen, Users, ShoppingBag, BarChart2, Plus, Download, Bold, Italic, Underline, Link as LinkIcon, Code, X, Search, Edit2, Trash2, ArrowUp, ArrowDown, ArrowLeft, ArrowRight, ZoomIn, ZoomOut, Move } from "lucide-react";
 
 const INITIAL_LESSONS = {
   "1.1": { id: "1.1", title: "The Multimodal Script", duration: "12:45", video: "multimodal_script_v3.mp4", notes: "Introduction to multimodal scripting techniques using Gemini 1.5 Pro.", keyPrompt: "Analyze this image as a Director of Photography...", resources: [{ name: "Visual_Bible_Template.pdf", size: "2.4 MB", type: "PDF" }] },
@@ -73,7 +73,7 @@ interface Product {
   revenue: string;
   status: "ACTIVE" | "DRAFT";
   image: string;
-  imagePosition: { x: number; y: number };
+  imagePosition: { x: number; y: number; zoom: number };
 }
 
 export default function AdminDashboard() {
@@ -164,7 +164,7 @@ export default function AdminDashboard() {
       revenue: "$3,596",
       status: "ACTIVE",
       image: "https://images.unsplash.com/photo-1550684848-fac1c5b4e853?q=80&w=2670&auto=format&fit=crop",
-      imagePosition: { x: 50, y: 50 }
+      imagePosition: { x: 50, y: 50, zoom: 1 }
     },
     {
       id: "p2",
@@ -174,7 +174,7 @@ export default function AdminDashboard() {
       revenue: "$4,361",
       status: "ACTIVE",
       image: "https://images.unsplash.com/photo-1535905557558-afc4877a26fc?q=80&w=2574&auto=format&fit=crop",
-      imagePosition: { x: 50, y: 50 }
+      imagePosition: { x: 50, y: 50, zoom: 1 }
     },
     {
       id: "p3",
@@ -184,12 +184,14 @@ export default function AdminDashboard() {
       revenue: "Unreleased",
       status: "DRAFT",
       image: "",
-      imagePosition: { x: 50, y: 50 }
+      imagePosition: { x: 50, y: 50, zoom: 1 }
     }
   ]);
 
   const [isProductModalOpen, setIsProductModalOpen] = useState(false);
   const [editingProduct, setEditingProduct] = useState<Product | null>(null);
+  const [isDragging, setIsDragging] = useState(false);
+  const dragStartRef = useRef<{ x: number, y: number } | null>(null);
 
   const handleAddProduct = () => {
     const newProduct: Product = {
@@ -200,7 +202,7 @@ export default function AdminDashboard() {
       revenue: "$0",
       status: "DRAFT",
       image: "",
-      imagePosition: { x: 50, y: 50 }
+      imagePosition: { x: 50, y: 50, zoom: 1 }
     };
     setEditingProduct(newProduct);
     setIsProductModalOpen(true);
@@ -1429,22 +1431,65 @@ export default function AdminDashboard() {
     e.target.value = '';
   };
 
-  const handleImagePositionChange = (direction: 'up' | 'down' | 'left' | 'right') => {
+  const handleImagePositionChange = (direction: 'up' | 'down' | 'left' | 'right' | 'zoomIn' | 'zoomOut') => {
     if (!editingProduct) return;
     
-    const currentPos = editingProduct.imagePosition || { x: 50, y: 50 };
-    let { x, y } = currentPos;
+    const currentPos = editingProduct.imagePosition || { x: 50, y: 50, zoom: 1 };
+    let { x, y, zoom } = currentPos;
+    
+    // Ensure zoom is defined if coming from older data
+    if (zoom === undefined) zoom = 1;
     
     const STEP = 5;
+    const ZOOM_STEP = 0.1;
     
     switch (direction) {
       case 'up': y = Math.max(0, y - STEP); break;
       case 'down': y = Math.min(100, y + STEP); break;
       case 'left': x = Math.max(0, x - STEP); break;
       case 'right': x = Math.min(100, x + STEP); break;
+      case 'zoomIn': zoom = Math.min(3, zoom + ZOOM_STEP); break;
+      case 'zoomOut': zoom = Math.max(1, zoom - ZOOM_STEP); break;
     }
     
-    setEditingProduct({ ...editingProduct, imagePosition: { x, y } });
+    setEditingProduct({ ...editingProduct, imagePosition: { x, y, zoom } });
+  };
+
+  const handleMouseDown = (e: React.MouseEvent) => {
+    e.preventDefault();
+    setIsDragging(true);
+    dragStartRef.current = { x: e.clientX, y: e.clientY };
+  };
+
+  const handleMouseMove = (e: React.MouseEvent) => {
+    if (!isDragging || !editingProduct || !dragStartRef.current) return;
+    
+    const deltaX = e.clientX - dragStartRef.current.x;
+    const deltaY = e.clientY - dragStartRef.current.y;
+    
+    // Reset drag start to current position for next frame
+    dragStartRef.current = { x: e.clientX, y: e.clientY };
+    
+    const currentPos = editingProduct.imagePosition || { x: 50, y: 50, zoom: 1 };
+    
+    // Inverse logic: dragging mouse right moves background left (so x increases in bg position logic usually, but let's test)
+    // Actually background-position percentage: 0% is left, 100% is right.
+    // To move the image "right" within the container, we decrease the percentage? No, 0% aligns left edge of image to left edge of container.
+    // Let's just create a sensitivity factor
+    const sensitivity = 0.5;
+    
+    let newX = Math.max(0, Math.min(100, currentPos.x - (deltaX * sensitivity)));
+    let newY = Math.max(0, Math.min(100, currentPos.y - (deltaY * sensitivity)));
+    
+    setEditingProduct({ 
+      ...editingProduct, 
+      imagePosition: { ...currentPos, x: newX, y: newY } 
+    });
+  };
+
+  const handleMouseUp = () => {
+    setIsDragging(false);
+    dragStartRef.current = null;
   };
 
   const renderAssetStore = () => (
@@ -1483,7 +1528,9 @@ export default function AdminDashboard() {
                   className="absolute inset-0 bg-cover opacity-60 group-hover:opacity-80 transition-opacity" 
                   style={{ 
                     backgroundImage: `url('${product.image}')`,
-                    backgroundPosition: `${product.imagePosition?.x || 50}% ${product.imagePosition?.y || 50}%`
+                    backgroundPosition: `${product.imagePosition?.x || 50}% ${product.imagePosition?.y || 50}%`,
+                    transform: `scale(${product.imagePosition?.zoom || 1})`,
+                    transformOrigin: `${product.imagePosition?.x || 50}% ${product.imagePosition?.y || 50}%` // This ensures zoom happens around the focal point
                   }}
                 ></div>
               ) : (
@@ -1597,37 +1644,42 @@ export default function AdminDashboard() {
                   </div>
                 </div>
                 {editingProduct.image && (
-                  <div className="mt-2 h-48 w-full bg-gray-900 border border-white/5 rounded overflow-hidden relative group">
-                    <img 
-                      src={editingProduct.image} 
-                      alt="Preview" 
-                      className="w-full h-full object-cover opacity-60"
-                      style={{ objectPosition: `${editingProduct.imagePosition?.x || 50}% ${editingProduct.imagePosition?.y || 50}%` }}
+                  <div 
+                    className={`mt-2 h-64 w-full bg-gray-900 border border-white/5 rounded overflow-hidden relative group cursor-move ${isDragging ? 'border-neonPurple' : ''}`}
+                    onMouseDown={handleMouseDown}
+                    onMouseMove={handleMouseMove}
+                    onMouseUp={handleMouseUp}
+                    onMouseLeave={handleMouseUp}
+                  >
+                    <div 
+                      className="w-full h-full bg-cover bg-no-repeat"
+                      style={{ 
+                        backgroundImage: `url('${editingProduct.image}')`,
+                        backgroundPosition: `${editingProduct.imagePosition?.x || 50}% ${editingProduct.imagePosition?.y || 50}%`,
+                        transform: `scale(${editingProduct.imagePosition?.zoom || 1})`,
+                        transformOrigin: `${editingProduct.imagePosition?.x || 50}% ${editingProduct.imagePosition?.y || 50}%`, // Focus zoom on the position
+                        opacity: 0.6
+                      }}
                     />
                     
                     {/* Position Controls Overlay */}
-                    <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity bg-black/40">
-                      <div className="grid grid-cols-3 gap-1">
-                        <div></div>
-                        <button onClick={(e) => { e.preventDefault(); handleImagePositionChange('up'); }} className="p-1 bg-black/80 text-white hover:bg-neonPurple rounded"><ArrowUp className="w-4 h-4" /></button>
-                        <div></div>
-                        
-                        <button onClick={(e) => { e.preventDefault(); handleImagePositionChange('left'); }} className="p-1 bg-black/80 text-white hover:bg-neonPurple rounded"><ArrowLeft className="w-4 h-4" /></button>
-                        <div className="flex items-center justify-center w-6 h-6 rounded-full border border-white/20 bg-black/50">
-                           <div className="w-1 h-1 bg-white rounded-full"></div>
-                        </div>
-                        <button onClick={(e) => { e.preventDefault(); handleImagePositionChange('right'); }} className="p-1 bg-black/80 text-white hover:bg-neonPurple rounded"><ArrowRight className="w-4 h-4" /></button>
-                        
-                        <div></div>
-                        <button onClick={(e) => { e.preventDefault(); handleImagePositionChange('down'); }} className="p-1 bg-black/80 text-white hover:bg-neonPurple rounded"><ArrowDown className="w-4 h-4" /></button>
-                        <div></div>
+                    <div className="absolute inset-0 flex flex-col justify-between p-4 pointer-events-none">
+                      <div className="flex justify-end gap-2 pointer-events-auto opacity-0 group-hover:opacity-100 transition-opacity">
+                         <button onClick={(e) => { e.preventDefault(); handleImagePositionChange('zoomIn'); }} className="p-2 bg-black/80 text-white hover:bg-neonPurple rounded shadow-lg border border-white/10" title="Zoom In"><ZoomIn className="w-4 h-4" /></button>
+                         <button onClick={(e) => { e.preventDefault(); handleImagePositionChange('zoomOut'); }} className="p-2 bg-black/80 text-white hover:bg-neonPurple rounded shadow-lg border border-white/10" title="Zoom Out"><ZoomOut className="w-4 h-4" /></button>
                       </div>
-                    </div>
-                    
-                    <div className="absolute bottom-2 right-2 pointer-events-none">
-                      <span className="text-[10px] bg-black/50 px-2 py-1 rounded text-white font-mono">
-                        POS: {editingProduct.imagePosition?.x || 50}% {editingProduct.imagePosition?.y || 50}%
-                      </span>
+                      
+                      <div className="flex items-center justify-center pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity">
+                         <div className="bg-black/50 p-2 rounded-full border border-white/10 backdrop-blur-sm">
+                            <Move className="w-6 h-6 text-white/80" />
+                         </div>
+                      </div>
+
+                      <div className="flex justify-end pointer-events-none">
+                        <span className="text-[10px] bg-black/50 px-2 py-1 rounded text-white font-mono backdrop-blur-sm border border-white/5">
+                          POS: {Math.round(editingProduct.imagePosition?.x || 50)}% {Math.round(editingProduct.imagePosition?.y || 50)}% • ZOOM: {((editingProduct.imagePosition?.zoom || 1) * 100).toFixed(0)}%
+                        </span>
+                      </div>
                     </div>
                   </div>
                 )}
