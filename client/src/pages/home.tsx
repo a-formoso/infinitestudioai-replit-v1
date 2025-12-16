@@ -98,54 +98,52 @@ export default function Home() {
                   <div className="space-y-12">
                       
                       {/* Project 1 */}
-                      <div className="group relative h-[450px] w-full glass-panel overflow-hidden cursor-pointer border border-white/5 hover:border-electricBlue/50 transition-all duration-500">
+                      <Link href="/case-studies" className="group relative h-[450px] w-full glass-panel overflow-hidden cursor-pointer border border-white/5 hover:border-electricBlue/50 transition-all duration-500 block">
                           <div className="absolute inset-0 bg-gray-800 group-hover:scale-105 transition-transform duration-700">
-                               {/* Placeholder Image */}
-                              <div className="w-full h-full bg-[url('https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=2564&auto=format&fit=crop')] bg-cover bg-center opacity-70 group-hover:opacity-30 transition-opacity duration-500"></div>
+                              <div className="w-full h-full bg-[url('https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=2564&auto=format&fit=crop')] bg-cover bg-center opacity-70 group-hover:opacity-50 transition-opacity duration-500"></div>
                           </div>
                           
-                          {/* Prompt Reveal Overlay */}
-                          <div className="absolute inset-0 bg-black/90 translate-y-full group-hover:translate-y-0 transition-transform duration-500 ease-in-out flex flex-col justify-center p-8 md:p-16">
-                              <p className="text-electricBlue font-mono text-xs mb-4 tracking-widest">/// PROMPT DATA REVEALED</p>
-                              <p className="font-mono text-base md:text-xl text-gray-300 mb-8 border-l-2 border-signalOrange pl-6 leading-relaxed italic">
-                                  "Cinematic wide shot of a cyberpunk detective standing in neon rain, 35mm anamorphic lens, Blade Runner 2049 aesthetic, high contrast, volumetric fog..."
-                              </p>
-                              <div className="flex flex-wrap gap-3 text-[10px] md:text-xs font-header text-white/70">
-                                  <span className="border border-white/20 px-3 py-1 rounded-full hover:bg-electricBlue/20 hover:border-electricBlue transition-colors">GEMINI 3.0</span>
-                                  <span className="border border-white/20 px-3 py-1 rounded-full hover:bg-electricBlue/20 hover:border-electricBlue transition-colors">NANO BANANO (3 PRO PREVIEW)</span>
-                                  <span className="border border-white/20 px-3 py-1 rounded-full hover:bg-electricBlue/20 hover:border-electricBlue transition-colors">VEO 3.1</span>
+                          <div className="absolute inset-0 flex items-center justify-center z-20">
+                              <div className="w-20 h-20 rounded-full bg-electricBlue/20 backdrop-blur-sm flex items-center justify-center border border-electricBlue/50 group-hover:bg-electricBlue group-hover:scale-110 transition-all duration-300">
+                                  <ArrowRight className="w-8 h-8 text-white" />
                               </div>
                           </div>
 
-                          {/* Title (Always Visible) */}
-                          <div className="absolute bottom-0 left-0 p-8 md:p-12 w-full bg-gradient-to-t from-black via-black/80 to-transparent pointer-events-none">
-                              <h3 className="font-header text-3xl md:text-5xl text-white mb-2 group-hover:text-electricBlue transition-colors duration-300">ECHO PROTOCOL</h3>
-                              <p className="text-sm text-gray-400 font-mono tracking-wide border-l border-white/30 pl-3">Sci-Fi Short Film</p>
+                          <div className="absolute top-4 left-4 z-10 flex items-center gap-3">
+                              <span className="bg-black/50 backdrop-blur-sm text-white text-[10px] font-mono px-2 py-1 border border-white/20">2:34</span>
+                              <span className="bg-black/50 backdrop-blur-sm text-gray-400 text-[10px] font-mono px-2 py-1 border border-white/20">2025</span>
                           </div>
-                      </div>
+
+                          <div className="absolute bottom-0 left-0 p-8 md:p-12 w-full bg-gradient-to-t from-black via-black/80 to-transparent">
+                              <h3 className="font-header text-3xl md:text-5xl text-white mb-2 group-hover:text-electricBlue transition-colors duration-300">ECHO PROTOCOL</h3>
+                              <p className="text-sm text-gray-400 font-mono tracking-wide border-l border-white/30 pl-3 mb-3">Sci-Fi Short Film</p>
+                              <p className="text-sm text-gray-500 max-w-xl leading-relaxed hidden md:block">A cyberpunk detective navigates neon-soaked streets, hunting for answers in a world where memories can be stolen.</p>
+                          </div>
+                      </Link>
 
                       {/* Project 2 */}
-                      <div className="group relative h-[450px] w-full glass-panel overflow-hidden cursor-pointer border border-white/5 hover:border-signalOrange/50 transition-all duration-500">
+                      <Link href="/case-studies" className="group relative h-[450px] w-full glass-panel overflow-hidden cursor-pointer border border-white/5 hover:border-signalOrange/50 transition-all duration-500 block">
                           <div className="absolute inset-0 bg-gray-800 group-hover:scale-105 transition-transform duration-700">
-                              <div className="w-full h-full bg-[url('https://images.unsplash.com/photo-1534447677768-be436bb09401?q=80&w=2694&auto=format&fit=crop')] bg-cover bg-center opacity-70 group-hover:opacity-30 transition-opacity duration-500"></div>
+                              <div className="w-full h-full bg-[url('https://images.unsplash.com/photo-1534447677768-be436bb09401?q=80&w=2694&auto=format&fit=crop')] bg-cover bg-center opacity-70 group-hover:opacity-50 transition-opacity duration-500"></div>
                           </div>
                           
-                          <div className="absolute inset-0 bg-black/90 translate-y-full group-hover:translate-y-0 transition-transform duration-500 ease-in-out flex flex-col justify-center p-8 md:p-16">
-                              <p className="text-signalOrange font-mono text-xs mb-4 tracking-widest">/// PROMPT DATA REVEALED</p>
-                              <p className="font-mono text-base md:text-xl text-gray-300 mb-8 border-l-2 border-electricBlue pl-6 leading-relaxed italic">
-                                  "Macro photography of liquid gold merging with obsidian rock, fluid dynamics simulation, 8k resolution, luxury commercial lighting..."
-                              </p>
-                              <div className="flex flex-wrap gap-3 text-[10px] md:text-xs font-header text-white/70">
-                                  <span className="border border-white/20 px-3 py-1 rounded-full hover:bg-signalOrange/20 hover:border-signalOrange transition-colors">VEO 3.1 PHYSICS</span>
-                                  <span className="border border-white/20 px-3 py-1 rounded-full hover:bg-signalOrange/20 hover:border-signalOrange transition-colors">MUSIC FX</span>
+                          <div className="absolute inset-0 flex items-center justify-center z-20">
+                              <div className="w-20 h-20 rounded-full bg-signalOrange/20 backdrop-blur-sm flex items-center justify-center border border-signalOrange/50 group-hover:bg-signalOrange group-hover:scale-110 transition-all duration-300">
+                                  <ArrowRight className="w-8 h-8 text-white" />
                               </div>
                           </div>
 
-                          <div className="absolute bottom-0 left-0 p-8 md:p-12 w-full bg-gradient-to-t from-black via-black/80 to-transparent pointer-events-none">
-                              <h3 className="font-header text-3xl md:text-5xl text-white mb-2 group-hover:text-signalOrange transition-colors duration-300">AURUM DYNAMICS</h3>
-                              <p className="text-sm text-gray-400 font-mono tracking-wide border-l border-white/30 pl-3">Luxury Brand Commercial</p>
+                          <div className="absolute top-4 left-4 z-10 flex items-center gap-3">
+                              <span className="bg-black/50 backdrop-blur-sm text-white text-[10px] font-mono px-2 py-1 border border-white/20">1:45</span>
+                              <span className="bg-black/50 backdrop-blur-sm text-gray-400 text-[10px] font-mono px-2 py-1 border border-white/20">2025</span>
                           </div>
-                      </div>
+
+                          <div className="absolute bottom-0 left-0 p-8 md:p-12 w-full bg-gradient-to-t from-black via-black/80 to-transparent">
+                              <h3 className="font-header text-3xl md:text-5xl text-white mb-2 group-hover:text-signalOrange transition-colors duration-300">AURUM DYNAMICS</h3>
+                              <p className="text-sm text-gray-400 font-mono tracking-wide border-l border-white/30 pl-3 mb-3">Luxury Brand Commercial</p>
+                              <p className="text-sm text-gray-500 max-w-xl leading-relaxed hidden md:block">A mesmerizing visual journey through liquid gold and obsidian, crafted for a luxury jewelry brand's global campaign.</p>
+                          </div>
+                      </Link>
 
                   </div>
               </div>
