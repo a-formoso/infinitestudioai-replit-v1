@@ -4,6 +4,7 @@ import { LayoutDashboard, BookOpen, Users, ShoppingBag, BarChart2, Plus, Downloa
 
 export default function AdminDashboard() {
   const [activeTab, setActiveTab] = useState("dashboard");
+  const [courseView, setCourseView] = useState<"list" | "editor">("list");
   const [logs, setLogs] = useState<string[]>([]);
   const terminalRef = useRef<HTMLDivElement>(null);
 
@@ -54,7 +55,13 @@ export default function AdminDashboard() {
           <p className="text-xs text-gray-400 font-mono">Last Sync: Just now</p>
         </div>
         <div className="flex gap-4">
-          <button className="flex items-center gap-2 bg-electricBlue text-white px-4 py-2 text-[10px] font-header font-bold uppercase hover:bg-white hover:text-black transition-colors">
+          <button 
+            onClick={() => {
+              setActiveTab("courses");
+              setCourseView("editor");
+            }}
+            className="flex items-center gap-2 bg-electricBlue text-white px-4 py-2 text-[10px] font-header font-bold uppercase hover:bg-white hover:text-black transition-colors"
+          >
             <Plus className="w-3 h-3" /> New Course
           </button>
           <button className="flex items-center gap-2 border border-white/20 text-white px-4 py-2 text-[10px] font-header font-bold uppercase hover:bg-white/10 transition-colors">
@@ -183,12 +190,130 @@ export default function AdminDashboard() {
     </div>
   );
 
-  const renderCourses = () => (
+  const renderCourseList = () => (
+    <div className="relative z-10 p-8 max-w-7xl mx-auto">
+      {/* HEADER */}
+      <div className="flex justify-between items-end mb-8">
+        <div>
+          <h1 className="font-header text-2xl text-white mb-1">COURSE MANAGEMENT</h1>
+          <p className="text-xs text-gray-400 font-mono">Manage curriculum, uploads, and pricing.</p>
+        </div>
+        <div className="flex gap-4">
+          <button 
+            onClick={() => setCourseView('editor')}
+            className="bg-electricBlue text-white px-4 py-2 text-[10px] font-header font-bold uppercase hover:bg-white hover:text-black transition-colors"
+          >
+            + Create New Course
+          </button>
+        </div>
+      </div>
+
+      {/* COURSE LIST */}
+      <div className="space-y-6">
+        
+        {/* Course Item 1 */}
+        <div className="glass-panel p-0 overflow-hidden border border-white/10 hover:border-electricBlue/30 transition-colors group">
+          <div className="p-6 flex items-center justify-between border-b border-white/5 bg-white/5">
+            <div className="flex items-center gap-4">
+              <div className="w-12 h-12 bg-gray-900 shrink-0 relative overflow-hidden rounded border border-white/10">
+                <div className="absolute inset-0 bg-gradient-to-br from-blue-900/40 to-black"></div>
+                <span className="absolute inset-0 flex items-center justify-center font-header text-white text-xs">L1</span>
+              </div>
+              <div>
+                <h3 className="font-header text-sm text-white">MASTER THE GOOGLE ECOSYSTEM</h3>
+                <p className="text-[10px] text-gray-400 font-mono">ID: #COURSE-001 • Last Updated: 2h ago</p>
+              </div>
+            </div>
+            <div className="flex items-center gap-6">
+              <div className="text-right">
+                <p className="text-xs text-white font-bold">3,420</p>
+                <p className="text-[10px] text-gray-500 uppercase">Students</p>
+              </div>
+              <div className="text-right">
+                <p className="text-xs text-green-400 font-bold">$149</p>
+                <p className="text-[10px] text-gray-500 uppercase">Price</p>
+              </div>
+              <span className="bg-green-500/10 text-green-500 px-3 py-1 rounded text-[10px] font-bold border border-green-500/20">LIVE</span>
+              <button className="text-gray-400 hover:text-white transition-colors">•••</button>
+            </div>
+          </div>
+          
+          {/* Modules (Collapsible) */}
+          <div className="bg-black/30 p-4 space-y-2">
+            <div className="flex justify-between items-center p-3 bg-white/5 rounded border border-white/5 hover:border-white/10 cursor-move">
+              <div className="flex items-center gap-3">
+                <span className="text-gray-600 text-xs">::</span>
+                <span className="text-xs text-gray-300 font-medium">Module 1: The Writer's Room</span>
+              </div>
+              <div className="flex gap-3 text-[10px]">
+                <span className="text-gray-500">3 Lessons</span>
+                <button onClick={() => setCourseView('editor')} className="text-electricBlue hover:underline">Edit</button>
+              </div>
+            </div>
+            <div className="flex justify-between items-center p-3 bg-white/5 rounded border border-white/5 hover:border-white/10 cursor-move">
+              <div className="flex items-center gap-3">
+                <span className="text-gray-600 text-xs">::</span>
+                <span className="text-xs text-gray-300 font-medium">Module 2: The Art Dept</span>
+              </div>
+              <div className="flex gap-3 text-[10px]">
+                <span className="text-gray-500">4 Lessons</span>
+                <button onClick={() => setCourseView('editor')} className="text-electricBlue hover:underline">Edit</button>
+              </div>
+            </div>
+            <div className="flex justify-between items-center p-3 bg-white/5 rounded border border-white/5 hover:border-white/10 cursor-move">
+              <div className="flex items-center gap-3">
+                <span className="text-gray-600 text-xs">::</span>
+                <span className="text-xs text-gray-300 font-medium">Module 3: Principal Photography</span>
+              </div>
+              <div className="flex gap-3 text-[10px]">
+                <span className="text-gray-500">5 Lessons</span>
+                <button onClick={() => setCourseView('editor')} className="text-electricBlue hover:underline">Edit</button>
+              </div>
+            </div>
+            <button className="w-full py-2 text-[10px] text-gray-500 hover:text-white hover:bg-white/5 border border-dashed border-white/10 rounded transition-colors">
+              + Add Module
+            </button>
+          </div>
+        </div>
+
+        {/* Course Item 2 */}
+        <div className="glass-panel p-0 overflow-hidden border border-white/10 hover:border-signalOrange/30 transition-colors group opacity-80">
+          <div className="p-6 flex items-center justify-between border-b border-white/5 bg-white/5">
+            <div className="flex items-center gap-4">
+              <div className="w-12 h-12 bg-gray-900 shrink-0 relative overflow-hidden rounded border border-white/10">
+                <div className="absolute inset-0 bg-gradient-to-br from-orange-900/40 to-black"></div>
+                <span className="absolute inset-0 flex items-center justify-center font-header text-white text-xs">L2</span>
+              </div>
+              <div>
+                <h3 className="font-header text-sm text-white">ADVANCED AI CINEMATOGRAPHY</h3>
+                <p className="text-[10px] text-gray-400 font-mono">ID: #COURSE-002 • Last Updated: 1d ago</p>
+              </div>
+            </div>
+            <div className="flex items-center gap-6">
+              <div className="text-right">
+                <p class="text-xs text-white font-bold">1,105</p>
+                <p class="text-[10px] text-gray-500 uppercase">Students</p>
+              </div>
+              <div className="text-right">
+                <p class="text-xs text-green-400 font-bold">$199</p>
+                <p class="text-[10px] text-gray-500 uppercase">Price</p>
+              </div>
+              <span className="bg-yellow-500/10 text-yellow-500 px-3 py-1 rounded text-[10px] font-bold border border-yellow-500/20">DRAFT</span>
+              <button className="text-gray-400 hover:text-white transition-colors">•••</button>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  );
+
+  const renderCourseEditor = () => (
     <div className="relative z-10 p-8 max-w-7xl mx-auto">
       {/* BREADCRUMBS & HEADER */}
       <div className="mb-8">
         <div className="flex items-center gap-2 text-[10px] font-mono text-gray-500 mb-2">
-          <a href="#" className="hover:text-white">COURSES</a>
+          <button onClick={() => setCourseView('list')} className="hover:text-white">COURSES</button>
           <span>/</span>
           <a href="#" className="hover:text-white">MASTER THE GOOGLE ECOSYSTEM</a>
           <span>/</span>
@@ -197,8 +322,9 @@ export default function AdminDashboard() {
         <div className="flex justify-between items-end">
           <h1 className="font-header text-2xl text-white">COURSE EDITOR</h1>
           <div className="flex gap-4">
+            <button onClick={() => setCourseView('list')} className="text-gray-400 text-xs hover:text-white transition-colors underline">Cancel</button>
             <button className="text-gray-400 text-xs hover:text-white transition-colors underline">Preview</button>
-            <button className="bg-green-500 text-black px-4 py-2 text-[10px] font-header font-bold uppercase hover:bg-white transition-colors">
+            <button onClick={() => setCourseView('list')} className="bg-green-500 text-black px-4 py-2 text-[10px] font-header font-bold uppercase hover:bg-white transition-colors">
               Save Changes
             </button>
           </div>
@@ -337,7 +463,7 @@ export default function AdminDashboard() {
               <LayoutDashboard className="w-4 h-4" /> DASHBOARD
             </button>
             <button 
-              onClick={() => setActiveTab("courses")}
+              onClick={() => { setActiveTab("courses"); setCourseView("list"); }}
               className={`w-full flex items-center gap-3 px-4 py-3 text-xs font-header font-bold rounded transition-colors ${activeTab === "courses" ? "bg-white/10 text-white border-l-2 border-electricBlue" : "text-gray-400 hover:bg-white/5 hover:text-white"}`}
             >
               <BookOpen className="w-4 h-4" /> COURSES
@@ -383,7 +509,7 @@ export default function AdminDashboard() {
         <div className="fixed inset-0 bg-grid-pattern bg-[size:40px_40px] opacity-20 pointer-events-none z-0"></div>
 
         {activeTab === "dashboard" && renderDashboard()}
-        {activeTab === "courses" && renderCourses()}
+        {activeTab === "courses" && (courseView === "list" ? renderCourseList() : renderCourseEditor())}
         {activeTab === "students" && (
           <div className="relative z-10 p-8 flex items-center justify-center h-full">
             <div className="text-center">
