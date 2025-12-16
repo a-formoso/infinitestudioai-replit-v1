@@ -1,3 +1,4 @@
+import { Footer } from "@/components/footer";
 import { Link } from "wouter";
 import { Video, Music, Film, ChevronRight } from "lucide-react";
 
@@ -151,12 +152,7 @@ export default function Hire() {
         </div>
       </section>
 
-      {/* FOOTER */}
-      <footer className="bg-black border-t border-white/10 py-8 text-center relative z-20">
-        <div className="text-[10px] text-gray-600 font-mono">
-          © 2025 INFINITE STUDIO. <Link href="/dashboard" className="text-white hover:underline">RETURN TO DASHBOARD</Link>
-        </div>
-      </footer>
+      <Footer />
     </div>
   );
 }
