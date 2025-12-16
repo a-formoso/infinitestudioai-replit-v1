@@ -56,7 +56,7 @@ export default function CoursePlayer() {
                           {/* Scrubber */}
                           <div className="absolute bottom-0 left-0 right-0 h-1 bg-white/20 cursor-pointer z-10">
                                 <div className="h-full bg-electricBlue w-1/3 relative">
-                                    <div className="absolute right-0 top-1/2 -translate-y-1/2 w-3 h-3 bg-white rounded-full shadow opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                                    <div className="absolute right-0 top-1/2 -translate-y-1/2 w-3 h-3 bg-white rounded-full shadow opacity-0 group-hover:opacity-100 transition-opacity z-20"></div>
                                 </div>
                           </div>
 
