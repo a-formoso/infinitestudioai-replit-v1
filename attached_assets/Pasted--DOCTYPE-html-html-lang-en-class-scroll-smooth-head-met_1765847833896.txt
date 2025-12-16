@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SECURE CHECKOUT | INFINITE STUDIO</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&family=Syncopate:wght@400;700&display=swap" rel="stylesheet">
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        obsidian: '#0A0A0A',
+                        electricBlue: '#2962FF',
+                        signalOrange: '#FF3D00',
+                        offWhite: '#E0E0E0',
+                        glass: 'rgba(255, 255, 255, 0.05)',
+                        glassBorder: 'rgba(255, 255, 255, 0.1)',
+                    },
+                    fontFamily: {
+                        header: ['Syncopate', 'sans-serif'],
+                        body: ['Inter', 'sans-serif'],
+                    },
+                    backgroundImage: {
+                        'grid-pattern': "linear-gradient(to right, #1a1a1a 1px, transparent 1px), linear-gradient(to bottom, #1a1a1a 1px, transparent 1px)",
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        /* Hide scrollbar */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #0A0A0A; }
+        ::-webkit-scrollbar-thumb { background: #333; }
+        
+        input {
+            background: rgba(0,0,0,0.5);
+            border: 1px solid rgba(255,255,255,0.1);
+            color: white;
+            padding: 1rem;
+            font-family: 'Inter', sans-serif;
+            width: 100%;
+            font-size: 0.875rem;
+        }
+        input:focus {
+            outline: none;
+            border-color: #2962FF;
+            box-shadow: 0 0 10px rgba(41,98,255,0.2);
+        }
+    </style>
+</head>
+<body class="bg-obsidian text-offWhite font-body antialiased selection:bg-electricBlue selection:text-white overflow-x-hidden">
+
+    <!-- GRID OVERLAY -->
+    <div class="fixed inset-0 bg-grid-pattern bg-[size:40px_40px] opacity-20 pointer-events-none z-0"></div>
+
+    <!-- NAV (Minimal for Checkout) -->
+    <nav class="fixed top-0 w-full z-50 glass-panel border-b-0 border-b-glassBorder">
+        <div class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
+            <a href="index.html" class="font-header font-bold text-xl tracking-widest text-white flex items-center gap-2 hover:opacity-80 transition-opacity">
+                <span class="text-electricBlue text-2xl">∞</span> INFINITE STUDIO
+            </a>
+            <div class="flex gap-2 items-center text-[10px] font-mono text-gray-400">
+                <div class="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div> SECURE SSL ENCRYPTED
+            </div>
+        </div>
+    </nav>
+
+    <!-- CHECKOUT CONTENT -->
+    <section class="min-h-screen pt-32 pb-20 px-6 max-w-7xl mx-auto z-10 flex items-center justify-center">
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 w-full">
+            
+            <!-- LEFT: ORDER SUMMARY -->
+            <div class="lg:col-span-5 order-2 lg:order-1">
+                <div class="glass-panel p-8 sticky top-32">
+                    <h2 class="font-header text-lg text-white mb-6 border-b border-white/10 pb-4">ORDER SUMMARY</h2>
+                    
+                    <!-- Product Card -->
+                    <div class="flex gap-4 mb-6">
+                        <div class="w-24 h-24 bg-gray-900 overflow-hidden relative shrink-0">
+                             <div class="absolute inset-0 bg-gradient-to-br from-blue-900/40 to-black"></div>
+                             <div class="absolute bottom-2 left-2 font-header font-bold text-lg text-white z-10">01</div>
+                        </div>
+                        <div>
+                            <h3 class="font-header text-sm text-white mb-1">MASTER THE GOOGLE ECOSYSTEM</h3>
+                            <p class="text-xs text-gray-400 font-mono mb-2">Level 01 Certification</p>
+                            <span class="font-header font-bold text-electricBlue">$149.00</span>
+                        </div>
+                    </div>
+
+                    <!-- Line Items -->
+                    <div class="space-y-3 border-t border-white/10 pt-6 mb-6 text-xs font-mono text-gray-400">
+                        <div class="flex justify-between">
+                            <span>Subtotal</span>
+                            <span>$149.00</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span>Taxes (Estimated)</span>
+                            <span>$0.00</span>
+                        </div>
+                        <div class="flex justify-between text-white font-bold text-sm pt-4 border-t border-white/10 mt-4">
+                            <span>TOTAL DUE</span>
+                            <span>$149.00</span>
+                        </div>
+                    </div>
+
+                    <!-- Trust Badges -->
+                    <div class="bg-white/5 p-4 rounded text-center space-y-2">
+                        <div class="text-[10px] font-mono text-gray-400 uppercase tracking-widest mb-2">Guaranteed Safe Checkout</div>
+                        <div class="flex justify-center gap-4 opacity-50 grayscale hover:grayscale-0 transition-all">
+                            <!-- Placeholder Credit Card Icons -->
+                            <div class="w-8 h-5 bg-white/20 rounded"></div>
+                            <div class="w-8 h-5 bg-white/20 rounded"></div>
+                            <div class="w-8 h-5 bg-white/20 rounded"></div>
+                        </div>
+                    </div>
+                    
+                    <!-- Testimonial Mini -->
+                    <div class="mt-8 text-center">
+                        <p class="text-xs text-gray-400 italic mb-2">"The only AI course that actually teaches you how to direct, not just prompt."</p>
+                        <p class="text-[10px] font-header text-electricBlue">- SARAH J., FILMMAKER</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- RIGHT: PAYMENT DETAILS -->
+            <div class="lg:col-span-7 order-1 lg:order-2">
+                <div class="glass-panel p-8 md:p-12">
+                    <h1 class="font-header text-2xl text-white mb-8">COMPLETE ENROLLMENT</h1>
+                    
+                    <form class="space-y-6">
+                        <!-- Email Section -->
+                        <div>
+                            <label class="block text-xs font-header text-gray-400 mb-2">ACCOUNT EMAIL</label>
+                            <input type="email" placeholder="director@studio.com" required>
+                        </div>
+
+                        <!-- Card Section -->
+                        <div class="pt-4 border-t border-white/10">
+                            <label class="block text-xs font-header text-gray-400 mb-4">PAYMENT METHOD</label>
+                            
+                            <div class="space-y-4">
+                                <div>
+                                    <label class="block text-[10px] font-mono text-gray-500 mb-1">CARD NUMBER</label>
+                                    <input type="text" placeholder="0000 0000 0000 0000" class="font-mono">
+                                </div>
+                                <div class="grid grid-cols-2 gap-4">
+                                    <div>
+                                        <label class="block text-[10px] font-mono text-gray-500 mb-1">EXPIRY</label>
+                                        <input type="text" placeholder="MM / YY" class="font-mono">
+                                    </div>
+                                    <div>
+                                        <label class="block text-[10px] font-mono text-gray-500 mb-1">CVC</label>
+                                        <input type="text" placeholder="123" class="font-mono">
+                                    </div>
+                                </div>
+                                <div>
+                                    <label class="block text-[10px] font-mono text-gray-500 mb-1">CARDHOLDER NAME</label>
+                                    <input type="text" placeholder="ALEX SMITH">
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Submit Button -->
+                        <button type="submit" class="w-full bg-electricBlue text-white font-header font-bold text-sm uppercase py-5 hover:bg-white hover:text-black transition-all duration-300 tracking-wider shadow-[0_0_30px_rgba(41,98,255,0.3)] mt-8">
+                            Pay $149.00 & Access Course
+                        </button>
+                        
+                        <p class="text-[10px] text-center text-gray-500 mt-4">
+                            By clicking the button above, you agree to our <a href="#" class="text-electricBlue underline">Terms of Service</a> and <a href="#" class="text-electricBlue underline">Privacy Policy</a>.
+                        </p>
+                    </form>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- FOOTER (Minimal) -->
+    <footer class="bg-black border-t border-white/10 py-8 text-center relative z-20">
+        <div class="text-[10px] text-gray-600 font-mono">
+            © 2025 INFINITE STUDIO. SECURE PAYMENT PROCESSING.
+        </div>
+    </footer>
+</body>
+</html>
