@@ -53,8 +53,9 @@ export default function Dashboard() {
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const formData = new FormData(e.currentTarget);
+    const username = formData.get("username") as string;
     const email = formData.get("email") as string;
-    updateMutation.mutate({ username: user?.username || "", email });
+    updateMutation.mutate({ username, email });
   };
 
   const enrollments = data?.data?.enrollments || [];
@@ -91,6 +92,17 @@ export default function Dashboard() {
                         <DialogTitle className="font-header text-xl text-white">EDIT PROFILE</DialogTitle>
                       </DialogHeader>
                       <form onSubmit={handleSubmit} className="space-y-6 mt-4">
+                        <div>
+                          <label className="block text-[10px] font-mono text-gray-500 mb-2 uppercase tracking-wider">Director Name</label>
+                          <input 
+                            type="text"
+                            name="username"
+                            defaultValue={user?.username || ""}
+                            data-testid="input-edit-username"
+                            className="w-full bg-black/50 border border-white/10 text-white p-4 font-body text-sm focus:outline-none focus:border-electricBlue transition-all"
+                            required
+                          />
+                        </div>
                         <div>
                           <label className="block text-[10px] font-mono text-gray-500 mb-2 uppercase tracking-wider">Email Address</label>
                           <input 
