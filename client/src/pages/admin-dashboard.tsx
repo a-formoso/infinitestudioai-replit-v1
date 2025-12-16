@@ -65,6 +65,16 @@ interface Student {
   status: "ACTIVE" | "PENDING" | "INACTIVE";
 }
 
+interface Product {
+  id: string;
+  title: string;
+  price: string;
+  sales: number;
+  revenue: string;
+  status: "ACTIVE" | "DRAFT";
+  image: string;
+}
+
 export default function AdminDashboard() {
   const [activeTab, setActiveTab] = useState("dashboard");
   const [courseView, setCourseView] = useState<"list" | "editor" | "preview">("list");
@@ -142,6 +152,77 @@ export default function AdminDashboard() {
   const handleStudentFormChange = (field: keyof Student, value: any) => {
     if (!editingStudent) return;
     setEditingStudent({ ...editingStudent, [field]: value });
+  };
+
+  const [productsList, setProductsList] = useState<Product[]>([
+    {
+      id: "p1",
+      title: "NEON NOIR TEXTURES",
+      price: "$29",
+      sales: 124,
+      revenue: "$3,596",
+      status: "ACTIVE",
+      image: "https://images.unsplash.com/photo-1550684848-fac1c5b4e853?q=80&w=2670&auto=format&fit=crop"
+    },
+    {
+      id: "p2",
+      title: "SCI-FI CHARACTERS VOL. 1",
+      price: "$49",
+      sales: 89,
+      revenue: "$4,361",
+      status: "ACTIVE",
+      image: "https://images.unsplash.com/photo-1535905557558-afc4877a26fc?q=80&w=2574&auto=format&fit=crop"
+    },
+    {
+      id: "p3",
+      title: "CINEMATIC SFX PACK",
+      price: "$19",
+      sales: 0,
+      revenue: "Unreleased",
+      status: "DRAFT",
+      image: ""
+    }
+  ]);
+
+  const [isProductModalOpen, setIsProductModalOpen] = useState(false);
+  const [editingProduct, setEditingProduct] = useState<Product | null>(null);
+
+  const handleAddProduct = () => {
+    const newProduct: Product = {
+      id: `p${productsList.length + 1}`,
+      title: "NEW PRODUCT",
+      price: "$0",
+      sales: 0,
+      revenue: "$0",
+      status: "DRAFT",
+      image: ""
+    };
+    setEditingProduct(newProduct);
+    setIsProductModalOpen(true);
+  };
+
+  const handleEditProduct = (product: Product) => {
+    setEditingProduct({ ...product });
+    setIsProductModalOpen(true);
+  };
+
+  const handleSaveProduct = () => {
+    if (!editingProduct) return;
+    
+    const existingIndex = productsList.findIndex(p => p.id === editingProduct.id);
+    if (existingIndex >= 0) {
+      setProductsList(productsList.map(p => p.id === editingProduct.id ? editingProduct : p));
+    } else {
+      setProductsList([...productsList, editingProduct]);
+    }
+    
+    setIsProductModalOpen(false);
+    setEditingProduct(null);
+  };
+
+  const handleProductFormChange = (field: keyof Product, value: any) => {
+    if (!editingProduct) return;
+    setEditingProduct({ ...editingProduct, [field]: value });
   };
 
   const handleCourseListUpdate = (courseId: string, field: keyof Course, value: string) => {
@@ -1340,7 +1421,10 @@ export default function AdminDashboard() {
           <p className="text-xs text-gray-400 font-mono">Manage product files, pricing, and licenses.</p>
         </div>
         <div className="flex gap-4">
-          <button className="bg-neonPurple text-white px-4 py-2 text-[10px] font-header font-bold uppercase hover:bg-white hover:text-black transition-colors">
+          <button 
+            onClick={handleAddProduct}
+            className="bg-neonPurple text-white px-4 py-2 text-[10px] font-header font-bold uppercase hover:bg-white hover:text-black transition-colors"
+          >
             + Add New Product
           </button>
         </div>
@@ -1356,68 +1440,120 @@ export default function AdminDashboard() {
 
       {/* PRODUCT GRID */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        
-        {/* Product Card 1 */}
-        <div className="glass-panel p-0 overflow-hidden border border-white/10 hover:border-neonPurple/50 transition-colors group relative">
-          <div className="h-40 bg-gray-900 relative">
-            <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1550684848-fac1c5b4e853?q=80&w=2670&auto=format&fit=crop')] bg-cover bg-center opacity-60 group-hover:opacity-80 transition-opacity"></div>
-            <div className="absolute top-2 right-2 bg-green-500 text-black text-[10px] font-bold px-2 py-1 rounded">ACTIVE</div>
-          </div>
-          <div className="p-6">
-            <div className="flex justify-between items-start mb-2">
-              <h3 className="font-header text-sm text-white">NEON NOIR TEXTURES</h3>
-              <span className="font-mono text-neonPurple font-bold">$29</span>
+        {productsList.map((product) => (
+          <div key={product.id} className={`glass-panel p-0 overflow-hidden border border-white/10 ${product.status === 'ACTIVE' ? 'hover:border-neonPurple/50' : 'hover:border-white/30 opacity-70'} transition-colors group relative`}>
+            <div className="h-40 bg-gray-900 relative flex items-center justify-center border-b border-white/5 overflow-hidden">
+              {product.image ? (
+                <div className="absolute inset-0 bg-cover bg-center opacity-60 group-hover:opacity-80 transition-opacity" style={{ backgroundImage: `url('${product.image}')` }}></div>
+              ) : (
+                <div className="text-white/20 text-4xl font-header">+</div>
+              )}
+              <div className={`absolute top-2 right-2 ${product.status === 'ACTIVE' ? 'bg-green-500' : 'bg-yellow-500'} text-black text-[10px] font-bold px-2 py-1 rounded`}>
+                {product.status}
+              </div>
             </div>
-            <p className="text-[10px] text-gray-400 mb-4">124 Sales • $3,596 Revenue</p>
-            
-            <div className="flex gap-2">
-              <button className="flex-1 bg-white/10 hover:bg-white/20 text-white text-[10px] py-2 rounded border border-white/10 transition-colors">Edit Details</button>
-              <button className="flex-1 bg-white/10 hover:bg-white/20 text-white text-[10px] py-2 rounded border border-white/10 transition-colors">Update Files</button>
-            </div>
-          </div>
-        </div>
-
-        {/* Product Card 2 */}
-        <div className="glass-panel p-0 overflow-hidden border border-white/10 hover:border-neonPurple/50 transition-colors group relative">
-          <div className="h-40 bg-gray-900 relative">
-            <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1535905557558-afc4877a26fc?q=80&w=2574&auto=format&fit=crop')] bg-cover bg-center opacity-60 group-hover:opacity-80 transition-opacity"></div>
-            <div className="absolute top-2 right-2 bg-green-500 text-black text-[10px] font-bold px-2 py-1 rounded">ACTIVE</div>
-          </div>
-          <div className="p-6">
-            <div className="flex justify-between items-start mb-2">
-              <h3 className="font-header text-sm text-white">SCI-FI CHARACTERS VOL. 1</h3>
-              <span className="font-mono text-neonPurple font-bold">$49</span>
-            </div>
-            <p className="text-[10px] text-gray-400 mb-4">89 Sales • $4,361 Revenue</p>
-            
-            <div className="flex gap-2">
-              <button className="flex-1 bg-white/10 hover:bg-white/20 text-white text-[10px] py-2 rounded border border-white/10 transition-colors">Edit Details</button>
-              <button className="flex-1 bg-white/10 hover:bg-white/20 text-white text-[10px] py-2 rounded border border-white/10 transition-colors">Update Files</button>
+            <div className="p-6">
+              <div className="flex justify-between items-start mb-2">
+                <h3 className="font-header text-sm text-white">{product.title}</h3>
+                <span className={`font-mono font-bold ${product.status === 'ACTIVE' ? 'text-neonPurple' : 'text-gray-500'}`}>{product.price}</span>
+              </div>
+              <p className="text-[10px] text-gray-400 mb-4">{product.sales} Sales • {product.revenue}</p>
+              
+              <div className="flex gap-2">
+                {product.status === 'DRAFT' && (
+                   <button className="flex-1 bg-neonPurple/20 text-neonPurple hover:bg-neonPurple/30 text-[10px] py-2 rounded border border-neonPurple/30 transition-colors">Publish</button>
+                )}
+                <button 
+                  onClick={() => handleEditProduct(product)}
+                  className="flex-1 bg-white/10 hover:bg-white/20 text-white text-[10px] py-2 rounded border border-white/10 transition-colors"
+                >
+                  Edit Details
+                </button>
+                <button className="flex-1 bg-white/10 hover:bg-white/20 text-white text-[10px] py-2 rounded border border-white/10 transition-colors">Update Files</button>
+              </div>
             </div>
           </div>
-        </div>
-
-        {/* Product Card 3 (Draft) */}
-        <div className="glass-panel p-0 overflow-hidden border border-white/10 hover:border-white/30 transition-colors group relative opacity-70">
-          <div className="h-40 bg-gray-900 relative flex items-center justify-center border-b border-white/5">
-            <div className="text-white/20 text-4xl font-header">+</div>
-            <div className="absolute top-2 right-2 bg-yellow-500 text-black text-[10px] font-bold px-2 py-1 rounded">DRAFT</div>
-          </div>
-          <div className="p-6">
-            <div className="flex justify-between items-start mb-2">
-              <h3 className="font-header text-sm text-white">CINEMATIC SFX PACK</h3>
-              <span className="font-mono text-gray-500 font-bold">$19</span>
-            </div>
-            <p className="text-[10px] text-gray-400 mb-4">0 Sales • Unreleased</p>
-            
-            <div className="flex gap-2">
-              <button className="flex-1 bg-neonPurple/20 text-neonPurple hover:bg-neonPurple/30 text-[10px] py-2 rounded border border-neonPurple/30 transition-colors">Publish</button>
-              <button className="flex-1 bg-white/10 hover:bg-white/20 text-white text-[10px] py-2 rounded border border-white/10 transition-colors">Edit</button>
-            </div>
-          </div>
-        </div>
-
+        ))}
       </div>
+
+      {/* Edit Product Modal */}
+      {isProductModalOpen && editingProduct && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm animate-in fade-in duration-200">
+          <div className="glass-panel p-8 max-w-md w-full border border-white/10 relative">
+            <button 
+              onClick={() => setIsProductModalOpen(false)}
+              className="absolute top-4 right-4 text-gray-500 hover:text-white"
+            >
+              <X className="w-4 h-4" />
+            </button>
+            
+            <h2 className="font-header text-xl text-white mb-6">
+              {productsList.find(p => p.id === editingProduct.id) ? "EDIT PRODUCT" : "NEW PRODUCT"}
+            </h2>
+            
+            <div className="space-y-4">
+              <div>
+                <label className="block text-[10px] font-mono text-gray-500 mb-2 uppercase">Product Title</label>
+                <input 
+                  type="text" 
+                  value={editingProduct.title}
+                  onChange={(e) => handleProductFormChange("title", e.target.value)}
+                  className="bg-black/50 border border-white/10 text-white text-xs px-4 py-3 w-full focus:border-neonPurple outline-none uppercase font-bold"
+                />
+              </div>
+              
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-[10px] font-mono text-gray-500 mb-2 uppercase">Price</label>
+                  <input 
+                    type="text" 
+                    value={editingProduct.price}
+                    onChange={(e) => handleProductFormChange("price", e.target.value)}
+                    className="bg-black/50 border border-white/10 text-white text-xs px-4 py-3 w-full focus:border-neonPurple outline-none font-mono"
+                  />
+                </div>
+                <div>
+                  <label className="block text-[10px] font-mono text-gray-500 mb-2 uppercase">Status</label>
+                  <select 
+                    value={editingProduct.status}
+                    onChange={(e) => handleProductFormChange("status", e.target.value)}
+                    className="bg-black/50 border border-white/10 text-white text-xs px-4 py-3 w-full focus:border-neonPurple outline-none appearance-none"
+                  >
+                    <option value="DRAFT">DRAFT</option>
+                    <option value="ACTIVE">ACTIVE</option>
+                  </select>
+                </div>
+              </div>
+
+              <div>
+                <label className="block text-[10px] font-mono text-gray-500 mb-2 uppercase">Cover Image URL</label>
+                <input 
+                  type="text" 
+                  value={editingProduct.image}
+                  onChange={(e) => handleProductFormChange("image", e.target.value)}
+                  placeholder="https://..."
+                  className="bg-black/50 border border-white/10 text-white text-xs px-4 py-3 w-full focus:border-neonPurple outline-none font-mono"
+                />
+              </div>
+              
+              <div className="pt-4 flex gap-3">
+                <button 
+                  onClick={() => setIsProductModalOpen(false)}
+                  className="flex-1 py-3 text-xs font-header font-bold text-gray-400 bg-white/5 hover:bg-white/10 transition-colors"
+                >
+                  CANCEL
+                </button>
+                <button 
+                  onClick={handleSaveProduct}
+                  className="flex-1 py-3 text-xs font-header font-bold text-white bg-neonPurple hover:bg-white hover:text-black transition-colors"
+                >
+                  SAVE PRODUCT
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 
