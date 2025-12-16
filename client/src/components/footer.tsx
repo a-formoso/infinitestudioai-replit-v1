@@ -1,5 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 
+import { Link } from "wouter";
+
 export function Footer() {
   const [lines, setLines] = useState<Array<{ time: string; content: string; colorClass: string }>>([]);
   const terminalRef = useRef<HTMLDivElement>(null);
@@ -84,7 +86,7 @@ export function Footer() {
                       <li><a href="#" className="hover:text-signalOrange transition-colors">All Courses</a></li>
                       <li><a href="#" className="hover:text-signalOrange transition-colors">Mentorship</a></li>
                       <li><a href="#" className="hover:text-signalOrange transition-colors">Student Login</a></li>
-                      <li><a href="#" className="hover:text-signalOrange transition-colors">FAQ</a></li>
+                      <li><Link href="/support" className="hover:text-signalOrange transition-colors">Support Center</Link></li>
                   </ul>
               </div>
 
