@@ -3,11 +3,13 @@ import { Footer } from "@/components/footer";
 import { useState } from "react";
 import { login } from "@/lib/api";
 import { useToast } from "@/hooks/use-toast";
+import { useQueryClient } from "@tanstack/react-query";
 
 export default function Login() {
   const [, setLocation] = useLocation();
   const { toast } = useToast();
   const [isLoading, setIsLoading] = useState(false);
+  const queryClient = useQueryClient();
 
   const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -27,6 +29,7 @@ export default function Login() {
       });
       setIsLoading(false);
     } else {
+      await queryClient.invalidateQueries({ queryKey: ["currentUser"] });
       toast({
         title: "Welcome back!",
         description: "Redirecting to dashboard...",

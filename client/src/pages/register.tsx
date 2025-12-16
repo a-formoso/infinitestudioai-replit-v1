@@ -2,11 +2,13 @@ import { Link, useLocation } from "wouter";
 import { useState } from "react";
 import { register } from "@/lib/api";
 import { useToast } from "@/hooks/use-toast";
+import { useQueryClient } from "@tanstack/react-query";
 
 export default function Register() {
   const [, setLocation] = useLocation();
   const { toast } = useToast();
   const [isLoading, setIsLoading] = useState(false);
+  const queryClient = useQueryClient();
 
   const handleRegister = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -48,6 +50,7 @@ export default function Register() {
       });
       setIsLoading(false);
     } else {
+      await queryClient.invalidateQueries({ queryKey: ["currentUser"] });
       toast({
         title: "Account created!",
         description: "Welcome to Infinite Studio. Redirecting...",
