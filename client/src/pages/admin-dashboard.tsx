@@ -154,6 +154,17 @@ export default function AdminDashboard() {
 
   const [deleteConfirmation, setDeleteConfirmation] = useState<{ isOpen: boolean; type: 'module' | 'lesson'; id: string; title: string; parentId?: string } | null>(null);
   
+  const [editingModuleId, setEditingModuleId] = useState<string | null>(null);
+
+  const handleModuleTitleUpdate = (moduleId: string, newTitle: string) => {
+    setModules(modules.map(m => {
+      if (m.id === moduleId) {
+        return { ...m, title: newTitle };
+      }
+      return m;
+    }));
+  };
+
   const handleAddModule = () => {
     const newId = `module-${modules.length + 1}`;
     setModules([...modules, { id: newId, title: "NEW MODULE", status: "Draft", lessons: [] }]);
@@ -600,17 +611,41 @@ export default function AdminDashboard() {
           <div className="overflow-y-auto flex-grow p-2 space-y-2">
             {modules.map((module) => (
               <div key={module.id} className="bg-white/5 rounded border border-white/5 mb-2 group/module">
-                <div className="p-3 text-xs font-bold text-gray-300 flex justify-between cursor-pointer hover:bg-white/5">
-                  <span className="uppercase">{module.title}</span>
-                  <div className="flex items-center gap-2">
+                <div className="p-3 text-xs font-bold text-gray-300 flex justify-between cursor-pointer hover:bg-white/5 items-center">
+                  {editingModuleId === module.id ? (
+                    <input 
+                      autoFocus
+                      type="text"
+                      value={module.title}
+                      onChange={(e) => handleModuleTitleUpdate(module.id, e.target.value)}
+                      onBlur={() => setEditingModuleId(null)}
+                      onKeyDown={(e) => e.key === 'Enter' && setEditingModuleId(null)}
+                      className="bg-black/50 text-white border border-electricBlue/50 rounded px-2 py-1 w-full outline-none uppercase font-bold text-xs"
+                      onClick={(e) => e.stopPropagation()}
+                    />
+                  ) : (
+                    <span className="uppercase flex-grow py-1" onDoubleClick={() => setEditingModuleId(module.id)}>{module.title}</span>
+                  )}
+                  
+                  <div className="flex items-center gap-2 ml-2 shrink-0">
                     <span className="text-[10px] text-gray-500 group-hover/module:hidden">{module.status}</span>
-                    <button 
-                      onClick={(e) => { e.stopPropagation(); requestDeleteModule(module.id); }}
-                      className="hidden group-hover/module:block text-red-500 hover:text-red-400"
-                      title="Delete Module"
-                    >
-                      <Trash2 className="w-3 h-3" />
-                    </button>
+                    
+                    <div className="hidden group-hover/module:flex gap-1 items-center">
+                      <button 
+                        onClick={(e) => { e.stopPropagation(); setEditingModuleId(module.id); }}
+                        className="text-electricBlue hover:text-white p-1 hover:bg-white/10 rounded"
+                        title="Edit Module Name"
+                      >
+                        <Edit2 className="w-3 h-3" />
+                      </button>
+                      <button 
+                        onClick={(e) => { e.stopPropagation(); requestDeleteModule(module.id); }}
+                        className="text-red-500 hover:text-red-400 p-1 hover:bg-white/10 rounded"
+                        title="Delete Module"
+                      >
+                        <Trash2 className="w-3 h-3" />
+                      </button>
+                    </div>
                   </div>
                 </div>
                 <div className="pl-2 pr-2 pb-2 space-y-1">
