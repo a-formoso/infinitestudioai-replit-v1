@@ -611,24 +611,30 @@ export default function AdminDashboard() {
           <div className="overflow-y-auto flex-grow p-2 space-y-2">
             {modules.map((module) => (
               <div key={module.id} className="bg-white/5 rounded border border-white/5 mb-2 group/module">
-                <div className="p-3 text-xs font-bold text-gray-300 flex justify-between cursor-pointer hover:bg-white/5 items-center">
-                  {editingModuleId === module.id ? (
-                    <input 
-                      autoFocus
-                      type="text"
-                      value={module.title}
-                      onChange={(e) => handleModuleTitleUpdate(module.id, e.target.value)}
-                      onBlur={() => setEditingModuleId(null)}
-                      onKeyDown={(e) => e.key === 'Enter' && setEditingModuleId(null)}
-                      className="bg-black/50 text-white border border-electricBlue/50 rounded px-2 py-1 w-full outline-none uppercase font-bold text-xs"
-                      onClick={(e) => e.stopPropagation()}
-                    />
-                  ) : (
-                    <span className="uppercase flex-grow py-1" onDoubleClick={() => setEditingModuleId(module.id)}>{module.title}</span>
-                  )}
+                <div 
+                  className="p-3 text-xs font-bold text-gray-300 flex justify-between cursor-pointer hover:bg-white/5 items-center"
+                  onClick={() => setExpandedModuleId(expandedModuleId === module.id ? null : module.id)}
+                >
+                  <div className="flex items-center gap-2 flex-grow">
+                    <span className="text-gray-500 text-[10px]">{expandedModuleId === module.id ? '▼' : '▶'}</span>
+                    {editingModuleId === module.id ? (
+                      <input 
+                        autoFocus
+                        type="text"
+                        value={module.title}
+                        onChange={(e) => handleModuleTitleUpdate(module.id, e.target.value)}
+                        onBlur={() => setEditingModuleId(null)}
+                        onKeyDown={(e) => e.key === 'Enter' && setEditingModuleId(null)}
+                        className="bg-black/50 text-white border border-electricBlue/50 rounded px-2 py-1 w-full outline-none uppercase font-bold text-xs"
+                        onClick={(e) => e.stopPropagation()}
+                      />
+                    ) : (
+                      <span className="uppercase py-1" onDoubleClick={(e) => { e.stopPropagation(); setEditingModuleId(module.id); }}>{module.title}</span>
+                    )}
+                  </div>
                   
                   <div className="flex items-center gap-2 ml-2 shrink-0">
-                    <span className="text-[10px] text-gray-500 group-hover/module:hidden">{module.status}</span>
+                    <span className="text-[10px] text-gray-500 group-hover/module:hidden">{module.lessons.length} Lessons</span>
                     
                     <div className="hidden group-hover/module:flex gap-1 items-center">
                       <button 
@@ -648,38 +654,41 @@ export default function AdminDashboard() {
                     </div>
                   </div>
                 </div>
-                <div className="pl-2 pr-2 pb-2 space-y-1">
-                  {module.lessons.map((lessonId) => {
-                    const lesson = lessons[lessonId];
-                    if (!lesson) return null;
-                    return (
-                      <div 
-                        key={lessonId}
-                        className={`p-2 text-[10px] rounded cursor-pointer flex justify-between items-center group/item transition-colors ${selectedLessonId === lessonId ? 'bg-electricBlue/20 text-white border-l-2 border-electricBlue' : 'text-gray-400 hover:bg-electricBlue/10 hover:text-white border-l-2 border-transparent'}`}
-                        onClick={() => setSelectedLessonId(lessonId)}
-                      >
-                        <span className="truncate pr-2">{lesson.title}</span>
-                        <div className="flex items-center gap-2">
-                          <div className={`w-2 h-2 shrink-0 rounded-full group-hover/item:hidden ${selectedLessonId === lessonId ? 'bg-electricBlue animate-pulse' : 'bg-green-500'}`}></div>
-                          <button 
-                            onClick={(e) => requestDeleteLesson(module.id, lessonId, e)}
-                            className="hidden group-hover/item:block text-red-500 hover:text-red-400"
-                            title="Delete Lesson"
-                          >
-                            <Trash2 className="w-3 h-3" />
-                          </button>
+                
+                {expandedModuleId === module.id && (
+                  <div className="pl-2 pr-2 pb-2 space-y-1 animate-in slide-in-from-top-1 duration-200">
+                    {module.lessons.map((lessonId) => {
+                      const lesson = lessons[lessonId];
+                      if (!lesson) return null;
+                      return (
+                        <div 
+                          key={lessonId}
+                          className={`p-2 text-[10px] rounded cursor-pointer flex justify-between items-center group/item transition-colors ${selectedLessonId === lessonId ? 'bg-electricBlue/20 text-white border-l-2 border-electricBlue' : 'text-gray-400 hover:bg-electricBlue/10 hover:text-white border-l-2 border-transparent'}`}
+                          onClick={(e) => { e.stopPropagation(); setSelectedLessonId(lessonId); }}
+                        >
+                          <span className="truncate pr-2">{lesson.title}</span>
+                          <div className="flex items-center gap-2">
+                            <div className={`w-2 h-2 shrink-0 rounded-full group-hover/item:hidden ${selectedLessonId === lessonId ? 'bg-electricBlue animate-pulse' : 'bg-green-500'}`}></div>
+                            <button 
+                              onClick={(e) => requestDeleteLesson(module.id, lessonId, e)}
+                              className="hidden group-hover/item:block text-red-500 hover:text-red-400"
+                              title="Delete Lesson"
+                            >
+                              <Trash2 className="w-3 h-3" />
+                            </button>
+                          </div>
                         </div>
-                      </div>
-                    );
-                  })}
-                  {/* Add Lesson Button per Module */}
-                  <button 
-                    onClick={() => handleAddLesson(module.id)}
-                    className="w-full mt-2 py-1.5 border border-dashed border-white/10 text-[9px] text-gray-500 hover:text-white hover:border-white/30 rounded transition-colors"
-                  >
-                    + Add Lesson
-                  </button>
-                </div>
+                      );
+                    })}
+                    {/* Add Lesson Button per Module */}
+                    <button 
+                      onClick={(e) => { e.stopPropagation(); handleAddLesson(module.id); }}
+                      className="w-full mt-2 py-1.5 border border-dashed border-white/10 text-[9px] text-gray-500 hover:text-white hover:border-white/30 rounded transition-colors"
+                    >
+                      + Add Lesson
+                    </button>
+                  </div>
+                )}
               </div>
             ))}
           </div>
