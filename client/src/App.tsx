@@ -21,13 +21,11 @@ import AdminDashboard from "@/pages/admin-dashboard";
 import Links from "@/pages/links";
 import Privacy from "@/pages/privacy";
 import Terms from "@/pages/terms";
-import CaseStudies from "@/pages/case-studies";
 
 function Router() {
   return (
     <Switch>
       <Route path="/" component={Home} />
-      <Route path="/case-studies" component={CaseStudies} />
       <Route path="/links" component={Links} />
       <Route path="/privacy" component={Privacy} />
       <Route path="/terms" component={Terms} />

@@ -145,7 +145,6 @@ export default function Home() {
                           <p className="text-electricBlue font-mono text-xs mb-2 tracking-widest">/// SELECTED WORKS</p>
                           <h2 className="font-header text-4xl font-bold text-white">PRODUCTION</h2>
                       </div>
-                      <Link href="/case-studies" className="text-xs font-header font-bold border-b border-signalOrange pb-1 hover:text-signalOrange transition-colors tracking-wider">VIEW ALL CASE STUDIES</Link>
                   </div>
 
                   {/* Project Carousel */}
@@ -175,10 +174,9 @@ export default function Home() {
                           style={{ transform: `translateX(-${currentSlide * 100}%)` }}
                         >
                           {projects.map((project) => (
-                            <Link 
+                            <div 
                               key={project.id}
-                              href="/case-studies" 
-                              className="group relative h-[450px] w-full flex-shrink-0 glass-panel overflow-hidden cursor-pointer border border-white/5 hover:border-electricBlue/50 transition-all duration-500 block"
+                              className="group relative h-[450px] w-full flex-shrink-0 glass-panel overflow-hidden border border-white/5 hover:border-electricBlue/50 transition-all duration-500"
                             >
                               <div className="absolute inset-0 bg-gray-800 group-hover:scale-105 transition-transform duration-700">
                                 <div 
@@ -203,7 +201,7 @@ export default function Home() {
                                 <p className="text-sm text-gray-400 font-mono tracking-wide border-l border-white/30 pl-3 mb-3">{project.category}</p>
                                 <p className="text-sm text-gray-500 max-w-xl leading-relaxed hidden md:block">{project.description}</p>
                               </div>
-                            </Link>
+                            </div>
                           ))}
                         </div>
                       </div>
