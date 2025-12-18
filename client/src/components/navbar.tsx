@@ -34,10 +34,8 @@ export function Navbar() {
   return (
     <nav className="fixed top-0 w-full z-50 glass-panel border-b-0 border-b-glassBorder">
         <div className="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
-            <Link href="/">
-              <a className="font-header font-bold text-xl tracking-widest text-white flex items-center gap-2 cursor-pointer">
-                  <span className="text-electricBlue text-2xl">∞</span> INFINITE STUDIO
-              </a>
+            <Link href="/" className="font-header font-bold text-xl tracking-widest text-white flex items-center gap-2 cursor-pointer">
+                <span className="text-electricBlue text-2xl">∞</span> INFINITE STUDIO
             </Link>
 
             <div className="hidden md:flex items-center gap-8 absolute left-1/2 transform -translate-x-1/2">

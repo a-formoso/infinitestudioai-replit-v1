@@ -2,7 +2,7 @@ import { Navbar } from "@/components/navbar";
 import { Footer } from "@/components/footer";
 import { Link } from "wouter";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { getEnrollments, getCurrentUser, updateProfile } from "@/lib/api";
+import { getEnrollments, getCurrentUser, updateProfile, getOrders } from "@/lib/api";
 import { useState } from "react";
 import { useToast } from "@/hooks/use-toast";
 import {
@@ -28,7 +28,13 @@ export default function Dashboard() {
     queryFn: getCurrentUser,
   });
 
+  const { data: ordersData } = useQuery({
+    queryKey: ["orders"],
+    queryFn: getOrders,
+  });
+
   const user = userData?.data?.user;
+  const orders = ordersData?.data?.orders || [];
 
   const updateMutation = useMutation({
     mutationFn: ({ username, email }: { username: string; email: string }) =>
@@ -135,7 +141,7 @@ export default function Dashboard() {
               <div className="lg:col-span-2 space-y-8">
                   
                   {/* Hero: Resume Learning */}
-                  <Link href="/course/player">
+                  <Link href={enrollments.length > 0 ? `/course/player/${enrollments[0]?.course?.slug || 'level-1'}` : "/academy"}>
                     <div className="glass-panel p-0 overflow-hidden relative group cursor-pointer border border-electricBlue/30 hover:border-electricBlue transition-all duration-300">
                         <div className="h-64 bg-gray-900 relative">
                             <div className="absolute inset-0 bg-gradient-to-br from-blue-900/40 to-black"></div>
@@ -174,14 +180,14 @@ export default function Dashboard() {
                       ) : enrollments.length === 0 ? (
                         <div className="text-center py-8">
                           <p className="text-gray-400 text-sm mb-4">No enrollments yet</p>
-                          <Link href="/academy">
-                            <a className="text-electricBlue hover:underline text-xs font-header">Browse Courses →</a>
+                          <Link href="/academy" className="text-electricBlue hover:underline text-xs font-header">
+                            Browse Courses →
                           </Link>
                         </div>
                       ) : (
                         <div className="space-y-6">
                           {enrollments.map((enrollment: any) => (
-                            <Link key={enrollment.id} href={`/course/${enrollment.course.slug}`}>
+                            <Link key={enrollment.id} href={`/course/player/${enrollment.course.slug}`}>
                               <div className="flex gap-4 items-center group cursor-pointer" data-testid={`card-enrollment-${enrollment.course.slug}`}>
                                   <div className={`w-16 h-16 bg-gray-800 shrink-0 relative overflow-hidden rounded border border-white/10 group-hover:border-${enrollment.course.color === 'electricBlue' ? 'electricBlue' : 'signalOrange'}/50 transition-colors`}>
                                       <div className={`absolute inset-0 bg-gradient-to-br ${enrollment.course.color === 'electricBlue' ? 'from-blue-900/40' : 'from-orange-900/40'} to-black`}></div>
@@ -229,6 +235,33 @@ export default function Dashboard() {
                               <p className="text-[10px] text-gray-400 mt-1">Level 1 Course Supplement</p>
                           </a>
                       </div>
+                  </div>
+
+                  {/* Order History */}
+                  <div className="glass-panel p-8">
+                      <h3 className="font-header text-sm text-white mb-6 border-b border-white/10 pb-4">ORDER HISTORY</h3>
+                      {orders.length === 0 ? (
+                        <p className="text-gray-400 text-xs text-center py-4">No orders yet</p>
+                      ) : (
+                        <div className="space-y-4">
+                          {orders.slice(0, 5).map((order: any) => (
+                            <div key={order.id} className="p-4 border border-white/10 hover:border-electricBlue/30 transition-colors" data-testid={`order-${order.id}`}>
+                              <div className="flex justify-between items-center mb-2">
+                                <span className="text-[10px] font-mono text-electricBlue">ORDER #{order.id}</span>
+                                <span className="text-[10px] font-mono text-gray-500">
+                                  {new Date(order.createdAt).toLocaleDateString()}
+                                </span>
+                              </div>
+                              <div className="flex justify-between items-center">
+                                <span className="text-xs text-white font-bold">${parseFloat(order.total).toFixed(2)}</span>
+                                <span className={`text-[10px] font-mono uppercase ${order.status === 'completed' ? 'text-green-500' : 'text-yellow-500'}`}>
+                                  {order.status}
+                                </span>
+                              </div>
+                            </div>
+                          ))}
+                        </div>
+                      )}
                   </div>
 
                   {/* Community Feed (Mockup) */}

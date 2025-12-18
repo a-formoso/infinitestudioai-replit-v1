@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { Link, useLocation } from "wouter";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { getCurrentUser, getCourseBySlug, enrollInCourse } from "@/lib/api";
+import { getCurrentUser, getCourseBySlug, createOrder } from "@/lib/api";
 import { useToast } from "@/hooks/use-toast";
 
 export default function Checkout() {
@@ -28,10 +28,11 @@ export default function Checkout() {
     }
   }, [userData, userLoading, courseSlug, setLocation]);
 
-  const enrollMutation = useMutation({
-    mutationFn: (courseId: string) => enrollInCourse(courseId),
+  const orderMutation = useMutation({
+    mutationFn: (courseId: number) => createOrder([{ itemType: "course", itemId: courseId.toString() }]),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["enrollments"] });
+      queryClient.invalidateQueries({ queryKey: ["orders"] });
       toast({
         title: "Payment Successful!",
         description: "You are now enrolled. Redirecting to your dashboard...",
@@ -51,7 +52,7 @@ export default function Checkout() {
     e.preventDefault();
     const courseId = courseData?.data?.course?.id;
     if (courseId) {
-      enrollMutation.mutate(courseId.toString());
+      orderMutation.mutate(courseId);
     }
   };
 
@@ -211,11 +212,11 @@ export default function Checkout() {
                 {/* Submit Button */}
                 <button 
                   type="submit"
-                  disabled={enrollMutation.isPending}
+                  disabled={orderMutation.isPending}
                   data-testid="button-pay"
                   className={`w-full ${isLevel2 ? 'bg-signalOrange' : 'bg-electricBlue'} text-white font-header font-bold text-sm uppercase py-5 hover:bg-white hover:text-black transition-all duration-300 tracking-wider shadow-[0_0_30px_rgba(41,98,255,0.3)] mt-8 disabled:opacity-50 disabled:cursor-not-allowed`}
                 >
-                  {enrollMutation.isPending ? "Processing..." : `Pay $${coursePrice}.00 & Access Course`}
+                  {orderMutation.isPending ? "Processing..." : `Pay $${coursePrice}.00 & Access Course`}
                 </button>
                 
                 <p className="text-[10px] text-center text-gray-500 mt-4">
