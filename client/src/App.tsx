@@ -41,7 +41,6 @@ function Router() {
       <Route path="/course/level-1" component={CourseLevel1} />
       <Route path="/course/level-2" component={CourseLevel2} />
       <Route path="/dashboard" component={Dashboard} />
-      <Route path="/course/player/:courseSlug" component={CoursePlayer} />
       <Route path="/course/player" component={CoursePlayer} />
       <Route component={NotFound} />
     </Switch>

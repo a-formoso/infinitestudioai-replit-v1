@@ -1,41 +1,7 @@
-import { useState } from "react";
 import { Link } from "wouter";
 import { Footer } from "@/components/footer";
-import { useQuery } from "@tanstack/react-query";
-import type { Asset } from "@shared/schema";
 
 export default function AssetStore() {
-  const [selectedCategory, setSelectedCategory] = useState<string>("ALL");
-
-  const { data: assetsData, isLoading } = useQuery<{ assets: Asset[] }>({
-    queryKey: ["/api/assets"],
-    queryFn: async () => {
-      const res = await fetch("/api/assets");
-      if (!res.ok) throw new Error("Failed to fetch assets");
-      return res.json();
-    },
-  });
-
-  const assets = assetsData?.assets || [];
-  const uniqueCategories = Array.from(new Set(assets.map(a => a.category.toUpperCase())));
-  const categories = ["ALL", ...uniqueCategories];
-  
-  const filteredAssets = selectedCategory === "ALL" 
-    ? assets 
-    : assets.filter(a => a.category.toUpperCase() === selectedCategory);
-
-  const getAccentColor = (color: string) => {
-    const colorMap: Record<string, string> = {
-      neonPurple: "neonPurple",
-      electricBlue: "electricBlue",
-      signalOrange: "signalOrange",
-      purple: "purple-500",
-      green: "green-500",
-      white: "white",
-    };
-    return colorMap[color] || "purple-500";
-  };
-
   return (
     <div className="min-h-screen bg-obsidian text-offWhite font-body antialiased selection:bg-neonPurple selection:text-white overflow-x-hidden">
       {/* GRID OVERLAY */}
@@ -48,7 +14,7 @@ export default function AssetStore() {
             <span className="text-electricBlue text-2xl">∞</span> INFINITE STUDIO
           </Link>
           <div className="flex gap-6 items-center">
-            <Link href="/" className="text-xs font-mono text-gray-400 hover:text-white transition-colors">HOME</Link>
+            <a href="#" className="text-xs font-mono text-gray-400 hover:text-white transition-colors">CART (0)</a>
             <a href="#" className="hidden md:block bg-neonPurple text-white px-6 py-2 text-xs font-header font-bold uppercase hover:bg-white hover:text-black transition-all duration-300 tracking-wider">
               All Access Pass
             </a>
@@ -71,79 +37,106 @@ export default function AssetStore() {
 
         {/* FILTERS */}
         <div className="flex flex-wrap justify-center gap-4">
-          {categories.map((category) => (
-            <button
-              key={category}
-              onClick={() => setSelectedCategory(category)}
-              data-testid={`filter-${category.toLowerCase().replace(/\s+/g, '-')}`}
-              className={`px-6 py-2 rounded-full text-xs font-header font-bold transition-all ${
-                selectedCategory === category
-                  ? "bg-white text-black border-white"
-                  : "border border-white/20 hover:bg-white/10"
-              }`}
-            >
-              {category}
-            </button>
-          ))}
+          <button className="bg-white text-black border-white px-6 py-2 rounded-full text-xs font-header font-bold hover:bg-white/10 hover:text-white border transition-all">ALL</button>
+          <button className="border border-white/20 px-6 py-2 rounded-full text-xs font-header font-bold hover:bg-white/10 transition-all">CHARACTER SHEETS</button>
+          <button className="border border-white/20 px-6 py-2 rounded-full text-xs font-header font-bold hover:bg-white/10 transition-all">TEXTURES</button>
+          <button className="border border-white/20 px-6 py-2 rounded-full text-xs font-header font-bold hover:bg-white/10 transition-all">AUDIO / SFX</button>
+          <button className="border border-white/20 px-6 py-2 rounded-full text-xs font-header font-bold hover:bg-white/10 transition-all">PROMPTS</button>
         </div>
       </header>
 
       {/* STORE GRID */}
       <section className="py-12 bg-black/50 relative z-10 border-t border-white/10">
         <div className="max-w-7xl mx-auto px-6">
-          {isLoading ? (
-            <div className="flex justify-center py-20">
-              <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-purple-500"></div>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            
+            {/* Product 1: Character Pack */}
+            <div className="glass-panel p-0 group cursor-pointer hover:border-neonPurple/50 transition-all duration-300 overflow-hidden">
+              <div className="aspect-[16/9] bg-gray-800 relative overflow-hidden">
+                <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1535905557558-afc4877a26fc?q=80&w=2574&auto=format&fit=crop')] bg-cover bg-center transition-transform duration-700 group-hover:scale-110 opacity-80 group-hover:opacity-100"></div>
+                <div className="absolute top-4 left-4 bg-neonPurple text-white text-[10px] font-bold px-2 py-1 uppercase tracking-wider">Bestseller</div>
+              </div>
+              <div className="p-6">
+                <div className="flex justify-between items-start mb-2">
+                  <h3 className="font-header text-lg text-white group-hover:text-neonPurple transition-colors">SCI-FI CHARACTERS VOL. 1</h3>
+                  <span className="font-mono text-white">$49</span>
+                </div>
+                <p className="text-xs text-gray-400 font-mono mb-4 border-b border-white/10 pb-4">50+ Consistent Character Sheets (Front/Side/45) ready for Veo Ingredients.</p>
+                <div className="flex justify-between items-center">
+                  <span className="text-[10px] text-gray-500 font-header">PNG + PROMPT JSON</span>
+                  <button className="text-xs font-bold text-white hover:text-neonPurple transition-colors flex items-center gap-1">
+                    ADD TO CART <span>+</span>
+                  </button>
+                </div>
+              </div>
             </div>
-          ) : (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-              {filteredAssets.map((asset) => {
-                const accentColor = getAccentColor(asset.color);
-                return (
-                  <div 
-                    key={asset.id}
-                    className={`glass-panel p-0 group cursor-pointer hover:border-${accentColor}/50 transition-all duration-300 overflow-hidden`}
-                    data-testid={`asset-${asset.id}`}
-                  >
-                    <div className="aspect-[16/9] bg-gray-800 relative overflow-hidden">
-                      {asset.imageUrl ? (
-                        <div 
-                          className="absolute inset-0 bg-cover bg-center transition-transform duration-700 group-hover:scale-110 opacity-80 group-hover:opacity-100"
-                          style={{ backgroundImage: `url('${asset.imageUrl}')` }}
-                        ></div>
-                      ) : (
-                        <div className="absolute inset-0 flex items-center justify-center bg-gray-900">
-                          <div className="font-mono text-xs text-green-500 opacity-70 p-8 leading-relaxed">
-                            &gt; PROMPT: Cinematic wide...<br />
-                            &gt; LENS: 35mm Anamorphic...<br />
-                            &gt; LIGHT: Volumetric Fog...
-                          </div>
-                        </div>
-                      )}
-                      {asset.badge && (
-                        <div className={`absolute top-4 left-4 bg-${accentColor} text-white text-[10px] font-bold px-2 py-1 uppercase tracking-wider`}>
-                          {asset.badge}
-                        </div>
-                      )}
-                    </div>
-                    <div className="p-6">
-                      <div className="flex justify-between items-start mb-2">
-                        <h3 className={`font-header text-lg text-white group-hover:text-${accentColor} transition-colors`}>{asset.title}</h3>
-                        <span className="font-mono text-white">${parseFloat(asset.price).toFixed(0)}</span>
-                      </div>
-                      <p className="text-xs text-gray-400 font-mono mb-4 border-b border-white/10 pb-4 line-clamp-2">{asset.description}</p>
-                      <div className="flex justify-between items-center">
-                        <span className="text-[10px] text-gray-500 font-header">{asset.fileFormat}</span>
-                        <button className={`text-xs font-bold text-white hover:text-${accentColor} transition-colors flex items-center gap-1`}>
-                          ADD TO CART <span>+</span>
-                        </button>
-                      </div>
-                    </div>
-                  </div>
-                );
-              })}
+
+            {/* Product 2: Texture Pack */}
+            <div className="glass-panel p-0 group cursor-pointer hover:border-electricBlue/50 transition-all duration-300 overflow-hidden">
+              <div className="aspect-[16/9] bg-gray-800 relative overflow-hidden">
+                <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1550684848-fac1c5b4e853?q=80&w=2670&auto=format&fit=crop')] bg-cover bg-center transition-transform duration-700 group-hover:scale-110 opacity-80 group-hover:opacity-100"></div>
+                <div className="absolute top-4 left-4 bg-electricBlue text-white text-[10px] font-bold px-2 py-1 uppercase tracking-wider">New</div>
+              </div>
+              <div className="p-6">
+                <div className="flex justify-between items-start mb-2">
+                  <h3 className="font-header text-lg text-white group-hover:text-electricBlue transition-colors">NEON NOIR TEXTURES</h3>
+                  <span className="font-mono text-white">$29</span>
+                </div>
+                <p className="text-xs text-gray-400 font-mono mb-4 border-b border-white/10 pb-4">100+ High-Res Cyberpunk environment textures generated with Nano Banana.</p>
+                <div className="flex justify-between items-center">
+                  <span className="text-[10px] text-gray-500 font-header">4K JPG</span>
+                  <button className="text-xs font-bold text-white hover:text-electricBlue transition-colors flex items-center gap-1">
+                    ADD TO CART <span>+</span>
+                  </button>
+                </div>
+              </div>
             </div>
-          )}
+
+            {/* Product 3: Audio Pack */}
+            <div className="glass-panel p-0 group cursor-pointer hover:border-signalOrange/50 transition-all duration-300 overflow-hidden">
+              <div className="aspect-[16/9] bg-gray-800 relative overflow-hidden">
+                <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1511379938547-c1f69419868d?q=80&w=2670&auto=format&fit=crop')] bg-cover bg-center transition-transform duration-700 group-hover:scale-110 opacity-80 group-hover:opacity-100"></div>
+              </div>
+              <div className="p-6">
+                <div className="flex justify-between items-start mb-2">
+                  <h3 className="font-header text-lg text-white group-hover:text-signalOrange transition-colors">CINEMATIC SFX PACK</h3>
+                  <span className="font-mono text-white">$19</span>
+                </div>
+                <p className="text-xs text-gray-400 font-mono mb-4 border-b border-white/10 pb-4">Pre-mixed Foley stems for Sci-Fi films. Impacts, Risers, and Ambience.</p>
+                <div className="flex justify-between items-center">
+                  <span className="text-[10px] text-gray-500 font-header">WAV / MP3</span>
+                  <button className="text-xs font-bold text-white hover:text-signalOrange transition-colors flex items-center gap-1">
+                    ADD TO CART <span>+</span>
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            {/* Product 4: Prompt Library */}
+            <div className="glass-panel p-0 group cursor-pointer hover:border-white/50 transition-all duration-300 overflow-hidden">
+              <div className="aspect-[16/9] bg-gray-900 relative overflow-hidden flex items-center justify-center">
+                <div className="font-mono text-xs text-green-500 opacity-70 p-8 leading-relaxed">
+                  &gt; PROMPT: Cinematic wide...<br />
+                  &gt; LENS: 35mm Anamorphic...<br />
+                  &gt; LIGHT: Volumetric Fog...
+                </div>
+              </div>
+              <div className="p-6">
+                <div className="flex justify-between items-start mb-2">
+                  <h3 className="font-header text-lg text-white group-hover:text-gray-300 transition-colors">MASTER PROMPT LIBRARY</h3>
+                  <span className="font-mono text-white">$39</span>
+                </div>
+                <p className="text-xs text-gray-400 font-mono mb-4 border-b border-white/10 pb-4">500+ Curated Prompts for Veo 3.1 and Midjourney. Copy/Paste ready.</p>
+                <div className="flex justify-between items-center">
+                  <span className="text-[10px] text-gray-500 font-header">PDF / NOTION</span>
+                  <button className="text-xs font-bold text-white hover:text-gray-300 transition-colors flex items-center gap-1">
+                    ADD TO CART <span>+</span>
+                  </button>
+                </div>
+              </div>
+            </div>
+
+          </div>
         </div>
       </section>
 

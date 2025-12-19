@@ -3,8 +3,6 @@ import { Navbar } from "@/components/navbar";
 import { Footer } from "@/components/footer";
 import { Play, ChevronLeft, ChevronRight } from "lucide-react";
 import { Link } from "wouter";
-import { useQuery } from "@tanstack/react-query";
-import type { Course, Asset } from "@shared/schema";
 
 const projects = [
   {
@@ -51,27 +49,6 @@ const projects = [
 
 export default function Home() {
   const [currentSlide, setCurrentSlide] = useState(0);
-
-  const { data: coursesData } = useQuery<{ courses: Course[] }>({
-    queryKey: ["/api/courses"],
-    queryFn: async () => {
-      const res = await fetch("/api/courses");
-      if (!res.ok) throw new Error("Failed to fetch courses");
-      return res.json();
-    },
-  });
-
-  const { data: assetsData } = useQuery<{ assets: Asset[] }>({
-    queryKey: ["/api/assets"],
-    queryFn: async () => {
-      const res = await fetch("/api/assets");
-      if (!res.ok) throw new Error("Failed to fetch assets");
-      return res.json();
-    },
-  });
-
-  const courses = coursesData?.courses || [];
-  const assets = assetsData?.assets || [];
 
   const nextSlide = () => {
     setCurrentSlide((prev) => (prev + 1) % projects.length);
@@ -257,47 +234,47 @@ export default function Home() {
               </div>
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                  {courses.map((course, index) => {
-                    const isLevel1 = course.slug === "level-1";
-                    const accentColor = isLevel1 ? "electricBlue" : "signalOrange";
-                    const gradientFrom = isLevel1 ? "from-blue-900/40" : "from-orange-900/40";
-                    const levelLabel = isLevel1 ? "LEVEL 01" : "LEVEL 02";
-                    
-                    return (
-                      <Link 
-                        key={course.id}
-                        href={`/course/${course.slug}`} 
-                        className={`glass-panel p-1 hover:border-${accentColor}/50 transition-all duration-300 group cursor-pointer block`}
-                        data-testid={`course-card-${course.slug}`}
-                      >
-                        <div className="bg-gray-900 h-56 mb-6 relative overflow-hidden">
-                          <div className={`absolute inset-0 bg-gradient-to-br ${gradientFrom} to-black`}></div>
+                  {/* Course 1 */}
+                  <Link href="/course/level-1" className="glass-panel p-1 hover:border-electricBlue/50 transition-all duration-300 group cursor-pointer block">
+                      <div className="bg-gray-900 h-56 mb-6 relative overflow-hidden">
+                          <div className="absolute inset-0 bg-gradient-to-br from-blue-900/40 to-black"></div>
+                          {/* Abstract course graphic */}
                           <div className="absolute inset-0 flex items-center justify-center opacity-30 group-hover:opacity-50 transition-opacity duration-500">
-                            {isLevel1 ? (
-                              <>
-                                <div className="w-24 h-24 rounded-full border border-electricBlue animate-pulse"></div>
-                                <div className="w-16 h-16 rounded-full border border-white absolute"></div>
-                              </>
-                            ) : (
-                              <>
-                                <div className="w-24 h-24 border-2 border-signalOrange rotate-45 transform transition-transform group-hover:rotate-90 duration-700"></div>
-                                <div className="w-24 h-24 border-2 border-white -rotate-45 absolute transform transition-transform group-hover:-rotate-90 duration-700"></div>
-                              </>
-                            )}
+                               <div className="w-24 h-24 rounded-full border border-electricBlue animate-pulse"></div>
+                               <div className="w-16 h-16 rounded-full border border-white absolute"></div>
                           </div>
-                          <div className="absolute bottom-4 left-4 font-header font-bold text-3xl text-white z-10">{levelLabel}</div>
-                        </div>
-                        <div className="px-6 pb-8">
-                          <h3 className={`font-header text-xl text-white mb-3 group-hover:text-${accentColor} transition-colors leading-tight`}>{course.title}</h3>
-                          <p className="text-sm text-gray-400 mb-6 leading-relaxed">{course.shortDescription}</p>
+                          <div className="absolute bottom-4 left-4 font-header font-bold text-3xl text-white z-10">LEVEL 01</div>
+                      </div>
+                      <div className="px-6 pb-8">
+                          <h3 className="font-header text-xl text-white mb-3 group-hover:text-electricBlue transition-colors leading-tight">MASTER THE GOOGLE ECOSYSTEM</h3>
+                          <p className="text-sm text-gray-400 mb-6 leading-relaxed">The foundational course. Learn the connected workflow of Gemini, Nano Banana (Gemini 3 Pro Preview), and Veo.</p>
                           <div className="flex justify-between items-center border-t border-white/10 pt-4">
-                            <span className={`font-mono text-xs text-${accentColor} bg-${accentColor}/10 px-2 py-1 rounded`}>{course.duration}</span>
-                            <span className={`font-header font-bold text-xl text-white group-hover:text-${accentColor} transition-colors`}>${parseFloat(course.price).toFixed(0)}</span>
+                              <span className="font-mono text-xs text-electricBlue bg-electricBlue/10 px-2 py-1 rounded">4.5 HOURS</span>
+                              <span className="font-header font-bold text-xl text-white group-hover:text-electricBlue transition-colors">$149</span>
                           </div>
-                        </div>
-                      </Link>
-                    );
-                  })}
+                      </div>
+                  </Link>
+
+                  {/* Course 2 */}
+                  <Link href="/course/level-2" className="glass-panel p-1 hover:border-signalOrange/50 transition-all duration-300 group cursor-pointer block">
+                      <div className="bg-gray-900 h-56 mb-6 relative overflow-hidden">
+                          <div className="absolute inset-0 bg-gradient-to-br from-orange-900/40 to-black"></div>
+                           {/* Abstract course graphic */}
+                           <div className="absolute inset-0 flex items-center justify-center opacity-30 group-hover:opacity-50 transition-opacity duration-500">
+                              <div className="w-24 h-24 border-2 border-signalOrange rotate-45 transform transition-transform group-hover:rotate-90 duration-700"></div>
+                              <div className="w-24 h-24 border-2 border-white -rotate-45 absolute transform transition-transform group-hover:-rotate-90 duration-700"></div>
+                         </div>
+                          <div className="absolute bottom-4 left-4 font-header font-bold text-3xl text-white z-10">LEVEL 02</div>
+                      </div>
+                      <div className="px-6 pb-8">
+                          <h3 className="font-header text-xl text-white mb-3 group-hover:text-signalOrange transition-colors leading-tight">ADVANCED AI CINEMATOGRAPHY</h3>
+                          <p className="text-sm text-gray-400 mb-6 leading-relaxed">Mastering physics, compound camera moves, and the uncanny valley in Veo 3.1. Deep dive into motion control.</p>
+                          <div className="flex justify-between items-center border-t border-white/10 pt-4">
+                              <span className="font-mono text-xs text-signalOrange bg-signalOrange/10 px-2 py-1 rounded">6.0 HOURS</span>
+                              <span className="font-header font-bold text-xl text-white group-hover:text-signalOrange transition-colors">$199</span>
+                          </div>
+                      </div>
+                  </Link>
               </div>
           </section>
           {/* ASSET STORE & FOOTER CONTAINER */}
@@ -310,36 +287,49 @@ export default function Home() {
                           <p className="text-purple-500 font-mono text-xs mb-2 tracking-widest">/// RESOURCE LIBRARY</p>
                           <h2 className="font-header text-4xl font-bold text-white">ASSET STORE</h2>
                       </div>
-                      <Link href="/store" className="text-xs font-header font-bold border-b border-purple-500 pb-1 hover:text-purple-500 transition-colors tracking-wider">VIEW ALL PACKS</Link>
+                      <a href="#" className="text-xs font-header font-bold border-b border-purple-500 pb-1 hover:text-purple-500 transition-colors tracking-wider">VIEW ALL PACKS</a>
                   </div>
 
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                      {assets.slice(0, 3).map((asset) => (
-                        <Link 
-                          key={asset.id}
-                          href="/store"
-                          className="glass-panel p-6 hover:border-purple-500/50 transition-all duration-300 group cursor-pointer block"
-                          data-testid={`asset-card-${asset.id}`}
-                        >
+                      {/* Asset 1 */}
+                      <div className="glass-panel p-6 hover:border-purple-500/50 transition-all duration-300 group cursor-pointer">
                           <div className="aspect-video bg-gray-800 mb-4 overflow-hidden relative">
-                            {asset.imageUrl && (
-                              <div 
-                                className="absolute inset-0 bg-cover bg-center opacity-60 group-hover:scale-110 transition-transform duration-500"
-                                style={{ backgroundImage: `url('${asset.imageUrl}')` }}
-                              ></div>
-                            )}
-                            {asset.badge && (
-                              <div className="absolute top-2 right-2 bg-purple-600 text-white text-[10px] font-bold px-2 py-1">{asset.badge}</div>
-                            )}
+                               <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1563089145-599997674d42?q=80&w=2670&auto=format&fit=crop')] bg-cover bg-center opacity-60 group-hover:scale-110 transition-transform duration-500"></div>
+                               <div className="absolute top-2 right-2 bg-purple-600 text-white text-[10px] font-bold px-2 py-1">NEW</div>
                           </div>
-                          <h3 className="font-header text-sm text-white mb-1">{asset.title}</h3>
-                          <p className="text-xs text-gray-500 font-mono mb-4 line-clamp-1">{asset.description}</p>
+                          <h3 className="font-header text-sm text-white mb-1">CYBERPUNK TEXTURES VOL. 1</h3>
+                          <p className="text-xs text-gray-500 font-mono mb-4">50+ Nano Banana Generated Surfaces</p>
                           <div className="flex justify-between items-center">
-                            <span className="text-white font-bold">${parseFloat(asset.price).toFixed(0)}</span>
-                            <span className="text-[10px] text-purple-400 group-hover:translate-x-1 transition-transform">GET PACK →</span>
+                              <span className="text-white font-bold">$29</span>
+                              <span className="text-[10px] text-purple-400 group-hover:translate-x-1 transition-transform">GET PACK →</span>
                           </div>
-                        </Link>
-                      ))}
+                      </div>
+
+                      {/* Asset 2 */}
+                      <div className="glass-panel p-6 hover:border-purple-500/50 transition-all duration-300 group cursor-pointer">
+                          <div className="aspect-video bg-gray-800 mb-4 overflow-hidden relative">
+                              <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1535905557558-afc4877a26fc?q=80&w=2574&auto=format&fit=crop')] bg-cover bg-center opacity-60 group-hover:scale-110 transition-transform duration-500"></div>
+                          </div>
+                          <h3 className="font-header text-sm text-white mb-1">SCI-FI CHARACTER SHEETS</h3>
+                          <p className="text-xs text-gray-500 font-mono mb-4">Ready-to-use 'Ingredients' for Veo</p>
+                          <div className="flex justify-between items-center">
+                              <span className="text-white font-bold">$49</span>
+                              <span className="text-[10px] text-purple-400 group-hover:translate-x-1 transition-transform">GET PACK →</span>
+                          </div>
+                      </div>
+
+                      {/* Asset 3 */}
+                      <div className="glass-panel p-6 hover:border-purple-500/50 transition-all duration-300 group cursor-pointer">
+                          <div className="aspect-video bg-gray-800 mb-4 overflow-hidden relative">
+                              <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1511379938547-c1f69419868d?q=80&w=2670&auto=format&fit=crop')] bg-cover bg-center opacity-60 group-hover:scale-110 transition-transform duration-500"></div>
+                          </div>
+                          <h3 className="font-header text-sm text-white mb-1">CINEMATIC LUTS PACK</h3>
+                          <p className="text-xs text-gray-500 font-mono mb-4">Color grading for AI video output</p>
+                          <div className="flex justify-between items-center">
+                              <span className="text-white font-bold">$19</span>
+                              <span className="text-[10px] text-purple-400 group-hover:translate-x-1 transition-transform">GET PACK →</span>
+                          </div>
+                      </div>
                   </div>
               </div>
               
