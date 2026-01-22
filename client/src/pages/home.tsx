@@ -301,63 +301,58 @@ export default function Home() {
               </div>
           </section>
 
-          {/* ASSET STORE & FOOTER CONTAINER */}
-          <div className="bg-black border-t border-white/10 relative z-20">
-              
-              {/* ASSET STORE (Added Here) */}
-              <div id="store" className="max-w-7xl mx-auto px-6 py-16 border-b border-white/10">
-                  <div className="flex flex-col md:flex-row justify-between items-end mb-12">
-                      <div>
-                          <p className="text-purple-500 font-mono text-xs mb-2 tracking-widest">/// RESOURCE LIBRARY</p>
-                          <h2 className="font-header text-4xl font-bold text-white">ASSET STORE</h2>
+          {/* ASSET STORE SECTION */}
+          <section id="store" className="py-20 max-w-7xl mx-auto px-6 relative z-10">
+              <div className="flex flex-col md:flex-row justify-between items-end mb-12">
+                  <div>
+                      <p className="text-purple-500 font-mono text-xs mb-2 tracking-widest">/// RESOURCE LIBRARY</p>
+                      <h2 className="font-header text-4xl font-bold text-white">ASSET STORE</h2>
+                  </div>
+                  <a href="/store" className="text-xs font-header font-bold border-b border-purple-500 pb-1 hover:text-purple-500 transition-colors tracking-wider">VIEW ALL PACKS</a>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                  {/* Asset 1 */}
+                  <div className="glass-panel p-6 hover:border-purple-500/50 transition-all duration-300 group cursor-pointer">
+                      <div className="aspect-video bg-gray-800 mb-4 overflow-hidden relative">
+                           <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1563089145-599997674d42?q=80&w=2670&auto=format&fit=crop')] bg-cover bg-center opacity-60 group-hover:scale-110 transition-transform duration-500"></div>
+                           <div className="absolute top-2 right-2 bg-purple-600 text-white text-[10px] font-bold px-2 py-1">NEW</div>
                       </div>
-                      <a href="#" className="text-xs font-header font-bold border-b border-purple-500 pb-1 hover:text-purple-500 transition-colors tracking-wider">VIEW ALL PACKS</a>
+                      <h3 className="font-header text-sm text-white mb-1">CYBERPUNK TEXTURES VOL. 1</h3>
+                      <p className="text-xs text-gray-500 font-mono mb-4">50+ Nano Banana Generated Surfaces</p>
+                      <div className="flex justify-between items-center">
+                          <span className="text-white font-bold">$29</span>
+                          <span className="text-[10px] text-purple-400 group-hover:translate-x-1 transition-transform">GET PACK →</span>
+                      </div>
                   </div>
 
-                  <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                      {/* Asset 1 */}
-                      <div className="glass-panel p-6 hover:border-purple-500/50 transition-all duration-300 group cursor-pointer">
-                          <div className="aspect-video bg-gray-800 mb-4 overflow-hidden relative">
-                               <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1563089145-599997674d42?q=80&w=2670&auto=format&fit=crop')] bg-cover bg-center opacity-60 group-hover:scale-110 transition-transform duration-500"></div>
-                               <div className="absolute top-2 right-2 bg-purple-600 text-white text-[10px] font-bold px-2 py-1">NEW</div>
-                          </div>
-                          <h3 className="font-header text-sm text-white mb-1">CYBERPUNK TEXTURES VOL. 1</h3>
-                          <p className="text-xs text-gray-500 font-mono mb-4">50+ Nano Banana Generated Surfaces</p>
-                          <div className="flex justify-between items-center">
-                              <span className="text-white font-bold">$29</span>
-                              <span className="text-[10px] text-purple-400 group-hover:translate-x-1 transition-transform">GET PACK →</span>
-                          </div>
+                  {/* Asset 2 */}
+                  <div className="glass-panel p-6 hover:border-purple-500/50 transition-all duration-300 group cursor-pointer">
+                      <div className="aspect-video bg-gray-800 mb-4 overflow-hidden relative">
+                          <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1535905557558-afc4877a26fc?q=80&w=2574&auto=format&fit=crop')] bg-cover bg-center opacity-60 group-hover:scale-110 transition-transform duration-500"></div>
                       </div>
-
-                      {/* Asset 2 */}
-                      <div className="glass-panel p-6 hover:border-purple-500/50 transition-all duration-300 group cursor-pointer">
-                          <div className="aspect-video bg-gray-800 mb-4 overflow-hidden relative">
-                              <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1535905557558-afc4877a26fc?q=80&w=2574&auto=format&fit=crop')] bg-cover bg-center opacity-60 group-hover:scale-110 transition-transform duration-500"></div>
-                          </div>
-                          <h3 className="font-header text-sm text-white mb-1">SCI-FI CHARACTER SHEETS</h3>
-                          <p className="text-xs text-gray-500 font-mono mb-4">Ready-to-use 'Ingredients' for Veo</p>
-                          <div className="flex justify-between items-center">
-                              <span className="text-white font-bold">$49</span>
-                              <span className="text-[10px] text-purple-400 group-hover:translate-x-1 transition-transform">GET PACK →</span>
-                          </div>
+                      <h3 className="font-header text-sm text-white mb-1">SCI-FI CHARACTER SHEETS</h3>
+                      <p className="text-xs text-gray-500 font-mono mb-4">Ready-to-use 'Ingredients' for Veo</p>
+                      <div className="flex justify-between items-center">
+                          <span className="text-white font-bold">$49</span>
+                          <span className="text-[10px] text-purple-400 group-hover:translate-x-1 transition-transform">GET PACK →</span>
                       </div>
+                  </div>
 
-                      {/* Asset 3 */}
-                      <div className="glass-panel p-6 hover:border-purple-500/50 transition-all duration-300 group cursor-pointer">
-                          <div className="aspect-video bg-gray-800 mb-4 overflow-hidden relative">
-                              <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1511379938547-c1f69419868d?q=80&w=2670&auto=format&fit=crop')] bg-cover bg-center opacity-60 group-hover:scale-110 transition-transform duration-500"></div>
-                          </div>
-                          <h3 className="font-header text-sm text-white mb-1">CINEMATIC LUTS PACK</h3>
-                          <p className="text-xs text-gray-500 font-mono mb-4">Color grading for AI video output</p>
-                          <div className="flex justify-between items-center">
-                              <span className="text-white font-bold">$19</span>
-                              <span className="text-[10px] text-purple-400 group-hover:translate-x-1 transition-transform">GET PACK →</span>
-                          </div>
+                  {/* Asset 3 */}
+                  <div className="glass-panel p-6 hover:border-purple-500/50 transition-all duration-300 group cursor-pointer">
+                      <div className="aspect-video bg-gray-800 mb-4 overflow-hidden relative">
+                          <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1511379938547-c1f69419868d?q=80&w=2670&auto=format&fit=crop')] bg-cover bg-center opacity-60 group-hover:scale-110 transition-transform duration-500"></div>
+                      </div>
+                      <h3 className="font-header text-sm text-white mb-1">CINEMATIC LUTS PACK</h3>
+                      <p className="text-xs text-gray-500 font-mono mb-4">Color grading for AI video output</p>
+                      <div className="flex justify-between items-center">
+                          <span className="text-white font-bold">$19</span>
+                          <span className="text-[10px] text-purple-400 group-hover:translate-x-1 transition-transform">GET PACK →</span>
                       </div>
                   </div>
               </div>
-              
-          </div>
+          </section>
           <Footer />
       </div>
   );
