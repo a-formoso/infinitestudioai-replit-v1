@@ -71,20 +71,20 @@ export function Footer() {
               </div>
               
               <div>
-                  <h5 className="font-header text-xs text-white mb-6 tracking-widest border-b border-white/10 pb-2 inline-block">STUDIO</h5>
+                  <h5 className="font-header text-xs text-white mb-6 tracking-widest border-b border-white/10 pb-2 inline-block">ACADEMY</h5>
                   <ul className="space-y-3 text-xs text-gray-400 font-mono">
-                      <li><Link href="/hire" className="hover:text-electricBlue transition-colors">Services</Link></li>
-                      <li><Link href="/about" className="hover:text-electricBlue transition-colors">About Us</Link></li>
-                      <li><Link href="/hire" className="hover:text-electricBlue transition-colors">Contact</Link></li>
+                      <li><Link href="/academy" className="hover:text-electricBlue transition-colors">All Courses</Link></li>
+                      <li><Link href="/mentorship" className="hover:text-yellow-500 transition-colors">Mentorship</Link></li>
+                      <li><Link href="/support" className="hover:text-electricBlue transition-colors">Support Center</Link></li>
                   </ul>
               </div>
 
               <div>
-                  <h5 className="font-header text-xs text-white mb-6 tracking-widest border-b border-white/10 pb-2 inline-block">ACADEMY</h5>
+                  <h5 className="font-header text-xs text-white mb-6 tracking-widest border-b border-white/10 pb-2 inline-block">STUDIO</h5>
                   <ul className="space-y-3 text-xs text-gray-400 font-mono">
-                      <li><Link href="/academy" className="hover:text-signalOrange transition-colors">All Courses</Link></li>
-                      <li><Link href="/mentorship" className="hover:text-signalOrange transition-colors">Mentorship</Link></li>
-                      <li><Link href="/support" className="hover:text-signalOrange transition-colors">Support Center</Link></li>
+                      <li><Link href="/hire" className="hover:text-signalOrange transition-colors">Services</Link></li>
+                      <li><Link href="/about" className="hover:text-signalOrange transition-colors">About Us</Link></li>
+                      <li><Link href="/hire" className="hover:text-signalOrange transition-colors">Contact</Link></li>
                   </ul>
               </div>
 
