@@ -277,6 +277,30 @@ export default function Home() {
                   </Link>
               </div>
           </section>
+
+          {/* MENTORSHIP TEASER */}
+          <section className="py-20 border-t border-white/10 bg-gradient-to-b from-black/50 to-black relative z-10">
+              <div className="max-w-4xl mx-auto px-6 text-center">
+                  <div className="inline-block border border-yellow-500/50 px-3 py-1 mb-6 text-[10px] font-mono text-yellow-500 tracking-widest uppercase animate-pulse">
+                      Limited Spots Available
+                  </div>
+                  <h2 className="font-header text-3xl md:text-5xl font-bold text-white leading-tight mb-6">
+                      THE INNER <span className="text-transparent bg-clip-text bg-gradient-to-r from-yellow-500 to-yellow-600">CIRCLE</span>
+                  </h2>
+                  <p className="text-lg text-gray-400 max-w-2xl mx-auto leading-relaxed mb-8">
+                      Direct mentorship with Alex Director. Weekly critique sessions, career strategy, and advanced "Beta" workflows not available in public courses.
+                  </p>
+                  <div className="flex flex-col sm:flex-row gap-4 justify-center">
+                      <Link href="/mentorship" className="bg-yellow-500 text-black px-8 py-4 text-xs font-header font-bold uppercase hover:bg-white transition-all shadow-[0_0_20px_rgba(255,215,0,0.2)]" data-testid="link-mentorship-apply">
+                          Apply Now
+                      </Link>
+                      <Link href="/mentorship" className="border border-yellow-500/50 text-yellow-500 px-8 py-4 text-xs font-header font-bold uppercase hover:bg-yellow-500/10 transition-all" data-testid="link-mentorship-learn">
+                          Learn More
+                      </Link>
+                  </div>
+              </div>
+          </section>
+
           {/* ASSET STORE & FOOTER CONTAINER */}
           <div className="bg-black border-t border-white/10 relative z-20">
               
