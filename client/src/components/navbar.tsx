@@ -11,7 +11,7 @@ import {
 import { LogOut, User, LayoutDashboard } from "lucide-react";
 
 export function Navbar() {
-  const [, setLocation] = useLocation();
+  const [location, setLocation] = useLocation();
   const queryClient = useQueryClient();
   
   const { data } = useQuery({
@@ -31,6 +31,11 @@ export function Navbar() {
     setLocation("/");
   };
 
+  const isAcademyActive = location.startsWith("/academy") || location.startsWith("/course");
+  const isMentorshipActive = location === "/mentorship";
+  const isStudioActive = location === "/hire" || location === "/about";
+  const isStoreActive = location === "/store";
+
   return (
     <nav className="fixed top-0 w-full z-50 glass-panel border-b-0 border-b-glassBorder">
         <div className="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
@@ -41,10 +46,10 @@ export function Navbar() {
             </Link>
 
             <div className="hidden md:flex items-center gap-8 absolute left-1/2 transform -translate-x-1/2">
-                <a href="/#work" className="text-xs font-header font-bold text-gray-400 hover:text-white transition-colors tracking-widest">STUDIO</a>
-                <a href="/#academy" className="text-xs font-header font-bold text-gray-400 hover:text-white transition-colors tracking-widest">ACADEMY</a>
-                <Link href="/mentorship" className="text-xs font-header font-bold text-yellow-500 hover:text-yellow-400 transition-colors tracking-widest">MENTORSHIP</Link>
-                <a href="/#store" className="text-xs font-header font-bold text-gray-400 hover:text-white transition-colors tracking-widest">ASSET STORE</a>
+                <a href="/#academy" className={`text-xs font-header font-bold transition-colors tracking-widest ${isAcademyActive ? "text-electricBlue" : "text-gray-400 hover:text-electricBlue"}`}>ACADEMY</a>
+                <Link href="/mentorship" className={`text-xs font-header font-bold transition-colors tracking-widest ${isMentorshipActive ? "text-yellow-500" : "text-gray-400 hover:text-yellow-500"}`}>MENTORSHIP</Link>
+                <a href="/#work" className={`text-xs font-header font-bold transition-colors tracking-widest ${isStudioActive ? "text-signalOrange" : "text-gray-400 hover:text-signalOrange"}`}>STUDIO</a>
+                <a href="/#store" className={`text-xs font-header font-bold transition-colors tracking-widest ${isStoreActive ? "text-purple-500" : "text-gray-400 hover:text-purple-500"}`}>ASSET STORE</a>
             </div>
 
             <div className="flex items-center gap-4">
