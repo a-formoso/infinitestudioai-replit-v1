@@ -82,9 +82,9 @@ export function Footer() {
               <div>
                   <h5 className="font-header text-xs text-white mb-6 tracking-widest border-b border-white/10 pb-2 inline-block">STUDIO</h5>
                   <ul className="space-y-3 text-xs text-gray-400 font-mono">
+                      <li><Link href="/about" className="hover:text-signalOrange transition-colors">About</Link></li>
                       <li><Link href="/hire" className="hover:text-signalOrange transition-colors">Services</Link></li>
-                      <li><Link href="/about" className="hover:text-signalOrange transition-colors">About Us</Link></li>
-                      <li><Link href="/hire" className="hover:text-signalOrange transition-colors">Contact</Link></li>
+                      <li><Link href="/hire" className="hover:text-signalOrange transition-colors">Contact Us</Link></li>
                   </ul>
               </div>
 
