@@ -31,10 +31,15 @@ export function Navbar() {
     setLocation("/");
   };
 
+  const isHomepage = location === "/";
   const isAcademyActive = location.startsWith("/academy") || location.startsWith("/course");
   const isMentorshipActive = location === "/mentorship";
   const isStudioActive = location === "/hire" || location === "/about";
   const isStoreActive = location === "/store";
+
+  const getNavLink = (homepageAnchor: string, pagePath: string) => {
+    return isHomepage ? homepageAnchor : pagePath;
+  };
 
   return (
     <nav className="fixed top-0 w-full z-50 glass-panel border-b-0 border-b-glassBorder">
@@ -46,10 +51,10 @@ export function Navbar() {
             </Link>
 
             <div className="hidden md:flex items-center gap-8 absolute left-1/2 transform -translate-x-1/2">
-                <a href="/#academy" className={`text-xs font-header font-bold transition-colors tracking-widest ${isAcademyActive ? "text-electricBlue" : "text-gray-400 hover:text-electricBlue"}`}>ACADEMY</a>
+                <a href={getNavLink("#academy", "/academy")} className={`text-xs font-header font-bold transition-colors tracking-widest ${isAcademyActive ? "text-electricBlue" : "text-gray-400 hover:text-electricBlue"}`}>ACADEMY</a>
                 <Link href="/mentorship" className={`text-xs font-header font-bold transition-colors tracking-widest ${isMentorshipActive ? "text-yellow-500" : "text-gray-400 hover:text-yellow-500"}`}>MENTORSHIP</Link>
-                <a href="/#work" className={`text-xs font-header font-bold transition-colors tracking-widest ${isStudioActive ? "text-signalOrange" : "text-gray-400 hover:text-signalOrange"}`}>STUDIO</a>
-                <a href="/#store" className={`text-xs font-header font-bold transition-colors tracking-widest ${isStoreActive ? "text-purple-500" : "text-gray-400 hover:text-purple-500"}`}>ASSET STORE</a>
+                <a href={getNavLink("#work", "/hire")} className={`text-xs font-header font-bold transition-colors tracking-widest ${isStudioActive ? "text-signalOrange" : "text-gray-400 hover:text-signalOrange"}`}>STUDIO</a>
+                <a href={getNavLink("#store", "/store")} className={`text-xs font-header font-bold transition-colors tracking-widest ${isStoreActive ? "text-purple-500" : "text-gray-400 hover:text-purple-500"}`}>ASSET STORE</a>
             </div>
 
             <div className="flex items-center gap-4">
