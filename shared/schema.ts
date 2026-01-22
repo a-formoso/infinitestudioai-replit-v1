@@ -80,25 +80,6 @@ export const orderItems = pgTable("order_items", {
   price: numeric("price", { precision: 10, scale: 2 }).notNull(),
 });
 
-export const waitlistEntries = pgTable("waitlist_entries", {
-  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
-  email: text("email").notNull(),
-  name: text("name"),
-  tier: text("tier").notNull(),
-  createdAt: timestamp("created_at").defaultNow().notNull(),
-});
-
-export const mentorshipApplications = pgTable("mentorship_applications", {
-  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
-  name: text("name").notNull(),
-  email: text("email").notNull(),
-  portfolio: text("portfolio"),
-  experience: text("experience").notNull(),
-  goals: text("goals").notNull(),
-  status: text("status").notNull().default("pending"),
-  createdAt: timestamp("created_at").defaultNow().notNull(),
-});
-
 export const insertUserSchema = createInsertSchema(users).omit({
   id: true,
   createdAt: true,
@@ -135,17 +116,6 @@ export const insertOrderItemSchema = createInsertSchema(orderItems).omit({
   id: true,
 });
 
-export const insertWaitlistEntrySchema = createInsertSchema(waitlistEntries).omit({
-  id: true,
-  createdAt: true,
-});
-
-export const insertMentorshipApplicationSchema = createInsertSchema(mentorshipApplications).omit({
-  id: true,
-  status: true,
-  createdAt: true,
-});
-
 export type InsertUser = z.infer<typeof insertUserSchema>;
 export type User = typeof users.$inferSelect;
 
@@ -169,9 +139,3 @@ export type Order = typeof orders.$inferSelect;
 
 export type InsertOrderItem = z.infer<typeof insertOrderItemSchema>;
 export type OrderItem = typeof orderItems.$inferSelect;
-
-export type InsertWaitlistEntry = z.infer<typeof insertWaitlistEntrySchema>;
-export type WaitlistEntry = typeof waitlistEntries.$inferSelect;
-
-export type InsertMentorshipApplication = z.infer<typeof insertMentorshipApplicationSchema>;
-export type MentorshipApplication = typeof mentorshipApplications.$inferSelect;

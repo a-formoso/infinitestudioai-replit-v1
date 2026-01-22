@@ -7,8 +7,6 @@ import {
   assets,
   orders,
   orderItems,
-  waitlistEntries,
-  mentorshipApplications,
   type User,
   type InsertUser,
   type Course,
@@ -25,10 +23,6 @@ import {
   type InsertOrder,
   type OrderItem,
   type InsertOrderItem,
-  type WaitlistEntry,
-  type InsertWaitlistEntry,
-  type MentorshipApplication,
-  type InsertMentorshipApplication,
 } from "@shared/schema";
 import { db } from "./db";
 import { eq, and, sql } from "drizzle-orm";
@@ -75,12 +69,6 @@ export interface IStorage {
   createOrder(order: InsertOrder): Promise<Order>;
   createOrderItem(orderItem: InsertOrderItem): Promise<OrderItem>;
   getOrderItems(orderId: string): Promise<OrderItem[]>;
-
-  // Waitlist operations
-  createWaitlistEntry(entry: InsertWaitlistEntry): Promise<WaitlistEntry>;
-
-  // Mentorship application operations
-  createMentorshipApplication(application: InsertMentorshipApplication): Promise<MentorshipApplication>;
 }
 
 export class DatabaseStorage implements IStorage {
@@ -297,24 +285,6 @@ export class DatabaseStorage implements IStorage {
       .select()
       .from(orderItems)
       .where(eq(orderItems.orderId, orderId));
-  }
-
-  // Waitlist operations
-  async createWaitlistEntry(entry: InsertWaitlistEntry): Promise<WaitlistEntry> {
-    const [waitlistEntry] = await db
-      .insert(waitlistEntries)
-      .values(entry)
-      .returning();
-    return waitlistEntry;
-  }
-
-  // Mentorship application operations
-  async createMentorshipApplication(application: InsertMentorshipApplication): Promise<MentorshipApplication> {
-    const [mentorshipApp] = await db
-      .insert(mentorshipApplications)
-      .values(application)
-      .returning();
-    return mentorshipApp;
   }
 }
 

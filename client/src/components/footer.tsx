@@ -71,20 +71,20 @@ export function Footer() {
               </div>
               
               <div>
-                  <h5 className="font-header text-xs text-white mb-6 tracking-widest border-b border-white/10 pb-2 inline-block">ACADEMY</h5>
+                  <h5 className="font-header text-xs text-white mb-6 tracking-widest border-b border-white/10 pb-2 inline-block">STUDIO</h5>
                   <ul className="space-y-3 text-xs text-gray-400 font-mono">
-                      <li><Link href="/academy" className="hover:text-electricBlue transition-colors">All Courses</Link></li>
-                      <li><Link href="/mentorship" className="hover:text-yellow-500 transition-colors">Mentorship</Link></li>
-                      <li><Link href="/support" className="hover:text-electricBlue transition-colors">Support Center</Link></li>
+                      <li><Link href="/hire" className="hover:text-electricBlue transition-colors">Services</Link></li>
+                      <li><Link href="/about" className="hover:text-electricBlue transition-colors">About Us</Link></li>
+                      <li><Link href="/hire" className="hover:text-electricBlue transition-colors">Contact</Link></li>
                   </ul>
               </div>
 
               <div>
-                  <h5 className="font-header text-xs text-white mb-6 tracking-widest border-b border-white/10 pb-2 inline-block">STUDIO</h5>
+                  <h5 className="font-header text-xs text-white mb-6 tracking-widest border-b border-white/10 pb-2 inline-block">ACADEMY</h5>
                   <ul className="space-y-3 text-xs text-gray-400 font-mono">
-                      <li><Link href="/about" className="hover:text-signalOrange transition-colors">About</Link></li>
-                      <li><Link href="/hire" className="hover:text-signalOrange transition-colors">Services</Link></li>
-                      <li><Link href="/hire" className="hover:text-signalOrange transition-colors">Contact Us</Link></li>
+                      <li><a href="#" className="hover:text-signalOrange transition-colors">All Courses</a></li>
+                      <li><Link href="/login" className="hover:text-signalOrange transition-colors">Student Login</Link></li>
+                      <li><Link href="/support" className="hover:text-signalOrange transition-colors">Support Center</Link></li>
                   </ul>
               </div>
 
@@ -103,7 +103,7 @@ export function Footer() {
           </div>
 
           {/* THE LIVE TERMINAL */}
-          <div className="w-full bg-[#050505] border border-white/10 p-2 md:p-4 font-mono text-[8px] md:text-xs text-green-500 h-32 overflow-hidden relative shadow-inner shadow-black/50 rounded-none mb-8">
+          <div className="w-full bg-[#050505] border border-white/10 p-2 md:p-4 font-mono text-[8px] md:text-xs text-green-500 h-32 overflow-hidden relative shadow-inner shadow-black/50 rounded-sm mb-8">
               <div className="absolute top-2 right-3 text-white/20 text-[8px] tracking-widest border border-white/10 px-1">LIVE SYSTEM LOG // V.2.4.1</div>
               <div className="absolute top-2 left-3 text-electricBlue/50 text-[8px] tracking-widest">SERVER: LON-01</div>
               

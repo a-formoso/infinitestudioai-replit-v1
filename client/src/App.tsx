@@ -21,7 +21,6 @@ import AdminDashboard from "@/pages/admin-dashboard";
 import Links from "@/pages/links";
 import Privacy from "@/pages/privacy";
 import Terms from "@/pages/terms";
-import Mentorship from "@/pages/mentorship";
 
 function Router() {
   return (
@@ -30,7 +29,6 @@ function Router() {
       <Route path="/links" component={Links} />
       <Route path="/privacy" component={Privacy} />
       <Route path="/terms" component={Terms} />
-      <Route path="/mentorship" component={Mentorship} />
       <Route path="/hire" component={Hire} />
       <Route path="/about" component={About} />
       <Route path="/login" component={Login} />
