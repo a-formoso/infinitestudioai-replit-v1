@@ -1,4 +1,5 @@
 import { Link } from "wouter";
+import { Navbar } from "@/components/navbar";
 import { Footer } from "@/components/footer";
 
 export default function AssetStore() {
@@ -7,20 +8,7 @@ export default function AssetStore() {
       {/* GRID OVERLAY */}
       <div className="fixed inset-0 bg-grid-pattern bg-[size:40px_40px] opacity-20 pointer-events-none z-0"></div>
 
-      {/* NAV */}
-      <nav className="fixed top-0 w-full z-50 glass-panel border-b-0 border-b-glassBorder">
-        <div className="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
-          <Link href="/" className="font-header font-bold text-xl tracking-widest text-white flex items-center gap-2 hover:opacity-80 transition-opacity">
-            <span className="text-electricBlue text-2xl">∞</span> INFINITE STUDIO
-          </Link>
-          <div className="flex gap-6 items-center">
-            <a href="#" className="text-xs font-mono text-gray-400 hover:text-white transition-colors">CART (0)</a>
-            <a href="#" className="hidden md:block bg-neonPurple text-white px-6 py-2 text-xs font-header font-bold uppercase hover:bg-white hover:text-black transition-all duration-300 tracking-wider">
-              All Access Pass
-            </a>
-          </div>
-        </div>
-      </nav>
+      <Navbar />
 
       {/* HERO */}
       <header className="relative pt-40 pb-12 px-6 max-w-7xl mx-auto z-10 text-center">
