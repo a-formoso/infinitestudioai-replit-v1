@@ -2,7 +2,7 @@ import type { Express } from "express";
 import { createServer, type Server } from "http";
 import { storage } from "./storage";
 import bcrypt from "bcryptjs";
-import { insertUserSchema, insertEnrollmentSchema, insertLessonProgressSchema, insertOrderSchema, insertOrderItemSchema } from "@shared/schema";
+import { insertUserSchema, insertEnrollmentSchema, insertLessonProgressSchema, insertOrderSchema, insertOrderItemSchema, insertWaitlistEntrySchema, insertMentorshipApplicationSchema } from "@shared/schema";
 import { z } from "zod";
 
 declare module "express-session" {
@@ -389,6 +389,36 @@ export async function registerRoutes(
       res.status(201).json({ order, items: orderItems });
     } catch (error) {
       res.status(500).json({ message: "Failed to create order" });
+    }
+  });
+
+  // ===== Mentorship Routes =====
+  
+  // Join waitlist
+  app.post("/api/mentorship/waitlist", async (req, res) => {
+    try {
+      const validatedData = insertWaitlistEntrySchema.parse(req.body);
+      const entry = await storage.createWaitlistEntry(validatedData);
+      res.status(201).json({ message: "Successfully joined waitlist", entry });
+    } catch (error) {
+      if (error instanceof z.ZodError) {
+        return res.status(400).json({ message: "Invalid data", errors: error.errors });
+      }
+      res.status(500).json({ message: "Failed to join waitlist" });
+    }
+  });
+
+  // Apply for mentorship
+  app.post("/api/mentorship/apply", async (req, res) => {
+    try {
+      const validatedData = insertMentorshipApplicationSchema.parse(req.body);
+      const application = await storage.createMentorshipApplication(validatedData);
+      res.status(201).json({ message: "Application submitted successfully", application });
+    } catch (error) {
+      if (error instanceof z.ZodError) {
+        return res.status(400).json({ message: "Invalid data", errors: error.errors });
+      }
+      res.status(500).json({ message: "Failed to submit application" });
     }
   });
 

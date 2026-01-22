@@ -1,8 +1,293 @@
 import { Navbar } from "@/components/navbar";
 import { Footer } from "@/components/footer";
-import { Link } from "wouter";
+import { useState } from "react";
+
+function WaitlistModal({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }) {
+  const [email, setEmail] = useState("");
+  const [name, setName] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [success, setSuccess] = useState(false);
+
+  if (!isOpen) return null;
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsSubmitting(true);
+    try {
+      const res = await fetch("/api/mentorship/waitlist", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, name, tier: "studio_lot" }),
+      });
+      if (res.ok) {
+        setSuccess(true);
+      }
+    } catch (error) {
+      console.error("Failed to join waitlist");
+    }
+    setIsSubmitting(false);
+  };
+
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+      <div className="absolute inset-0 bg-black/80 backdrop-blur-sm" onClick={onClose}></div>
+      <div className="relative bg-obsidian border border-white/20 p-8 max-w-md w-full z-10">
+        <button 
+          onClick={onClose}
+          className="absolute top-4 right-4 text-gray-400 hover:text-white"
+          data-testid="button-close-waitlist-modal"
+        >
+          ×
+        </button>
+        
+        {success ? (
+          <div className="text-center py-8">
+            <div className="text-electricBlue text-4xl mb-4">✓</div>
+            <h3 className="font-header text-xl text-white mb-2">You're on the list!</h3>
+            <p className="text-sm text-gray-400">We'll notify you when spots open up for The Studio Lot.</p>
+          </div>
+        ) : (
+          <>
+            <h3 className="font-header text-xl text-white mb-2">JOIN THE WAITLIST</h3>
+            <p className="text-xs text-gray-400 font-mono mb-6">The Studio Lot · $99/mo</p>
+            
+            <form onSubmit={handleSubmit} className="space-y-4">
+              <div>
+                <label className="block text-xs text-gray-400 font-mono mb-2">NAME (OPTIONAL)</label>
+                <input
+                  type="text"
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
+                  className="w-full bg-black border border-white/20 px-4 py-3 text-white text-sm focus:border-electricBlue focus:outline-none"
+                  placeholder="Your name"
+                  data-testid="input-waitlist-name"
+                />
+              </div>
+              <div>
+                <label className="block text-xs text-gray-400 font-mono mb-2">EMAIL *</label>
+                <input
+                  type="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  required
+                  className="w-full bg-black border border-white/20 px-4 py-3 text-white text-sm focus:border-electricBlue focus:outline-none"
+                  placeholder="your@email.com"
+                  data-testid="input-waitlist-email"
+                />
+              </div>
+              <button
+                type="submit"
+                disabled={isSubmitting}
+                className="w-full bg-electricBlue text-white px-6 py-3 text-xs font-header font-bold uppercase hover:bg-blue-600 transition-all disabled:opacity-50"
+                data-testid="button-submit-waitlist"
+              >
+                {isSubmitting ? "Joining..." : "Join Waitlist"}
+              </button>
+            </form>
+          </>
+        )}
+      </div>
+    </div>
+  );
+}
+
+function ApplicationModal({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }) {
+  const [step, setStep] = useState(1);
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    portfolio: "",
+    experience: "",
+    goals: "",
+  });
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [success, setSuccess] = useState(false);
+
+  if (!isOpen) return null;
+
+  const handleSubmit = async () => {
+    setIsSubmitting(true);
+    try {
+      const res = await fetch("/api/mentorship/apply", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(formData),
+      });
+      if (res.ok) {
+        setSuccess(true);
+      }
+    } catch (error) {
+      console.error("Failed to submit application");
+    }
+    setIsSubmitting(false);
+  };
+
+  const nextStep = () => setStep(step + 1);
+  const prevStep = () => setStep(step - 1);
+
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+      <div className="absolute inset-0 bg-black/80 backdrop-blur-sm" onClick={onClose}></div>
+      <div className="relative bg-obsidian border border-yellow-500/30 p-8 max-w-lg w-full z-10">
+        <button 
+          onClick={onClose}
+          className="absolute top-4 right-4 text-gray-400 hover:text-white"
+          data-testid="button-close-apply-modal"
+        >
+          ×
+        </button>
+        
+        {success ? (
+          <div className="text-center py-8">
+            <div className="text-yellow-500 text-4xl mb-4">✓</div>
+            <h3 className="font-header text-xl text-white mb-2">Application Submitted!</h3>
+            <p className="text-sm text-gray-400">We'll review your application and get back to you within 48 hours.</p>
+          </div>
+        ) : (
+          <>
+            <div className="flex justify-between items-center mb-6">
+              <div>
+                <h3 className="font-header text-xl text-white">EXECUTIVE PRODUCER</h3>
+                <p className="text-xs text-yellow-500 font-mono">Application · Step {step} of 3</p>
+              </div>
+              <div className="flex gap-1">
+                {[1, 2, 3].map((s) => (
+                  <div
+                    key={s}
+                    className={`w-8 h-1 ${s <= step ? "bg-yellow-500" : "bg-white/20"}`}
+                  />
+                ))}
+              </div>
+            </div>
+            
+            {step === 1 && (
+              <div className="space-y-4">
+                <div>
+                  <label className="block text-xs text-gray-400 font-mono mb-2">YOUR NAME *</label>
+                  <input
+                    type="text"
+                    value={formData.name}
+                    onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                    required
+                    className="w-full bg-black border border-white/20 px-4 py-3 text-white text-sm focus:border-yellow-500 focus:outline-none"
+                    placeholder="Full name"
+                    data-testid="input-apply-name"
+                  />
+                </div>
+                <div>
+                  <label className="block text-xs text-gray-400 font-mono mb-2">EMAIL *</label>
+                  <input
+                    type="email"
+                    value={formData.email}
+                    onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                    required
+                    className="w-full bg-black border border-white/20 px-4 py-3 text-white text-sm focus:border-yellow-500 focus:outline-none"
+                    placeholder="your@email.com"
+                    data-testid="input-apply-email"
+                  />
+                </div>
+                <div>
+                  <label className="block text-xs text-gray-400 font-mono mb-2">PORTFOLIO / WEBSITE (OPTIONAL)</label>
+                  <input
+                    type="url"
+                    value={formData.portfolio}
+                    onChange={(e) => setFormData({ ...formData, portfolio: e.target.value })}
+                    className="w-full bg-black border border-white/20 px-4 py-3 text-white text-sm focus:border-yellow-500 focus:outline-none"
+                    placeholder="https://yourportfolio.com"
+                    data-testid="input-apply-portfolio"
+                  />
+                </div>
+                <button
+                  onClick={nextStep}
+                  disabled={!formData.name || !formData.email}
+                  className="w-full bg-yellow-500 text-black px-6 py-3 text-xs font-header font-bold uppercase hover:bg-yellow-400 transition-all disabled:opacity-50"
+                  data-testid="button-apply-next-1"
+                >
+                  Continue
+                </button>
+              </div>
+            )}
+
+            {step === 2 && (
+              <div className="space-y-4">
+                <div>
+                  <label className="block text-xs text-gray-400 font-mono mb-2">YOUR EXPERIENCE *</label>
+                  <p className="text-[10px] text-gray-500 mb-2">Tell us about your background in filmmaking, AI tools, or creative work.</p>
+                  <textarea
+                    value={formData.experience}
+                    onChange={(e) => setFormData({ ...formData, experience: e.target.value })}
+                    required
+                    rows={5}
+                    className="w-full bg-black border border-white/20 px-4 py-3 text-white text-sm focus:border-yellow-500 focus:outline-none resize-none"
+                    placeholder="I've been working with..."
+                    data-testid="input-apply-experience"
+                  />
+                </div>
+                <div className="flex gap-4">
+                  <button
+                    onClick={prevStep}
+                    className="flex-1 border border-white/20 text-white px-6 py-3 text-xs font-header font-bold uppercase hover:bg-white/10 transition-all"
+                    data-testid="button-apply-back-2"
+                  >
+                    Back
+                  </button>
+                  <button
+                    onClick={nextStep}
+                    disabled={!formData.experience}
+                    className="flex-1 bg-yellow-500 text-black px-6 py-3 text-xs font-header font-bold uppercase hover:bg-yellow-400 transition-all disabled:opacity-50"
+                    data-testid="button-apply-next-2"
+                  >
+                    Continue
+                  </button>
+                </div>
+              </div>
+            )}
+
+            {step === 3 && (
+              <div className="space-y-4">
+                <div>
+                  <label className="block text-xs text-gray-400 font-mono mb-2">YOUR GOALS *</label>
+                  <p className="text-[10px] text-gray-500 mb-2">What do you hope to achieve with Executive Producer mentorship?</p>
+                  <textarea
+                    value={formData.goals}
+                    onChange={(e) => setFormData({ ...formData, goals: e.target.value })}
+                    required
+                    rows={5}
+                    className="w-full bg-black border border-white/20 px-4 py-3 text-white text-sm focus:border-yellow-500 focus:outline-none resize-none"
+                    placeholder="My goals are..."
+                    data-testid="input-apply-goals"
+                  />
+                </div>
+                <div className="flex gap-4">
+                  <button
+                    onClick={prevStep}
+                    className="flex-1 border border-white/20 text-white px-6 py-3 text-xs font-header font-bold uppercase hover:bg-white/10 transition-all"
+                    data-testid="button-apply-back-3"
+                  >
+                    Back
+                  </button>
+                  <button
+                    onClick={handleSubmit}
+                    disabled={!formData.goals || isSubmitting}
+                    className="flex-1 bg-yellow-500 text-black px-6 py-3 text-xs font-header font-bold uppercase hover:bg-yellow-400 transition-all disabled:opacity-50"
+                    data-testid="button-submit-application"
+                  >
+                    {isSubmitting ? "Submitting..." : "Submit Application"}
+                  </button>
+                </div>
+              </div>
+            )}
+          </>
+        )}
+      </div>
+    </div>
+  );
+}
 
 export default function Mentorship() {
+  const [showWaitlist, setShowWaitlist] = useState(false);
+  const [showApplication, setShowApplication] = useState(false);
+
   return (
     <div className="min-h-screen bg-obsidian text-offWhite font-sans antialiased selection:bg-yellow-500 selection:text-black overflow-x-hidden">
       <div className="fixed inset-0 bg-grid-pattern bg-[size:40px_40px] opacity-20 pointer-events-none z-0"></div>
@@ -42,6 +327,7 @@ export default function Mentorship() {
                 <span className="text-2xl font-header font-bold text-white">$99<span className="text-sm font-normal text-gray-500">/mo</span></span>
               </div>
               <button 
+                onClick={() => setShowWaitlist(true)}
                 data-testid="button-join-waitlist"
                 className="border border-white/20 text-white px-6 py-3 text-xs font-header font-bold uppercase hover:bg-electricBlue hover:border-electricBlue transition-all"
               >
@@ -72,6 +358,7 @@ export default function Mentorship() {
                 <span className="text-2xl font-header font-bold text-white">$1,500<span className="text-sm font-normal text-gray-500">/mo</span></span>
               </div>
               <button 
+                onClick={() => setShowApplication(true)}
                 data-testid="button-apply-now"
                 className="bg-yellow-500 text-black px-6 py-3 text-xs font-header font-bold uppercase hover:bg-white transition-all shadow-[0_0_20px_rgba(255,215,0,0.2)]"
               >
@@ -112,6 +399,9 @@ export default function Mentorship() {
       </section>
 
       <Footer />
+
+      <WaitlistModal isOpen={showWaitlist} onClose={() => setShowWaitlist(false)} />
+      <ApplicationModal isOpen={showApplication} onClose={() => setShowApplication(false)} />
     </div>
   );
 }
