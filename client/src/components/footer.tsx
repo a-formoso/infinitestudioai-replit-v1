@@ -71,20 +71,20 @@ export function Footer() {
               </div>
               
               <div>
-                  <h5 className="font-header text-xs text-white mb-6 tracking-widest border-b border-white/10 pb-2 inline-block">STUDIO</h5>
-                  <ul className="space-y-3 text-xs text-gray-400 font-mono">
-                      <li><Link href="/about" className="hover:text-electricBlue transition-colors">About</Link></li>
-                      <li><Link href="/hire" className="hover:text-electricBlue transition-colors">Services</Link></li>
-                      <li><Link href="/hire" className="hover:text-electricBlue transition-colors">Contact Us</Link></li>
-                  </ul>
-              </div>
-
-              <div>
                   <h5 className="font-header text-xs text-white mb-6 tracking-widest border-b border-white/10 pb-2 inline-block">ACADEMY</h5>
                   <ul className="space-y-3 text-xs text-gray-400 font-mono">
                       <li><a href="#" className="hover:text-signalOrange transition-colors">All Courses</a></li>
                       <li><Link href="/login" className="hover:text-signalOrange transition-colors">Student Login</Link></li>
                       <li><Link href="/support" className="hover:text-signalOrange transition-colors">Support Center</Link></li>
+                  </ul>
+              </div>
+
+              <div>
+                  <h5 className="font-header text-xs text-white mb-6 tracking-widest border-b border-white/10 pb-2 inline-block">STUDIO</h5>
+                  <ul className="space-y-3 text-xs text-gray-400 font-mono">
+                      <li><Link href="/about" className="hover:text-electricBlue transition-colors">About</Link></li>
+                      <li><Link href="/hire" className="hover:text-electricBlue transition-colors">Services</Link></li>
+                      <li><Link href="/hire" className="hover:text-electricBlue transition-colors">Contact Us</Link></li>
                   </ul>
               </div>
 
