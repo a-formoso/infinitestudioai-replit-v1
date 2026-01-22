@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MENTORSHIP | INFINITE STUDIO</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&family=Syncopate:wght@400;700&display=swap" rel="stylesheet">
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        obsidian: '#0A0A0A',
+                        electricBlue: '#2962FF',
+                        signalOrange: '#FF3D00',
+                        gold: '#FFD700',
+                        offWhite: '#E0E0E0',
+                        glass: 'rgba(255, 255, 255, 0.05)',
+                        glassBorder: 'rgba(255, 255, 255, 0.1)',
+                    },
+                    fontFamily: {
+                        header: ['Syncopate', 'sans-serif'],
+                        body: ['Inter', 'sans-serif'],
+                    },
+                    backgroundImage: {
+                        'grid-pattern': "linear-gradient(to right, #1a1a1a 1px, transparent 1px), linear-gradient(to bottom, #1a1a1a 1px, transparent 1px)",
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        /* Hide scrollbar */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #0A0A0A; }
+        ::-webkit-scrollbar-thumb { background: #333; }
+        
+        .gold-border {
+            border-color: rgba(255, 215, 0, 0.3);
+            box-shadow: 0 0 20px rgba(255, 215, 0, 0.1);
+        }
+        .gold-border:hover {
+            border-color: #FFD700;
+            box-shadow: 0 0 30px rgba(255, 215, 0, 0.2);
+        }
+    </style>
+</head>
+<body class="bg-obsidian text-offWhite font-body antialiased selection:bg-gold selection:text-black overflow-x-hidden">
+
+    <!-- GRID OVERLAY -->
+    <div class="fixed inset-0 bg-grid-pattern bg-[size:40px_40px] opacity-20 pointer-events-none z-0"></div>
+
+    <!-- NAV -->
+    <nav class="fixed top-0 w-full z-50 glass-panel border-b-0 border-b-glassBorder">
+        <div class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
+            <a href="index.html" class="font-header font-bold text-xl tracking-widest text-white flex items-center gap-2 hover:opacity-80 transition-opacity">
+                <span class="text-electricBlue text-2xl">∞</span> INFINITE STUDIO
+            </a>
+            <div class="flex gap-6 items-center">
+                <a href="#" class="hidden md:block bg-gold text-black px-6 py-2 text-xs font-header font-bold uppercase hover:bg-white transition-all duration-300 tracking-wider">
+                    Apply Now
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- HERO HEADER -->
+    <header class="relative pt-40 pb-20 px-6 max-w-7xl mx-auto z-10 text-center">
+        <div class="inline-block border border-gold/50 px-3 py-1 mb-6 text-[10px] font-mono text-gold tracking-widest uppercase animate-pulse">
+            Accepting Applications for Q1 2026
+        </div>
+        <h1 class="font-header text-4xl md:text-6xl font-bold text-white leading-tight mb-6">
+            THE INNER<br>
+            <span class="text-transparent bg-clip-text bg-gradient-to-r from-gold to-yellow-600">CIRCLE</span>
+        </h1>
+        <p class="text-lg text-gray-400 max-w-2xl mx-auto leading-relaxed font-light mb-12">
+            Direct access to Alex Director. Weekly critique sessions, career strategy, and advanced "Beta" workflows not available in the public courses.
+        </p>
+    </header>
+
+    <!-- TIERS SECTION -->
+    <section class="py-20 border-t border-white/10 bg-black/50 relative z-10">
+        <div class="max-w-6xl mx-auto px-6 grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
+            
+            <!-- TIER 1: GROUP MENTORSHIP -->
+            <div class="glass-panel p-8 hover:border-white/30 transition-all duration-300 group relative">
+                <div class="absolute top-0 right-0 p-4 opacity-10 text-6xl font-header font-bold text-white">01</div>
+                <h3 class="font-header text-2xl text-white mb-2">THE STUDIO LOT</h3>
+                <p class="text-xs font-mono text-gray-500 mb-8 uppercase tracking-widest">Group Coaching Program</p>
+                
+                <ul class="space-y-4 mb-8 text-sm text-gray-300">
+                    <li class="flex gap-3"><span class="text-electricBlue">✓</span> Bi-Weekly Live Q&A Calls</li>
+                    <li class="flex gap-3"><span class="text-electricBlue">✓</span> Access to "WIP" Feedback Channel</li>
+                    <li class="flex gap-3"><span class="text-electricBlue">✓</span> Early Access to New Asset Packs</li>
+                    <li class="flex gap-3"><span class="text-electricBlue">✓</span> Guest lectures from Industry Pros</li>
+                </ul>
+
+                <div class="flex justify-between items-end border-t border-white/10 pt-6">
+                    <div>
+                        <span class="block text-xs text-gray-500 font-mono mb-1">MEMBERSHIP</span>
+                        <span class="text-2xl font-header font-bold text-white">$99<span class="text-sm font-normal text-gray-500">/mo</span></span>
+                    </div>
+                    <button class="border border-white/20 text-white px-6 py-3 text-xs font-header font-bold uppercase hover:bg-electricBlue hover:border-electricBlue transition-all">
+                        Join Waitlist
+                    </button>
+                </div>
+            </div>
+
+            <!-- TIER 2: 1-ON-1 (GOLD) -->
+            <div class="glass-panel p-8 gold-border transition-all duration-300 group relative transform md:scale-105 bg-black/80">
+                <div class="absolute -top-4 left-1/2 -translate-x-1/2 bg-gold text-black px-4 py-1 text-[10px] font-header font-bold uppercase tracking-wider">
+                    Limited to 5 Spots
+                </div>
+                <div class="absolute top-0 right-0 p-4 opacity-10 text-6xl font-header font-bold text-gold">02</div>
+                
+                <h3 class="font-header text-2xl text-white mb-2">EXECUTIVE PRODUCER</h3>
+                <p class="text-xs font-mono text-gold mb-8 uppercase tracking-widest">1-on-1 Mentorship</p>
+                
+                <ul class="space-y-4 mb-8 text-sm text-gray-300">
+                    <li class="flex gap-3"><span class="text-gold">✓</span> Weekly 1-on-1 Strategy Calls (Zoom)</li>
+                    <li class="flex gap-3"><span class="text-gold">✓</span> Direct Line (Slack/WhatsApp) Access</li>
+                    <li class="flex gap-3"><span class="text-gold">✓</span> "Done For You" Career Roadmap</li>
+                    <li class="flex gap-3"><span class="text-gold">✓</span> Personal Intro to Agency Clients</li>
+                </ul>
+
+                <div class="flex justify-between items-end border-t border-white/10 pt-6">
+                    <div>
+                        <span class="block text-xs text-gray-500 font-mono mb-1">INVESTMENT</span>
+                        <span class="text-2xl font-header font-bold text-white">$1,500<span class="text-sm font-normal text-gray-500">/mo</span></span>
+                    </div>
+                    <button class="bg-gold text-black px-6 py-3 text-xs font-header font-bold uppercase hover:bg-white transition-all shadow-[0_0_20px_rgba(255,215,0,0.2)]">
+                        Apply Now
+                    </button>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- TESTIMONIALS -->
+    <section class="py-20 relative z-10">
+        <div class="max-w-4xl mx-auto px-6 text-center">
+            <h2 class="font-header text-xl text-white mb-12">SUCCESS STORIES</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div class="glass-panel p-8 text-left">
+                    <p class="text-sm text-gray-400 italic mb-6">"Before the Inner Circle, I was just making cool clips. Alex helped me package my skills into a service. I closed my first $5k client within 3 weeks of mentorship."</p>
+                    <div class="flex gap-4 items-center">
+                        <div class="w-10 h-10 bg-gray-800 rounded-full"></div>
+                        <div>
+                            <p class="text-xs font-bold text-white">MARCUS T.</p>
+                            <p class="text-[10px] text-electricBlue font-mono">FREELANCE DIRECTOR</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="glass-panel p-8 text-left">
+                    <p class="text-sm text-gray-400 italic mb-6">"The technical feedback is unmatched. Alex spotted a lighting inconsistency in my Veo workflow that I had missed for months. Instant level up."</p>
+                    <div class="flex gap-4 items-center">
+                        <div class="w-10 h-10 bg-gray-800 rounded-full"></div>
+                        <div>
+                            <p class="text-xs font-bold text-white">JESSICA L.</p>
+                            <p class="text-[10px] text-electricBlue font-mono">VFX ARTIST</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="bg-black border-t border-white/10 py-8 text-center relative z-20">
+        <div class="text-[10px] text-gray-600 font-mono">
+            © 2025 INFINITE STUDIO. <a href="index.html" class="text-white hover:underline">RETURN TO DASHBOARD</a>
+        </div>
+    </footer>
+
+</body>
+</html>
