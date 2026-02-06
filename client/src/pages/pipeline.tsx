@@ -13,7 +13,10 @@ import {
   PanelRightClose,
   Sparkles,
   Send,
-  RotateCcw
+  RotateCcw,
+  Menu,
+  X,
+  FileText
 } from "lucide-react";
 
 type StepStatus = "locked" | "active" | "complete";
@@ -137,7 +140,9 @@ export default function Pipeline() {
     { id: 3, label: "STEP 3", title: "ARCHITECTURE", status: "locked" },
   ]);
   const [activeStep, setActiveStep] = useState(0);
-  const [inspectorOpen, setInspectorOpen] = useState(true);
+  const [desktopInspectorOpen, setDesktopInspectorOpen] = useState(true);
+  const [inspectorOpen, setInspectorOpen] = useState(false);
+  const [sidebarOpen, setSidebarOpen] = useState(false);
   const [interviewStep, setInterviewStep] = useState(0);
   const [answers, setAnswers] = useState<string[]>(["", "", "", ""]);
   const [seedLocked, setSeedLocked] = useState(false);
@@ -161,6 +166,7 @@ export default function Pipeline() {
     const step = steps.find((s) => s.id === stepId);
     if (step && step.status !== "locked") {
       setActiveStep(stepId);
+      setSidebarOpen(false);
     }
   };
 
@@ -192,7 +198,7 @@ export default function Pipeline() {
                 <span className="text-gray-500 text-xs font-mono">PROJECT NAME</span>
                 <p className="text-white font-header text-lg">{SAMPLE_SEED.projectName}</p>
               </div>
-              <div className="grid grid-cols-3 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                 <div>
                   <span className="text-gray-500 text-xs font-mono">FORMAT</span>
                   <p className="text-electricBlue text-sm">{SAMPLE_SEED.format}</p>
@@ -554,18 +560,18 @@ export default function Pipeline() {
         <div className="space-y-3">
           {SAMPLE_BEATS.map((beat, i) => (
             <div key={i} className="glass-panel p-4 hover:border-white/20 transition-all duration-300 group">
-              <div className="flex items-start gap-4">
-                <div className="flex-shrink-0 w-24">
+              <div className="flex flex-col sm:flex-row items-start gap-3 sm:gap-4">
+                <div className="flex sm:flex-col flex-row items-center sm:items-start gap-2 sm:gap-0 flex-shrink-0 sm:w-24">
                   <span className={`text-[10px] font-mono px-2 py-1 ${
                     beat.act === "ACT I" ? "text-electricBlue bg-electricBlue/10" :
                     beat.act === "ACT II" ? "text-signalOrange bg-signalOrange/10" :
                     "text-purple-400 bg-purple-500/10"
                   }`}>{beat.act}</span>
-                  <p className="text-[10px] font-mono text-gray-600 mt-2">{beat.time}</p>
+                  <p className="text-[10px] font-mono text-gray-600 sm:mt-2">{beat.time}</p>
                 </div>
-                <div className="flex-1">
+                <div className="flex-1 w-full">
                   <h4 className="font-header text-xs text-white mb-2 tracking-widest">{beat.section}</h4>
-                  <div className="grid grid-cols-2 gap-4">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
                     <div>
                       <span className="text-[10px] font-mono text-gray-600 block mb-1">STORY BEAT (EXTERNAL)</span>
                       <p className="text-gray-400 text-xs leading-relaxed">{beat.external}</p>
@@ -602,79 +608,243 @@ export default function Pipeline() {
     }
   };
 
+  const inspectorContent = (
+    <div className="px-4 pb-6 space-y-4">
+      <div>
+        <span className="text-[10px] font-mono text-gray-600 tracking-widest">INSPECTOR</span>
+        <h3 className="font-header text-xs text-white tracking-widest">REFERENCE DATA</h3>
+      </div>
+
+      {seedLocked && (
+        <div className="glass-panel p-3 border border-electricBlue/20">
+          <div className="flex items-center gap-2 mb-2">
+            <CheckCircle2 className="w-3 h-3 text-green-400" />
+            <span className="text-[10px] font-mono text-green-400">Narrative_Seed.md</span>
+          </div>
+          <div className="space-y-2">
+            <div>
+              <span className="text-[8px] font-mono text-gray-600">PROJECT</span>
+              <p className="text-white text-[10px]">{SAMPLE_SEED.projectName}</p>
+            </div>
+            <div>
+              <span className="text-[8px] font-mono text-gray-600">GENRE</span>
+              <p className="text-electricBlue text-[10px]">{SAMPLE_SEED.genre}</p>
+            </div>
+            <div>
+              <span className="text-[8px] font-mono text-gray-600">VISUAL ANCHOR</span>
+              <p className="text-signalOrange text-[10px]">{SAMPLE_SEED.visualAnchor}</p>
+            </div>
+            <div>
+              <span className="text-[8px] font-mono text-gray-600">PROTAGONIST</span>
+              <p className="text-white text-[10px]">{SAMPLE_SEED.protagonistName}</p>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {synopsisLocked && (
+        <div className="glass-panel p-3 border border-signalOrange/20">
+          <div className="flex items-center gap-2 mb-2">
+            <CheckCircle2 className="w-3 h-3 text-green-400" />
+            <span className="text-[10px] font-mono text-green-400">Synopsis_v1.md</span>
+          </div>
+          <div className="space-y-2">
+            <div>
+              <span className="text-[8px] font-mono text-gray-600">DIRECTION</span>
+              <p className="text-white text-[10px]">Option {selectedLogline}</p>
+            </div>
+            <div>
+              <span className="text-[8px] font-mono text-gray-600">FRAMEWORK</span>
+              <p className="text-signalOrange text-[10px]">{FRAMEWORKS.find(f => f.id === selectedFramework)?.name}</p>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {characterLocked && (
+        <div className="glass-panel p-3 border border-purple-500/20">
+          <div className="flex items-center gap-2 mb-2">
+            <CheckCircle2 className="w-3 h-3 text-green-400" />
+            <span className="text-[10px] font-mono text-green-400">CharacterSheet.md</span>
+          </div>
+          <div className="space-y-2">
+            <div>
+              <span className="text-[8px] font-mono text-gray-600">NAME</span>
+              <p className="text-white text-[10px]">{SAMPLE_CHARACTER.name}</p>
+            </div>
+            <div>
+              <span className="text-[8px] font-mono text-gray-600">ARCHETYPE</span>
+              <p className="text-purple-400 text-[10px]">{SAMPLE_CHARACTER.archetype}</p>
+            </div>
+            <div>
+              <span className="text-[8px] font-mono text-gray-600">TACTIC</span>
+              <p className="text-purple-400 text-[10px]">{SAMPLE_CHARACTER.tactic}</p>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {!seedLocked && !synopsisLocked && !characterLocked && (
+        <div className="text-center py-8">
+          <Circle className="w-8 h-8 text-gray-700 mx-auto mb-3" />
+          <p className="text-[10px] font-mono text-gray-600">NO DELIVERABLES LOCKED</p>
+          <p className="text-[10px] text-gray-700 mt-1">Complete steps to populate</p>
+        </div>
+      )}
+
+      <div className="glass-panel p-3 border border-white/5">
+        <span className="text-[10px] font-mono text-gray-600 block mb-2">PIPELINE STATUS</span>
+        <div className="space-y-1">
+          {steps.map((step) => (
+            <div key={step.id} className="flex items-center justify-between">
+              <span className="text-[10px] text-gray-500">{step.title}</span>
+              <span className={`text-[8px] font-mono ${
+                step.status === "complete" ? "text-green-400" :
+                step.status === "active" ? "text-electricBlue" :
+                "text-gray-700"
+              }`}>
+                {step.status === "complete" ? "DONE" : step.status === "active" ? "ACTIVE" : "LOCKED"}
+              </span>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+
+  const sidebarContent = (
+    <>
+      <div className="p-6">
+        <div className="flex items-center gap-2 mb-1">
+          <div className="w-2 h-2 bg-red-500 rounded-full animate-ping" />
+          <span className="text-[10px] font-mono text-gray-500">PIPELINE ACTIVE</span>
+        </div>
+        <h2 className="font-header text-sm text-white tracking-widest">CONTROL CENTER</h2>
+      </div>
+
+      <div className="px-4 pb-6 space-y-6">
+        {Object.entries(PHASE_COLORS).map(([phaseNum, phase]) => {
+          const isActive = phaseNum === "1";
+          const PhaseIcon = phase.icon;
+          return (
+            <div key={phaseNum} data-testid={`phase-${phaseNum}`}>
+              <div className={`flex items-center gap-3 px-2 py-2 mb-2 ${isActive ? "" : "opacity-30"}`}>
+                <PhaseIcon className={`w-4 h-4 ${COLOR_MAP[phase.accent].text}`} />
+                <div>
+                  <span className={`text-[10px] font-mono ${COLOR_MAP[phase.accent].text}`}>PHASE {phaseNum}</span>
+                  <p className="text-xs font-header text-white tracking-wider">{phase.label}</p>
+                </div>
+              </div>
+
+              {isActive && (
+                <div className="ml-2 border-l border-white/10 pl-4 space-y-1">
+                  {steps.map((step) => (
+                    <button
+                      key={step.id}
+                      onClick={() => goToStep(step.id)}
+                      data-testid={`step-btn-${step.id}`}
+                      className={`w-full flex items-center gap-3 px-3 py-2 text-left transition-all duration-200 ${
+                        activeStep === step.id
+                          ? "bg-white/5 border-l-2 border-electricBlue -ml-[1px]"
+                          : step.status === "locked"
+                          ? "opacity-30 cursor-not-allowed"
+                          : "hover:bg-white/5 cursor-pointer"
+                      }`}
+                    >
+                      {renderStatusIcon(step.status)}
+                      <div>
+                        <span className="text-[10px] font-mono text-gray-500 block">{step.label}</span>
+                        <span className="text-xs text-white">{step.title}</span>
+                      </div>
+                    </button>
+                  ))}
+                </div>
+              )}
+
+              {!isActive && (
+                <div className="ml-2 border-l border-white/5 pl-4">
+                  <div className="flex items-center gap-2 px-3 py-2">
+                    <Lock className="w-3 h-3 text-gray-700" />
+                    <span className="text-[10px] font-mono text-gray-700">REQUIRES PHASE {Number(phaseNum) - 1}</span>
+                  </div>
+                </div>
+              )}
+            </div>
+          );
+        })}
+      </div>
+    </>
+  );
+
   return (
     <div className="min-h-screen bg-obsidian text-offWhite font-sans antialiased selection:bg-electricBlue selection:text-white overflow-x-hidden">
       <div className="fixed inset-0 bg-grid-pattern bg-[size:40px_40px] opacity-20 pointer-events-none z-0"></div>
       <Navbar />
 
-      <div className="pt-20 flex h-[calc(100vh-80px)] relative z-10">
-        {/* LEFT SIDEBAR — PHASE TRACKER */}
-        <aside className="w-64 flex-shrink-0 border-r border-white/10 bg-black/50 overflow-y-auto" data-testid="sidebar-tracker">
-          <div className="p-6">
-            <div className="flex items-center gap-2 mb-1">
-              <div className="w-2 h-2 bg-red-500 rounded-full animate-ping" />
-              <span className="text-[10px] font-mono text-gray-500">PIPELINE ACTIVE</span>
+      {/* MOBILE TOOLBAR */}
+      <div className="md:hidden fixed top-[64px] left-0 right-0 z-40 bg-black/90 backdrop-blur-sm border-b border-white/10 px-4 py-2 flex items-center justify-between">
+        <button
+          onClick={() => { setSidebarOpen(true); setInspectorOpen(false); }}
+          data-testid="btn-mobile-sidebar"
+          className="flex items-center gap-2 px-3 py-2 text-gray-400 hover:text-white transition-colors"
+        >
+          <Menu className="w-4 h-4" />
+          <span className="text-[10px] font-mono tracking-widest">STEPS</span>
+        </button>
+        <div className="flex items-center gap-2">
+          <div className="w-2 h-2 rounded-full bg-electricBlue animate-pulse" />
+          <span className="text-[10px] font-mono text-gray-500">{steps[activeStep]?.label} — {steps[activeStep]?.title}</span>
+        </div>
+        <button
+          onClick={() => { setInspectorOpen(true); setSidebarOpen(false); }}
+          data-testid="btn-mobile-inspector"
+          className="flex items-center gap-2 px-3 py-2 text-gray-400 hover:text-white transition-colors"
+        >
+          <span className="text-[10px] font-mono tracking-widest">REF</span>
+          <FileText className="w-4 h-4" />
+        </button>
+      </div>
+
+      {/* MOBILE SIDEBAR OVERLAY */}
+      {sidebarOpen && (
+        <div className="md:hidden fixed inset-0 z-50">
+          <div className="absolute inset-0 bg-black/60" onClick={() => setSidebarOpen(false)} />
+          <aside className="absolute left-0 top-0 bottom-0 w-72 bg-obsidian border-r border-white/10 overflow-y-auto" data-testid="sidebar-tracker-mobile">
+            <div className="flex justify-end p-3">
+              <button onClick={() => setSidebarOpen(false)} className="p-2 text-gray-400 hover:text-white">
+                <X className="w-5 h-5" />
+              </button>
             </div>
-            <h2 className="font-header text-sm text-white tracking-widest">CONTROL CENTER</h2>
-          </div>
+            {sidebarContent}
+          </aside>
+        </div>
+      )}
 
-          <div className="px-4 pb-6 space-y-6">
-            {Object.entries(PHASE_COLORS).map(([phaseNum, phase]) => {
-              const isActive = phaseNum === "1";
-              const PhaseIcon = phase.icon;
-              return (
-                <div key={phaseNum} data-testid={`phase-${phaseNum}`}>
-                  <div className={`flex items-center gap-3 px-2 py-2 mb-2 ${isActive ? "" : "opacity-30"}`}>
-                    <PhaseIcon className={`w-4 h-4 ${COLOR_MAP[phase.accent].text}`} />
-                    <div>
-                      <span className={`text-[10px] font-mono ${COLOR_MAP[phase.accent].text}`}>PHASE {phaseNum}</span>
-                      <p className="text-xs font-header text-white tracking-wider">{phase.label}</p>
-                    </div>
-                  </div>
+      {/* MOBILE INSPECTOR OVERLAY */}
+      {inspectorOpen && (
+        <div className="md:hidden fixed inset-0 z-50">
+          <div className="absolute inset-0 bg-black/60" onClick={() => setInspectorOpen(false)} />
+          <aside className="absolute right-0 top-0 bottom-0 w-72 bg-obsidian border-l border-white/10 overflow-y-auto" data-testid="inspector-panel-mobile">
+            <div className="flex justify-start p-3">
+              <button onClick={() => setInspectorOpen(false)} className="p-2 text-gray-400 hover:text-white">
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+            {inspectorContent}
+          </aside>
+        </div>
+      )}
 
-                  {isActive && (
-                    <div className="ml-2 border-l border-white/10 pl-4 space-y-1">
-                      {steps.map((step) => (
-                        <button
-                          key={step.id}
-                          onClick={() => goToStep(step.id)}
-                          data-testid={`step-btn-${step.id}`}
-                          className={`w-full flex items-center gap-3 px-3 py-2 text-left transition-all duration-200 ${
-                            activeStep === step.id
-                              ? "bg-white/5 border-l-2 border-electricBlue -ml-[1px]"
-                              : step.status === "locked"
-                              ? "opacity-30 cursor-not-allowed"
-                              : "hover:bg-white/5 cursor-pointer"
-                          }`}
-                        >
-                          {renderStatusIcon(step.status)}
-                          <div>
-                            <span className="text-[10px] font-mono text-gray-500 block">{step.label}</span>
-                            <span className="text-xs text-white">{step.title}</span>
-                          </div>
-                        </button>
-                      ))}
-                    </div>
-                  )}
-
-                  {!isActive && (
-                    <div className="ml-2 border-l border-white/5 pl-4">
-                      <div className="flex items-center gap-2 px-3 py-2">
-                        <Lock className="w-3 h-3 text-gray-700" />
-                        <span className="text-[10px] font-mono text-gray-700">REQUIRES PHASE {Number(phaseNum) - 1}</span>
-                      </div>
-                    </div>
-                  )}
-                </div>
-              );
-            })}
-          </div>
+      <div className="pt-[104px] md:pt-20 flex h-[calc(100vh-104px)] md:h-[calc(100vh-80px)] relative z-10">
+        {/* LEFT SIDEBAR — DESKTOP ONLY */}
+        <aside className="hidden md:block w-64 flex-shrink-0 border-r border-white/10 bg-black/50 overflow-y-auto" data-testid="sidebar-tracker">
+          {sidebarContent}
         </aside>
 
         {/* MAIN WORKSPACE */}
         <main className="flex-1 overflow-y-auto" data-testid="main-workspace">
-          <div className="p-8 max-w-4xl mx-auto">
-            <div className="flex items-center gap-3 mb-8">
+          <div className="p-4 md:p-8 max-w-4xl mx-auto">
+            <div className="hidden md:flex items-center gap-3 mb-8">
               <div className={`w-3 h-3 rounded-full bg-electricBlue ${steps[activeStep]?.status === "complete" ? "" : "animate-pulse"}`} />
               <span className="text-electricBlue text-xs font-mono tracking-widest">PHASE 1 — {steps[activeStep]?.label}</span>
               <ChevronRight className="w-3 h-3 text-gray-600" />
@@ -685,126 +855,24 @@ export default function Pipeline() {
           </div>
         </main>
 
-        {/* RIGHT PANEL — INSPECTOR */}
+        {/* RIGHT PANEL — DESKTOP ONLY */}
         <aside
-          className={`flex-shrink-0 border-l border-white/10 bg-black/30 overflow-y-auto transition-all duration-300 ${
-            inspectorOpen ? "w-72" : "w-12"
+          className={`hidden md:block flex-shrink-0 border-l border-white/10 bg-black/30 overflow-y-auto transition-all duration-300 ${
+            desktopInspectorOpen ? "w-72" : "w-12"
           }`}
           data-testid="inspector-panel"
         >
           <div className="p-3">
             <button
-              onClick={() => setInspectorOpen(!inspectorOpen)}
+              onClick={() => setDesktopInspectorOpen(!desktopInspectorOpen)}
               data-testid="btn-toggle-inspector"
               className="w-full flex items-center justify-center p-1 text-gray-500 hover:text-white transition-colors"
             >
-              {inspectorOpen ? <PanelRightClose className="w-4 h-4" /> : <PanelRightOpen className="w-4 h-4" />}
+              {desktopInspectorOpen ? <PanelRightClose className="w-4 h-4" /> : <PanelRightOpen className="w-4 h-4" />}
             </button>
           </div>
 
-          {inspectorOpen && (
-            <div className="px-4 pb-6 space-y-4">
-              <div>
-                <span className="text-[10px] font-mono text-gray-600 tracking-widest">INSPECTOR</span>
-                <h3 className="font-header text-xs text-white tracking-widest">REFERENCE DATA</h3>
-              </div>
-
-              {seedLocked && (
-                <div className="glass-panel p-3 border border-electricBlue/20">
-                  <div className="flex items-center gap-2 mb-2">
-                    <CheckCircle2 className="w-3 h-3 text-green-400" />
-                    <span className="text-[10px] font-mono text-green-400">Narrative_Seed.md</span>
-                  </div>
-                  <div className="space-y-2">
-                    <div>
-                      <span className="text-[8px] font-mono text-gray-600">PROJECT</span>
-                      <p className="text-white text-[10px]">{SAMPLE_SEED.projectName}</p>
-                    </div>
-                    <div>
-                      <span className="text-[8px] font-mono text-gray-600">GENRE</span>
-                      <p className="text-electricBlue text-[10px]">{SAMPLE_SEED.genre}</p>
-                    </div>
-                    <div>
-                      <span className="text-[8px] font-mono text-gray-600">VISUAL ANCHOR</span>
-                      <p className="text-signalOrange text-[10px]">{SAMPLE_SEED.visualAnchor}</p>
-                    </div>
-                    <div>
-                      <span className="text-[8px] font-mono text-gray-600">PROTAGONIST</span>
-                      <p className="text-white text-[10px]">{SAMPLE_SEED.protagonistName}</p>
-                    </div>
-                  </div>
-                </div>
-              )}
-
-              {synopsisLocked && (
-                <div className="glass-panel p-3 border border-signalOrange/20">
-                  <div className="flex items-center gap-2 mb-2">
-                    <CheckCircle2 className="w-3 h-3 text-green-400" />
-                    <span className="text-[10px] font-mono text-green-400">Synopsis_v1.md</span>
-                  </div>
-                  <div className="space-y-2">
-                    <div>
-                      <span className="text-[8px] font-mono text-gray-600">DIRECTION</span>
-                      <p className="text-white text-[10px]">Option {selectedLogline}</p>
-                    </div>
-                    <div>
-                      <span className="text-[8px] font-mono text-gray-600">FRAMEWORK</span>
-                      <p className="text-signalOrange text-[10px]">{FRAMEWORKS.find(f => f.id === selectedFramework)?.name}</p>
-                    </div>
-                  </div>
-                </div>
-              )}
-
-              {characterLocked && (
-                <div className="glass-panel p-3 border border-purple-500/20">
-                  <div className="flex items-center gap-2 mb-2">
-                    <CheckCircle2 className="w-3 h-3 text-green-400" />
-                    <span className="text-[10px] font-mono text-green-400">CharacterSheet.md</span>
-                  </div>
-                  <div className="space-y-2">
-                    <div>
-                      <span className="text-[8px] font-mono text-gray-600">NAME</span>
-                      <p className="text-white text-[10px]">{SAMPLE_CHARACTER.name}</p>
-                    </div>
-                    <div>
-                      <span className="text-[8px] font-mono text-gray-600">ARCHETYPE</span>
-                      <p className="text-purple-400 text-[10px]">{SAMPLE_CHARACTER.archetype}</p>
-                    </div>
-                    <div>
-                      <span className="text-[8px] font-mono text-gray-600">TACTIC</span>
-                      <p className="text-purple-400 text-[10px]">{SAMPLE_CHARACTER.tactic}</p>
-                    </div>
-                  </div>
-                </div>
-              )}
-
-              {!seedLocked && !synopsisLocked && !characterLocked && (
-                <div className="text-center py-8">
-                  <Circle className="w-8 h-8 text-gray-700 mx-auto mb-3" />
-                  <p className="text-[10px] font-mono text-gray-600">NO DELIVERABLES LOCKED</p>
-                  <p className="text-[10px] text-gray-700 mt-1">Complete steps to populate</p>
-                </div>
-              )}
-
-              <div className="glass-panel p-3 border border-white/5">
-                <span className="text-[10px] font-mono text-gray-600 block mb-2">PIPELINE STATUS</span>
-                <div className="space-y-1">
-                  {steps.map((step) => (
-                    <div key={step.id} className="flex items-center justify-between">
-                      <span className="text-[10px] text-gray-500">{step.title}</span>
-                      <span className={`text-[8px] font-mono ${
-                        step.status === "complete" ? "text-green-400" :
-                        step.status === "active" ? "text-electricBlue" :
-                        "text-gray-700"
-                      }`}>
-                        {step.status === "complete" ? "DONE" : step.status === "active" ? "ACTIVE" : "LOCKED"}
-                      </span>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            </div>
-          )}
+          {desktopInspectorOpen && inspectorContent}
         </aside>
       </div>
     </div>
