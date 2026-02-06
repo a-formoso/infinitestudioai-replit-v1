@@ -10,6 +10,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { LogOut, User, LayoutDashboard, Menu, X } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
 
 export function Navbar() {
   const [, setLocation] = useLocation();
@@ -36,6 +37,27 @@ export function Navbar() {
   const handleMobileNav = (path: string) => {
     setMobileMenuOpen(false);
     setLocation(path);
+  };
+
+  const navLinks = [
+    { href: "/#work", label: "STUDIO", testId: "mobile-link-studio", isRoute: false },
+    { href: "/#academy", label: "ACADEMY", testId: "mobile-link-academy", isRoute: false },
+    { href: "/#store", label: "ASSET STORE", testId: "mobile-link-store", isRoute: false },
+    { href: "/pipeline", label: "PIPELINE", testId: "mobile-link-pipeline", isRoute: true, highlight: true },
+  ];
+
+  const linkVariants = {
+    hidden: { opacity: 0, x: -20 },
+    visible: (i: number) => ({
+      opacity: 1,
+      x: 0,
+      transition: { delay: i * 0.05, duration: 0.3, ease: [0.25, 0.46, 0.45, 0.94] as const },
+    }),
+    exit: (i: number) => ({
+      opacity: 0,
+      x: -20,
+      transition: { delay: i * 0.03, duration: 0.2 },
+    }),
   };
 
   return (
@@ -99,70 +121,116 @@ export function Navbar() {
                   data-testid="btn-mobile-menu"
                   className="md:hidden p-2 text-gray-400 hover:text-white transition-colors"
                 >
-                  {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+                  <AnimatePresence mode="wait">
+                    {mobileMenuOpen ? (
+                      <motion.div
+                        key="close"
+                        initial={{ rotate: -90, opacity: 0 }}
+                        animate={{ rotate: 0, opacity: 1 }}
+                        exit={{ rotate: 90, opacity: 0 }}
+                        transition={{ duration: 0.2 }}
+                      >
+                        <X className="w-5 h-5" />
+                      </motion.div>
+                    ) : (
+                      <motion.div
+                        key="menu"
+                        initial={{ rotate: 90, opacity: 0 }}
+                        animate={{ rotate: 0, opacity: 1 }}
+                        exit={{ rotate: -90, opacity: 0 }}
+                        transition={{ duration: 0.2 }}
+                      >
+                        <Menu className="w-5 h-5" />
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
                 </button>
               </div>
           </div>
       </nav>
 
-      {mobileMenuOpen && (
-        <div className="md:hidden fixed inset-0 z-40" data-testid="mobile-menu-overlay">
-          <div className="absolute inset-0 bg-black/60" onClick={() => setMobileMenuOpen(false)} />
-          <div className="absolute top-[64px] left-0 right-0 bg-obsidian border-b border-white/10">
-            <div className="flex flex-col px-6 py-4 space-y-1">
-              <a
-                href="/#work"
-                onClick={() => setMobileMenuOpen(false)}
-                className="text-sm font-header font-bold text-gray-400 hover:text-white transition-colors tracking-widest py-3 border-b border-white/5"
-                data-testid="mobile-link-studio"
-              >
-                STUDIO
-              </a>
-              <a
-                href="/#academy"
-                onClick={() => setMobileMenuOpen(false)}
-                className="text-sm font-header font-bold text-gray-400 hover:text-white transition-colors tracking-widest py-3 border-b border-white/5"
-                data-testid="mobile-link-academy"
-              >
-                ACADEMY
-              </a>
-              <a
-                href="/#store"
-                onClick={() => setMobileMenuOpen(false)}
-                className="text-sm font-header font-bold text-gray-400 hover:text-white transition-colors tracking-widest py-3 border-b border-white/5"
-                data-testid="mobile-link-store"
-              >
-                ASSET STORE
-              </a>
-              <button
-                onClick={() => handleMobileNav("/pipeline")}
-                className="text-left text-sm font-header font-bold text-gray-400 hover:text-electricBlue transition-colors tracking-widest py-3 border-b border-white/5"
-                data-testid="mobile-link-pipeline"
-              >
-                PIPELINE
-              </button>
-              {!user && (
-                <button
-                  onClick={() => handleMobileNav("/login")}
-                  className="text-left text-sm font-header font-bold text-white hover:text-electricBlue transition-colors tracking-widest py-3"
-                  data-testid="mobile-link-login"
+      <AnimatePresence>
+        {mobileMenuOpen && (
+          <div className="md:hidden fixed inset-0 z-40" data-testid="mobile-menu-overlay">
+            <motion.div
+              className="absolute inset-0 bg-black/60"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.3 }}
+              onClick={() => setMobileMenuOpen(false)}
+            />
+            <motion.div
+              className="absolute top-[64px] left-0 right-0 bg-obsidian/95 backdrop-blur-md border-b border-white/10 overflow-hidden"
+              initial={{ height: 0, opacity: 0 }}
+              animate={{ height: "auto", opacity: 1 }}
+              exit={{ height: 0, opacity: 0 }}
+              transition={{ duration: 0.35, ease: [0.25, 0.46, 0.45, 0.94] }}
+            >
+              <div className="flex flex-col px-6 py-4 space-y-1">
+                {navLinks.map((link, i) => (
+                  <motion.div
+                    key={link.testId}
+                    custom={i}
+                    variants={linkVariants}
+                    initial="hidden"
+                    animate="visible"
+                    exit="exit"
+                  >
+                    {link.isRoute ? (
+                      <button
+                        onClick={() => handleMobileNav(link.href)}
+                        className={`text-left text-sm font-header font-bold transition-colors tracking-widest py-3 border-b border-white/5 w-full ${
+                          link.highlight ? "text-gray-400 hover:text-electricBlue" : "text-gray-400 hover:text-white"
+                        }`}
+                        data-testid={link.testId}
+                      >
+                        {link.label}
+                      </button>
+                    ) : (
+                      <a
+                        href={link.href}
+                        onClick={() => setMobileMenuOpen(false)}
+                        className="block text-sm font-header font-bold text-gray-400 hover:text-white transition-colors tracking-widest py-3 border-b border-white/5"
+                        data-testid={link.testId}
+                      >
+                        {link.label}
+                      </a>
+                    )}
+                  </motion.div>
+                ))}
+
+                <motion.div
+                  custom={navLinks.length}
+                  variants={linkVariants}
+                  initial="hidden"
+                  animate="visible"
+                  exit="exit"
                 >
-                  LOGIN
-                </button>
-              )}
-              {user && (
-                <button
-                  onClick={() => handleMobileNav("/dashboard")}
-                  className="text-left text-sm font-header font-bold text-white hover:text-electricBlue transition-colors tracking-widest py-3"
-                  data-testid="mobile-link-dashboard"
-                >
-                  DASHBOARD
-                </button>
-              )}
-            </div>
+                  {!user && (
+                    <button
+                      onClick={() => handleMobileNav("/login")}
+                      className="text-left text-sm font-header font-bold text-white hover:text-electricBlue transition-colors tracking-widest py-3 w-full"
+                      data-testid="mobile-link-login"
+                    >
+                      LOGIN
+                    </button>
+                  )}
+                  {user && (
+                    <button
+                      onClick={() => handleMobileNav("/dashboard")}
+                      className="text-left text-sm font-header font-bold text-white hover:text-electricBlue transition-colors tracking-widest py-3 w-full"
+                      data-testid="mobile-link-dashboard"
+                    >
+                      DASHBOARD
+                    </button>
+                  )}
+                </motion.div>
+              </div>
+            </motion.div>
           </div>
-        </div>
-      )}
+        )}
+      </AnimatePresence>
     </>
   );
 }
