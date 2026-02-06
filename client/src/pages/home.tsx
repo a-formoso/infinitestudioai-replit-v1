@@ -234,7 +234,7 @@ export default function Home() {
               <div className="flex justify-between items-end mb-12">
                   <div>
                       <p className="text-signalOrange font-mono text-xs mb-2 tracking-widest">/// KNOWLEDGE TRANSFER</p>
-                      <h2 className="font-header text-4xl font-bold text-white">THE ACADEMY</h2>
+                      <h2 className="font-header text-4xl font-bold text-white">ACADEMY</h2>
                   </div>
                   <Link href="/academy" className="text-xs font-header font-bold border-b border-signalOrange pb-1 hover:text-signalOrange transition-colors tracking-wider" data-testid="link-view-all-courses">ALL COURSES</Link>
               </div>
@@ -291,7 +291,7 @@ export default function Home() {
                   <div className="flex justify-between items-end mb-12">
                       <div>
                           <p className="text-purple-500 font-mono text-xs mb-2 tracking-widest">/// RESOURCE LIBRARY</p>
-                          <h2 className="font-header text-4xl font-bold text-white">ASSET STORE</h2>
+                          <h2 className="font-header text-4xl font-bold text-white">STORE</h2>
                       </div>
                       <Link href="/store" className="text-xs font-header font-bold border-b border-purple-500 pb-1 hover:text-purple-500 transition-colors tracking-wider" data-testid="link-view-all-packs">ALL ASSETS</Link>
                   </div>
