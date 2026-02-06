@@ -149,7 +149,6 @@ export default function Home() {
                           <p className="text-electricBlue font-mono text-xs mb-2 tracking-widest">/// SELECTED WORKS</p>
                           <h2 className="font-header text-4xl font-bold text-white">PRODUCTION</h2>
                       </div>
-                      <Link href="/hire" className="text-xs font-header font-bold border-b border-electricBlue pb-1 hover:text-electricBlue transition-colors tracking-wider" data-testid="link-view-all-work">ALL WORK</Link>
                   </div>
 
                   {/* Project Carousel */}
