@@ -122,9 +122,9 @@ export default function Home() {
                           <div className="relative z-10">
                               <h2 className="font-header text-2xl text-white mb-2 group-hover:translate-x-2 transition-transform duration-300">STUDIO SERVICES</h2>
                               <p className="text-sm text-gray-400 mb-6 leading-relaxed">Full-service AI production. Commercials, music videos, and pre-viz.</p>
-                              <a href="#work" className="inline-block border border-white/30 text-white px-6 py-3 font-header text-xs font-bold uppercase tracking-wider hover:border-electricBlue hover:text-electricBlue hover:scale-105 transition-all duration-300">
+                              <Link href="/hire" className="inline-block border border-white/30 text-white px-6 py-3 font-header text-xs font-bold uppercase tracking-wider hover:border-electricBlue hover:text-electricBlue hover:scale-105 transition-all duration-300">
                                   Hire Us
-                              </a>
+                              </Link>
                           </div>
                       </div>
                   </div>
