@@ -40,9 +40,9 @@ export function Navbar() {
   };
 
   const navLinks = [
-    { href: "/#work", label: "STUDIO", testId: "mobile-link-studio", isRoute: false },
-    { href: "/#academy", label: "ACADEMY", testId: "mobile-link-academy", isRoute: false },
-    { href: "/#store", label: "ASSET STORE", testId: "mobile-link-store", isRoute: false },
+    { href: "/hire", label: "STUDIO", testId: "mobile-link-studio", isRoute: true },
+    { href: "/academy", label: "ACADEMY", testId: "mobile-link-academy", isRoute: true },
+    { href: "/store", label: "ASSET STORE", testId: "mobile-link-store", isRoute: true },
     { href: "/pipeline", label: "PIPELINE", testId: "mobile-link-pipeline", isRoute: true, highlight: true },
   ];
 
@@ -64,17 +64,15 @@ export function Navbar() {
     <>
       <nav className="fixed top-0 w-full z-50 glass-panel border-b-0 border-b-glassBorder">
           <div className="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
-              <Link href="/">
-                <a className="font-header font-bold text-xl tracking-widest text-white flex items-center gap-2 cursor-pointer">
+              <Link href="/" className="font-header font-bold text-xl tracking-widest text-white flex items-center gap-2 cursor-pointer">
                     <span className="text-electricBlue text-2xl">∞</span> INFINITE STUDIO
-                </a>
               </Link>
 
               <div className="hidden md:flex items-center gap-8 absolute left-1/2 transform -translate-x-1/2">
-                  <a href="/#work" className="text-xs font-header font-bold text-gray-400 hover:text-white transition-colors tracking-widest">STUDIO</a>
-                  <a href="/#academy" className="text-xs font-header font-bold text-gray-400 hover:text-white transition-colors tracking-widest">ACADEMY</a>
-                  <a href="/#store" className="text-xs font-header font-bold text-gray-400 hover:text-white transition-colors tracking-widest">ASSET STORE</a>
-                  <Link href="/pipeline"><a className="text-xs font-header font-bold text-gray-400 hover:text-electricBlue transition-colors tracking-widest">PIPELINE</a></Link>
+                  <Link href="/hire" className="text-xs font-header font-bold text-gray-400 hover:text-white transition-colors tracking-widest">STUDIO</Link>
+                  <Link href="/academy" className="text-xs font-header font-bold text-gray-400 hover:text-white transition-colors tracking-widest">ACADEMY</Link>
+                  <Link href="/store" className="text-xs font-header font-bold text-gray-400 hover:text-white transition-colors tracking-widest">ASSET STORE</Link>
+                  <Link href="/pipeline" className="text-xs font-header font-bold text-gray-400 hover:text-electricBlue transition-colors tracking-widest">PIPELINE</Link>
               </div>
 
               <div className="flex items-center gap-4">
@@ -111,9 +109,7 @@ export function Navbar() {
                     </DropdownMenuContent>
                   </DropdownMenu>
                 ) : (
-                  <Link href="/login">
-                    <span className="hidden md:inline text-xs font-header font-bold text-gray-400 hover:text-white transition-colors tracking-widest cursor-pointer" data-testid="link-login">LOGIN</span>
-                  </Link>
+                  <Link href="/login" className="hidden md:inline text-xs font-header font-bold text-gray-400 hover:text-white transition-colors tracking-widest cursor-pointer" data-testid="link-login">LOGIN</Link>
                 )}
 
                 <button
