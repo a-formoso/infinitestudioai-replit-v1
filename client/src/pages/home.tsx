@@ -105,9 +105,13 @@ export default function Home() {
                           <div className="relative z-10">
                               <h2 className="font-header text-2xl text-white mb-2 group-hover:translate-x-2 transition-transform duration-300">THE ACADEMY</h2>
                               <p className="text-sm text-gray-400 mb-6 leading-relaxed">Stop prompting blindly. Master the Google Filmmaking Ecosystem from Gemini to Veo.</p>
-                              <a href="/academy" className="inline-block bg-signalOrange text-black px-6 py-3 font-header text-xs font-bold uppercase tracking-wider hover:bg-white hover:scale-105 transition-all duration-300">
+                              <button
+                                onClick={() => document.getElementById("academy")?.scrollIntoView({ behavior: "smooth" })}
+                                className="inline-block bg-signalOrange text-black px-6 py-3 font-header text-xs font-bold uppercase tracking-wider hover:bg-white hover:scale-105 transition-all duration-300"
+                                data-testid="btn-view-courses-hero"
+                              >
                                   View Courses
-                              </a>
+                              </button>
                           </div>
                       </div>
 
@@ -145,6 +149,7 @@ export default function Home() {
                           <p className="text-electricBlue font-mono text-xs mb-2 tracking-widest">/// SELECTED WORKS</p>
                           <h2 className="font-header text-4xl font-bold text-white">PRODUCTION</h2>
                       </div>
+                      <Link href="/hire" className="text-xs font-header font-bold border-b border-electricBlue pb-1 hover:text-electricBlue transition-colors tracking-wider" data-testid="link-view-all-work">VIEW ALL WORK</Link>
                   </div>
 
                   {/* Project Carousel */}
@@ -231,6 +236,7 @@ export default function Home() {
                       <p className="text-signalOrange font-mono text-xs mb-2 tracking-widest">/// KNOWLEDGE TRANSFER</p>
                       <h2 className="font-header text-4xl font-bold text-white">THE ACADEMY</h2>
                   </div>
+                  <Link href="/academy" className="text-xs font-header font-bold border-b border-signalOrange pb-1 hover:text-signalOrange transition-colors tracking-wider" data-testid="link-view-all-courses">VIEW ALL COURSES</Link>
               </div>
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
@@ -287,7 +293,7 @@ export default function Home() {
                           <p className="text-purple-500 font-mono text-xs mb-2 tracking-widest">/// RESOURCE LIBRARY</p>
                           <h2 className="font-header text-4xl font-bold text-white">ASSET STORE</h2>
                       </div>
-                      <a href="#" className="text-xs font-header font-bold border-b border-purple-500 pb-1 hover:text-purple-500 transition-colors tracking-wider">VIEW ALL PACKS</a>
+                      <Link href="/store" className="text-xs font-header font-bold border-b border-purple-500 pb-1 hover:text-purple-500 transition-colors tracking-wider" data-testid="link-view-all-packs">VIEW ALL PACKS</Link>
                   </div>
 
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
