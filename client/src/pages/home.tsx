@@ -288,7 +288,7 @@ export default function Home() {
               
               {/* ASSET STORE (Added Here) */}
               <div id="store" className="max-w-7xl mx-auto px-6 py-16 border-b border-white/10">
-                  <div className="flex flex-col md:flex-row justify-between items-end mb-12">
+                  <div className="flex justify-between items-end mb-12">
                       <div>
                           <p className="text-purple-500 font-mono text-xs mb-2 tracking-widest">/// RESOURCE LIBRARY</p>
                           <h2 className="font-header text-4xl font-bold text-white">ASSET STORE</h2>
