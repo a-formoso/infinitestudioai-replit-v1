@@ -44,6 +44,7 @@ export function Navbar() {
                 <a href="/#work" className="text-xs font-header font-bold text-gray-400 hover:text-white transition-colors tracking-widest">STUDIO</a>
                 <a href="/#academy" className="text-xs font-header font-bold text-gray-400 hover:text-white transition-colors tracking-widest">ACADEMY</a>
                 <a href="/#store" className="text-xs font-header font-bold text-gray-400 hover:text-white transition-colors tracking-widest">ASSET STORE</a>
+                <Link href="/pipeline"><a className="text-xs font-header font-bold text-gray-400 hover:text-electricBlue transition-colors tracking-widest">PIPELINE</a></Link>
             </div>
 
             <div className="flex items-center gap-4">
