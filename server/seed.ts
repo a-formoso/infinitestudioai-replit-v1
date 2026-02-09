@@ -20,7 +20,7 @@ async function seed() {
           level: "Foundation",
           duration: "4.5 HOURS",
           lessonsCount: 25,
-          badge: "BESTSELLER",
+          badge: "FOUNDATION",
           color: "electricBlue",
         },
         {
@@ -34,7 +34,7 @@ async function seed() {
           level: "Specialist",
           duration: "6.0 HOURS",
           lessonsCount: 30,
-          badge: "ADVANCED",
+          badge: "SPECIALIST",
           color: "signalOrange",
         },
       ])
