@@ -39,8 +39,8 @@ function Router() {
       <Route path="/checkout" component={Checkout} />
       <Route path="/support" component={Support} />
       <Route path="/academy" component={Academy} />
-      <Route path="/course/level-1" component={CourseLevel1} />
-      <Route path="/course/level-2" component={CourseLevel2} />
+      <Route path="/academy/foundation/master-the-google-ecosystem" component={CourseLevel1} />
+      <Route path="/academy/specialist/advanced-ai-cinematography" component={CourseLevel2} />
       <Route path="/dashboard" component={Dashboard} />
       <Route path="/course/player" component={CoursePlayer} />
       <Route path="/pipeline" component={Pipeline} />

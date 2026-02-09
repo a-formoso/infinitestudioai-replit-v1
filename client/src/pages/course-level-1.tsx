@@ -19,8 +19,8 @@ export default function CourseLevel1() {
   });
 
   const { data: courseData } = useQuery({
-    queryKey: ["course", "level-1"],
-    queryFn: () => getCourseBySlug("level-1"),
+    queryKey: ["course", "master-the-google-ecosystem"],
+    queryFn: () => getCourseBySlug("master-the-google-ecosystem"),
   });
 
   const enrollMutation = useMutation({
@@ -44,7 +44,7 @@ export default function CourseLevel1() {
 
   const handleEnroll = () => {
     if (!userData?.data?.user) {
-      setLocation("/checkout?course=level-1");
+      setLocation("/checkout?course=master-the-google-ecosystem");
       return;
     }
 

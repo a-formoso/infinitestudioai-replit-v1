@@ -240,7 +240,7 @@ export default function Home() {
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                   {/* Course 1 */}
-                  <Link href="/course/level-1" className="glass-panel p-1 hover:border-electricBlue/50 transition-all duration-300 group cursor-pointer block">
+                  <Link href="/academy/foundation/master-the-google-ecosystem" className="glass-panel p-1 hover:border-electricBlue/50 transition-all duration-300 group cursor-pointer block">
                       <div className="bg-gray-900 h-56 mb-6 relative overflow-hidden">
                           <div className="absolute inset-0 bg-gradient-to-br from-blue-900/40 to-black"></div>
                           {/* Abstract course graphic */}
@@ -248,7 +248,6 @@ export default function Home() {
                                <div className="w-24 h-24 rounded-full border border-electricBlue animate-pulse"></div>
                                <div className="w-16 h-16 rounded-full border border-white absolute"></div>
                           </div>
-                          <div className="absolute bottom-4 left-4 font-header font-bold text-3xl text-white z-10">LEVEL 01</div>
                       </div>
                       <div className="px-6 pb-8">
                           <h3 className="font-header text-xl text-white mb-3 group-hover:text-electricBlue transition-colors leading-tight">MASTER THE GOOGLE ECOSYSTEM</h3>
@@ -261,7 +260,7 @@ export default function Home() {
                   </Link>
 
                   {/* Course 2 */}
-                  <Link href="/course/level-2" className="glass-panel p-1 hover:border-signalOrange/50 transition-all duration-300 group cursor-pointer block">
+                  <Link href="/academy/specialist/advanced-ai-cinematography" className="glass-panel p-1 hover:border-signalOrange/50 transition-all duration-300 group cursor-pointer block">
                       <div className="bg-gray-900 h-56 mb-6 relative overflow-hidden">
                           <div className="absolute inset-0 bg-gradient-to-br from-orange-900/40 to-black"></div>
                            {/* Abstract course graphic */}
@@ -269,7 +268,6 @@ export default function Home() {
                               <div className="w-24 h-24 border-2 border-signalOrange rotate-45 transform transition-transform group-hover:rotate-90 duration-700"></div>
                               <div className="w-24 h-24 border-2 border-white -rotate-45 absolute transform transition-transform group-hover:-rotate-90 duration-700"></div>
                          </div>
-                          <div className="absolute bottom-4 left-4 font-header font-bold text-3xl text-white z-10">LEVEL 02</div>
                       </div>
                       <div className="px-6 pb-8">
                           <h3 className="font-header text-xl text-white mb-3 group-hover:text-signalOrange transition-colors leading-tight">ADVANCED AI CINEMATOGRAPHY</h3>

@@ -207,7 +207,7 @@ export default function Links() {
 
             {/* 2. CORE COURSE (MAIN REVENUE) */}
             <Link
-              href="/course/level-1"
+              href="/academy/foundation/master-the-google-ecosystem"
               className="glass-btn glow-blue rounded-xl p-4 flex items-center gap-4 group animate-fade-in-up"
               style={{ animationDelay: "0.3s" }}
             >

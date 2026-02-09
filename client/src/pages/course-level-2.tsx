@@ -19,8 +19,8 @@ export default function CourseLevel2() {
   });
 
   const { data: courseData } = useQuery({
-    queryKey: ["course", "level-2"],
-    queryFn: () => getCourseBySlug("level-2"),
+    queryKey: ["course", "advanced-ai-cinematography"],
+    queryFn: () => getCourseBySlug("advanced-ai-cinematography"),
   });
 
   const enrollMutation = useMutation({
@@ -44,7 +44,7 @@ export default function CourseLevel2() {
 
   const handleEnroll = () => {
     if (!userData?.data?.user) {
-      setLocation("/checkout?course=level-2");
+      setLocation("/checkout?course=advanced-ai-cinematography");
       return;
     }
 

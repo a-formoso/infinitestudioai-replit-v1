@@ -11,13 +11,13 @@ async function seed() {
       .values([
         {
           title: "MASTER THE GOOGLE ECOSYSTEM",
-          slug: "level-1",
+          slug: "master-the-google-ecosystem",
           description:
             "Stop using fragmented tools. Learn to run a complete Hollywood-style studio from your browser using the integrated power of Gemini 3.0, Nano Banana, and Veo.",
           shortDescription:
             "The foundation. Learn the connected workflow of Gemini 3.0, Nano Banana, and Veo to run a one-person studio.",
           price: "149.00",
-          level: "Beginner",
+          level: "Foundation",
           duration: "4.5 HOURS",
           lessonsCount: 25,
           badge: "BESTSELLER",
@@ -25,13 +25,13 @@ async function seed() {
         },
         {
           title: "ADVANCED AI CINEMATOGRAPHY",
-          slug: "level-2",
+          slug: "advanced-ai-cinematography",
           description:
             "Mastering physics, compound camera moves, and the uncanny valley in Veo 3.1. Deep dive into motion control.",
           shortDescription:
             'Mastering physics, compound camera moves, and the "Invisible Cut" in Veo 3.1. Deep technical control.',
           price: "199.00",
-          level: "Advanced",
+          level: "Specialist",
           duration: "6.0 HOURS",
           lessonsCount: 30,
           badge: "ADVANCED",

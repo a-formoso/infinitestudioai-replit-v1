@@ -37,9 +37,9 @@ export default function Academy() {
                   
                   {/* FILTERS */}
                   <div className="flex flex-wrap gap-4">
-                      <button className="border border-white/20 px-6 py-2 rounded-full text-xs font-header font-bold bg-white text-black hover:bg-white/90 transition-all">ALL LEVELS</button>
-                      <button className="border border-white/20 px-6 py-2 rounded-full text-xs font-header font-bold hover:bg-white/10 transition-all">BEGINNER</button>
-                      <button className="border border-white/20 px-6 py-2 rounded-full text-xs font-header font-bold hover:bg-white/10 transition-all">ADVANCED</button>
+                      <button className="border border-white/20 px-6 py-2 rounded-full text-xs font-header font-bold bg-white text-black hover:bg-white/90 transition-all">ALL COURSES</button>
+                      <button className="border border-white/20 px-6 py-2 rounded-full text-xs font-header font-bold hover:bg-white/10 transition-all">FOUNDATION</button>
+                      <button className="border border-white/20 px-6 py-2 rounded-full text-xs font-header font-bold hover:bg-white/10 transition-all">SPECIALIST</button>
                       <button className="border border-white/20 px-6 py-2 rounded-full text-xs font-header font-bold hover:bg-white/10 transition-all">WORKSHOPS</button>
                   </div>
               </div>
@@ -73,12 +73,12 @@ export default function Academy() {
                           <div className="glass-panel p-0 animate-pulse h-96"></div>
                         </>
                       ) : (
-                        courses.map((course: any, index: number) => (
-                          <Link key={course.id} href={`/course/${course.slug}`}>
-                            <a className={`glass-panel p-0 group cursor-pointer hover:border-${course.color === 'electricBlue' ? 'electricBlue' : 'signalOrange'}/50 transition-all duration-300 block`} data-testid={`card-course-${course.slug}`}>
+                        courses.map((course: any) => {
+                          const tier = course.level === 'Foundation' ? 'foundation' : 'specialist';
+                          return (
+                            <Link key={course.id} href={`/academy/${tier}/${course.slug}`} className={`glass-panel p-0 group cursor-pointer hover:border-${course.color === 'electricBlue' ? 'electricBlue' : 'signalOrange'}/50 transition-all duration-300 block`} data-testid={`card-course-${course.slug}`}>
                                 <div className="h-48 bg-gray-900 relative overflow-hidden">
                                     <div className={`absolute inset-0 bg-gradient-to-br ${course.color === 'electricBlue' ? 'from-blue-900/40' : 'from-orange-900/40'} to-black`}></div>
-                                    <div className="absolute bottom-4 left-4 font-header font-bold text-3xl text-white z-10">LEVEL {(index + 1).toString().padStart(2, '0')}</div>
                                     {course.badge && (
                                       <div className={`absolute top-4 right-4 ${course.color === 'electricBlue' ? 'bg-electricBlue text-white' : 'bg-signalOrange text-black'} text-[10px] font-bold px-2 py-1`}>{course.badge}</div>
                                     )}
@@ -93,9 +93,9 @@ export default function Academy() {
                                         <span className="text-sm font-header font-bold text-white" data-testid={`text-price-${course.slug}`}>${parseFloat(course.price).toFixed(0)}</span>
                                     </div>
                                 </div>
-                            </a>
-                          </Link>
-                        ))
+                            </Link>
+                          );
+                        })
                       )}
                   </div>
               </div>

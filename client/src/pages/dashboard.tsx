@@ -174,14 +174,12 @@ export default function Dashboard() {
                       ) : enrollments.length === 0 ? (
                         <div className="text-center py-8">
                           <p className="text-gray-400 text-sm mb-4">No enrollments yet</p>
-                          <Link href="/academy">
-                            <a className="text-electricBlue hover:underline text-xs font-header">Browse Courses →</a>
-                          </Link>
+                          <Link href="/academy" className="text-electricBlue hover:underline text-xs font-header">Browse Courses →</Link>
                         </div>
                       ) : (
                         <div className="space-y-6">
                           {enrollments.map((enrollment: any) => (
-                            <Link key={enrollment.id} href={`/course/${enrollment.course.slug}`}>
+                            <Link key={enrollment.id} href={`/academy/${enrollment.course.level === 'Foundation' ? 'foundation' : 'specialist'}/${enrollment.course.slug}`}>
                               <div className="flex gap-4 items-center group cursor-pointer" data-testid={`card-enrollment-${enrollment.course.slug}`}>
                                   <div className={`w-16 h-16 bg-gray-800 shrink-0 relative overflow-hidden rounded border border-white/10 group-hover:border-${enrollment.course.color === 'electricBlue' ? 'electricBlue' : 'signalOrange'}/50 transition-colors`}>
                                       <div className={`absolute inset-0 bg-gradient-to-br ${enrollment.course.color === 'electricBlue' ? 'from-blue-900/40' : 'from-orange-900/40'} to-black`}></div>
