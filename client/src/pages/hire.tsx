@@ -14,9 +14,6 @@ export default function Hire() {
           <Link href="/" className="font-header font-bold text-xl tracking-widest text-white flex items-center gap-2 hover:opacity-80 transition-opacity">
             <span className="text-electricBlue text-2xl">∞</span> INFINITE STUDIO
           </Link>
-          <a href="#contact" className="hidden md:block bg-white text-black px-6 py-2 text-xs font-header font-bold uppercase hover:bg-electricBlue hover:text-white transition-all duration-300 tracking-wider">
-            Book a Call
-          </a>
         </div>
       </nav>
 

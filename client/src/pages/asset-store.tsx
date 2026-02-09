@@ -13,12 +13,6 @@ export default function AssetStore() {
           <Link href="/" className="font-header font-bold text-xl tracking-widest text-white flex items-center gap-2 hover:opacity-80 transition-opacity">
             <span className="text-electricBlue text-2xl">∞</span> INFINITE STUDIO
           </Link>
-          <div className="flex gap-6 items-center">
-            <a href="#" className="text-xs font-mono text-gray-400 hover:text-white transition-colors">CART (0)</a>
-            <a href="#" className="hidden md:block bg-neonPurple text-white px-6 py-2 text-xs font-header font-bold uppercase hover:bg-white hover:text-black transition-all duration-300 tracking-wider">
-              All Access Pass
-            </a>
-          </div>
         </div>
       </nav>
 
