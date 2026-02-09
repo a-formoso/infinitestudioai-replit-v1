@@ -77,7 +77,7 @@ export default function Login() {
         <div className="w-full lg:w-1/2 flex flex-col justify-center items-center px-6 relative">
             
             {/* Top Nav (Minimal) */}
-            <div className="absolute top-8 right-8">
+            <div className="absolute top-8 left-6 lg:left-auto lg:right-8">
                 <Link href="/" className="text-xs font-header font-bold text-gray-500 hover:text-white transition-colors">BACK TO HOME →</Link>
             </div>
 
