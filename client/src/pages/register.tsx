@@ -93,8 +93,8 @@ export default function Register() {
 
         <div className="w-full lg:w-1/2 flex flex-col justify-center items-center px-6 relative">
             
-            <div className="absolute top-8 right-8">
-                <Link href="/" className="text-xs font-header font-bold text-gray-500 hover:text-white transition-colors">BACK TO HOME →</Link>
+            <div className="absolute top-8 left-6 lg:left-auto lg:right-8">
+                <Link href="/" className="text-xs font-header font-bold text-gray-500 hover:text-white transition-colors"><span className="lg:hidden">← </span>BACK TO HOME<span className="hidden lg:inline"> →</span></Link>
             </div>
 
             <div className="glass-panel p-8 md:p-12 w-full max-w-md">
