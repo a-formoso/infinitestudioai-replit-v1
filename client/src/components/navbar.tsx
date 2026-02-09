@@ -13,7 +13,7 @@ import { LogOut, User, LayoutDashboard, Menu, X } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 
 export function Navbar() {
-  const [, setLocation] = useLocation();
+  const [location, setLocation] = useLocation();
   const queryClient = useQueryClient();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   
@@ -68,9 +68,19 @@ export function Navbar() {
               </Link>
 
               <div className="hidden md:flex items-center gap-8 absolute left-1/2 transform -translate-x-1/2">
-                  <Link href="/hire" className="text-xs font-header font-bold text-gray-400 hover:text-white transition-colors tracking-widest">STUDIO</Link>
-                  <Link href="/academy" className="text-xs font-header font-bold text-gray-400 hover:text-white transition-colors tracking-widest">ACADEMY</Link>
-                  <Link href="/store" className="text-xs font-header font-bold text-gray-400 hover:text-white transition-colors tracking-widest">ASSET STORE</Link>
+                  {navLinks.map((link) => (
+                    <Link
+                      key={link.href}
+                      href={link.href}
+                      className={`text-xs font-header font-bold transition-colors tracking-widest ${
+                        location === link.href || (link.href !== "/" && location.startsWith(link.href))
+                          ? "text-electricBlue"
+                          : "text-gray-400 hover:text-white"
+                      }`}
+                    >
+                      {link.label}
+                    </Link>
+                  ))}
               </div>
 
               <div className="flex items-center gap-4">
@@ -175,7 +185,7 @@ export function Navbar() {
                       <button
                         onClick={() => handleMobileNav(link.href)}
                         className={`text-left text-sm font-header font-bold transition-colors tracking-widest py-3 border-b border-white/5 w-full ${
-                          link.highlight ? "text-gray-400 hover:text-electricBlue" : "text-gray-400 hover:text-white"
+                          location === link.href || (link.href !== "/" && location.startsWith(link.href)) ? "text-electricBlue" : "text-gray-400 hover:text-white"
                         }`}
                         data-testid={link.testId}
                       >
