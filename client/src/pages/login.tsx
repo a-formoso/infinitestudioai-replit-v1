@@ -132,7 +132,7 @@ export default function Login() {
                       disabled={isLoading}
                       className="w-full bg-white text-black font-header font-bold text-sm uppercase py-4 hover:bg-electricBlue hover:text-white transition-all duration-300 tracking-wider shadow-[0_0_20px_rgba(255,255,255,0.1)] disabled:opacity-50 disabled:cursor-not-allowed"
                     >
-                        {isLoading ? "CONNECTING..." : "Initialize Session"}
+                        {isLoading ? "CONNECTING..." : "Initialise Session"}
                     </button>
                 </form>
 
