@@ -2,35 +2,43 @@ import { useState } from "react";
 import { Navbar } from "@/components/navbar";
 import { Footer } from "@/components/footer";
 import { Link } from "wouter";
-import { Clock, BookOpen, Users, Star, ArrowRight } from "lucide-react";
+import { Clock, Users, Star, ArrowRight } from "lucide-react";
 
 type Tier = "all" | "foundation" | "specialist" | "flagship";
 type ColorKey = "blue" | "orange" | "purple" | "gold";
 
-const COLOR_STYLES: Record<ColorKey, { hoverBorder: string; badgeBg: string; accentText: string; gradientFrom: string }> = {
+const COLOR_STYLES: Record<ColorKey, { hoverBorder: string; badgeBg: string; accentText: string; gradientFrom: string; durationPill: string; hoverText: string }> = {
   blue: {
     hoverBorder: "hover:border-electricBlue/50",
     badgeBg: "bg-electricBlue text-white",
     accentText: "text-electricBlue",
     gradientFrom: "from-blue-900/40",
+    durationPill: "text-electricBlue bg-electricBlue/10",
+    hoverText: "group-hover:text-electricBlue",
   },
   orange: {
     hoverBorder: "hover:border-signalOrange/50",
     badgeBg: "bg-signalOrange text-black",
     accentText: "text-signalOrange",
     gradientFrom: "from-orange-900/40",
+    durationPill: "text-signalOrange bg-signalOrange/10",
+    hoverText: "group-hover:text-signalOrange",
   },
   purple: {
     hoverBorder: "hover:border-purple-500/50",
     badgeBg: "bg-purple-500 text-white",
     accentText: "text-purple-400",
     gradientFrom: "from-purple-900/40",
+    durationPill: "text-purple-400 bg-purple-500/10",
+    hoverText: "group-hover:text-purple-400",
   },
   gold: {
     hoverBorder: "hover:border-gold/50",
     badgeBg: "bg-gold text-black",
     accentText: "text-gold",
     gradientFrom: "from-yellow-900/40",
+    durationPill: "text-gold bg-gold/10",
+    hoverText: "group-hover:text-gold",
   },
 };
 
@@ -263,8 +271,8 @@ function CourseCard({ course }: { course: Course }) {
   const styles = COLOR_STYLES[course.colorKey];
 
   const inner = (
-    <div className={`glass-panel p-0 group cursor-pointer ${styles.hoverBorder} transition-all duration-300 h-full flex flex-col`} data-testid={`card-course-${course.slug}`}>
-      <div className="h-44 bg-gray-900 relative overflow-hidden flex-shrink-0">
+    <div className={`glass-panel p-1 group cursor-pointer ${styles.hoverBorder} transition-all duration-300 h-full flex flex-col`} data-testid={`card-course-${course.slug}`}>
+      <div className="bg-gray-900 h-56 relative overflow-hidden flex-shrink-0">
         <div className={`absolute inset-0 bg-gradient-to-br ${styles.gradientFrom} to-black`}></div>
         <div
           className="absolute inset-0 bg-cover bg-center opacity-40 group-hover:opacity-60 group-hover:scale-105 transition-all duration-700"
@@ -279,22 +287,12 @@ function CourseCard({ course }: { course: Course }) {
           <div className="absolute top-3 right-3 text-[10px] font-mono text-gray-400 border border-white/20 bg-black/50 px-2 py-1">COMING SOON</div>
         )}
       </div>
-      <div className="p-6 flex flex-col flex-1">
-        <p className={`text-[10px] font-mono ${styles.accentText} mb-2 tracking-widest uppercase`}>{course.subtitle}</p>
-        <h3 className="font-header text-sm text-white mb-3 leading-tight group-hover:text-white transition-colors">{course.title}</h3>
-        <p className="text-xs text-gray-500 font-mono mb-4 leading-relaxed flex-1">{course.description}</p>
-        <div className="flex justify-between items-center pt-4 border-t border-white/10">
-          <div className="flex items-center gap-3">
-            <span className="flex items-center gap-1 text-[10px] font-mono text-gray-400">
-              <Clock className="w-3 h-3" /> {course.duration}
-            </span>
-            {course.lessons > 0 && (
-              <span className="flex items-center gap-1 text-[10px] font-mono text-gray-400">
-                <BookOpen className="w-3 h-3" /> {course.lessons}
-              </span>
-            )}
-          </div>
-          <span className={`text-sm font-header font-bold ${styles.accentText}`} data-testid={`text-price-${course.slug}`}>{course.price}</span>
+      <div className="px-6 pb-8 pt-6 flex flex-col flex-1">
+        <h3 className={`font-header text-xl text-white mb-3 ${styles.hoverText} transition-colors leading-tight`}>{course.title}</h3>
+        <p className="text-sm text-gray-400 mb-6 leading-relaxed flex-1">{course.description}</p>
+        <div className="flex justify-between items-center border-t border-white/10 pt-4">
+          <span className={`font-mono text-xs ${styles.durationPill} px-2 py-1 rounded`}>{course.duration}</span>
+          <span className={`font-header font-bold text-xl text-white ${styles.hoverText} transition-colors`} data-testid={`text-price-${course.slug}`}>{course.price}</span>
         </div>
       </div>
     </div>
