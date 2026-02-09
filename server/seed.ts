@@ -6,7 +6,7 @@ async function seed() {
 
   try {
     // Create courses
-    const [course1, course2] = await db
+    const [course1, course2, course3] = await db
       .insert(courses)
       .values([
         {
@@ -36,6 +36,20 @@ async function seed() {
           lessonsCount: 30,
           badge: "SPECIALIST",
           color: "signalOrange",
+        },
+        {
+          title: "NANO BANANA MASTERY",
+          slug: "nano-banana-mastery",
+          description:
+            "Create Consistent Digital Actors. Stop Rolling the Dice. Master character consistency and style-locking — the entry point for anyone who wants to move beyond random generation.",
+          shortDescription:
+            "Master character consistency and style-locking. The entry point for moving beyond random generation.",
+          price: "129.00",
+          level: "Foundation",
+          duration: "3.5 HOURS",
+          lessonsCount: 11,
+          badge: "FOUNDATION",
+          color: "electricBlue",
         },
       ])
       .returning();
@@ -190,6 +204,109 @@ async function seed() {
         title: "Time of Day and Color Temperature",
         videoUrl: null,
         duration: 17,
+      },
+    ]);
+
+    // Create lessons for Course 3 (Nano Banana Mastery)
+    await db.insert(lessons).values([
+      {
+        courseId: course3.id,
+        moduleNumber: 1,
+        moduleName: "INITIALIZATION",
+        lessonNumber: 1,
+        title: "The Consistency Problem: Why AI Usually Forgets Faces",
+        videoUrl: null,
+        duration: 12,
+      },
+      {
+        courseId: course3.id,
+        moduleNumber: 1,
+        moduleName: "INITIALIZATION",
+        lessonNumber: 2,
+        title: "Interface & Architecture: Navigating the Workspace",
+        videoUrl: null,
+        duration: 14,
+      },
+      {
+        courseId: course3.id,
+        moduleNumber: 1,
+        moduleName: "INITIALIZATION",
+        lessonNumber: 3,
+        title: 'The "Ingredient" Workflow: Face, Costume & Style Layers',
+        videoUrl: null,
+        duration: 16,
+      },
+      {
+        courseId: course3.id,
+        moduleNumber: 1,
+        moduleName: "INITIALIZATION",
+        lessonNumber: 4,
+        title: "Your First Actor: Zero-Shot Character Profile",
+        videoUrl: null,
+        duration: 20,
+      },
+      {
+        courseId: course3.id,
+        moduleNumber: 2,
+        moduleName: "THE DIGITAL WARDROBE",
+        lessonNumber: 1,
+        title: "Advanced Inpainting: Changing Clothes Without Changing the Character",
+        videoUrl: null,
+        duration: 22,
+      },
+      {
+        courseId: course3.id,
+        moduleNumber: 2,
+        moduleName: "THE DIGITAL WARDROBE",
+        lessonNumber: 2,
+        title: '"Hand & Eye" Surgery: Fixing Common AI Artifacts',
+        videoUrl: null,
+        duration: 18,
+      },
+      {
+        courseId: course3.id,
+        moduleNumber: 2,
+        moduleName: "THE DIGITAL WARDROBE",
+        lessonNumber: 3,
+        title: "Style Transfer: Keeping the Actor, Changing the Genre",
+        videoUrl: null,
+        duration: 20,
+      },
+      {
+        courseId: course3.id,
+        moduleNumber: 2,
+        moduleName: "THE DIGITAL WARDROBE",
+        lessonNumber: 4,
+        title: "Whisk & Visual Remix: Blending Inputs While Keeping Fidelity",
+        videoUrl: null,
+        duration: 18,
+      },
+      {
+        courseId: course3.id,
+        moduleNumber: 3,
+        moduleName: "SCENE PLACEMENT",
+        lessonNumber: 1,
+        title: "Perspective Matching: Placing Characters Into Complex Backgrounds",
+        videoUrl: null,
+        duration: 20,
+      },
+      {
+        courseId: course3.id,
+        moduleNumber: 3,
+        moduleName: "SCENE PLACEMENT",
+        lessonNumber: 2,
+        title: "Lighting Consistency: Relighting the Face to Match the Environment",
+        videoUrl: null,
+        duration: 18,
+      },
+      {
+        courseId: course3.id,
+        moduleNumber: 3,
+        moduleName: "SCENE PLACEMENT",
+        lessonNumber: 3,
+        title: "Multi-Character Scenes: Two Distinct Actors in One Frame",
+        videoUrl: null,
+        duration: 22,
       },
     ]);
 

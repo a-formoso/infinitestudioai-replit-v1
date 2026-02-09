@@ -22,6 +22,7 @@ import Links from "@/pages/links";
 import Privacy from "@/pages/privacy";
 import Terms from "@/pages/terms";
 import Pipeline from "@/pages/pipeline";
+import CourseNanoBanana from "@/pages/course-nano-banana";
 
 function Router() {
   return (
@@ -41,6 +42,7 @@ function Router() {
       <Route path="/academy" component={Academy} />
       <Route path="/academy/foundation/master-the-google-ecosystem" component={CourseLevel1} />
       <Route path="/academy/specialist/advanced-ai-cinematography" component={CourseLevel2} />
+      <Route path="/academy/foundation/nano-banana-mastery" component={CourseNanoBanana} />
       <Route path="/dashboard" component={Dashboard} />
       <Route path="/course/player" component={CoursePlayer} />
       <Route path="/pipeline" component={Pipeline} />
