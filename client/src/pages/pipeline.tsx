@@ -1,5 +1,4 @@
 import { useState } from "react";
-import { Navbar } from "@/components/navbar";
 import { 
   ChevronRight, 
   ChevronLeft, 
@@ -132,7 +131,7 @@ const SAMPLE_BEATS = [
   { time: "4:45–5:30", section: "THE CLIMAX", external: "Flicker releases all absorbed light into Umbra. A blinding flash. Flicker goes completely dark.", internal: "Ultimate sacrifice. Chooses to give everything.", act: "ACT III" },
 ];
 
-export default function Pipeline() {
+export default function PipelineContent() {
   const [steps, setSteps] = useState<PipelineStep[]>([
     { id: 0, label: "STEP 0", title: "THE KICKOFF", status: "active" },
     { id: 1, label: "STEP 1", title: "CORE IDEA", status: "locked" },
@@ -777,37 +776,73 @@ export default function Pipeline() {
   );
 
   return (
-    <div className="min-h-screen bg-obsidian text-offWhite font-sans antialiased selection:bg-electricBlue selection:text-white overflow-x-hidden">
-      <div className="fixed inset-0 bg-grid-pattern bg-[size:40px_40px] opacity-20 pointer-events-none z-0"></div>
-      <Navbar />
+    <div className="relative z-10 flex h-full min-h-0 overflow-hidden">
+      {/* LEFT SIDEBAR — PIPELINE STEPS */}
+      <aside className="hidden lg:block w-56 flex-shrink-0 border-r border-white/10 bg-black/50 overflow-y-auto" data-testid="sidebar-tracker">
+        {sidebarContent}
+      </aside>
 
-      {/* MOBILE TOOLBAR */}
-      <div className="md:hidden fixed top-[64px] left-0 right-0 z-40 bg-black/90 backdrop-blur-sm border-b border-white/10 px-4 py-2 flex items-center justify-between">
-        <button
-          onClick={() => { setSidebarOpen(true); setInspectorOpen(false); }}
-          data-testid="btn-mobile-sidebar"
-          className="flex items-center gap-2 px-3 py-2 text-gray-400 hover:text-white transition-colors"
-        >
-          <Menu className="w-4 h-4" />
-          <span className="text-[10px] font-mono tracking-widest">STEPS</span>
-        </button>
-        <div className="flex items-center gap-2">
-          <div className="w-2 h-2 rounded-full bg-electricBlue animate-pulse" />
-          <span className="text-[10px] font-mono text-gray-500">{steps[activeStep]?.label} — {steps[activeStep]?.title}</span>
+      {/* MAIN WORKSPACE */}
+      <main className="flex-1 overflow-y-auto" data-testid="main-workspace">
+        {/* MOBILE TOOLBAR */}
+        <div className="lg:hidden sticky top-0 z-40 bg-black/90 backdrop-blur-sm border-b border-white/10 px-4 py-2 flex items-center justify-between">
+          <button
+            onClick={() => { setSidebarOpen(true); setInspectorOpen(false); }}
+            data-testid="btn-mobile-sidebar"
+            className="flex items-center gap-2 px-3 py-2 text-gray-400 hover:text-white transition-colors"
+          >
+            <Menu className="w-4 h-4" />
+            <span className="text-[10px] font-mono tracking-widest">STEPS</span>
+          </button>
+          <div className="flex items-center gap-2">
+            <div className="w-2 h-2 rounded-full bg-electricBlue animate-pulse" />
+            <span className="text-[10px] font-mono text-gray-500">{steps[activeStep]?.label} — {steps[activeStep]?.title}</span>
+          </div>
+          <button
+            onClick={() => { setInspectorOpen(true); setSidebarOpen(false); }}
+            data-testid="btn-mobile-inspector"
+            className="flex items-center gap-2 px-3 py-2 text-gray-400 hover:text-white transition-colors"
+          >
+            <span className="text-[10px] font-mono tracking-widest">REF</span>
+            <FileText className="w-4 h-4" />
+          </button>
         </div>
-        <button
-          onClick={() => { setInspectorOpen(true); setSidebarOpen(false); }}
-          data-testid="btn-mobile-inspector"
-          className="flex items-center gap-2 px-3 py-2 text-gray-400 hover:text-white transition-colors"
-        >
-          <span className="text-[10px] font-mono tracking-widest">REF</span>
-          <FileText className="w-4 h-4" />
-        </button>
-      </div>
+
+        <div className="p-4 md:p-8 max-w-4xl mx-auto">
+          <div className="hidden lg:flex items-center gap-3 mb-8">
+            <div className={`w-3 h-3 rounded-full bg-electricBlue ${steps[activeStep]?.status === "complete" ? "" : "animate-pulse"}`} />
+            <span className="text-electricBlue text-xs font-mono tracking-widest">PHASE 1 — {steps[activeStep]?.label}</span>
+            <ChevronRight className="w-3 h-3 text-gray-600" />
+            <span className="text-white text-xs font-mono tracking-widest">{steps[activeStep]?.title}</span>
+          </div>
+
+          {renderActiveStep()}
+        </div>
+      </main>
+
+      {/* RIGHT PANEL — INSPECTOR */}
+      <aside
+        className={`hidden lg:block flex-shrink-0 border-l border-white/10 bg-black/30 overflow-y-auto transition-all duration-300 ${
+          desktopInspectorOpen ? "w-64" : "w-12"
+        }`}
+        data-testid="inspector-panel"
+      >
+        <div className="p-3">
+          <button
+            onClick={() => setDesktopInspectorOpen(!desktopInspectorOpen)}
+            data-testid="btn-toggle-inspector"
+            className="w-full flex items-center justify-center p-1 text-gray-500 hover:text-white transition-colors"
+          >
+            {desktopInspectorOpen ? <PanelRightClose className="w-4 h-4" /> : <PanelRightOpen className="w-4 h-4" />}
+          </button>
+        </div>
+
+        {desktopInspectorOpen && inspectorContent}
+      </aside>
 
       {/* MOBILE SIDEBAR OVERLAY */}
       {sidebarOpen && (
-        <div className="md:hidden fixed inset-0 z-50">
+        <div className="lg:hidden fixed inset-0 z-50">
           <div className="absolute inset-0 bg-black/60" onClick={() => setSidebarOpen(false)} />
           <aside className="absolute left-0 top-0 bottom-0 w-72 bg-obsidian border-r border-white/10 overflow-y-auto" data-testid="sidebar-tracker-mobile">
             <div className="flex justify-end p-3">
@@ -822,7 +857,7 @@ export default function Pipeline() {
 
       {/* MOBILE INSPECTOR OVERLAY */}
       {inspectorOpen && (
-        <div className="md:hidden fixed inset-0 z-50">
+        <div className="lg:hidden fixed inset-0 z-50">
           <div className="absolute inset-0 bg-black/60" onClick={() => setInspectorOpen(false)} />
           <aside className="absolute right-0 top-0 bottom-0 w-72 bg-obsidian border-l border-white/10 overflow-y-auto" data-testid="inspector-panel-mobile">
             <div className="flex justify-start p-3">
@@ -834,47 +869,6 @@ export default function Pipeline() {
           </aside>
         </div>
       )}
-
-      <div className="pt-[104px] md:pt-20 flex h-[calc(100vh-104px)] md:h-[calc(100vh-80px)] relative z-10">
-        {/* LEFT SIDEBAR — DESKTOP ONLY */}
-        <aside className="hidden md:block w-64 flex-shrink-0 border-r border-white/10 bg-black/50 overflow-y-auto" data-testid="sidebar-tracker">
-          {sidebarContent}
-        </aside>
-
-        {/* MAIN WORKSPACE */}
-        <main className="flex-1 overflow-y-auto" data-testid="main-workspace">
-          <div className="p-4 md:p-8 max-w-4xl mx-auto">
-            <div className="hidden md:flex items-center gap-3 mb-8">
-              <div className={`w-3 h-3 rounded-full bg-electricBlue ${steps[activeStep]?.status === "complete" ? "" : "animate-pulse"}`} />
-              <span className="text-electricBlue text-xs font-mono tracking-widest">PHASE 1 — {steps[activeStep]?.label}</span>
-              <ChevronRight className="w-3 h-3 text-gray-600" />
-              <span className="text-white text-xs font-mono tracking-widest">{steps[activeStep]?.title}</span>
-            </div>
-
-            {renderActiveStep()}
-          </div>
-        </main>
-
-        {/* RIGHT PANEL — DESKTOP ONLY */}
-        <aside
-          className={`hidden md:block flex-shrink-0 border-l border-white/10 bg-black/30 overflow-y-auto transition-all duration-300 ${
-            desktopInspectorOpen ? "w-72" : "w-12"
-          }`}
-          data-testid="inspector-panel"
-        >
-          <div className="p-3">
-            <button
-              onClick={() => setDesktopInspectorOpen(!desktopInspectorOpen)}
-              data-testid="btn-toggle-inspector"
-              className="w-full flex items-center justify-center p-1 text-gray-500 hover:text-white transition-colors"
-            >
-              {desktopInspectorOpen ? <PanelRightClose className="w-4 h-4" /> : <PanelRightOpen className="w-4 h-4" />}
-            </button>
-          </div>
-
-          {desktopInspectorOpen && inspectorContent}
-        </aside>
-      </div>
     </div>
   );
 }

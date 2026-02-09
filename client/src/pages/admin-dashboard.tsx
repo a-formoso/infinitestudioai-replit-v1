@@ -1,7 +1,8 @@
-import { Link } from "wouter";
+import { Link, useSearch } from "wouter";
 import { useState, useEffect, useRef } from "react";
-import { LayoutDashboard, BookOpen, Users, ShoppingBag, BarChart2, Plus, Download, Bold, Italic, Underline, Link as LinkIcon, Code, X, Search, Edit2, Trash2, ArrowUp, ArrowDown, ArrowLeft, ArrowRight, ZoomIn, ZoomOut, Move, TrendingUp, DollarSign, Activity } from "lucide-react";
+import { LayoutDashboard, BookOpen, Users, ShoppingBag, BarChart2, Plus, Download, Bold, Italic, Underline, Link as LinkIcon, Code, X, Search, Edit2, Trash2, ArrowUp, ArrowDown, ArrowLeft, ArrowRight, ZoomIn, ZoomOut, Move, TrendingUp, DollarSign, Activity, Workflow } from "lucide-react";
 import { LineChart, Line, AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, BarChart, Bar, PieChart, Pie, Cell } from 'recharts';
+import PipelineContent from "./pipeline";
 
 const INITIAL_LESSONS = {
   "1.1": { id: "1.1", title: "The Multimodal Script", duration: "12:45", video: "multimodal_script_v3.mp4", notes: "Introduction to multimodal scripting techniques using Gemini 1.5 Pro.", keyPrompt: "Analyze this image as a Director of Photography...", resources: [{ name: "Visual_Bible_Template.pdf", size: "2.4 MB", type: "PDF" }] },
@@ -79,7 +80,10 @@ interface Product {
 }
 
 export default function AdminDashboard() {
-  const [activeTab, setActiveTab] = useState("dashboard");
+  const searchString = useSearch();
+  const searchParams = new URLSearchParams(searchString);
+  const initialTab = searchParams.get("tab") || "dashboard";
+  const [activeTab, setActiveTab] = useState(initialTab);
   const [courseView, setCourseView] = useState<"list" | "editor" | "preview">("list");
   const [expandedCourseId, setExpandedCourseId] = useState<string | null>("course-1");
   const [expandedModuleId, setExpandedModuleId] = useState<string | null>(null);
@@ -2117,6 +2121,15 @@ export default function AdminDashboard() {
             >
               <BarChart2 className="w-4 h-4" /> ANALYTICS
             </button>
+
+            <p className="text-[10px] font-mono text-gray-500 px-4 py-2 uppercase tracking-widest mt-4">Production</p>
+            <button 
+              onClick={() => setActiveTab("pipeline")}
+              data-testid="tab-pipeline"
+              className={`w-full flex items-center gap-3 px-4 py-3 text-xs font-header font-bold rounded transition-colors ${activeTab === "pipeline" ? "bg-white/10 text-white border-l-2 border-electricBlue" : "text-gray-400 hover:bg-white/5 hover:text-white"}`}
+            >
+              <Workflow className="w-4 h-4" /> PIPELINE
+            </button>
           </nav>
         </div>
 
@@ -2135,7 +2148,7 @@ export default function AdminDashboard() {
       </aside>
 
       {/* MAIN CONTENT */}
-      <main className="flex-grow overflow-y-auto relative">
+      <main className={`flex-grow relative ${activeTab === "pipeline" ? "flex flex-col overflow-hidden" : "overflow-y-auto"}`}>
         {/* GRID OVERLAY */}
         <div className="fixed inset-0 bg-grid-pattern bg-[size:40px_40px] opacity-20 pointer-events-none z-0"></div>
 
@@ -2148,6 +2161,7 @@ export default function AdminDashboard() {
         {activeTab === "students" && renderStudents()}
         {activeTab === "store" && renderAssetStore()}
         {activeTab === "analytics" && renderAnalytics()}
+        {activeTab === "pipeline" && <PipelineContent />}
         {/* DELETE CONFIRMATION MODAL */}
         {deleteConfirmation?.isOpen && (
           <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm animate-in fade-in duration-200">

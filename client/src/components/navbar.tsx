@@ -43,7 +43,7 @@ export function Navbar() {
     { href: "/hire", label: "STUDIO", testId: "mobile-link-studio", isRoute: true },
     { href: "/academy", label: "ACADEMY", testId: "mobile-link-academy", isRoute: true },
     { href: "/store", label: "ASSET STORE", testId: "mobile-link-store", isRoute: true },
-    { href: "/pipeline", label: "PIPELINE", testId: "mobile-link-pipeline", isRoute: true, highlight: true },
+    { href: "/admin?tab=pipeline", label: "PIPELINE", testId: "mobile-link-pipeline", isRoute: true, highlight: true },
   ];
 
   const linkVariants = {
@@ -72,7 +72,7 @@ export function Navbar() {
                   <Link href="/hire" className="text-xs font-header font-bold text-gray-400 hover:text-white transition-colors tracking-widest">STUDIO</Link>
                   <Link href="/academy" className="text-xs font-header font-bold text-gray-400 hover:text-white transition-colors tracking-widest">ACADEMY</Link>
                   <Link href="/store" className="text-xs font-header font-bold text-gray-400 hover:text-white transition-colors tracking-widest">ASSET STORE</Link>
-                  <Link href="/pipeline" className="text-xs font-header font-bold text-gray-400 hover:text-electricBlue transition-colors tracking-widest">PIPELINE</Link>
+                  <Link href="/admin?tab=pipeline" className="text-xs font-header font-bold text-gray-400 hover:text-electricBlue transition-colors tracking-widest">PIPELINE</Link>
               </div>
 
               <div className="flex items-center gap-4">

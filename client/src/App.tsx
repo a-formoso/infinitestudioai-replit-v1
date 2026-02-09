@@ -21,7 +21,6 @@ import AdminDashboard from "@/pages/admin-dashboard";
 import Links from "@/pages/links";
 import Privacy from "@/pages/privacy";
 import Terms from "@/pages/terms";
-import Pipeline from "@/pages/pipeline";
 import CourseNanoBanana from "@/pages/course-nano-banana";
 import CourseAIFilmmakingEcosystem from "@/pages/course-ai-filmmaking-ecosystem";
 
@@ -47,7 +46,6 @@ function Router() {
       <Route path="/academy/specialist/google-ai-filmmaking-ecosystem" component={CourseAIFilmmakingEcosystem} />
       <Route path="/dashboard" component={Dashboard} />
       <Route path="/course/player" component={CoursePlayer} />
-      <Route path="/pipeline" component={Pipeline} />
       <Route component={NotFound} />
     </Switch>
   );
