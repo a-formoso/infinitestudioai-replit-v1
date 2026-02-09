@@ -25,7 +25,7 @@ import {
   type InsertOrderItem,
 } from "@shared/schema";
 import { db } from "./db";
-import { eq, and, sql } from "drizzle-orm";
+import { eq, and, sql, desc } from "drizzle-orm";
 
 export interface IStorage {
   // User operations
@@ -107,7 +107,7 @@ export class DatabaseStorage implements IStorage {
 
   // Course operations
   async getAllCourses(): Promise<Course[]> {
-    return await db.select().from(courses);
+    return await db.select().from(courses).orderBy(desc(courses.createdAt));
   }
 
   async getCourse(id: string): Promise<Course | undefined> {

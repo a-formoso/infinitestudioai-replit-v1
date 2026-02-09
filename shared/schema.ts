@@ -23,6 +23,7 @@ export const courses = pgTable("courses", {
   lessonsCount: integer("lessons_count").notNull(),
   badge: text("badge"),
   color: text("color").notNull(),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
 });
 
 export const lessons = pgTable("lessons", {
@@ -87,6 +88,7 @@ export const insertUserSchema = createInsertSchema(users).omit({
 
 export const insertCourseSchema = createInsertSchema(courses).omit({
   id: true,
+  createdAt: true,
 });
 
 export const insertLessonSchema = createInsertSchema(lessons).omit({

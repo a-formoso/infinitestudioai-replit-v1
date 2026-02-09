@@ -3,6 +3,8 @@ import { Navbar } from "@/components/navbar";
 import { Footer } from "@/components/footer";
 import { Play, ChevronLeft, ChevronRight } from "lucide-react";
 import { Link } from "wouter";
+import { useQuery } from "@tanstack/react-query";
+import { getCourses } from "@/lib/api";
 
 const projects = [
   {
@@ -49,6 +51,11 @@ const projects = [
 
 export default function Home() {
   const [currentSlide, setCurrentSlide] = useState(0);
+  const { data: coursesData } = useQuery({
+    queryKey: ["courses"],
+    queryFn: getCourses,
+  });
+  const featuredCourses = (coursesData?.data?.courses || []).slice(0, 2);
 
   const nextSlide = () => {
     setCurrentSlide((prev) => (prev + 1) % projects.length);
@@ -239,45 +246,40 @@ export default function Home() {
               </div>
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                  {/* Course 1 */}
-                  <Link href="/academy/foundation/master-the-google-ecosystem" className="glass-panel p-0 hover:border-electricBlue/50 transition-all duration-300 group cursor-pointer block" data-testid="card-course-home-foundation">
-                      <div className="h-48 bg-gray-900 relative overflow-hidden">
-                          <div className="absolute inset-0 bg-gradient-to-br from-blue-900/40 to-black"></div>
-                          <div className="absolute inset-0 flex items-center justify-center opacity-30 group-hover:opacity-50 transition-opacity duration-500">
-                               <div className="w-24 h-24 rounded-full border border-electricBlue animate-pulse"></div>
-                               <div className="w-16 h-16 rounded-full border border-white absolute"></div>
-                          </div>
-                          <div className="absolute top-4 right-4 bg-electricBlue text-white text-[10px] font-bold px-2 py-1">FOUNDATION</div>
-                      </div>
-                      <div className="p-8">
-                          <h3 className="font-header text-xl text-white mb-2 group-hover:text-electricBlue transition-colors leading-tight">MASTER THE GOOGLE ECOSYSTEM</h3>
-                          <p className="text-xs text-gray-400 font-mono mb-4 leading-relaxed">The foundational course. Learn the connected workflow of Gemini, Nano Banana (Gemini 3 Pro Preview), and Veo.</p>
-                          <div className="flex justify-between items-center pt-4 border-t border-white/10">
-                              <span className="text-xs font-mono text-white">4.5 HOURS • 25 LESSONS</span>
-                              <span className="text-sm font-header font-bold text-white">$149</span>
-                          </div>
-                      </div>
-                  </Link>
-
-                  {/* Course 2 */}
-                  <Link href="/academy/specialist/advanced-ai-cinematography" className="glass-panel p-0 hover:border-signalOrange/50 transition-all duration-300 group cursor-pointer block" data-testid="card-course-home-specialist">
-                      <div className="h-48 bg-gray-900 relative overflow-hidden">
-                          <div className="absolute inset-0 bg-gradient-to-br from-orange-900/40 to-black"></div>
-                           <div className="absolute inset-0 flex items-center justify-center opacity-30 group-hover:opacity-50 transition-opacity duration-500">
-                              <div className="w-24 h-24 border-2 border-signalOrange rotate-45 transform transition-transform group-hover:rotate-90 duration-700"></div>
-                              <div className="w-24 h-24 border-2 border-white -rotate-45 absolute transform transition-transform group-hover:-rotate-90 duration-700"></div>
-                         </div>
-                          <div className="absolute top-4 right-4 bg-signalOrange text-black text-[10px] font-bold px-2 py-1">SPECIALIST</div>
-                      </div>
-                      <div className="p-8">
-                          <h3 className="font-header text-xl text-white mb-2 group-hover:text-signalOrange transition-colors leading-tight">ADVANCED AI CINEMATOGRAPHY</h3>
-                          <p className="text-xs text-gray-400 font-mono mb-4 leading-relaxed">Mastering physics, compound camera moves, and the uncanny valley in Veo 3.1. Deep dive into motion control.</p>
-                          <div className="flex justify-between items-center pt-4 border-t border-white/10">
-                              <span className="text-xs font-mono text-white">6.0 HOURS • 30 LESSONS</span>
-                              <span className="text-sm font-header font-bold text-white">$199</span>
-                          </div>
-                      </div>
-                  </Link>
+                  {featuredCourses.length > 0 ? (
+                    featuredCourses.map((course: any) => {
+                      const isBlue = course.color === 'electricBlue';
+                      const tier = course.level === 'Foundation' ? 'foundation' : 'specialist';
+                      return (
+                        <Link
+                          key={course.id}
+                          href={`/academy/${tier}/${course.slug}`}
+                          className={`glass-panel p-0 hover:border-${isBlue ? 'electricBlue' : 'signalOrange'}/50 transition-all duration-300 group cursor-pointer block`}
+                          data-testid={`card-course-home-${course.slug}`}
+                        >
+                            <div className="h-48 bg-gray-900 relative overflow-hidden">
+                                <div className={`absolute inset-0 bg-gradient-to-br ${isBlue ? 'from-blue-900/40' : 'from-orange-900/40'} to-black`}></div>
+                                {course.badge && (
+                                  <div className={`absolute top-4 right-4 ${isBlue ? 'bg-electricBlue text-white' : 'bg-signalOrange text-black'} text-[10px] font-bold px-2 py-1`}>{course.badge}</div>
+                                )}
+                            </div>
+                            <div className="p-8">
+                                <h3 className={`font-header text-xl text-white mb-2 group-hover:text-${isBlue ? 'electricBlue' : 'signalOrange'} transition-colors leading-tight`}>{course.title}</h3>
+                                <p className="text-xs text-gray-400 font-mono mb-4 leading-relaxed">{course.shortDescription}</p>
+                                <div className="flex justify-between items-center pt-4 border-t border-white/10">
+                                    <span className="text-xs font-mono text-white">{course.duration} • {course.lessonsCount} LESSONS</span>
+                                    <span className="text-sm font-header font-bold text-white">${parseFloat(course.price).toFixed(0)}</span>
+                                </div>
+                            </div>
+                        </Link>
+                      );
+                    })
+                  ) : (
+                    <>
+                      <div className="glass-panel p-0 animate-pulse h-96"></div>
+                      <div className="glass-panel p-0 animate-pulse h-96"></div>
+                    </>
+                  )}
               </div>
           </section>
           {/* ASSET STORE & FOOTER CONTAINER */}
