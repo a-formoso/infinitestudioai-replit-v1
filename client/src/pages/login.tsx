@@ -74,22 +74,22 @@ export default function Login() {
         </div>
 
         {/* RIGHT: LOGIN FORM */}
-        <div className="w-full lg:w-1/2 flex flex-col justify-center items-center px-6 relative">
+        <div className="w-full lg:w-1/2 flex flex-col justify-center items-center px-6 relative overflow-hidden">
             
             {/* Top Nav (Minimal) */}
             <div className="absolute top-8 left-6 lg:left-auto lg:right-8">
                 <Link href="/" className="text-xs font-header font-bold text-gray-500 hover:text-white transition-colors"><span className="lg:hidden">← </span>BACK TO HOME<span className="hidden lg:inline"> →</span></Link>
             </div>
 
-            <div className="glass-panel p-8 md:p-12 w-full max-w-md">
-                <div className="text-center mb-10">
+            <div className="glass-panel p-6 md:p-12 w-full max-w-md">
+                <div className="text-center mb-6 md:mb-10">
                     <div className="font-header font-bold text-2xl tracking-widest text-white flex justify-center items-center gap-2 mb-2">
                         <span className="text-electricBlue text-3xl">∞</span> INFINITE
                     </div>
                     <p className="text-xs text-gray-400 font-mono tracking-wider">STUDENT ACCESS PORTAL</p>
                 </div>
 
-                <form className="space-y-6" onSubmit={handleLogin}>
+                <form className="space-y-4 md:space-y-6" onSubmit={handleLogin}>
                     <div>
                         <label className="block text-[10px] font-mono text-gray-500 mb-2 uppercase tracking-wider">Email Address</label>
                         <input 

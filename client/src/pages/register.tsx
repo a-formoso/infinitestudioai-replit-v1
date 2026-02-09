@@ -91,21 +91,21 @@ export default function Register() {
             </div>
         </div>
 
-        <div className="w-full lg:w-1/2 flex flex-col justify-center items-center px-6 relative">
+        <div className="w-full lg:w-1/2 flex flex-col justify-center items-center px-6 relative overflow-hidden">
             
             <div className="absolute top-8 left-6 lg:left-auto lg:right-8">
                 <Link href="/" className="text-xs font-header font-bold text-gray-500 hover:text-white transition-colors"><span className="lg:hidden">← </span>BACK TO HOME<span className="hidden lg:inline"> →</span></Link>
             </div>
 
-            <div className="glass-panel p-8 md:p-12 w-full max-w-md">
-                <div className="text-center mb-10">
+            <div className="glass-panel p-6 md:p-12 w-full max-w-md">
+                <div className="text-center mb-4 md:mb-10">
                     <div className="font-header font-bold text-2xl tracking-widest text-white flex justify-center items-center gap-2 mb-2">
                         <span className="text-signalOrange text-3xl">∞</span> INFINITE
                     </div>
                     <p className="text-xs text-gray-400 font-mono tracking-wider">CREATE YOUR DIRECTOR ACCOUNT</p>
                 </div>
 
-                <form className="space-y-5" onSubmit={handleRegister}>
+                <form className="space-y-3 md:space-y-5" onSubmit={handleRegister}>
                     <div>
                         <label className="block text-[10px] font-mono text-gray-500 mb-2 uppercase tracking-wider">Director Name</label>
                         <input 
@@ -114,7 +114,7 @@ export default function Register() {
                             data-testid="input-username"
                             placeholder="Your name or alias" 
                             required
-                            className="w-full bg-black/50 border border-white/10 text-white p-4 font-body text-sm focus:outline-none focus:border-signalOrange focus:shadow-[0_0_15px_rgba(255,107,0,0.2)] transition-all"
+                            className="w-full bg-black/50 border border-white/10 text-white p-3 md:p-4 font-body text-sm focus:outline-none focus:border-signalOrange focus:shadow-[0_0_15px_rgba(255,107,0,0.2)] transition-all"
                         />
                     </div>
                     <div>
@@ -125,7 +125,7 @@ export default function Register() {
                             data-testid="input-email"
                             placeholder="director@studio.com" 
                             required
-                            className="w-full bg-black/50 border border-white/10 text-white p-4 font-body text-sm focus:outline-none focus:border-signalOrange focus:shadow-[0_0_15px_rgba(255,107,0,0.2)] transition-all"
+                            className="w-full bg-black/50 border border-white/10 text-white p-3 md:p-4 font-body text-sm focus:outline-none focus:border-signalOrange focus:shadow-[0_0_15px_rgba(255,107,0,0.2)] transition-all"
                         />
                     </div>
                     <div>
@@ -138,7 +138,7 @@ export default function Register() {
                               placeholder="••••••••" 
                               required
                               minLength={6}
-                              className="w-full bg-black/50 border border-white/10 text-white p-4 pr-12 font-body text-sm focus:outline-none focus:border-signalOrange focus:shadow-[0_0_15px_rgba(255,107,0,0.2)] transition-all"
+                              className="w-full bg-black/50 border border-white/10 text-white p-3 md:p-4 pr-12 font-body text-sm focus:outline-none focus:border-signalOrange focus:shadow-[0_0_15px_rgba(255,107,0,0.2)] transition-all"
                           />
                           <button
                             type="button"
@@ -160,7 +160,7 @@ export default function Register() {
                               placeholder="••••••••" 
                               required
                               minLength={6}
-                              className="w-full bg-black/50 border border-white/10 text-white p-4 pr-12 font-body text-sm focus:outline-none focus:border-signalOrange focus:shadow-[0_0_15px_rgba(255,107,0,0.2)] transition-all"
+                              className="w-full bg-black/50 border border-white/10 text-white p-3 md:p-4 pr-12 font-body text-sm focus:outline-none focus:border-signalOrange focus:shadow-[0_0_15px_rgba(255,107,0,0.2)] transition-all"
                           />
                           <button
                             type="button"
@@ -177,13 +177,13 @@ export default function Register() {
                       type="submit" 
                       data-testid="button-register"
                       disabled={isLoading}
-                      className="w-full bg-signalOrange text-white font-header font-bold text-sm uppercase py-4 hover:bg-white hover:text-black transition-all duration-300 tracking-wider shadow-[0_0_20px_rgba(255,107,0,0.2)] disabled:opacity-50 disabled:cursor-not-allowed"
+                      className="w-full bg-signalOrange text-white font-header font-bold text-sm uppercase py-3 md:py-4 hover:bg-white hover:text-black transition-all duration-300 tracking-wider shadow-[0_0_20px_rgba(255,107,0,0.2)] disabled:opacity-50 disabled:cursor-not-allowed"
                     >
                         {isLoading ? "CREATING ACCOUNT..." : "Begin Your Journey"}
                     </button>
                 </form>
 
-                <div className="mt-8 text-center">
+                <div className="mt-4 md:mt-8 text-center">
                     <p className="text-[10px] text-gray-500">
                         Already have an account? <Link href="/login" className="text-signalOrange hover:underline">Sign in here</Link>
                     </p>
