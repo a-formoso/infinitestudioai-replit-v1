@@ -6,7 +6,7 @@ async function seed() {
 
   try {
     // Create courses
-    const [course1, course2, course3] = await db
+    const [course1, course2, course3, course4] = await db
       .insert(courses)
       .values([
         {
@@ -34,6 +34,20 @@ async function seed() {
           level: "Specialist",
           duration: "6.0 HOURS",
           lessonsCount: 30,
+          badge: "SPECIALIST",
+          color: "signalOrange",
+        },
+        {
+          title: "THE GOOGLE AI FILMMAKING ECOSYSTEM",
+          slug: "google-ai-filmmaking-ecosystem",
+          description:
+            'The "Shared Brain" Workflow. Run a Hollywood Studio from your Browser. A comprehensive deep-dive connecting Gemini, ImageFX, and Veo into a single pipeline.',
+          shortDescription:
+            'The "Shared Brain" Workflow. Connect Gemini, ImageFX, and Veo into a single production pipeline.',
+          price: "249.00",
+          level: "Specialist",
+          duration: "8.0 HOURS",
+          lessonsCount: 18,
           badge: "SPECIALIST",
           color: "signalOrange",
         },
@@ -207,10 +221,176 @@ async function seed() {
       },
     ]);
 
-    // Create lessons for Course 3 (Nano Banana Mastery)
+    // Create lessons for Course 3 (The Google AI Filmmaking Ecosystem)
     await db.insert(lessons).values([
       {
         courseId: course3.id,
+        moduleNumber: 1,
+        moduleName: "PRE-PRODUCTION",
+        lessonNumber: 1,
+        title: "Intro to Gemini 3.0: Why It's the Best LLM for Filmmakers",
+        videoUrl: null,
+        duration: 18,
+      },
+      {
+        courseId: course3.id,
+        moduleNumber: 1,
+        moduleName: "PRE-PRODUCTION",
+        lessonNumber: 2,
+        title: 'The "4-Element" Prompt Structure: Context, Subject, Art Style, Technical Specs',
+        videoUrl: null,
+        duration: 22,
+      },
+      {
+        courseId: course3.id,
+        moduleNumber: 1,
+        moduleName: "PRE-PRODUCTION",
+        lessonNumber: 3,
+        title: 'Building Custom "Gems": Screenwriter & Cinematographer Personas',
+        videoUrl: null,
+        duration: 20,
+      },
+      {
+        courseId: course3.id,
+        moduleNumber: 1,
+        moduleName: "PRE-PRODUCTION",
+        lessonNumber: 4,
+        title: "Deep Research with NotebookLM: Analyzing Scripts for Structure & Pacing",
+        videoUrl: null,
+        duration: 24,
+      },
+      {
+        courseId: course3.id,
+        moduleNumber: 1,
+        moduleName: "PRE-PRODUCTION",
+        lessonNumber: 5,
+        title: 'The "Bible" Generation: Characters, Locations & Lore Document',
+        videoUrl: null,
+        duration: 26,
+      },
+      {
+        courseId: course3.id,
+        moduleNumber: 2,
+        moduleName: "VISUAL DEVELOPMENT",
+        lessonNumber: 1,
+        title: "Mastering ImageFX: Understanding the Diffusion Model",
+        videoUrl: null,
+        duration: 22,
+      },
+      {
+        courseId: course3.id,
+        moduleNumber: 2,
+        moduleName: "VISUAL DEVELOPMENT",
+        lessonNumber: 2,
+        title: "Mixboarding: Creating Mood Boards the AI Understands",
+        videoUrl: null,
+        duration: 20,
+      },
+      {
+        courseId: course3.id,
+        moduleNumber: 2,
+        moduleName: "VISUAL DEVELOPMENT",
+        lessonNumber: 3,
+        title: '"Product Stills" Workflow: High-Fidelity Props & Assets',
+        videoUrl: null,
+        duration: 24,
+      },
+      {
+        courseId: course3.id,
+        moduleNumber: 2,
+        moduleName: "VISUAL DEVELOPMENT",
+        lessonNumber: 4,
+        title: "Aspect Ratio Math: Preparing Images for Veo (16:9 vs 2.35:1)",
+        videoUrl: null,
+        duration: 18,
+      },
+      {
+        courseId: course3.id,
+        moduleNumber: 3,
+        moduleName: "PRODUCTION",
+        lessonNumber: 1,
+        title: "Veo 3.1 Architecture: How the Video Model Interprets Static Images",
+        videoUrl: null,
+        duration: 26,
+      },
+      {
+        courseId: course3.id,
+        moduleNumber: 3,
+        moduleName: "PRODUCTION",
+        lessonNumber: 2,
+        title: "Camera Movement 101: Pan, Tilt, Truck, Jib & Rack Focus",
+        videoUrl: null,
+        duration: 28,
+      },
+      {
+        courseId: course3.id,
+        moduleNumber: 3,
+        moduleName: "PRODUCTION",
+        lessonNumber: 3,
+        title: "Physics Directing: Controlling Fluid Dynamics, Smoke & Gravity",
+        videoUrl: null,
+        duration: 24,
+      },
+      {
+        courseId: course3.id,
+        moduleNumber: 3,
+        moduleName: "PRODUCTION",
+        lessonNumber: 4,
+        title: 'The "Invisible Cut": Stitching 5-Second Clips Into Seamless Sequences',
+        videoUrl: null,
+        duration: 30,
+      },
+      {
+        courseId: course3.id,
+        moduleNumber: 3,
+        moduleName: "PRODUCTION",
+        lessonNumber: 5,
+        title: "Acting Direction: Controlling Micro-Expressions via Prompts",
+        videoUrl: null,
+        duration: 22,
+      },
+      {
+        courseId: course3.id,
+        moduleNumber: 4,
+        moduleName: "POST-PRODUCTION & SOUND",
+        lessonNumber: 1,
+        title: "Sonic Synthesis with MusicFX: Generating the Score",
+        videoUrl: null,
+        duration: 22,
+      },
+      {
+        courseId: course3.id,
+        moduleNumber: 4,
+        moduleName: "POST-PRODUCTION & SOUND",
+        lessonNumber: 2,
+        title: "Voice & Dialogue: Using Google AI Studio (TTS) for Narration",
+        videoUrl: null,
+        duration: 20,
+      },
+      {
+        courseId: course3.id,
+        moduleNumber: 4,
+        moduleName: "POST-PRODUCTION & SOUND",
+        lessonNumber: 3,
+        title: "Lip-Syncing: Matching Generated Audio to Veo Video",
+        videoUrl: null,
+        duration: 24,
+      },
+      {
+        courseId: course3.id,
+        moduleNumber: 4,
+        moduleName: "POST-PRODUCTION & SOUND",
+        lessonNumber: 4,
+        title: "Final Assembly: Handoff to Premiere/DaVinci for Delivery",
+        videoUrl: null,
+        duration: 20,
+      },
+    ]);
+
+    // Create lessons for Course 4 (Nano Banana Mastery)
+    await db.insert(lessons).values([
+      {
+        courseId: course4.id,
         moduleNumber: 1,
         moduleName: "INITIALIZATION",
         lessonNumber: 1,
@@ -219,7 +399,7 @@ async function seed() {
         duration: 12,
       },
       {
-        courseId: course3.id,
+        courseId: course4.id,
         moduleNumber: 1,
         moduleName: "INITIALIZATION",
         lessonNumber: 2,
@@ -228,7 +408,7 @@ async function seed() {
         duration: 14,
       },
       {
-        courseId: course3.id,
+        courseId: course4.id,
         moduleNumber: 1,
         moduleName: "INITIALIZATION",
         lessonNumber: 3,
@@ -237,7 +417,7 @@ async function seed() {
         duration: 16,
       },
       {
-        courseId: course3.id,
+        courseId: course4.id,
         moduleNumber: 1,
         moduleName: "INITIALIZATION",
         lessonNumber: 4,
@@ -246,7 +426,7 @@ async function seed() {
         duration: 20,
       },
       {
-        courseId: course3.id,
+        courseId: course4.id,
         moduleNumber: 2,
         moduleName: "THE DIGITAL WARDROBE",
         lessonNumber: 1,
@@ -255,7 +435,7 @@ async function seed() {
         duration: 22,
       },
       {
-        courseId: course3.id,
+        courseId: course4.id,
         moduleNumber: 2,
         moduleName: "THE DIGITAL WARDROBE",
         lessonNumber: 2,
@@ -264,7 +444,7 @@ async function seed() {
         duration: 18,
       },
       {
-        courseId: course3.id,
+        courseId: course4.id,
         moduleNumber: 2,
         moduleName: "THE DIGITAL WARDROBE",
         lessonNumber: 3,
@@ -273,7 +453,7 @@ async function seed() {
         duration: 20,
       },
       {
-        courseId: course3.id,
+        courseId: course4.id,
         moduleNumber: 2,
         moduleName: "THE DIGITAL WARDROBE",
         lessonNumber: 4,
@@ -282,7 +462,7 @@ async function seed() {
         duration: 18,
       },
       {
-        courseId: course3.id,
+        courseId: course4.id,
         moduleNumber: 3,
         moduleName: "SCENE PLACEMENT",
         lessonNumber: 1,
@@ -291,7 +471,7 @@ async function seed() {
         duration: 20,
       },
       {
-        courseId: course3.id,
+        courseId: course4.id,
         moduleNumber: 3,
         moduleName: "SCENE PLACEMENT",
         lessonNumber: 2,
@@ -300,7 +480,7 @@ async function seed() {
         duration: 18,
       },
       {
-        courseId: course3.id,
+        courseId: course4.id,
         moduleNumber: 3,
         moduleName: "SCENE PLACEMENT",
         lessonNumber: 3,

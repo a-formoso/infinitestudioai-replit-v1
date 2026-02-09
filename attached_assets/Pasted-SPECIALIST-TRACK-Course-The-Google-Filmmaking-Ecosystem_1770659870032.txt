@@ -1,0 +1,46 @@
+SPECIALIST TRACK
+
+Course: The Google Filmmaking Ecosystem
+Tagline: The "Shared Brain" Workflow. Run a Hollywood Studio from your Browser.
+Goal: A comprehensive deep-dive connecting Gemini, ImageFX, and Veo into a single pipeline.
+Prerequisite: Recommended completion of Foundation.
+
+Module 1: Pre-Production (The Writer's Room)
+1.1 Intro to Gemini 3.0: Why it’s the best LLM for filmmakers.
+
+1.2 The "4-Element" Prompt Structure: (From your screenshot) Context, Subject, Art Style, Technical Specs.
+
+1.3 Building Custom "Gems": Creating a "Screenwriter Persona" and a "Cinematographer Persona" to help you brainstorm.
+
+1.4 Deep Research with NotebookLM: Uploading PDFs of movie scripts to analyze structure and pacing.
+
+1.5 The "Bible" Generation: Creating a unified document for characters, locations, and lore.
+
+Module 2: Visual Development (The Art Dept)
+2.1 Mastering ImageFX: The "seeds" of your video. Understanding the diffusion model.
+
+2.2 Mixboarding: (From your screenshot) creating mood boards that the AI understands.
+
+2.3 "Product Stills" Workflow: Creating high-fidelity props and assets for the film.
+
+2.4 Aspect Ratio Math: Preparing images for Veo (16:9 vs 2.35:1 Anamorphic).
+
+Module 3: Production (The Director's Chair)
+3.1 Veo 3.1 Architecture: How the video model interprets static images.
+
+3.2 Camera Movement 101: Technical prompting (Pan, Tilt, Truck, Jib, Rack Focus).
+
+3.3 Physics Directing: Controlling fluid dynamics, smoke, and gravity in Veo.
+
+3.4 The "Invisible Cut": How to stitch 5-second clips into a seamless sequence.
+
+3.5 Acting Direction: Using prompts to control micro-expressions (blink, smile, look left).
+
+Module 4: Post-Production & Sound (The Edit Bay)
+4.1 Sonic Synthesis with MusicFX: Generating the score.
+
+4.2 Voice & Dialogue: Using Google AI Studio (TTS) for narration (from your screenshot).
+
+4.3 Lip-Syncing: Workflow to match the generated audio to the Veo video lips.
+
+4.4 Final Assembly: Bringing it all into Premiere/DaVinci (brief overview of the handoff).
