@@ -66,7 +66,7 @@ export default function Register() {
   };
 
   return (
-    <div className="min-h-screen bg-obsidian text-offWhite font-body antialiased selection:bg-electricBlue selection:text-white overflow-hidden h-screen flex">
+    <div className="fixed inset-0 bg-obsidian text-offWhite font-body antialiased selection:bg-electricBlue selection:text-white overflow-hidden flex">
       <div className="fixed inset-0 bg-grid-pattern bg-[size:40px_40px] opacity-20 pointer-events-none z-0"></div>
 
       <div className="flex h-full w-full relative z-10">
