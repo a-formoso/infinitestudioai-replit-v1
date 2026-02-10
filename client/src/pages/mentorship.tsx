@@ -15,14 +15,14 @@ export default function Mentorship() {
             <span className="text-[10px] font-header font-bold text-gold tracking-[0.3em]">ACCEPTING APPLICATIONS FOR Q4 2026</span>
           </div>
 
-          <h1 className="font-header font-bold text-5xl md:text-7xl text-white mb-2 tracking-tight leading-none" data-testid="text-hero-title">
+          <h1 className="font-header font-bold text-3xl md:text-5xl text-white mb-2 tracking-tight leading-none" data-testid="text-hero-title">
             THE INNER
           </h1>
-          <h1 className="font-header font-bold text-5xl md:text-7xl text-gold mb-8 tracking-tight leading-none">
+          <h1 className="font-header font-bold text-3xl md:text-5xl text-gold mb-8 tracking-tight leading-none">
             CIRCLE
           </h1>
 
-          <p className="text-gray-400 text-base md:text-lg max-w-2xl mx-auto leading-relaxed" data-testid="text-hero-description">
+          <p className="text-gray-400 text-base max-w-2xl mx-auto leading-relaxed" data-testid="text-hero-description">
             Direct access to Alex Director. Weekly critique sessions, career strategy, and advanced "Beta" workflows not available in the public courses.
           </p>
         </div>
@@ -34,10 +34,10 @@ export default function Mentorship() {
           <div className="glass-panel p-8 md:p-10 relative" data-testid="card-studio-lot">
             <div className="flex justify-between items-start mb-2">
               <div>
-                <h2 className="font-header font-bold text-xl md:text-2xl text-white tracking-wide" data-testid="text-tier1-title">THE STUDIO LOT</h2>
+                <h2 className="font-header font-bold text-lg md:text-xl text-white tracking-wide" data-testid="text-tier1-title">THE STUDIO LOT</h2>
                 <p className="text-[10px] font-header text-gray-500 tracking-[0.3em] mt-1">GROUP COACHING PROGRAM</p>
               </div>
-              <span className="font-header font-bold text-5xl md:text-6xl text-white/10 leading-none">01</span>
+              <span className="font-header font-bold text-4xl md:text-5xl text-white/10 leading-none">01</span>
             </div>
 
             <div className="space-y-4 mt-8 mb-10">
@@ -63,8 +63,8 @@ export default function Mentorship() {
               <div>
                 <p className="text-[10px] font-header text-gray-500 tracking-[0.3em] mb-1">MEMBERSHIP</p>
                 <div className="flex items-baseline gap-1">
-                  <span className="font-header font-bold text-3xl text-white" data-testid="text-tier1-price">$99</span>
-                  <span className="text-sm text-gray-500">/mo</span>
+                  <span className="font-header font-bold text-2xl text-white" data-testid="text-tier1-price">$99</span>
+                  <span className="text-xs text-gray-500">/mo</span>
                 </div>
               </div>
               <a
@@ -88,10 +88,10 @@ export default function Mentorship() {
 
             <div className="flex justify-between items-start mb-2">
               <div>
-                <h2 className="font-header font-bold text-xl md:text-2xl text-white tracking-wide" data-testid="text-tier2-title">EXECUTIVE PRODUCER</h2>
+                <h2 className="font-header font-bold text-lg md:text-xl text-white tracking-wide" data-testid="text-tier2-title">EXECUTIVE PRODUCER</h2>
                 <p className="text-[10px] font-header text-gold tracking-[0.3em] mt-1">1-ON-1 MENTORSHIP</p>
               </div>
-              <span className="font-header font-bold text-5xl md:text-6xl text-white/10 leading-none">02</span>
+              <span className="font-header font-bold text-4xl md:text-5xl text-white/10 leading-none">02</span>
             </div>
 
             <div className="space-y-4 mt-8 mb-10">
@@ -117,8 +117,8 @@ export default function Mentorship() {
               <div>
                 <p className="text-[10px] font-header text-gray-500 tracking-[0.3em] mb-1">INVESTMENT</p>
                 <div className="flex items-baseline gap-1">
-                  <span className="font-header font-bold text-3xl text-white" data-testid="text-tier2-price">$1,500</span>
-                  <span className="text-sm text-gray-500">/mo</span>
+                  <span className="font-header font-bold text-2xl text-white" data-testid="text-tier2-price">$1,500</span>
+                  <span className="text-xs text-gray-500">/mo</span>
                 </div>
               </div>
               <a
