@@ -22,7 +22,7 @@ export default function Mentorship() {
       <div className="fixed inset-0 bg-grid-pattern bg-[size:40px_40px] opacity-20 pointer-events-none z-0"></div>
       <Navbar />
       <section className="relative z-10 pt-40 pb-20 px-6">
-        <div className="max-w-5xl mx-auto text-center">
+        <div className="max-w-7xl mx-auto text-center">
           <div className="inline-block border border-gold/50 px-3 py-1 mb-6" data-testid="badge-applications">
             <span className="text-[10px] font-mono text-gold tracking-widest uppercase">ACCEPTING APPLICATIONS FOR {nextQuarter}</span>
           </div>
@@ -40,7 +40,7 @@ export default function Mentorship() {
         </div>
       </section>
       <section className="relative z-10 pb-32 px-6">
-        <div className="max-w-5xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-8">
+        <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-8">
 
           <div className="glass-panel p-8 md:p-10 relative" data-testid="card-studio-lot">
             <div className="flex justify-between items-start mb-2">

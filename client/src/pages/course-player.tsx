@@ -8,7 +8,7 @@ export default function CoursePlayer() {
   const [isFullscreen, setIsFullscreen] = useState(false);
 
   return (
-      <div className="min-h-screen bg-obsidian text-offWhite font-sans antialiased selection:bg-electricBlue selection:text-white overflow-x-hidden">
+      <div className="min-h-screen bg-obsidian text-offWhite font-body antialiased selection:bg-electricBlue selection:text-white overflow-x-hidden">
           {/* GRID BACKGROUND OVERLAY */}
           <div className="fixed inset-0 bg-grid-pattern bg-[size:40px_40px] opacity-20 pointer-events-none z-0"></div>
           {/* TOP BAR */}
