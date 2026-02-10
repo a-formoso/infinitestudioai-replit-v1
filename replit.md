@@ -27,7 +27,8 @@ Preferred communication style: Simple, everyday language.
 - **Runtime**: Node.js with TypeScript, using `tsx` for dev execution
 - **Framework**: Express.js
 - **API Pattern**: RESTful JSON API under `/api/*` prefix
-- **Authentication**: Session-based auth using `express-session` with PostgreSQL session store (`connect-pg-simple`). Passwords hashed with `bcryptjs`. No Passport.js despite README mention — sessions are managed directly with `req.session.userId`.
+- **Authentication**: Session-based auth using `express-session` with PostgreSQL session store (`connect-pg-simple`). Passwords hashed with `bcryptjs`. Sessions managed directly with `req.session.userId`.
+- **Email Verification**: Resend integration sends verification emails on registration. Users must verify email before purchasing courses. `server/email.ts` handles Resend client + branded email templates. Verification flow: register → check email → click link → redirect back to checkout.
 - **Session Storage**: PostgreSQL-backed via `connect-pg-simple` (auto-creates session table)
 - **Route Registration**: All routes defined in `server/routes.ts` via `registerRoutes()` function
 - **Storage Layer**: `server/storage.ts` provides an `IStorage` interface abstracting all database operations (users, courses, lessons, enrollments, progress, assets, orders)
@@ -41,7 +42,7 @@ Preferred communication style: Simple, everyday language.
 - **Schema Push**: `npm run db:push` (uses `drizzle-kit push`)
 - **Migrations**: Output to `./migrations` directory
 - **Tables**:
-  - `users` — id (UUID), username, password (hashed), email, createdAt
+  - `users` — id (UUID), username, password (hashed), email, emailVerified (bool), verificationToken, createdAt
   - `courses` — id (UUID), title, slug (unique), description, shortDescription, price, level, duration, lessonsCount, badge, color
   - `lessons` — id (UUID), courseId (FK), moduleNumber, moduleName, lessonNumber, title, videoUrl, duration
   - `enrollments` — id (UUID), userId (FK), courseId (FK), enrolledAt
@@ -114,3 +115,6 @@ migrations/           # Drizzle migration files
 
 ### No External Payment Provider
 - Checkout flow currently simulates payment — no Stripe or other payment gateway is integrated yet. The checkout page collects card details visually but enrollment happens directly via API call.
+- Checkout is accessible without login. Pay button redirects to register if not authenticated.
+- After registration, email verification is required before purchasing. Successful payment redirects to /course/player.
+- Regular login (not from checkout) redirects to /dashboard.

@@ -1,9 +1,9 @@
 import { Link, useLocation } from "wouter";
 import { useState } from "react";
-import { register } from "@/lib/api";
+import { register, resendVerification } from "@/lib/api";
 import { useToast } from "@/hooks/use-toast";
 import { useQueryClient } from "@tanstack/react-query";
-import { Eye, EyeOff } from "lucide-react";
+import { Eye, EyeOff, Mail, RefreshCw } from "lucide-react";
 
 export default function Register() {
   const [, setLocation] = useLocation();
@@ -11,6 +11,9 @@ export default function Register() {
   const [isLoading, setIsLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [verificationSent, setVerificationSent] = useState(false);
+  const [registeredEmail, setRegisteredEmail] = useState("");
+  const [isResending, setIsResending] = useState(false);
   const queryClient = useQueryClient();
   
   const searchParams = new URLSearchParams(window.location.search);
@@ -46,7 +49,7 @@ export default function Register() {
       return;
     }
 
-    const { data, error } = await register(username, email, password);
+    const { data, error } = await register(username, email, password, redirectUrl);
 
     if (error) {
       toast({
@@ -57,13 +60,64 @@ export default function Register() {
       setIsLoading(false);
     } else {
       await queryClient.invalidateQueries({ queryKey: ["currentUser"] });
-      toast({
-        title: "Account created!",
-        description: "Welcome to Infinite Studio. Redirecting...",
-      });
-      setLocation(redirectUrl);
+      setRegisteredEmail(email);
+      setVerificationSent(true);
+      setIsLoading(false);
     }
   };
+
+  const handleResend = async () => {
+    setIsResending(true);
+    const { error } = await resendVerification(redirectUrl);
+    if (error) {
+      toast({
+        title: "Failed to resend",
+        description: error,
+        variant: "destructive",
+      });
+    } else {
+      toast({
+        title: "Email sent!",
+        description: "Check your inbox for the verification link.",
+      });
+    }
+    setIsResending(false);
+  };
+
+  if (verificationSent) {
+    return (
+      <div className="fixed inset-0 bg-obsidian text-offWhite font-body antialiased selection:bg-electricBlue selection:text-white overflow-hidden flex">
+        <div className="fixed inset-0 bg-grid-pattern bg-[size:40px_40px] opacity-20 pointer-events-none z-0"></div>
+        <div className="flex h-full w-full relative z-10 items-center justify-center px-6">
+          <div className="glass-panel p-8 md:p-12 w-full max-w-md text-center">
+            <div className="w-20 h-20 mx-auto mb-6 rounded-full bg-electricBlue/10 border border-electricBlue/30 flex items-center justify-center">
+              <Mail className="w-10 h-10 text-electricBlue" />
+            </div>
+            <h1 className="font-header font-bold text-2xl tracking-widest text-white mb-4" data-testid="text-verify-title">CHECK YOUR EMAIL</h1>
+            <p className="text-sm text-gray-400 mb-2">We've sent a verification link to:</p>
+            <p className="text-electricBlue font-mono text-sm mb-6" data-testid="text-verify-email">{registeredEmail}</p>
+            <p className="text-xs text-gray-500 mb-8 leading-relaxed">
+              Click the link in the email to verify your account. Once verified, you'll be redirected back to complete your purchase.
+            </p>
+            <button
+              onClick={handleResend}
+              disabled={isResending}
+              data-testid="button-resend"
+              className="flex items-center gap-2 mx-auto px-6 py-3 border border-white/10 text-xs font-header font-bold text-white hover:bg-white/5 transition-colors disabled:opacity-50"
+            >
+              <RefreshCw className={`w-3 h-3 ${isResending ? 'animate-spin' : ''}`} />
+              {isResending ? "SENDING..." : "RESEND EMAIL"}
+            </button>
+            <div className="mt-8 pt-6 border-t border-white/10">
+              <p className="text-[10px] text-gray-600 font-mono">
+                Wrong email? <Link href={`/register?redirect=${encodeURIComponent(redirectUrl)}`} onClick={() => setVerificationSent(false)} className="text-signalOrange hover:underline">Start over</Link>
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="fixed inset-0 bg-obsidian text-offWhite font-body antialiased selection:bg-electricBlue selection:text-white overflow-hidden flex">
@@ -185,7 +239,7 @@ export default function Register() {
 
                 <div className="mt-4 md:mt-8 text-center">
                     <p className="text-[10px] text-gray-500">
-                        Already have an account? <Link href="/login" className="text-signalOrange hover:underline">Sign in here</Link>
+                        Already have an account? <Link href={`/login${redirectUrl !== '/dashboard' ? `?redirect=${encodeURIComponent(redirectUrl)}` : ''}`} className="text-signalOrange hover:underline">Sign in here</Link>
                     </p>
                 </div>
             </div>

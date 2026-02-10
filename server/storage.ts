@@ -33,7 +33,8 @@ export interface IStorage {
   getUserByUsername(username: string): Promise<User | undefined>;
   getUserByEmail(email: string): Promise<User | undefined>;
   createUser(user: InsertUser): Promise<User>;
-  updateUser(id: string, data: { username?: string; email?: string }): Promise<User | undefined>;
+  updateUser(id: string, data: { username?: string; email?: string; emailVerified?: boolean; verificationToken?: string | null }): Promise<User | undefined>;
+  getUserByVerificationToken(token: string): Promise<User | undefined>;
 
   // Course operations
   getAllCourses(): Promise<Course[]>;
@@ -96,12 +97,17 @@ export class DatabaseStorage implements IStorage {
     return user;
   }
 
-  async updateUser(id: string, data: { username?: string; email?: string }): Promise<User | undefined> {
+  async updateUser(id: string, data: { username?: string; email?: string; emailVerified?: boolean; verificationToken?: string | null }): Promise<User | undefined> {
     const [user] = await db
       .update(users)
       .set(data)
       .where(eq(users.id, id))
       .returning();
+    return user || undefined;
+  }
+
+  async getUserByVerificationToken(token: string): Promise<User | undefined> {
+    const [user] = await db.select().from(users).where(eq(users.verificationToken, token));
     return user || undefined;
   }
 

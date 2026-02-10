@@ -30,10 +30,17 @@ async function apiFetch<T>(
 }
 
 // Auth
-export async function register(username: string, email: string, password: string) {
-  return apiFetch<{ user: any }>('/auth/register', {
+export async function register(username: string, email: string, password: string, redirectPath?: string) {
+  return apiFetch<{ user: any; verificationSent: boolean }>('/auth/register', {
     method: 'POST',
-    body: JSON.stringify({ username, email, password }),
+    body: JSON.stringify({ username, email, password, redirectPath }),
+  });
+}
+
+export async function resendVerification(redirectPath?: string) {
+  return apiFetch<{ message: string }>('/auth/resend-verification', {
+    method: 'POST',
+    body: JSON.stringify({ redirectPath }),
   });
 }
 

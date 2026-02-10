@@ -1,4 +1,3 @@
-import { useEffect } from "react";
 import { Link, useLocation } from "wouter";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { getCurrentUser, getCourseBySlug, enrollInCourse } from "@/lib/api";
@@ -23,11 +22,9 @@ export default function Checkout() {
     enabled: !!courseSlug,
   });
 
-  useEffect(() => {
-    if (!userLoading && !userData?.data?.user) {
-      setLocation(`/login?redirect=/checkout?course=${courseSlug}`);
-    }
-  }, [userData, userLoading, courseSlug, setLocation]);
+  const user = userData?.data?.user;
+  const isLoggedIn = !!user;
+  const isVerified = user?.emailVerified === true;
 
   const enrollMutation = useMutation({
     mutationFn: (courseId: string) => enrollInCourse(courseId),
@@ -35,9 +32,9 @@ export default function Checkout() {
       queryClient.invalidateQueries({ queryKey: ["enrollments"] });
       toast({
         title: "Payment Successful!",
-        description: "You are now enrolled. Redirecting to your dashboard...",
+        description: "You are now enrolled. Redirecting to your course...",
       });
-      setTimeout(() => setLocation("/dashboard"), 1500);
+      setTimeout(() => setLocation("/course/player"), 1500);
     },
     onError: (error: any) => {
       toast({
@@ -50,13 +47,28 @@ export default function Checkout() {
 
   const handlePayment = (e: React.FormEvent) => {
     e.preventDefault();
+    
+    if (!isLoggedIn) {
+      setLocation(`/register?redirect=/checkout?course=${courseSlug}`);
+      return;
+    }
+    
+    if (!isVerified) {
+      toast({
+        title: "Email Not Verified",
+        description: "Please check your email and click the verification link before purchasing.",
+        variant: "destructive",
+      });
+      return;
+    }
+    
     const courseId = course?.id;
     if (courseId) {
       enrollMutation.mutate(courseId.toString());
     }
   };
 
-  if (userLoading || courseLoading) {
+  if (courseLoading || userLoading) {
     return (
       <div className="min-h-screen bg-obsidian flex items-center justify-center">
         <div className="text-electricBlue font-mono text-sm animate-pulse">Loading...</div>
@@ -155,14 +167,27 @@ export default function Checkout() {
               <form className="space-y-6" onSubmit={handlePayment}>
                 <div>
                   <label className="block text-xs font-header text-gray-400 mb-2">ACCOUNT EMAIL</label>
-                  <input 
-                    type="email" 
-                    value={userData?.data?.user?.email || ""}
-                    readOnly
-                    data-testid="input-email"
-                    className="w-full bg-black/50 border border-white/10 text-white p-4 font-body text-sm focus:outline-none opacity-70 cursor-not-allowed"
-                  />
+                  {isLoggedIn ? (
+                    <input 
+                      type="email" 
+                      value={user?.email || ""}
+                      readOnly
+                      data-testid="input-email"
+                      className="w-full bg-black/50 border border-white/10 text-white p-4 font-body text-sm focus:outline-none opacity-70 cursor-not-allowed"
+                    />
+                  ) : (
+                    <div className="w-full bg-black/50 border border-white/10 p-4 text-sm">
+                      <p className="text-gray-500 font-mono text-xs">You'll create an account when you click Pay below</p>
+                    </div>
+                  )}
                 </div>
+
+                {isLoggedIn && !isVerified && (
+                  <div className="bg-yellow-900/20 border border-yellow-500/30 p-4 text-sm" data-testid="banner-verify-email">
+                    <p className="text-yellow-400 font-mono text-xs mb-1">EMAIL NOT VERIFIED</p>
+                    <p className="text-yellow-200/70 text-xs">Check your inbox for a verification link. You must verify your email before purchasing.</p>
+                  </div>
+                )}
 
                 <div className="pt-4 border-t border-white/10">
                   <label className="block text-xs font-header text-gray-400 mb-4">PAYMENT METHOD</label>
@@ -211,12 +236,23 @@ export default function Checkout() {
 
                 <button 
                   type="submit"
-                  disabled={enrollMutation.isPending}
+                  disabled={enrollMutation.isPending || (isLoggedIn && !isVerified)}
                   data-testid="button-pay"
                   className={`w-full ${isSpecialist ? 'bg-signalOrange' : 'bg-electricBlue'} text-white font-header font-bold text-sm uppercase py-5 hover:bg-white hover:text-black transition-all duration-300 tracking-wider shadow-[0_0_30px_rgba(41,98,255,0.3)] mt-8 disabled:opacity-50 disabled:cursor-not-allowed`}
                 >
-                  {enrollMutation.isPending ? "Processing..." : `Pay $${coursePrice}.00 & Access Course`}
+                  {enrollMutation.isPending 
+                    ? "Processing..." 
+                    : isLoggedIn 
+                      ? `Pay $${coursePrice}.00 & Access Course`
+                      : `Create Account & Pay $${coursePrice}.00`
+                  }
                 </button>
+                
+                {!isLoggedIn && (
+                  <p className="text-[10px] text-center text-gray-500 mt-2">
+                    Already have an account? <Link href={`/login?redirect=/checkout?course=${courseSlug}`} className={`text-${accentColor} underline`} data-testid="link-login">Sign in here</Link>
+                  </p>
+                )}
                 
                 <p className="text-[10px] text-center text-gray-500 mt-4">
                   By clicking the button above, you agree to our <Link href="/terms" className={`text-${accentColor} underline`}>Terms of Service</Link> and <Link href="/privacy" className={`text-${accentColor} underline`}>Privacy Policy</Link>.

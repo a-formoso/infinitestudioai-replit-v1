@@ -138,7 +138,7 @@ export default function Login() {
 
                 <div className="mt-8 text-center">
                     <p className="text-[10px] text-gray-500">
-                        New to the studio? <Link href="/register" className="text-electricBlue hover:underline">Create an account</Link>
+                        New to the studio? <Link href={`/register${redirectUrl !== '/dashboard' ? `?redirect=${encodeURIComponent(redirectUrl)}` : ''}`} className="text-electricBlue hover:underline">Create an account</Link>
                     </p>
                 </div>
             </div>
