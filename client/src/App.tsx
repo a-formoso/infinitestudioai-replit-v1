@@ -23,6 +23,7 @@ import Privacy from "@/pages/privacy";
 import Terms from "@/pages/terms";
 import CourseNanoBanana from "@/pages/course-nano-banana";
 import CourseAIFilmmakingEcosystem from "@/pages/course-ai-filmmaking-ecosystem";
+import Mentorship from "@/pages/mentorship";
 
 function Router() {
   return (
@@ -44,6 +45,7 @@ function Router() {
       <Route path="/academy/specialist/advanced-ai-cinematography" component={CourseLevel2} />
       <Route path="/academy/foundation/nano-banana-mastery" component={CourseNanoBanana} />
       <Route path="/academy/specialist/google-ai-filmmaking-ecosystem" component={CourseAIFilmmakingEcosystem} />
+      <Route path="/mentorship" component={Mentorship} />
       <Route path="/dashboard" component={Dashboard} />
       <Route path="/course/player" component={CoursePlayer} />
       <Route component={NotFound} />

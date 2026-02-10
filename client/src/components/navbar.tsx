@@ -40,8 +40,9 @@ export function Navbar() {
   };
 
   const navLinks = [
-    { href: "/hire", label: "STUDIO", testId: "mobile-link-studio", isRoute: true },
     { href: "/academy", label: "ACADEMY", testId: "mobile-link-academy", isRoute: true },
+    { href: "/mentorship", label: "MENTORSHIP", testId: "mobile-link-mentorship", isRoute: true },
+    { href: "/hire", label: "STUDIO", testId: "mobile-link-studio", isRoute: true },
     { href: "/store", label: "ASSET STORE", testId: "mobile-link-store", isRoute: true },
   ];
 
