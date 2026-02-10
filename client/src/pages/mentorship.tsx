@@ -1,8 +1,22 @@
+import { useMemo } from "react";
 import { Navbar } from "@/components/navbar";
 import { Footer } from "@/components/footer";
 import { Check } from "lucide-react";
 
+function getNextQuarter(): string {
+  const now = new Date();
+  const month = now.getMonth();
+  const year = now.getFullYear();
+  const currentQ = Math.floor(month / 3) + 1;
+  if (currentQ < 4) {
+    return `Q${currentQ + 1} ${year}`;
+  }
+  return `Q1 ${year + 1}`;
+}
+
 export default function Mentorship() {
+  const nextQuarter = useMemo(() => getNextQuarter(), []);
+
   return (
     <div className="min-h-screen bg-obsidian text-offWhite font-body antialiased selection:bg-electricBlue selection:text-white overflow-x-hidden">
       <div className="fixed inset-0 bg-grid-pattern bg-[size:40px_40px] opacity-20 pointer-events-none z-0"></div>
@@ -10,7 +24,7 @@ export default function Mentorship() {
       <section className="relative z-10 pt-32 pb-20 px-6">
         <div className="max-w-5xl mx-auto text-center">
           <div className="inline-block border border-gold/50 px-4 py-1.5 mb-8" data-testid="badge-applications">
-            <span className="text-[10px] font-header font-bold text-gold tracking-[0.3em]">APPLICATIONS OPEN FOR Q4</span>
+            <span className="text-[10px] font-header font-bold text-gold tracking-[0.3em]">ACCEPTING APPLICATIONS FOR {nextQuarter}</span>
           </div>
 
           <h1 className="font-header font-bold text-3xl md:text-5xl text-white mb-2 tracking-tight leading-none" data-testid="text-hero-title">
