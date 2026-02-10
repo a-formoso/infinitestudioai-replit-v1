@@ -21,20 +21,20 @@ export default function Mentorship() {
     <div className="min-h-screen bg-obsidian text-offWhite font-body antialiased selection:bg-electricBlue selection:text-white overflow-x-hidden">
       <div className="fixed inset-0 bg-grid-pattern bg-[size:40px_40px] opacity-20 pointer-events-none z-0"></div>
       <Navbar />
-      <section className="relative z-10 pt-32 pb-20 px-6">
+      <section className="relative z-10 pt-40 pb-20 px-6">
         <div className="max-w-5xl mx-auto text-center">
           <div className="inline-block border border-gold/50 px-3 py-1 mb-6" data-testid="badge-applications">
             <span className="text-[10px] font-mono text-gold tracking-widest uppercase">ACCEPTING APPLICATIONS FOR {nextQuarter}</span>
           </div>
 
-          <h1 className="font-header text-3xl md:text-5xl font-bold text-white leading-tight mb-2" data-testid="text-hero-title">
+          <h1 className="font-header text-4xl md:text-6xl font-bold text-white leading-tight mb-2" data-testid="text-hero-title">
             THE INNER
           </h1>
-          <h1 className="font-header text-3xl md:text-5xl font-bold text-gold leading-tight mb-6">
+          <h1 className="font-header text-4xl md:text-6xl font-bold text-gold leading-tight mb-6">
             CIRCLE
           </h1>
 
-          <p className="text-base text-gray-400 leading-relaxed font-light mb-8 max-w-2xl mx-auto" data-testid="text-hero-description">
+          <p className="text-lg text-gray-400 leading-relaxed font-light mb-12 max-w-2xl mx-auto" data-testid="text-hero-description">
             Direct access to Alex Director. Weekly critique sessions, career strategy, and advanced "Beta" workflows not available in the public courses.
           </p>
         </div>
@@ -45,7 +45,7 @@ export default function Mentorship() {
           <div className="glass-panel p-8 md:p-10 relative" data-testid="card-studio-lot">
             <div className="flex justify-between items-start mb-2">
               <div>
-                <h2 className="font-header font-bold text-lg md:text-xl text-white tracking-wide" data-testid="text-tier1-title">THE STUDIO LOT</h2>
+                <h2 className="font-header text-lg text-white mb-4" data-testid="text-tier1-title">THE STUDIO LOT</h2>
                 <p className="text-[10px] font-mono text-gray-500 tracking-widest mt-1">GROUP COACHING PROGRAM</p>
               </div>
               <span className="font-header font-bold text-4xl md:text-5xl text-white/10 leading-none">01</span>
@@ -54,19 +54,19 @@ export default function Mentorship() {
             <div className="space-y-4 mt-8 mb-10">
               <div className="flex items-start gap-3">
                 <Check className="w-4 h-4 text-gold shrink-0 mt-0.5" />
-                <span className="text-xs text-gray-400 font-mono">Bi-Weekly Live Q&A Calls</span>
+                <span className="text-xs text-gray-500 font-mono">Bi-Weekly Live Q&A Calls</span>
               </div>
               <div className="flex items-start gap-3">
                 <Check className="w-4 h-4 text-gold shrink-0 mt-0.5" />
-                <span className="text-xs text-gray-400 font-mono">Access to "WIP" Feedback Channel</span>
+                <span className="text-xs text-gray-500 font-mono">Access to "WIP" Feedback Channel</span>
               </div>
               <div className="flex items-start gap-3">
                 <Check className="w-4 h-4 text-gold shrink-0 mt-0.5" />
-                <span className="text-xs text-gray-400 font-mono">Early Access to New Asset Packs</span>
+                <span className="text-xs text-gray-500 font-mono">Early Access to New Asset Packs</span>
               </div>
               <div className="flex items-start gap-3">
                 <Check className="w-4 h-4 text-gold shrink-0 mt-0.5" />
-                <span className="text-xs text-gray-400 font-mono">Guest Lectures from Industry Pros</span>
+                <span className="text-xs text-gray-500 font-mono">Guest Lectures from Industry Pros</span>
               </div>
             </div>
 
@@ -99,7 +99,7 @@ export default function Mentorship() {
 
             <div className="flex justify-between items-start mb-2">
               <div>
-                <h2 className="font-header font-bold text-lg md:text-xl text-white tracking-wide" data-testid="text-tier2-title">EXECUTIVE PRODUCER</h2>
+                <h2 className="font-header text-lg text-white mb-4" data-testid="text-tier2-title">EXECUTIVE PRODUCER</h2>
                 <p className="text-[10px] font-mono text-gold tracking-widest mt-1">1-ON-1 MENTORSHIP</p>
               </div>
               <span className="font-header font-bold text-4xl md:text-5xl text-white/10 leading-none">02</span>
@@ -108,19 +108,19 @@ export default function Mentorship() {
             <div className="space-y-4 mt-8 mb-10">
               <div className="flex items-start gap-3">
                 <Check className="w-4 h-4 text-gold shrink-0 mt-0.5" />
-                <span className="text-xs text-gray-400 font-mono">Weekly 1-on-1 Strategy Calls (Zoom)</span>
+                <span className="text-xs text-gray-500 font-mono">Weekly 1-on-1 Strategy Calls (Zoom)</span>
               </div>
               <div className="flex items-start gap-3">
                 <Check className="w-4 h-4 text-gold shrink-0 mt-0.5" />
-                <span className="text-xs text-gray-400 font-mono">Direct Line Slack/WhatsApp Access</span>
+                <span className="text-xs text-gray-500 font-mono">Direct Line Slack/WhatsApp Access</span>
               </div>
               <div className="flex items-start gap-3">
                 <Check className="w-4 h-4 text-gold shrink-0 mt-0.5" />
-                <span className="text-xs text-gray-400 font-mono">"Done For You" Career Roadmap</span>
+                <span className="text-xs text-gray-500 font-mono">"Done For You" Career Roadmap</span>
               </div>
               <div className="flex items-start gap-3">
                 <Check className="w-4 h-4 text-gold shrink-0 mt-0.5" />
-                <span className="text-xs text-gray-400 font-mono">Personal Intro to Agency Clients</span>
+                <span className="text-xs text-gray-500 font-mono">Personal Intro to Agency Clients</span>
               </div>
             </div>
 
