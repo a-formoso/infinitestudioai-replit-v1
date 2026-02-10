@@ -43,15 +43,7 @@ export default function CourseLevel2() {
   });
 
   const handleEnroll = () => {
-    if (!userData?.data?.user) {
-      setLocation("/checkout?course=advanced-ai-cinematography");
-      return;
-    }
-
-    const courseId = courseData?.data?.course?.id;
-    if (courseId) {
-      enrollMutation.mutate(courseId.toString());
-    }
+    setLocation("/checkout?course=advanced-ai-cinematography");
   };
 
   const toggleModule = (index: number) => {
@@ -86,9 +78,9 @@ export default function CourseLevel2() {
                       <span className="flex items-center gap-2"><div className="w-2 h-2 bg-signalOrange rounded-full"></div> 30 LESSONS</span>
                       <span className="flex items-center gap-2"><div className="w-2 h-2 bg-signalOrange rounded-full"></div> PRO CERTIFICATION</span>
                   </div>
-                  <a href="#enroll" className="inline-block bg-white text-black px-8 py-4 text-sm font-header font-bold uppercase hover:bg-signalOrange hover:text-white transition-all duration-300 tracking-wider">
+                  <button onClick={handleEnroll} className="inline-block bg-white text-black px-8 py-4 text-sm font-header font-bold uppercase hover:bg-signalOrange hover:text-white transition-all duration-300 tracking-wider cursor-pointer" data-testid="button-hero-enroll">
                       Start Advanced Training
-                  </a>
+                  </button>
               </div>
 
               {/* Right: Video Preview Card */}
@@ -222,11 +214,10 @@ export default function CourseLevel2() {
                       
                       <button 
                         onClick={handleEnroll}
-                        disabled={enrollMutation.isPending}
                         data-testid="button-enroll"
-                        className="w-full bg-signalOrange text-black font-header font-bold text-sm uppercase py-4 hover:bg-white transition-all duration-300 tracking-wider mb-4 shadow-[0_0_20px_rgba(255,61,0,0.4)] disabled:opacity-50 disabled:cursor-not-allowed"
+                        className="w-full bg-signalOrange text-black font-header font-bold text-sm uppercase py-4 hover:bg-white transition-all duration-300 tracking-wider mb-4 shadow-[0_0_20px_rgba(255,61,0,0.4)] cursor-pointer"
                       >
-                          {enrollMutation.isPending ? "Enrolling..." : "Enroll Now"}
+                          Enroll Now
                       </button>
                       
                       <p className="text-[10px] text-gray-500 text-center font-mono mb-6">

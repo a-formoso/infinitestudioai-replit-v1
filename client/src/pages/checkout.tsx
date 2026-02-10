@@ -10,16 +10,17 @@ export default function Checkout() {
   const queryClient = useQueryClient();
   
   const searchParams = new URLSearchParams(window.location.search);
-  const courseSlug = searchParams.get("course") || "level-1";
+  const courseSlug = searchParams.get("course") || "";
   
   const { data: userData, isLoading: userLoading } = useQuery({
     queryKey: ["currentUser"],
     queryFn: getCurrentUser,
   });
 
-  const { data: courseData } = useQuery({
+  const { data: courseData, isLoading: courseLoading } = useQuery({
     queryKey: ["course", courseSlug],
     queryFn: () => getCourseBySlug(courseSlug),
+    enabled: !!courseSlug,
   });
 
   useEffect(() => {
@@ -49,13 +50,13 @@ export default function Checkout() {
 
   const handlePayment = (e: React.FormEvent) => {
     e.preventDefault();
-    const courseId = courseData?.data?.course?.id;
+    const courseId = course?.id;
     if (courseId) {
       enrollMutation.mutate(courseId.toString());
     }
   };
 
-  if (userLoading) {
+  if (userLoading || courseLoading) {
     return (
       <div className="min-h-screen bg-obsidian flex items-center justify-center">
         <div className="text-electricBlue font-mono text-sm animate-pulse">Loading...</div>
@@ -63,19 +64,29 @@ export default function Checkout() {
     );
   }
 
-  const isLevel2 = courseSlug === "level-2";
-  const courseName = isLevel2 ? "ADVANCED AI CINEMATOGRAPHY" : "MASTER THE GOOGLE ECOSYSTEM";
-  const courseLevel = isLevel2 ? "02" : "01";
-  const coursePrice = isLevel2 ? 199 : 149;
-  const accentColor = isLevel2 ? "signalOrange" : "electricBlue";
-  const gradientFrom = isLevel2 ? "orange-900/40" : "blue-900/40";
+  const course = courseData?.data?.course;
+
+  if (!course) {
+    return (
+      <div className="min-h-screen bg-obsidian flex flex-col items-center justify-center gap-4">
+        <div className="text-white font-header text-xl">Course not found</div>
+        <Link href="/academy" className="text-electricBlue text-sm font-mono hover:underline">Back to Academy</Link>
+      </div>
+    );
+  }
+
+  const courseName = course.title?.toUpperCase() || "COURSE";
+  const courseLevel = course.level === "specialist" ? "02" : "01";
+  const rawPrice = course.price ?? 149;
+  const coursePrice = Math.floor(typeof rawPrice === "string" ? parseFloat(rawPrice) : rawPrice);
+  const isSpecialist = course.level === "specialist";
+  const accentColor = isSpecialist ? "signalOrange" : "electricBlue";
+  const gradientFrom = isSpecialist ? "orange-900/40" : "blue-900/40";
 
   return (
     <div className="min-h-screen bg-obsidian text-offWhite font-body antialiased selection:bg-electricBlue selection:text-white overflow-x-hidden">
-      {/* GRID OVERLAY */}
       <div className="fixed inset-0 bg-grid-pattern bg-[size:40px_40px] opacity-20 pointer-events-none z-0"></div>
 
-      {/* NAV (Minimal for Checkout) */}
       <nav className="fixed top-0 w-full z-50 glass-panel border-b-0 border-b-glassBorder">
         <div className="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
           <Link href="/" className="font-header font-bold text-xl tracking-widest text-white flex items-center gap-2 hover:opacity-80 transition-opacity">
@@ -87,29 +98,25 @@ export default function Checkout() {
         </div>
       </nav>
 
-      {/* CHECKOUT CONTENT */}
       <section className="min-h-screen pt-32 pb-20 px-6 max-w-7xl mx-auto z-10 flex items-center justify-center">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 w-full">
           
-          {/* LEFT: ORDER SUMMARY */}
           <div className="lg:col-span-5 order-2 lg:order-1">
             <div className="glass-panel p-8 sticky top-32">
-              <h2 className="font-header text-lg text-white mb-6 border-b border-white/10 pb-4">ORDER SUMMARY</h2>
+              <h2 className="font-header text-lg text-white mb-6 border-b border-white/10 pb-4" data-testid="text-order-summary">ORDER SUMMARY</h2>
               
-              {/* Product Card */}
               <div className="flex gap-4 mb-6">
                 <div className="w-24 h-24 bg-gray-900 overflow-hidden relative shrink-0">
                   <div className={`absolute inset-0 bg-gradient-to-br from-${gradientFrom} to-black`}></div>
                   <div className="absolute bottom-2 left-2 font-header font-bold text-lg text-white z-10">{courseLevel}</div>
                 </div>
                 <div>
-                  <h3 className="font-header text-sm text-white mb-1">{courseName}</h3>
-                  <p className="text-xs text-gray-400 font-mono mb-2">Level {courseLevel} Certification</p>
-                  <span className={`font-header font-bold text-${accentColor}`}>${coursePrice}.00</span>
+                  <h3 className="font-header text-sm text-white mb-1" data-testid="text-course-name">{courseName}</h3>
+                  <p className="text-xs text-gray-400 font-mono mb-2">Level {courseLevel} · {course.level === "specialist" ? "Specialist" : "Foundation"}</p>
+                  <span className={`font-header font-bold text-${accentColor}`} data-testid="text-course-price">${coursePrice}.00</span>
                 </div>
               </div>
 
-              {/* Line Items */}
               <div className="space-y-3 border-t border-white/10 pt-6 mb-6 text-xs font-mono text-gray-400">
                 <div className="flex justify-between">
                   <span>Subtotal</span>
@@ -121,22 +128,19 @@ export default function Checkout() {
                 </div>
                 <div className="flex justify-between text-white font-bold text-sm pt-4 border-t border-white/10 mt-4">
                   <span>TOTAL DUE</span>
-                  <span>${coursePrice}.00</span>
+                  <span data-testid="text-total">${coursePrice}.00</span>
                 </div>
               </div>
 
-              {/* Trust Badges */}
               <div className="bg-white/5 p-4 rounded text-center space-y-2">
                 <div className="text-[10px] font-mono text-gray-400 uppercase tracking-widest mb-2">Guaranteed Safe Checkout</div>
                 <div className="flex justify-center gap-4 opacity-50 grayscale hover:grayscale-0 transition-all">
-                  {/* Placeholder Credit Card Icons */}
                   <div className="w-8 h-5 bg-white/20 rounded"></div>
                   <div className="w-8 h-5 bg-white/20 rounded"></div>
                   <div className="w-8 h-5 bg-white/20 rounded"></div>
                 </div>
               </div>
               
-              {/* Testimonial Mini */}
               <div className="mt-8 text-center">
                 <p className="text-xs text-gray-400 italic mb-2">"The only AI course that actually teaches you how to direct, not just prompt."</p>
                 <p className={`text-[10px] font-header text-${accentColor}`}>- SARAH J., FILMMAKER</p>
@@ -144,13 +148,11 @@ export default function Checkout() {
             </div>
           </div>
 
-          {/* RIGHT: PAYMENT DETAILS */}
           <div className="lg:col-span-7 order-1 lg:order-2">
             <div className="glass-panel p-8 md:p-12">
-              <h1 className="font-header text-2xl text-white mb-8">COMPLETE ENROLLMENT</h1>
+              <h1 className="font-header text-2xl text-white mb-8" data-testid="text-checkout-title">COMPLETE ENROLLMENT</h1>
               
               <form className="space-y-6" onSubmit={handlePayment}>
-                {/* Email Section */}
                 <div>
                   <label className="block text-xs font-header text-gray-400 mb-2">ACCOUNT EMAIL</label>
                   <input 
@@ -162,7 +164,6 @@ export default function Checkout() {
                   />
                 </div>
 
-                {/* Card Section */}
                 <div className="pt-4 border-t border-white/10">
                   <label className="block text-xs font-header text-gray-400 mb-4">PAYMENT METHOD</label>
                   
@@ -208,18 +209,17 @@ export default function Checkout() {
                   </div>
                 </div>
 
-                {/* Submit Button */}
                 <button 
                   type="submit"
                   disabled={enrollMutation.isPending}
                   data-testid="button-pay"
-                  className={`w-full ${isLevel2 ? 'bg-signalOrange' : 'bg-electricBlue'} text-white font-header font-bold text-sm uppercase py-5 hover:bg-white hover:text-black transition-all duration-300 tracking-wider shadow-[0_0_30px_rgba(41,98,255,0.3)] mt-8 disabled:opacity-50 disabled:cursor-not-allowed`}
+                  className={`w-full ${isSpecialist ? 'bg-signalOrange' : 'bg-electricBlue'} text-white font-header font-bold text-sm uppercase py-5 hover:bg-white hover:text-black transition-all duration-300 tracking-wider shadow-[0_0_30px_rgba(41,98,255,0.3)] mt-8 disabled:opacity-50 disabled:cursor-not-allowed`}
                 >
                   {enrollMutation.isPending ? "Processing..." : `Pay $${coursePrice}.00 & Access Course`}
                 </button>
                 
                 <p className="text-[10px] text-center text-gray-500 mt-4">
-                  By clicking the button above, you agree to our <a href="#" className={`text-${accentColor} underline`}>Terms of Service</a> and <a href="#" className={`text-${accentColor} underline`}>Privacy Policy</a>.
+                  By clicking the button above, you agree to our <Link href="/terms" className={`text-${accentColor} underline`}>Terms of Service</Link> and <Link href="/privacy" className={`text-${accentColor} underline`}>Privacy Policy</Link>.
                 </p>
               </form>
             </div>
@@ -228,7 +228,6 @@ export default function Checkout() {
         </div>
       </section>
 
-      {/* FOOTER (Minimal) */}
       <footer className="bg-black border-t border-white/10 py-8 text-center relative z-20">
         <div className="text-[10px] text-gray-600 font-mono">
           © 2025 INFINITE STUDIO. SECURE PAYMENT PROCESSING.
