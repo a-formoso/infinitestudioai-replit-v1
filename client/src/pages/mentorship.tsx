@@ -23,8 +23,8 @@ export default function Mentorship() {
       <Navbar />
       <section className="relative z-10 pt-40 pb-20 px-6">
         <div className="max-w-7xl mx-auto text-center">
-          <div className="inline-flex items-center border border-gold/50 px-3 py-1 mb-6" data-testid="badge-applications">
-            <span className="text-[10px] font-mono text-gold tracking-widest uppercase leading-none">ACCEPTING APPLICATIONS FOR {nextQuarter}</span>
+          <div className="inline-block border border-gold/50 px-3 py-1 mb-6 text-[10px] font-mono text-gold tracking-widest uppercase" data-testid="badge-applications">
+            ACCEPTING APPLICATIONS FOR {nextQuarter}
           </div>
 
           <h1 className="font-header text-4xl md:text-6xl font-bold text-white leading-tight mb-2" data-testid="text-hero-title">
