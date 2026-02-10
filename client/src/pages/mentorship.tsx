@@ -27,10 +27,10 @@ export default function Mentorship() {
             <span className="text-[10px] font-header font-bold text-gold tracking-[0.3em]">ACCEPTING APPLICATIONS FOR {nextQuarter}</span>
           </div>
 
-          <h1 className="font-header font-bold text-3xl md:text-5xl text-white mb-2 tracking-tight leading-none" data-testid="text-hero-title">
+          <h1 className="font-header text-3xl md:text-5xl font-bold text-white leading-tight mb-2" data-testid="text-hero-title">
             THE INNER
           </h1>
-          <h1 className="font-header font-bold text-3xl md:text-5xl text-gold mb-8 tracking-tight leading-none">
+          <h1 className="font-header text-3xl md:text-5xl font-bold text-gold leading-tight mb-6">
             CIRCLE
           </h1>
 
