@@ -6,13 +6,11 @@ export default function Mentorship() {
   return (
     <div className="min-h-screen bg-obsidian text-offWhite font-body antialiased selection:bg-electricBlue selection:text-white overflow-x-hidden">
       <div className="fixed inset-0 bg-grid-pattern bg-[size:40px_40px] opacity-20 pointer-events-none z-0"></div>
-
       <Navbar />
-
       <section className="relative z-10 pt-32 pb-20 px-6">
         <div className="max-w-5xl mx-auto text-center">
           <div className="inline-block border border-gold/50 px-4 py-1.5 mb-8" data-testid="badge-applications">
-            <span className="text-[10px] font-header font-bold text-gold tracking-[0.3em]">ACCEPTING APPLICATIONS FOR Q4 2026</span>
+            <span className="text-[10px] font-header font-bold text-gold tracking-[0.3em]">APPLICATIONS OPEN FOR Q4</span>
           </div>
 
           <h1 className="font-header font-bold text-3xl md:text-5xl text-white mb-2 tracking-tight leading-none" data-testid="text-hero-title">
@@ -27,7 +25,6 @@ export default function Mentorship() {
           </p>
         </div>
       </section>
-
       <section className="relative z-10 pb-32 px-6">
         <div className="max-w-5xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-8">
 
@@ -135,7 +132,6 @@ export default function Mentorship() {
 
         </div>
       </section>
-
       <Footer />
     </div>
   );
