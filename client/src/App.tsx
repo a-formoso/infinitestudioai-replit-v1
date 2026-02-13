@@ -1,4 +1,5 @@
-import { Switch, Route } from "wouter";
+import { Switch, Route, useLocation } from "wouter";
+import { useEffect, useRef } from "react";
 import { queryClient } from "./lib/queryClient";
 import { QueryClientProvider } from "@tanstack/react-query";
 import { Toaster } from "@/components/ui/toaster";
@@ -24,6 +25,31 @@ import Terms from "@/pages/terms";
 import CourseNanoBanana from "@/pages/course-nano-banana";
 import CourseAIFilmmakingEcosystem from "@/pages/course-ai-filmmaking-ecosystem";
 import Mentorship from "@/pages/mentorship";
+
+const SCROLL_RESTORED_PATHS = [
+  "/academy/foundation/master-the-google-ecosystem",
+  "/academy/specialist/advanced-ai-cinematography",
+  "/academy/foundation/nano-banana-mastery",
+  "/academy/specialist/google-ai-filmmaking-ecosystem",
+  "/dashboard",
+  "/course/player",
+];
+
+function ScrollToTop() {
+  const [location] = useLocation();
+  const prevLocation = useRef(location);
+
+  useEffect(() => {
+    if (prevLocation.current !== location) {
+      if (!SCROLL_RESTORED_PATHS.includes(location)) {
+        window.scrollTo(0, 0);
+      }
+      prevLocation.current = location;
+    }
+  }, [location]);
+
+  return null;
+}
 
 function Router() {
   return (
@@ -58,6 +84,7 @@ function App() {
     <QueryClientProvider client={queryClient}>
       <TooltipProvider>
         <Toaster />
+        <ScrollToTop />
         <Router />
       </TooltipProvider>
     </QueryClientProvider>

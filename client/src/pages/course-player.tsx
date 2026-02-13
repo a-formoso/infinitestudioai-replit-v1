@@ -2,10 +2,20 @@ import { Footer } from "@/components/footer";
 import { useState } from "react";
 import { Link } from "wouter";
 import { Play, Check, Circle, ChevronLeft, ChevronRight, Download, MessageSquare, Maximize, Minimize } from "lucide-react";
+import { useQuery } from "@tanstack/react-query";
+import { getCurrentUser } from "@/lib/api";
+import { useScrollRestoration } from "@/hooks/use-scroll-restoration";
 
 export default function CoursePlayer() {
   const [activeTab, setActiveTab] = useState("overview");
   const [isFullscreen, setIsFullscreen] = useState(false);
+
+  const { data: userData } = useQuery({
+    queryKey: ["currentUser"],
+    queryFn: getCurrentUser,
+  });
+
+  useScrollRestoration(userData === undefined ? undefined : !!userData?.data?.user);
 
   return (
       <div className="min-h-screen bg-obsidian text-offWhite font-body antialiased selection:bg-electricBlue selection:text-white overflow-x-hidden">

@@ -6,6 +6,7 @@ import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { useLocation } from "wouter";
 import { getCurrentUser, getCourseBySlug, enrollInCourse } from "@/lib/api";
 import { useToast } from "@/hooks/use-toast";
+import { useScrollRestoration } from "@/hooks/use-scroll-restoration";
 
 export default function CourseLevel2() {
   const [openModule, setOpenModule] = useState<number | null>(null);
@@ -17,6 +18,8 @@ export default function CourseLevel2() {
     queryKey: ["currentUser"],
     queryFn: getCurrentUser,
   });
+
+  useScrollRestoration(userData === undefined ? undefined : !!userData?.data?.user);
 
   const { data: courseData } = useQuery({
     queryKey: ["course", "advanced-ai-cinematography"],

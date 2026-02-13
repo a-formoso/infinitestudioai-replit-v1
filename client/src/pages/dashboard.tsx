@@ -5,6 +5,7 @@ import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { getEnrollments, getCurrentUser, updateProfile } from "@/lib/api";
 import { useState } from "react";
 import { useToast } from "@/hooks/use-toast";
+import { useScrollRestoration } from "@/hooks/use-scroll-restoration";
 import {
   Dialog,
   DialogContent,
@@ -29,6 +30,8 @@ export default function Dashboard() {
   });
 
   const user = userData?.data?.user;
+
+  useScrollRestoration(userData === undefined ? undefined : !!user);
 
   const updateMutation = useMutation({
     mutationFn: ({ username, email }: { username: string; email: string }) =>
