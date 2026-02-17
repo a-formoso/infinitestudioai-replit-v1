@@ -41,7 +41,9 @@ export default function Academy() {
 
       <Navbar />
 
-      <header className="relative pt-40 pb-12 px-6 z-10">
+      <header className="relative pt-40 pb-12 px-6 z-10 overflow-hidden">
+          <div className="absolute inset-0 bg-[url('/images/academy-hero.jpeg')] bg-cover bg-center bg-no-repeat opacity-40"></div>
+          <div className="absolute inset-0 bg-gradient-to-b from-obsidian/60 via-obsidian/70 to-obsidian"></div>
           <div className="relative max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
               <div>
                   <div className="inline-block border border-signalOrange/50 px-3 py-1 mb-6 text-[10px] font-mono text-signalOrange tracking-widest uppercase">
@@ -74,12 +76,10 @@ export default function Academy() {
               </div>
               
               <div className="hidden md:flex justify-end relative">
-                  <div className="w-80 h-80 rounded-full border border-white/10 flex items-center justify-center relative overflow-hidden">
-                      <div className="absolute inset-0 bg-[url('/images/academy-hero.jpeg')] bg-cover bg-center opacity-40"></div>
-                      <div className="absolute inset-0 bg-gradient-to-b from-obsidian/40 via-transparent to-obsidian/60"></div>
+                  <div className="w-80 h-80 rounded-full border border-white/10 flex items-center justify-center relative">
                       <div className="absolute w-64 h-64 rounded-full border border-electricBlue/30 animate-[spin_10s_linear_infinite]"></div>
                       <div className="absolute w-48 h-48 rounded-full border border-signalOrange/30 animate-[spin_15s_linear_infinite_reverse]"></div>
-                      <div className="font-header text-5xl text-white relative z-10">∞</div>
+                      <div className="font-header text-5xl text-white">∞</div>
                   </div>
               </div>
           </div>
