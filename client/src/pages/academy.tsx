@@ -42,8 +42,8 @@ export default function Academy() {
       <Navbar />
 
       <header className="relative pt-40 pb-12 px-6 z-10 overflow-hidden">
-          <div className="absolute inset-0 bg-[url('/images/academy-hero.jpeg')] bg-cover bg-center bg-no-repeat opacity-40"></div>
-          <div className="absolute inset-0 bg-gradient-to-b from-obsidian/60 via-obsidian/70 to-obsidian"></div>
+          <div className="absolute top-40 left-0 right-0 bottom-0 bg-[url('/images/academy-hero.jpeg')] bg-cover bg-center bg-no-repeat opacity-40"></div>
+          <div className="absolute top-40 left-0 right-0 bottom-0 bg-gradient-to-b from-obsidian/60 via-obsidian/70 to-obsidian"></div>
           <div className="relative max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
               <div>
                   <div className="inline-block border border-signalOrange/50 px-3 py-1 mb-6 text-[10px] font-mono text-signalOrange tracking-widest uppercase">
