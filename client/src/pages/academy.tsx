@@ -75,13 +75,6 @@ export default function Academy() {
                   </div>
               </div>
               
-              <div className="hidden md:flex justify-end relative">
-                  <div className="w-80 h-80 rounded-full border border-white/10 flex items-center justify-center relative">
-                      <div className="absolute w-64 h-64 rounded-full border border-electricBlue/30 animate-[spin_10s_linear_infinite]"></div>
-                      <div className="absolute w-48 h-48 rounded-full border border-signalOrange/30 animate-[spin_15s_linear_infinite_reverse]"></div>
-                      <div className="font-header text-5xl text-white">∞</div>
-                  </div>
-              </div>
           </div>
       </header>
 
