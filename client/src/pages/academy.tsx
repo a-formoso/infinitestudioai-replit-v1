@@ -44,8 +44,7 @@ export default function Academy() {
       <header className="relative pt-40 pb-12 px-6 z-10 overflow-hidden">
           <div className="absolute inset-0 bg-[url('/images/academy-hero.jpeg')] bg-cover bg-center bg-no-repeat opacity-30"></div>
           <div className="absolute inset-0 bg-gradient-to-b from-obsidian/60 via-obsidian/70 to-obsidian"></div>
-          <div className="relative max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
-              <div>
+          <div className="relative max-w-7xl mx-auto">
                   <div className="inline-block border border-signalOrange/50 px-3 py-1 mb-6 text-[10px] font-mono text-signalOrange tracking-widest uppercase">
                       The Curriculum
                   </div>
@@ -53,7 +52,7 @@ export default function Academy() {
                       DIRECT THE<br />
                       <span className="text-transparent bg-clip-text bg-gradient-to-r from-signalOrange to-yellow-500">ALGORITHM</span>
                   </h1>
-                  <p className="text-lg text-gray-400 max-w-xl leading-relaxed font-light mb-8">
+                  <p className="text-lg text-gray-400 max-w-2xl leading-relaxed font-light mb-8">
                       From your first prompt to your final render. A structured education path for the modern AI Filmmaker.
                   </p>
                   
@@ -73,8 +72,6 @@ export default function Academy() {
                         </button>
                       ))}
                   </div>
-              </div>
-              
           </div>
       </header>
 
