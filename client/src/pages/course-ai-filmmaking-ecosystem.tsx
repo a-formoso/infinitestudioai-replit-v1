@@ -81,11 +81,11 @@ export default function CourseAIFilmmakingEcosystem() {
                       <span className="text-transparent bg-clip-text bg-gradient-to-r from-signalOrange to-yellow-500">FILMMAKING ECOSYSTEM</span>
                   </h1>
                   <p className="text-base text-gray-400 leading-relaxed font-light mb-8 max-w-lg">
-                      The "Shared Brain" Workflow. Run a Hollywood Studio from your Browser. A comprehensive deep-dive connecting Gemini, ImageFX, and Veo into a single pipeline.
+                      The complete AI Production Pipeline. From Narrative Seed to Final Render — learn to direct Gemini, ImageFX, and Veo as a single production system using the Operations Guide methodology.
                   </p>
                   <div className="flex flex-wrap gap-4 mb-8 text-xs font-mono text-gray-500">
                       <span className="flex items-center gap-2"><div className="w-2 h-2 bg-signalOrange rounded-full"></div> 8.0 HOURS CONTENT</span>
-                      <span className="flex items-center gap-2"><div className="w-2 h-2 bg-signalOrange rounded-full"></div> 18 LESSONS</span>
+                      <span className="flex items-center gap-2"><div className="w-2 h-2 bg-signalOrange rounded-full"></div> 14 LESSONS</span>
                       <span className="flex items-center gap-2"><div className="w-2 h-2 bg-signalOrange rounded-full"></div> PRO CERTIFICATION</span>
                   </div>
                   <button onClick={handleEnroll} className="inline-block bg-white text-black px-8 py-4 text-sm font-header font-bold uppercase hover:bg-signalOrange hover:text-white transition-all duration-300 tracking-wider cursor-pointer" data-testid="button-hero-enroll">
@@ -116,23 +116,23 @@ export default function CourseAIFilmmakingEcosystem() {
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                           <div className="glass-panel p-6 hover:border-white/20 transition-colors">
                               <div className="text-signalOrange mb-2 text-xl">01</div>
-                              <h4 className="font-bold text-white text-sm mb-2">The "Shared Brain" Pipeline</h4>
-                              <p className="text-xs text-gray-400 leading-relaxed">Connect Gemini, ImageFX, and Veo into a single seamless production workflow from script to final render.</p>
+                              <h4 className="font-bold text-white text-sm mb-2">The Writer's Room</h4>
+                              <p className="text-xs text-gray-400 leading-relaxed">Build the complete narrative blueprint — from Narrative Seed extraction through logline stress-testing, character sheets, and structured scene breakdowns.</p>
                           </div>
                           <div className="glass-panel p-6 hover:border-white/20 transition-colors">
                               <div className="text-signalOrange mb-2 text-xl">02</div>
-                              <h4 className="font-bold text-white text-sm mb-2">Visual Development</h4>
-                              <p className="text-xs text-gray-400 leading-relaxed">Master ImageFX diffusion, mixboarding, and aspect ratio math for cinema-grade visual assets.</p>
+                              <h4 className="font-bold text-white text-sm mb-2">The Art Department</h4>
+                              <p className="text-xs text-gray-400 leading-relaxed">Lock your visual identity with Style Presets, Digital LUTs, and the Master Prompt Formula. Build reusable cinematic lexicons for mathematical consistency.</p>
                           </div>
                           <div className="glass-panel p-6 hover:border-white/20 transition-colors">
                               <div className="text-signalOrange mb-2 text-xl">03</div>
-                              <h4 className="font-bold text-white text-sm mb-2">Directing in Veo 3.1</h4>
-                              <p className="text-xs text-gray-400 leading-relaxed">Camera movement, physics directing, acting prompts, and the "Invisible Cut" stitching technique.</p>
+                              <h4 className="font-bold text-white text-sm mb-2">The Shooting</h4>
+                              <p className="text-xs text-gray-400 leading-relaxed">Master the Veo "Delta" logic, the Physics Trinity (Weight, Tempo, Texture), Ghost Track dialogue synthesis, and timeline assembly.</p>
                           </div>
                           <div className="glass-panel p-6 hover:border-white/20 transition-colors">
                               <div className="text-signalOrange mb-2 text-xl">04</div>
-                              <h4 className="font-bold text-white text-sm mb-2">Sound & Post-Production</h4>
-                              <p className="text-xs text-gray-400 leading-relaxed">Score generation with MusicFX, AI voice synthesis, lip-syncing, and final assembly for delivery.</p>
+                              <h4 className="font-bold text-white text-sm mb-2">The Operations Guide</h4>
+                              <p className="text-xs text-gray-400 leading-relaxed">Every phase produces real deliverables — Narrative_Seed.md, CharacterSheets, CinematicLexicon.json, VeoMotion.json, and EditManifest.json.</p>
                           </div>
                       </div>
                   </div>
@@ -147,18 +147,23 @@ export default function CourseAIFilmmakingEcosystem() {
                                 onClick={() => toggleModule(1)}
                                 data-testid="button-toggle-module-1"
                               >
-                                  <span className="font-header text-sm text-white">MODULE 1: PRE-PRODUCTION (THE WRITER'S ROOM)</span>
-                                  <span className="text-signalOrange text-xl">{openModule === 1 ? '−' : '+'}</span>
+                                  <span className="font-header text-sm text-white">MODULE 1: THE WRITER'S ROOM</span>
+                                  <span className="text-xs font-mono text-gray-500 ml-2 hidden md:inline">PHASE 1 — FOUNDATION</span>
+                                  <span className="text-signalOrange text-xl ml-auto">{openModule === 1 ? '−' : '+'}</span>
                               </button>
-                              <div className={`transition-all duration-300 ease-out overflow-hidden ${openModule === 1 ? 'max-h-[500px] opacity-100' : 'max-h-0 opacity-0'}`}>
+                              <div className={`transition-all duration-300 ease-out overflow-hidden ${openModule === 1 ? 'max-h-[600px] opacity-100' : 'max-h-0 opacity-0'}`}>
                                   <div className="bg-black/30 p-6">
                                     <ul className="space-y-3 text-xs text-gray-400 font-mono">
-                                        <li className="flex gap-4"><span className="text-white">1.1</span> Intro to Gemini 3.0: Why It's the Best LLM for Filmmakers</li>
-                                        <li className="flex gap-4"><span className="text-white">1.2</span> The "4-Element" Prompt Structure: Context, Subject, Art Style, Technical Specs</li>
-                                        <li className="flex gap-4"><span className="text-white">1.3</span> Building Custom "Gems": Screenwriter & Cinematographer Personas</li>
-                                        <li className="flex gap-4"><span className="text-white">1.4</span> Deep Research with NotebookLM: Analyzing Scripts for Structure & Pacing</li>
-                                        <li className="flex gap-4"><span className="text-white">1.5</span> The "Bible" Generation: Characters, Locations & Lore Document</li>
+                                        <li className="flex gap-4"><span className="text-white">1.1</span> The Narrative Seed: The Creative Interview & Data Locking</li>
+                                        <li className="flex gap-4"><span className="text-white">1.2</span> The "What If" Engine: Logline Stress-Testing with 3 Angles</li>
+                                        <li className="flex gap-4"><span className="text-white">1.3</span> Framework Selection & Narrative Expansion</li>
+                                        <li className="flex gap-4"><span className="text-white">1.4</span> Casting the Digital Soul: Character Sheets & Visual Synthesis</li>
+                                        <li className="flex gap-4"><span className="text-white">1.5</span> The Scene Breakdown: Synopsis to Structured JSON</li>
+                                        <li className="flex gap-4"><span className="text-white">1.6</span> The Dialogue Pass: Voice, Subtext & Performance Directives</li>
                                     </ul>
+                                    <div className="mt-4 pt-4 border-t border-white/5 text-[10px] text-gray-600 font-mono">
+                                        DELIVERABLES: Narrative_Seed.md · Synopsis_v1.md · CharacterSheet.md · SceneBreakdown.json
+                                    </div>
                                   </div>
                               </div>
                           </div>
@@ -169,17 +174,21 @@ export default function CourseAIFilmmakingEcosystem() {
                                 onClick={() => toggleModule(2)}
                                 data-testid="button-toggle-module-2"
                               >
-                                  <span className="font-header text-sm text-white">MODULE 2: VISUAL DEVELOPMENT (THE ART DEPT)</span>
-                                  <span className="text-signalOrange text-xl">{openModule === 2 ? '−' : '+'}</span>
+                                  <span className="font-header text-sm text-white">MODULE 2: THE ART DEPARTMENT</span>
+                                  <span className="text-xs font-mono text-gray-500 ml-2 hidden md:inline">PHASE 2 — PRE-PRODUCTION</span>
+                                  <span className="text-signalOrange text-xl ml-auto">{openModule === 2 ? '−' : '+'}</span>
                               </button>
                               <div className={`transition-all duration-300 ease-out overflow-hidden ${openModule === 2 ? 'max-h-[500px] opacity-100' : 'max-h-0 opacity-0'}`}>
                                   <div className="bg-black/30 p-6">
                                     <ul className="space-y-3 text-xs text-gray-400 font-mono">
-                                        <li className="flex gap-4"><span className="text-white">2.1</span> Mastering ImageFX: Understanding the Diffusion Model</li>
-                                        <li className="flex gap-4"><span className="text-white">2.2</span> Mixboarding: Creating Mood Boards the AI Understands</li>
-                                        <li className="flex gap-4"><span className="text-white">2.3</span> "Product Stills" Workflow: High-Fidelity Props & Assets</li>
-                                        <li className="flex gap-4"><span className="text-white">2.4</span> Aspect Ratio Math: Preparing Images for Veo (16:9 vs 2.35:1)</li>
+                                        <li className="flex gap-4"><span className="text-white">2.1</span> The Audiovisual Blueprint: Building Style Presets & Digital LUTs</li>
+                                        <li className="flex gap-4"><span className="text-white">2.2</span> The Cinematic Lexicon: Master Prompt Formula & Variable Mapping</li>
+                                        <li className="flex gap-4"><span className="text-white">2.3</span> The Palette Limit: Constraining Your Film to 3–4 Visual Presets</li>
+                                        <li className="flex gap-4"><span className="text-white">2.4</span> Shot Design & Keyframes: Camera Plans and Start/End Frame Pairs</li>
                                     </ul>
+                                    <div className="mt-4 pt-4 border-t border-white/5 text-[10px] text-gray-600 font-mono">
+                                        DELIVERABLES: CinematicLexicon.json · Scene_XX_ShotList.json · Keyframe Prompts
+                                    </div>
                                   </div>
                               </div>
                           </div>
@@ -190,39 +199,21 @@ export default function CourseAIFilmmakingEcosystem() {
                                 onClick={() => toggleModule(3)}
                                 data-testid="button-toggle-module-3"
                               >
-                                  <span className="font-header text-sm text-white">MODULE 3: PRODUCTION (THE DIRECTOR'S CHAIR)</span>
-                                  <span className="text-signalOrange text-xl">{openModule === 3 ? '−' : '+'}</span>
+                                  <span className="font-header text-sm text-white">MODULE 3: THE SHOOTING</span>
+                                  <span className="text-xs font-mono text-gray-500 ml-2 hidden md:inline">PHASE 3 — PRODUCTION</span>
+                                  <span className="text-signalOrange text-xl ml-auto">{openModule === 3 ? '−' : '+'}</span>
                               </button>
                               <div className={`transition-all duration-300 ease-out overflow-hidden ${openModule === 3 ? 'max-h-[500px] opacity-100' : 'max-h-0 opacity-0'}`}>
                                   <div className="bg-black/30 p-6">
                                     <ul className="space-y-3 text-xs text-gray-400 font-mono">
-                                        <li className="flex gap-4"><span className="text-white">3.1</span> Veo 3.1 Architecture: How the Video Model Interprets Static Images</li>
-                                        <li className="flex gap-4"><span className="text-white">3.2</span> Camera Movement 101: Pan, Tilt, Truck, Jib & Rack Focus</li>
-                                        <li className="flex gap-4"><span className="text-white">3.3</span> Physics Directing: Controlling Fluid Dynamics, Smoke & Gravity</li>
-                                        <li className="flex gap-4"><span className="text-white">3.4</span> The "Invisible Cut": Stitching 5-Second Clips Into Seamless Sequences</li>
-                                        <li className="flex gap-4"><span className="text-white">3.5</span> Acting Direction: Controlling Micro-Expressions via Prompts</li>
+                                        <li className="flex gap-4"><span className="text-white">3.1</span> The Veo Prompt Structure: "Delta" Logic — Describing Motion, Not Appearance</li>
+                                        <li className="flex gap-4"><span className="text-white">3.2</span> The Motion Package: Physics Trinity (Weight, Tempo, Texture)</li>
+                                        <li className="flex gap-4"><span className="text-white">3.3</span> The Ghost Track Method: Dialogue Synthesis & Lip-Sync</li>
+                                        <li className="flex gap-4"><span className="text-white">3.4</span> The Edit Assembly: Layering Video, Dialogue, SFX, Ambience & Score</li>
                                     </ul>
-                                  </div>
-                              </div>
-                          </div>
-
-                          <div className="border border-white/10 bg-white/5">
-                              <button 
-                                className="w-full text-left p-6 flex justify-between items-center hover:bg-white/5 transition-colors" 
-                                onClick={() => toggleModule(4)}
-                                data-testid="button-toggle-module-4"
-                              >
-                                  <span className="font-header text-sm text-white">MODULE 4: POST-PRODUCTION & SOUND (THE EDIT BAY)</span>
-                                  <span className="text-signalOrange text-xl">{openModule === 4 ? '−' : '+'}</span>
-                              </button>
-                              <div className={`transition-all duration-300 ease-out overflow-hidden ${openModule === 4 ? 'max-h-[500px] opacity-100' : 'max-h-0 opacity-0'}`}>
-                                  <div className="bg-black/30 p-6">
-                                    <ul className="space-y-3 text-xs text-gray-400 font-mono">
-                                        <li className="flex gap-4"><span className="text-white">4.1</span> Sonic Synthesis with MusicFX: Generating the Score</li>
-                                        <li className="flex gap-4"><span className="text-white">4.2</span> Voice & Dialogue: Using Google AI Studio (TTS) for Narration</li>
-                                        <li className="flex gap-4"><span className="text-white">4.3</span> Lip-Syncing: Matching Generated Audio to Veo Video</li>
-                                        <li className="flex gap-4"><span className="text-white">4.4</span> Final Assembly: Handoff to Premiere/DaVinci for Delivery</li>
-                                    </ul>
+                                    <div className="mt-4 pt-4 border-t border-white/5 text-[10px] text-gray-600 font-mono">
+                                        DELIVERABLES: VeoMotion.json · Dialogue Audio · EditManifest.json
+                                    </div>
                                   </div>
                               </div>
                           </div>
