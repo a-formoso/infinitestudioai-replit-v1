@@ -60,17 +60,7 @@ export default function CourseAIFilmmakingEcosystem() {
 
       <Navbar />
 
-      <nav className="relative z-10 max-w-7xl mx-auto px-6 pt-24 pb-0" data-testid="breadcrumb-nav">
-        <ol className="flex items-center gap-1.5 text-[11px] font-mono text-gray-500">
-          <li><Link href="/academy" className="hover:text-white transition-colors">Academy</Link></li>
-          <li><ChevronRight className="w-3 h-3" /></li>
-          <li><Link href="/academy?filter=specialist" className="hover:text-white transition-colors">Specialist</Link></li>
-          <li><ChevronRight className="w-3 h-3" /></li>
-          <li className="text-white">The Google AI Filmmaking Ecosystem</li>
-        </ol>
-      </nav>
-
-      <header className="relative pt-8 pb-20 px-6 max-w-7xl mx-auto z-10">
+      <header className="relative pt-24 pb-20 px-6 max-w-7xl mx-auto z-10">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
               <div>
                   <div className="flex items-center gap-1.5 mb-6 text-[10px] font-mono text-gray-500 tracking-widest uppercase">
