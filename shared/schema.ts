@@ -25,6 +25,8 @@ export const courses = pgTable("courses", {
   lessonsCount: integer("lessons_count").notNull(),
   badge: text("badge"),
   color: text("color").notNull(),
+  status: text("status").notNull().default("published"),
+  imageUrl: text("image_url"),
   createdAt: timestamp("created_at").defaultNow().notNull(),
 });
 

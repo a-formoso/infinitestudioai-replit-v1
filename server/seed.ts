@@ -22,6 +22,7 @@ async function seed() {
           lessonsCount: 25,
           badge: "FOUNDATION",
           color: "electricBlue",
+          status: "published",
         },
         {
           title: "ADVANCED AI CINEMATOGRAPHY",
@@ -36,6 +37,7 @@ async function seed() {
           lessonsCount: 30,
           badge: "SPECIALIST",
           color: "signalOrange",
+          status: "published",
         },
         {
           title: "THE GOOGLE AI FILMMAKING ECOSYSTEM",
@@ -50,6 +52,7 @@ async function seed() {
           lessonsCount: 18,
           badge: "SPECIALIST",
           color: "signalOrange",
+          status: "published",
         },
         {
           title: "NANO BANANA MASTERY",
@@ -64,6 +67,55 @@ async function seed() {
           lessonsCount: 11,
           badge: "FOUNDATION",
           color: "electricBlue",
+          status: "published",
+        },
+        {
+          title: "SCORING WITH MUSICFX",
+          slug: "scoring-with-musicfx",
+          description:
+            "Learn to generate stems and mix your own soundtrack using Google's MusicFX. From ambient drones to full orchestral scores.",
+          shortDescription:
+            "Learn to generate stems and mix your own soundtrack.",
+          price: "79.00",
+          level: "Specialist",
+          duration: "2.5 HOURS",
+          lessonsCount: 8,
+          badge: "SPECIALIST",
+          color: "signalOrange",
+          status: "draft",
+          imageUrl: "https://images.unsplash.com/photo-1614726365723-49cfae96a6d6?q=80&w=2670&auto=format&fit=crop",
+        },
+        {
+          title: "EDITING IN GOOGLE VIDS",
+          slug: "editing-in-google-vids",
+          description:
+            "Post-production workflows for the AI era. Learn to assemble, cut, and deliver using Google's cloud-native editing tools.",
+          shortDescription:
+            "Post-production workflows for the AI era.",
+          price: "79.00",
+          level: "Foundation",
+          duration: "3.0 HOURS",
+          lessonsCount: 10,
+          badge: "FOUNDATION",
+          color: "electricBlue",
+          status: "draft",
+          imageUrl: "https://images.unsplash.com/photo-1635322966219-b75ed3a90533?q=80&w=2670&auto=format&fit=crop",
+        },
+        {
+          title: "THE BUSINESS OF AI FILM",
+          slug: "the-business-of-ai-film",
+          description:
+            "How to price, pitch, and sell AI video services. Build a sustainable creative business around AI filmmaking.",
+          shortDescription:
+            "How to price, pitch, and sell AI video services.",
+          price: "99.00",
+          level: "Specialist",
+          duration: "2.0 HOURS",
+          lessonsCount: 6,
+          badge: "SPECIALIST",
+          color: "signalOrange",
+          status: "draft",
+          imageUrl: "https://images.unsplash.com/photo-1550751827-4bd374c3f58b?q=80&w=2670&auto=format&fit=crop",
         },
       ])
       .returning();

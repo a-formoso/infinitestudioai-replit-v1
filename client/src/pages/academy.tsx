@@ -22,9 +22,12 @@ export default function Academy() {
     queryFn: getCourses,
   });
 
-  const courses = data?.data?.courses || [];
+  const allCourses = data?.data?.courses || [];
 
-  const filteredCourses = courses.filter((course: any) => {
+  const publishedCourses = allCourses.filter((course: any) => course.status === "published");
+  const draftCourses = allCourses.filter((course: any) => course.status === "draft");
+
+  const filteredCourses = publishedCourses.filter((course: any) => {
     if (activeFilter === "all") return true;
     if (activeFilter === "foundation") return course.level === "Foundation";
     if (activeFilter === "specialist") return course.level === "Specialist";
@@ -32,7 +35,7 @@ export default function Academy() {
   });
 
   const showCoreSection = activeFilter === "all" || activeFilter === "foundation" || activeFilter === "specialist";
-  const showWorkshops = activeFilter === "all" || activeFilter === "workshops";
+  const showComingSoon = activeFilter === "all" || activeFilter === "workshops";
 
   const filters: { label: string; value: Filter }[] = [
     { label: "ALL COURSES", value: "all" },
@@ -130,41 +133,25 @@ export default function Academy() {
               </div>
               )}
 
-              {showWorkshops && (
+              {showComingSoon && draftCourses.length > 0 && (
               <div className="mb-16">
                   <h2 className="font-header text-xl text-white mb-8 border-l-4 border-gray-600 pl-4">
-                      WORKSHOPS
+                      COMING SOON
                   </h2>
 
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                      
-                      <div className="glass-panel p-6 hover:border-white/30 transition-all duration-300 group cursor-pointer relative opacity-60 hover:opacity-100">
-                          <div className="absolute top-2 right-2 text-[10px] font-mono text-gray-500 border border-white/10 px-2 py-1">COMING SOON</div>
-                          <div className="h-32 bg-gray-800 mb-4 overflow-hidden relative grayscale group-hover:grayscale-0 transition-all">
-                               <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1614726365723-49cfae96a6d6?q=80&w=2670&auto=format&fit=crop')] bg-cover bg-center opacity-50"></div>
-                          </div>
-                          <h3 className="font-header text-sm text-white mb-2">SCORING WITH MUSICFX</h3>
-                          <p className="text-[10px] text-gray-400 font-mono mb-0">Learn to generate stems and mix your own soundtrack.</p>
-                      </div>
-
-                      <div className="glass-panel p-6 hover:border-white/30 transition-all duration-300 group cursor-pointer relative opacity-60 hover:opacity-100">
-                          <div className="absolute top-2 right-2 text-[10px] font-mono text-gray-500 border border-white/10 px-2 py-1">COMING SOON</div>
-                          <div className="h-32 bg-gray-800 mb-4 overflow-hidden relative grayscale group-hover:grayscale-0 transition-all">
-                               <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1635322966219-b75ed3a90533?q=80&w=2670&auto=format&fit=crop')] bg-cover bg-center opacity-50"></div>
-                          </div>
-                          <h3 className="font-header text-sm text-white mb-2">EDITING IN GOOGLE VIDS</h3>
-                          <p className="text-[10px] text-gray-400 font-mono mb-0">Post-production workflows for the AI era.</p>
-                      </div>
-
-                      <div className="glass-panel p-6 hover:border-white/30 transition-all duration-300 group cursor-pointer relative opacity-60 hover:opacity-100">
-                          <div className="absolute top-2 right-2 text-[10px] font-mono text-gray-500 border border-white/10 px-2 py-1">COMING SOON</div>
-                          <div className="h-32 bg-gray-800 mb-4 overflow-hidden relative grayscale group-hover:grayscale-0 transition-all">
-                               <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1550751827-4bd374c3f58b?q=80&w=2670&auto=format&fit=crop')] bg-cover bg-center opacity-50"></div>
-                          </div>
-                          <h3 className="font-header text-sm text-white mb-2">THE BUSINESS OF AI FILM</h3>
-                          <p className="text-[10px] text-gray-400 font-mono mb-0">How to price, pitch, and sell AI video services.</p>
-                      </div>
-
+                      {draftCourses.map((course: any) => (
+                        <div key={course.id} className="glass-panel p-6 hover:border-white/30 transition-all duration-300 group cursor-pointer relative opacity-60 hover:opacity-100" data-testid={`card-draft-${course.slug}`}>
+                            <div className={`absolute top-2 right-2 text-[10px] font-mono ${course.level === 'Specialist' ? 'text-signalOrange border-signalOrange/30' : 'text-electricBlue border-electricBlue/30'} border px-2 py-1`}>{course.level === 'Specialist' ? 'SPECIALIST' : 'FOUNDATION'}</div>
+                            <div className="h-32 bg-gray-800 mb-4 overflow-hidden relative grayscale group-hover:grayscale-0 transition-all">
+                                {course.imageUrl && (
+                                  <div className="absolute inset-0 bg-cover bg-center opacity-50" style={{ backgroundImage: `url(${course.imageUrl})` }}></div>
+                                )}
+                            </div>
+                            <h3 className="font-header text-sm text-white mb-2">{course.title}</h3>
+                            <p className="text-[10px] text-gray-400 font-mono mb-0">{course.shortDescription}</p>
+                        </div>
+                      ))}
                   </div>
               </div>
               )}
