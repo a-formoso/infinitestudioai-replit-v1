@@ -73,8 +73,10 @@ export default function CourseAIFilmmakingEcosystem() {
       <header className="relative pt-8 pb-20 px-6 max-w-7xl mx-auto z-10">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
               <div>
-                  <div className="inline-block border border-signalOrange/50 px-3 py-1 mb-6 text-[10px] font-mono text-signalOrange tracking-widest uppercase">
-                      Specialist Track
+                  <div className="flex items-center gap-1.5 mb-6 text-[10px] font-mono text-gray-500 tracking-widest uppercase">
+                      <Link href="/academy" className="hover:text-white transition-colors">Academy</Link>
+                      <ChevronRight className="w-3 h-3" />
+                      <Link href="/academy?filter=specialist" className="text-signalOrange hover:text-white transition-colors">Specialist</Link>
                   </div>
                   <h1 className="font-header text-3xl md:text-5xl font-bold text-white leading-tight mb-6">
                       THE GOOGLE AI<br />
