@@ -87,9 +87,8 @@ export default function Academy() {
               
               {showCoreSection && (
               <div className="mb-16">
-                  <h2 className="font-header text-xl text-white mb-8 border-l-4 border-white pl-4 flex items-center gap-4">
-                      CORE CERTIFICATION PATH
-                      <span className="text-[10px] font-mono text-gray-500 bg-white/5 px-2 py-1 rounded">MANDATORY</span>
+                  <h2 className="font-header text-xl text-white mb-8 border-l-4 border-white pl-4">
+                      CORE COURSES
                   </h2>
                   
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
@@ -133,9 +132,8 @@ export default function Academy() {
 
               {showWorkshops && (
               <div className="mb-16">
-                  <h2 className="font-header text-xl text-white mb-8 border-l-4 border-gray-600 pl-4 flex items-center gap-4">
-                      SPECIALIZED WORKSHOPS
-                      <span className="text-[10px] font-mono text-gray-500 bg-white/5 px-2 py-1 rounded">OPTIONAL</span>
+                  <h2 className="font-header text-xl text-white mb-8 border-l-4 border-gray-600 pl-4">
+                      WORKSHOPS
                   </h2>
 
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
