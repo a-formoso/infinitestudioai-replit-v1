@@ -38,10 +38,10 @@ export default function Academy() {
   const showComingSoon = activeFilter === "all" || activeFilter === "workshops";
 
   const filters: { label: string; value: Filter }[] = [
-    { label: "ALL COURSES", value: "all" },
+    { label: `ALL COURSES (${publishedCourses.length})`, value: "all" },
     { label: "FOUNDATION", value: "foundation" },
     { label: "SPECIALIST", value: "specialist" },
-    { label: "WORKSHOPS", value: "workshops" },
+    { label: "COMING SOON", value: "workshops" },
   ];
 
   return (
@@ -91,7 +91,7 @@ export default function Academy() {
               {showCoreSection && (
               <div className="mb-16">
                   <h2 className="font-header text-xl text-white mb-8 border-l-4 border-white pl-4">
-                      CORE COURSES
+                      LIVE COURSES
                   </h2>
                   
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
