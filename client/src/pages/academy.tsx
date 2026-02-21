@@ -7,8 +7,15 @@ import { useState } from "react";
 
 type Filter = "all" | "foundation" | "specialist" | "workshops";
 
+function getInitialFilter(): Filter {
+  const params = new URLSearchParams(window.location.search);
+  const filter = params.get("filter");
+  if (filter === "foundation" || filter === "specialist" || filter === "workshops") return filter;
+  return "all";
+}
+
 export default function Academy() {
-  const [activeFilter, setActiveFilter] = useState<Filter>("all");
+  const [activeFilter, setActiveFilter] = useState<Filter>(getInitialFilter);
 
   const { data, isLoading } = useQuery({
     queryKey: ["courses"],
