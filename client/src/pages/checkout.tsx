@@ -88,7 +88,7 @@ export default function Checkout() {
   }
 
   const courseName = course.title?.toUpperCase() || "COURSE";
-  const courseLevel = course.level === "specialist" ? "02" : "01";
+  const courseTier = course.level === "specialist" ? "Specialist" : "Foundation";
   const rawPrice = course.price ?? 149;
   const coursePrice = Math.floor(typeof rawPrice === "string" ? parseFloat(rawPrice) : rawPrice);
   const isSpecialist = course.level === "specialist";
@@ -120,11 +120,11 @@ export default function Checkout() {
               <div className="flex gap-4 mb-6">
                 <div className="w-24 h-24 bg-gray-900 overflow-hidden relative shrink-0">
                   <div className={`absolute inset-0 bg-gradient-to-br from-${gradientFrom} to-black`}></div>
-                  <div className="absolute bottom-2 left-2 font-header font-bold text-lg text-white z-10">{courseLevel}</div>
+                  <div className="absolute bottom-2 left-2 font-header font-bold text-[10px] text-white z-10 tracking-widest uppercase">{courseTier}</div>
                 </div>
                 <div>
                   <h3 className="font-header text-sm text-white mb-1" data-testid="text-course-name">{courseName}</h3>
-                  <p className="text-xs text-gray-400 font-mono mb-2">Level {courseLevel} · {course.level === "specialist" ? "Specialist" : "Foundation"}</p>
+                  <p className="text-xs text-gray-400 font-mono mb-2">{courseTier} Track</p>
                   <span className={`font-header font-bold text-${accentColor}`} data-testid="text-course-price">${coursePrice}.00</span>
                 </div>
               </div>
