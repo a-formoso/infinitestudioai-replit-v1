@@ -55,7 +55,7 @@ export default function Home() {
     queryKey: ["courses"],
     queryFn: getCourses,
   });
-  const featuredCourses = (coursesData?.data?.courses || []).slice(0, 2);
+  const featuredCourses = (coursesData?.data?.courses || []).filter((c: any) => c.status === "published").slice(0, 2);
 
   const nextSlide = () => {
     setCurrentSlide((prev) => (prev + 1) % projects.length);
