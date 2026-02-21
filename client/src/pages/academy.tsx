@@ -142,7 +142,7 @@ export default function Academy() {
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                       {draftCourses.map((course: any) => (
                         <div key={course.id} className="glass-panel p-6 hover:border-white/30 transition-all duration-300 group cursor-pointer relative opacity-60 hover:opacity-100" data-testid={`card-draft-${course.slug}`}>
-                            <div className={`absolute top-2 right-2 text-[10px] font-mono ${course.level === 'Specialist' ? 'text-signalOrange border-signalOrange/30' : 'text-electricBlue border-electricBlue/30'} border px-2 py-1`}>{course.level === 'Specialist' ? 'SPECIALIST' : 'FOUNDATION'}</div>
+                            <div className={`absolute top-2 right-2 z-10 text-[10px] font-mono ${course.level === 'Specialist' ? 'text-signalOrange border-signalOrange/30' : 'text-electricBlue border-electricBlue/30'} border px-2 py-1`}>{course.level === 'Specialist' ? 'SPECIALIST' : 'FOUNDATION'}</div>
                             <div className="h-32 bg-gray-800 mb-4 overflow-hidden relative grayscale group-hover:grayscale-0 transition-all">
                                 {course.imageUrl && (
                                   <div className="absolute inset-0 bg-cover bg-center opacity-50" style={{ backgroundImage: `url(${course.imageUrl})` }}></div>
