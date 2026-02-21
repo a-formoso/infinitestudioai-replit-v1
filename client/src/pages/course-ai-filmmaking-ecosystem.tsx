@@ -251,7 +251,7 @@ export default function CourseAIFilmmakingEcosystem() {
                               <Check className="w-4 h-4 text-signalOrange" /> Complete Project Files & Prompts
                           </li>
                           <li className="flex items-center gap-3">
-                              <Check className="w-4 h-4 text-signalOrange" /> Private Discord Access
+                              <Check className="w-4 h-4 text-signalOrange" /> Private WhatsApp Access
                           </li>
                           <li className="flex items-center gap-3">
                               <Check className="w-4 h-4 text-signalOrange" /> Industry Certification
