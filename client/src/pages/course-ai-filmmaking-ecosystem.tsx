@@ -64,9 +64,7 @@ export default function CourseAIFilmmakingEcosystem() {
         <ol className="flex items-center gap-1.5 text-[11px] font-mono text-gray-500">
           <li><Link href="/academy" className="hover:text-white transition-colors">Academy</Link></li>
           <li><ChevronRight className="w-3 h-3" /></li>
-          <li><Link href="/academy?filter=specialist" className="hover:text-white transition-colors">Specialist</Link></li>
-          <li><ChevronRight className="w-3 h-3" /></li>
-          <li className="text-white">The Google AI Filmmaking Ecosystem</li>
+          <li className="text-white">Specialist</li>
         </ol>
       </nav>
 
