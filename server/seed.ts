@@ -22,7 +22,7 @@ async function seed() {
           lessonsCount: 30,
           badge: "FOUNDATION",
           color: "electricBlue",
-          status: "published",
+          status: "draft",
         },
         {
           title: "THE GOOGLE AI FILMMAKING ECOSYSTEM",
@@ -69,22 +69,6 @@ async function seed() {
           color: "signalOrange",
           status: "draft",
           imageUrl: "https://images.unsplash.com/photo-1614726365723-49cfae96a6d6?q=80&w=2670&auto=format&fit=crop",
-        },
-        {
-          title: "EDITING IN GOOGLE VIDS",
-          slug: "editing-in-google-vids",
-          description:
-            "Post-production workflows for the AI era. Learn to assemble, cut, and deliver using Google's cloud-native editing tools.",
-          shortDescription:
-            "Post-production workflows for the AI era.",
-          price: "79.00",
-          level: "Foundation",
-          duration: "3.0 HOURS",
-          lessonsCount: 10,
-          badge: "FOUNDATION",
-          color: "electricBlue",
-          status: "draft",
-          imageUrl: "https://images.unsplash.com/photo-1635322966219-b75ed3a90533?q=80&w=2670&auto=format&fit=crop",
         },
         {
           title: "THE BUSINESS OF AI FILM",
