@@ -228,10 +228,7 @@ export default function CourseNanoBanana() {
                               <Check className="w-4 h-4 text-electricBlue" /> Character Sheet Templates
                           </li>
                           <li className="flex items-center gap-3">
-                              <Check className="w-4 h-4 text-electricBlue" /> Private Discord Access
-                          </li>
-                          <li className="flex items-center gap-3">
-                              <Check className="w-4 h-4 text-electricBlue" /> Certificate of Completion
+                              <Check className="w-4 h-4 text-electricBlue" /> Private WhatsApp Access
                           </li>
                       </ul>
                   </div>

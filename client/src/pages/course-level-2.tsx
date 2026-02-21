@@ -236,10 +236,7 @@ export default function CourseLevel2() {
                               <Check className="w-4 h-4 text-electricBlue" /> 'Physics of Dreams' eBook
                           </li>
                           <li className="flex items-center gap-3">
-                              <Check className="w-4 h-4 text-electricBlue" /> Private Discord Access
-                          </li>
-                          <li className="flex items-center gap-3">
-                              <Check className="w-4 h-4 text-electricBlue" /> Industry Certification
+                              <Check className="w-4 h-4 text-electricBlue" /> Private WhatsApp Access
                           </li>
                       </ul>
                   </div>
