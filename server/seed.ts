@@ -17,11 +17,11 @@ async function seed() {
           shortDescription:
             'Mastering physics, compound camera moves, and the "Invisible Cut" in Veo 3.1. Deep technical control.',
           price: "199.00",
-          level: "Specialist",
+          level: "Foundation",
           duration: "6.0 HOURS",
           lessonsCount: 30,
-          badge: "SPECIALIST",
-          color: "signalOrange",
+          badge: "FOUNDATION",
+          color: "electricBlue",
           status: "published",
         },
         {

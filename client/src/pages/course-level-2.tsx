@@ -54,7 +54,7 @@ export default function CourseLevel2() {
   };
 
   return (
-    <div className="min-h-screen bg-obsidian text-offWhite font-body antialiased selection:bg-signalOrange selection:text-white overflow-x-hidden">
+    <div className="min-h-screen bg-obsidian text-offWhite font-body antialiased selection:bg-electricBlue selection:text-white overflow-x-hidden">
       
       {/* GRID BACKGROUND OVERLAY */}
       <div className="fixed inset-0 bg-grid-pattern bg-[size:40px_40px] opacity-20 pointer-events-none z-0"></div>
@@ -65,7 +65,7 @@ export default function CourseLevel2() {
         <ol className="flex items-center gap-1.5 text-[11px] font-mono text-gray-500">
           <li><Link href="/academy" className="hover:text-white transition-colors">Academy</Link></li>
           <li><ChevronRight className="w-3 h-3" /></li>
-          <li><Link href="/academy?filter=specialist" className="hover:text-white transition-colors">Specialist</Link></li>
+          <li><Link href="/academy?filter=foundation" className="hover:text-white transition-colors">Foundation</Link></li>
           <li><ChevronRight className="w-3 h-3" /></li>
           <li className="text-white">Advanced AI Cinematography</li>
         </ol>
@@ -75,32 +75,32 @@ export default function CourseLevel2() {
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
               {/* Left: Text */}
               <div>
-                  <div className="inline-block border border-signalOrange/50 px-3 py-1 mb-6 text-[10px] font-mono text-signalOrange tracking-widest uppercase">
-                      Specialist Track
+                  <div className="inline-block border border-electricBlue/50 px-3 py-1 mb-6 text-[10px] font-mono text-electricBlue tracking-widest uppercase">
+                      Foundation Track
                   </div>
                   <h1 className="font-header text-3xl md:text-5xl font-bold text-white leading-tight mb-6">
                       ADVANCED AI<br />
-                      <span className="text-transparent bg-clip-text bg-gradient-to-r from-signalOrange to-yellow-500">CINEMATOGRAPHY</span>
+                      <span className="text-transparent bg-clip-text bg-gradient-to-r from-electricBlue to-cyan-400">CINEMATOGRAPHY</span>
                   </h1>
                   <p className="text-base text-gray-400 leading-relaxed font-light mb-8 max-w-lg">
                       You know how to generate. Now learn how to direct. Master the physics engine, compound camera moves, and the "Invisible Cut" in Veo 3.1.
                   </p>
                   <div className="flex flex-wrap gap-4 mb-8 text-xs font-mono text-gray-500">
-                      <span className="flex items-center gap-2"><div className="w-2 h-2 bg-signalOrange rounded-full"></div> 6.0 HOURS CONTENT</span>
-                      <span className="flex items-center gap-2"><div className="w-2 h-2 bg-signalOrange rounded-full"></div> 30 LESSONS</span>
-                      <span className="flex items-center gap-2"><div className="w-2 h-2 bg-signalOrange rounded-full"></div> PRO CERTIFICATION</span>
+                      <span className="flex items-center gap-2"><div className="w-2 h-2 bg-electricBlue rounded-full"></div> 6.0 HOURS CONTENT</span>
+                      <span className="flex items-center gap-2"><div className="w-2 h-2 bg-electricBlue rounded-full"></div> 30 LESSONS</span>
+                      <span className="flex items-center gap-2"><div className="w-2 h-2 bg-electricBlue rounded-full"></div> PRO CERTIFICATION</span>
                   </div>
-                  <button onClick={handleEnroll} className="inline-block bg-white text-black px-8 py-4 text-sm font-header font-bold uppercase hover:bg-signalOrange hover:text-white transition-all duration-300 tracking-wider cursor-pointer" data-testid="button-hero-enroll">
-                      Start Advanced Training
+                  <button onClick={handleEnroll} className="inline-block bg-white text-black px-8 py-4 text-sm font-header font-bold uppercase hover:bg-electricBlue hover:text-white transition-all duration-300 tracking-wider cursor-pointer" data-testid="button-hero-enroll">
+                      Start Training
                   </button>
               </div>
 
               {/* Right: Video Preview Card */}
-              <div className="relative glass-panel p-2 group border-signalOrange/20">
+              <div className="relative glass-panel p-2 group border-electricBlue/20">
                   <div className="aspect-video bg-gray-900 relative overflow-hidden">
                       {/* Placeholder for Course Trailer */}
-                      <div className="absolute inset-0 bg-gradient-to-br from-orange-900/40 to-black flex items-center justify-center group-hover:scale-105 transition-transform duration-500">
-                          <div className="w-16 h-16 rounded-full bg-white/10 backdrop-blur-sm flex items-center justify-center border border-white/20 group-hover:bg-signalOrange group-hover:border-signalOrange transition-colors cursor-pointer">
+                      <div className="absolute inset-0 bg-gradient-to-br from-blue-900/40 to-black flex items-center justify-center group-hover:scale-105 transition-transform duration-500">
+                          <div className="w-16 h-16 rounded-full bg-white/10 backdrop-blur-sm flex items-center justify-center border border-white/20 group-hover:bg-electricBlue group-hover:border-electricBlue transition-colors cursor-pointer">
                               <span className="text-2xl ml-1 text-white">▶</span>
                           </div>
                       </div>
@@ -119,25 +119,25 @@ export default function CourseLevel2() {
                   
                   {/* WHAT YOU LEARN */}
                   <div className="mb-16">
-                      <h3 className="font-header text-xl text-white mb-8 border-l-4 border-signalOrange pl-4">DEEP DIVE MODULES</h3>
+                      <h3 className="font-header text-xl text-white mb-8 border-l-4 border-electricBlue pl-4">DEEP DIVE MODULES</h3>
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                           <div className="glass-panel p-6 hover:border-white/20 transition-colors">
-                              <div className="text-signalOrange mb-2 text-xl">01</div>
+                              <div className="text-electricBlue mb-2 text-xl">01</div>
                               <h4 className="font-bold text-white text-sm mb-2">The Physics Engine</h4>
                               <p className="text-xs text-gray-400 leading-relaxed">How to prompt for weight, fluid dynamics, and momentum so objects don't float.</p>
                           </div>
                           <div className="glass-panel p-6 hover:border-white/20 transition-colors">
-                              <div className="text-signalOrange mb-2 text-xl">02</div>
+                              <div className="text-electricBlue mb-2 text-xl">02</div>
                               <h4 className="font-bold text-white text-sm mb-2">Compound Camera Moves</h4>
                               <p className="text-xs text-gray-400 leading-relaxed">Executing the "Dolly Zoom", Rack Focus, and Parallax shifts for 3D depth.</p>
                           </div>
                           <div className="glass-panel p-6 hover:border-white/20 transition-colors">
-                              <div className="text-signalOrange mb-2 text-xl">03</div>
+                              <div className="text-electricBlue mb-2 text-xl">03</div>
                               <h4 className="font-bold text-white text-sm mb-2">Complex Acting</h4>
                               <p className="text-xs text-gray-400 leading-relaxed">Directing micro-expressions and sequencing actions with [0:02] timestamps.</p>
                           </div>
                           <div className="glass-panel p-6 hover:border-white/20 transition-colors">
-                              <div className="text-signalOrange mb-2 text-xl">04</div>
+                              <div className="text-electricBlue mb-2 text-xl">04</div>
                               <h4 className="font-bold text-white text-sm mb-2">The Invisible Cut</h4>
                               <p className="text-xs text-gray-400 leading-relaxed">Match cuts and masking to stitch generations into continuous long takes.</p>
                           </div>
@@ -156,7 +156,7 @@ export default function CourseLevel2() {
                                 onClick={() => toggleModule(1)}
                               >
                                   <span className="font-header text-sm text-white">MODULE 1: PHYSICS & DYNAMICS</span>
-                                  <span className="text-signalOrange text-xl">{openModule === 1 ? '−' : '+'}</span>
+                                  <span className="text-electricBlue text-xl">{openModule === 1 ? '−' : '+'}</span>
                               </button>
                               <div className={`transition-all duration-300 ease-out overflow-hidden ${openModule === 1 ? 'max-h-[500px] opacity-100' : 'max-h-0 opacity-0'}`}>
                                   <div className="bg-black/30 p-6">
@@ -176,7 +176,7 @@ export default function CourseLevel2() {
                                 onClick={() => toggleModule(2)}
                               >
                                   <span className="font-header text-sm text-white">MODULE 2: ADVANCED CAMERA</span>
-                                  <span className="text-signalOrange text-xl">{openModule === 2 ? '−' : '+'}</span>
+                                  <span className="text-electricBlue text-xl">{openModule === 2 ? '−' : '+'}</span>
                               </button>
                               <div className={`transition-all duration-300 ease-out overflow-hidden ${openModule === 2 ? 'max-h-[500px] opacity-100' : 'max-h-0 opacity-0'}`}>
                                   <div className="bg-black/30 p-6">
@@ -196,7 +196,7 @@ export default function CourseLevel2() {
                                 onClick={() => toggleModule(3)}
                               >
                                   <span className="font-header text-sm text-white">MODULE 3: EDITING & VFX</span>
-                                  <span className="text-signalOrange text-xl">{openModule === 3 ? '−' : '+'}</span>
+                                  <span className="text-electricBlue text-xl">{openModule === 3 ? '−' : '+'}</span>
                               </button>
                               <div className={`transition-all duration-300 ease-out overflow-hidden ${openModule === 3 ? 'max-h-[500px] opacity-100' : 'max-h-0 opacity-0'}`}>
                                   <div className="bg-black/30 p-6">
@@ -217,37 +217,37 @@ export default function CourseLevel2() {
               <div className="lg:col-span-4 space-y-8">
                   
                   {/* Sticky Enrollment Card */}
-                  <div className="glass-panel p-8 sticky top-24 border-t-2 border-t-signalOrange">
+                  <div className="glass-panel p-8 sticky top-24 border-t-2 border-t-electricBlue">
                       <div className="text-center mb-6">
                           <span className="text-xs font-mono text-gray-400 line-through">$349</span>
                           <h2 className="text-4xl font-header font-bold text-white mt-2">$199</h2>
-                          <span className="text-[10px] font-mono text-signalOrange bg-signalOrange/10 px-2 py-1 rounded mt-2 inline-block">PRO CERTIFICATION</span>
+                          <span className="text-[10px] font-mono text-electricBlue bg-electricBlue/10 px-2 py-1 rounded mt-2 inline-block">FOUNDATION CERTIFICATION</span>
                       </div>
                       
                       <button 
                         onClick={handleEnroll}
                         data-testid="button-enroll"
-                        className="w-full bg-signalOrange text-black font-header font-bold text-sm uppercase py-4 hover:bg-white transition-all duration-300 tracking-wider mb-4 shadow-[0_0_20px_rgba(255,61,0,0.4)] cursor-pointer"
+                        className="w-full bg-electricBlue text-white font-header font-bold text-sm uppercase py-4 hover:bg-white hover:text-black transition-all duration-300 tracking-wider mb-4 shadow-[0_0_20px_rgba(41,98,255,0.4)] cursor-pointer"
                       >
                           Enroll Now
                       </button>
                       
                       <p className="text-[10px] text-gray-500 text-center font-mono mb-6">
-                          PREREQUISITE: LEVEL 01 OR PORTFOLIO REVIEW
+                          NO PREREQUISITE REQUIRED
                       </p>
 
                       <ul className="space-y-4 text-xs text-gray-400 font-mono border-t border-white/10 pt-6">
                           <li className="flex items-center gap-3">
-                              <Check className="w-4 h-4 text-signalOrange" /> 6.0 Hours of Advanced Training
+                              <Check className="w-4 h-4 text-electricBlue" /> 6.0 Hours of Training
                           </li>
                           <li className="flex items-center gap-3">
-                              <Check className="w-4 h-4 text-signalOrange" /> 'Physics of Dreams' eBook
+                              <Check className="w-4 h-4 text-electricBlue" /> 'Physics of Dreams' eBook
                           </li>
                           <li className="flex items-center gap-3">
-                              <Check className="w-4 h-4 text-signalOrange" /> Private Discord Access
+                              <Check className="w-4 h-4 text-electricBlue" /> Private Discord Access
                           </li>
                           <li className="flex items-center gap-3">
-                              <Check className="w-4 h-4 text-signalOrange" /> Industry Certification
+                              <Check className="w-4 h-4 text-electricBlue" /> Industry Certification
                           </li>
                       </ul>
                   </div>

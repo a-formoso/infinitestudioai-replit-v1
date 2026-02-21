@@ -26,7 +26,7 @@ import CourseAIFilmmakingEcosystem from "@/pages/course-ai-filmmaking-ecosystem"
 import Mentorship from "@/pages/mentorship";
 
 const SCROLL_RESTORED_PATHS = [
-  "/academy/specialist/advanced-ai-cinematography",
+  "/academy/foundation/advanced-ai-cinematography",
   "/academy/foundation/nano-banana-mastery",
   "/academy/specialist/google-ai-filmmaking-ecosystem",
   "/dashboard",
@@ -65,7 +65,7 @@ function Router() {
       <Route path="/checkout" component={Checkout} />
       <Route path="/support" component={Support} />
       <Route path="/academy" component={Academy} />
-      <Route path="/academy/specialist/advanced-ai-cinematography" component={CourseLevel2} />
+      <Route path="/academy/foundation/advanced-ai-cinematography" component={CourseLevel2} />
       <Route path="/academy/foundation/nano-banana-mastery" component={CourseNanoBanana} />
       <Route path="/academy/specialist/google-ai-filmmaking-ecosystem" component={CourseAIFilmmakingEcosystem} />
       <Route path="/mentorship" component={Mentorship} />
