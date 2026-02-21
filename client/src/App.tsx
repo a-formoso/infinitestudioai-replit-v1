@@ -7,7 +7,6 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import NotFound from "@/pages/not-found";
 import Home from "@/pages/home";
 import Academy from "@/pages/academy";
-import CourseLevel1 from "@/pages/course-level-1";
 import CourseLevel2 from "@/pages/course-level-2";
 import Dashboard from "@/pages/dashboard";
 import CoursePlayer from "@/pages/course-player";
@@ -27,7 +26,6 @@ import CourseAIFilmmakingEcosystem from "@/pages/course-ai-filmmaking-ecosystem"
 import Mentorship from "@/pages/mentorship";
 
 const SCROLL_RESTORED_PATHS = [
-  "/academy/foundation/master-the-google-ecosystem",
   "/academy/specialist/advanced-ai-cinematography",
   "/academy/foundation/nano-banana-mastery",
   "/academy/specialist/google-ai-filmmaking-ecosystem",
@@ -67,7 +65,6 @@ function Router() {
       <Route path="/checkout" component={Checkout} />
       <Route path="/support" component={Support} />
       <Route path="/academy" component={Academy} />
-      <Route path="/academy/foundation/master-the-google-ecosystem" component={CourseLevel1} />
       <Route path="/academy/specialist/advanced-ai-cinematography" component={CourseLevel2} />
       <Route path="/academy/foundation/nano-banana-mastery" component={CourseNanoBanana} />
       <Route path="/academy/specialist/google-ai-filmmaking-ecosystem" component={CourseAIFilmmakingEcosystem} />

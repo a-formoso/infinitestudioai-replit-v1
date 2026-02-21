@@ -207,14 +207,14 @@ export default function Links() {
 
             {/* 2. CORE COURSE (MAIN REVENUE) */}
             <Link
-              href="/academy/foundation/master-the-google-ecosystem"
+              href="/academy/specialist/google-ai-filmmaking-ecosystem"
               className="glass-btn glow-blue rounded-xl p-4 flex items-center gap-4 group animate-fade-in-up"
               style={{ animationDelay: "0.3s" }}
             >
-              <div className="w-12 h-12 rounded-lg bg-electricBlue/10 flex items-center justify-center shrink-0 border border-electricBlue/20">
+              <div className="w-12 h-12 rounded-lg bg-signalOrange/10 flex items-center justify-center shrink-0 border border-signalOrange/20">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
-                  className="h-6 w-6 text-electricBlue"
+                  className="h-6 w-6 text-signalOrange"
                   fill="none"
                   viewBox="0 0 24 24"
                   stroke="currentColor"
@@ -234,14 +234,14 @@ export default function Links() {
                 </svg>
               </div>
               <div className="flex-grow">
-                <h2 className="font-header text-xs text-white group-hover:text-electricBlue transition-colors mb-1">
-                  MASTER THE ECOSYSTEM
+                <h2 className="font-header text-xs text-white group-hover:text-signalOrange transition-colors mb-1">
+                  THE AI FILMMAKING ECOSYSTEM
                 </h2>
                 <p className="text-[10px] text-gray-400 font-mono">
                   The Complete Google AI Course
                 </p>
               </div>
-              <div className="text-electricBlue opacity-0 group-hover:opacity-100 transition-opacity">
+              <div className="text-signalOrange opacity-0 group-hover:opacity-100 transition-opacity">
                 <ArrowRight className="w-4 h-4" />
               </div>
             </Link>

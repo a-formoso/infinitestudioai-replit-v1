@@ -837,9 +837,9 @@ export default function AdminDashboard() {
             <tbody className="divide-y divide-white/5 font-mono">
               <tr className="hover:bg-white/5 transition-colors">
                 <td className="p-4 text-white">sarah_j_films</td>
-                <td className="p-4">Level 01 Certification</td>
+                <td className="p-4">AI Filmmaking Ecosystem</td>
                 <td className="p-4"><span className="bg-green-500/20 text-green-500 px-2 py-1 rounded">PAID</span></td>
-                <td className="p-4 text-right">$149.00</td>
+                <td className="p-4 text-right">$249.00</td>
               </tr>
               <tr className="hover:bg-white/5 transition-colors">
                 <td className="p-4 text-white">mike_vfx_pro</td>
@@ -855,9 +855,9 @@ export default function AdminDashboard() {
               </tr>
               <tr className="hover:bg-white/5 transition-colors">
                 <td className="p-4 text-white">guest_user_22</td>
-                <td className="p-4">Level 01 Certification</td>
+                <td className="p-4">Nano Banana Mastery</td>
                 <td className="p-4"><span className="bg-red-500/20 text-red-500 px-2 py-1 rounded">FAILED</span></td>
-                <td className="p-4 text-right">$149.00</td>
+                <td className="p-4 text-right">$129.00</td>
               </tr>
             </tbody>
           </table>
