@@ -86,7 +86,7 @@ export default function CourseAIFilmmakingEcosystem() {
                   <div className="flex flex-wrap gap-4 mb-8 text-xs font-mono text-gray-500">
                       <span className="flex items-center gap-2"><div className="w-2 h-2 bg-signalOrange rounded-full"></div> 8.0 HOURS</span>
                       <span className="flex items-center gap-2"><div className="w-2 h-2 bg-signalOrange rounded-full"></div> 14 LESSONS</span>
-                      <span className="flex items-center gap-2"><div className="w-2 h-2 bg-signalOrange rounded-full"></div> CERTIFICATION</span>
+                      <span className="flex items-center gap-2"><div className="w-2 h-2 bg-signalOrange rounded-full"></div> LIFETIME ACCESS</span>
                   </div>
                   <button onClick={handleEnroll} className="inline-block bg-white text-black px-8 py-4 text-sm font-header font-bold uppercase hover:bg-signalOrange hover:text-white transition-all duration-300 tracking-wider cursor-pointer" data-testid="button-hero-enroll">
                       Start Advanced Training
