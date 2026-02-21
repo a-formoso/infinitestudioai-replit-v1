@@ -1,9 +1,9 @@
 import { Navbar } from "@/components/navbar";
 import { Footer } from "@/components/footer";
 import { useState } from "react";
-import { Check } from "lucide-react";
+import { Check, ChevronRight } from "lucide-react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { useLocation } from "wouter";
+import { useLocation, Link } from "wouter";
 import { getCurrentUser, getCourseBySlug, enrollInCourse } from "@/lib/api";
 import { useToast } from "@/hooks/use-toast";
 import { useScrollRestoration } from "@/hooks/use-scroll-restoration";
@@ -61,8 +61,17 @@ export default function CourseLevel2() {
 
       <Navbar />
 
-      {/* HERO HEADER */}
-      <header className="relative pt-32 pb-20 px-6 max-w-7xl mx-auto z-10">
+      <nav className="relative z-10 max-w-7xl mx-auto px-6 pt-24 pb-0" data-testid="breadcrumb-nav">
+        <ol className="flex items-center gap-1.5 text-[11px] font-mono text-gray-500">
+          <li><Link href="/academy" className="hover:text-white transition-colors">Academy</Link></li>
+          <li><ChevronRight className="w-3 h-3" /></li>
+          <li><Link href="/academy" className="hover:text-white transition-colors">Specialist</Link></li>
+          <li><ChevronRight className="w-3 h-3" /></li>
+          <li className="text-white">Advanced AI Cinematography</li>
+        </ol>
+      </nav>
+
+      <header className="relative pt-8 pb-20 px-6 max-w-7xl mx-auto z-10">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
               {/* Left: Text */}
               <div>
