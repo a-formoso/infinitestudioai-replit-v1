@@ -153,7 +153,7 @@ export default function Dashboard() {
                         <div className="p-8 relative">
                             <div className="flex justify-between items-start mb-4">
                                 <div>
-                                    <h3 className="font-header text-xl text-white mb-1">MASTER THE GOOGLE ECOSYSTEM</h3>
+                                    <h3 className="font-header text-xl text-white mb-1">THE GOOGLE AI FILMMAKING ECOSYSTEM</h3>
                                     <p className="text-xs text-gray-400 font-mono">Module 3.2: The "Ingredients" Workflow</p>
                                 </div>
                                 <span className="text-electricBlue font-mono text-xl font-bold">65%</span>

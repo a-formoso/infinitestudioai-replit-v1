@@ -66,7 +66,7 @@ export function Hero() {
               
               <h3 className="text-xl font-heading font-medium text-white mb-4 tracking-wide uppercase">The Academy</h3>
               <p className="text-muted-foreground text-sm leading-relaxed mb-8 max-w-[90%]">
-                Stop prompting blindly. Master the Google Filmmaking Ecosystem from Gemini to Veo.
+                Stop prompting blindly. Learn the full AI filmmaking pipeline from Gemini to Veo.
               </p>
               
               <Button className="bg-[#FF4400] hover:bg-[#FF4400]/90 text-white rounded-none uppercase text-xs font-bold tracking-widest px-8">

@@ -29,7 +29,7 @@ export default function CoursePlayer() {
                         <ChevronLeft className="w-4 h-4" /> DASHBOARD
                     </Link>
                     <div className="h-4 w-px bg-white/10"></div>
-                    <h1 className="text-sm font-header font-bold text-white tracking-wider">MASTER THE GOOGLE ECOSYSTEM</h1>
+                    <h1 className="text-sm font-header font-bold text-white tracking-wider">THE GOOGLE AI FILMMAKING ECOSYSTEM</h1>
                 </div>
                 <div className="flex items-center gap-6">
                     <span className="text-[10px] font-mono text-electricBlue hidden md:block">3.2 THE "INGREDIENTS" WORKFLOW</span>

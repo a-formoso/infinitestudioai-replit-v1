@@ -85,11 +85,11 @@ export default function AdminDashboard() {
   const initialTab = searchParams.get("tab") || "dashboard";
   const [activeTab, setActiveTab] = useState(initialTab);
   const [courseView, setCourseView] = useState<"list" | "editor" | "preview">("list");
-  const [expandedCourseId, setExpandedCourseId] = useState<string | null>("course-1");
+  const [expandedCourseId, setExpandedCourseId] = useState<string | null>("course-2");
   const [expandedModuleId, setExpandedModuleId] = useState<string | null>(null);
   const [selectedLessonId, setSelectedLessonId] = useState<string>("1.1");
   const [logs, setLogs] = useState<string[]>([]);
-  const [editorCourseTitle, setEditorCourseTitle] = useState("MASTER THE GOOGLE ECOSYSTEM");
+  const [editorCourseTitle, setEditorCourseTitle] = useState("THE GOOGLE AI FILMMAKING ECOSYSTEM");
   const terminalRef = useRef<HTMLDivElement>(null);
 
   // State for Lessons Data
@@ -100,26 +100,38 @@ export default function AdminDashboard() {
 
   const [coursesList, setCoursesList] = useState<Course[]>([
     {
-      id: "course-1",
-      title: "MASTER THE GOOGLE ECOSYSTEM",
-      code: "L1",
-      color: "blue-900",
+      id: "course-2",
+      title: "ADVANCED AI CINEMATOGRAPHY",
+      code: "AC",
+      color: "orange-900",
+      lastUpdated: "1d ago",
+      students: "1,105",
+      price: "$199",
+      status: "LIVE",
+      modules: [],
+      lessons: {}
+    },
+    {
+      id: "course-3",
+      title: "THE GOOGLE AI FILMMAKING ECOSYSTEM",
+      code: "FE",
+      color: "orange-900",
       lastUpdated: "2h ago",
       students: "3,420",
-      price: "$149",
+      price: "$249",
       status: "LIVE",
       modules: INITIAL_MODULES,
       lessons: INITIAL_LESSONS
     },
     {
-      id: "course-2",
-      title: "ADVANCED AI CINEMATOGRAPHY",
-      code: "L2",
-      color: "orange-900",
-      lastUpdated: "1d ago",
-      students: "1,105",
-      price: "$199",
-      status: "DRAFT",
+      id: "course-4",
+      title: "NANO BANANA MASTERY",
+      code: "NB",
+      color: "blue-900",
+      lastUpdated: "3d ago",
+      students: "2,180",
+      price: "$129",
+      status: "LIVE",
       modules: [],
       lessons: {}
     }
@@ -128,9 +140,9 @@ export default function AdminDashboard() {
   const [editorCourseId, setEditorCourseId] = useState<string | null>(null);
 
   const [studentsList, setStudentsList] = useState<Student[]>([
-    { id: "s1", initials: "SJ", name: "Sarah Jenkins", email: "sarah.j@example.com", avatarColor: "purple-900", enrolledCourse: "Master the Ecosystem (L1)", progress: 85, lastActive: "2 hours ago", status: "ACTIVE" },
-    { id: "s2", initials: "MD", name: "Mike Davis", email: "mike.dfx@studio.net", avatarColor: "orange-900", enrolledCourse: "Advanced Cinematography (L2)", progress: 12, lastActive: "1 day ago", status: "ACTIVE" },
-    { id: "s3", initials: "JD", name: "John Doe", email: "jdoe@gmail.com", avatarColor: "gray-700", enrolledCourse: "Master the Ecosystem (L1)", progress: 0, lastActive: "Never", status: "PENDING" },
+    { id: "s1", initials: "SJ", name: "Sarah Jenkins", email: "sarah.j@example.com", avatarColor: "purple-900", enrolledCourse: "AI Filmmaking Ecosystem", progress: 85, lastActive: "2 hours ago", status: "ACTIVE" },
+    { id: "s2", initials: "MD", name: "Mike Davis", email: "mike.dfx@studio.net", avatarColor: "orange-900", enrolledCourse: "Advanced Cinematography", progress: 12, lastActive: "1 day ago", status: "ACTIVE" },
+    { id: "s3", initials: "JD", name: "John Doe", email: "jdoe@gmail.com", avatarColor: "gray-700", enrolledCourse: "Nano Banana Mastery", progress: 0, lastActive: "Never", status: "PENDING" },
   ]);
 
   // Mock Data for Analytics
@@ -153,7 +165,7 @@ export default function AdminDashboard() {
 
   const recentTransactions = [
     { id: 1, user: "Jane Doe", item: "Neon Noir Textures", amount: "$29.00", date: "2 mins ago", type: "Asset" },
-    { id: 2, user: "John Smith", item: "Master Google Ecosystem", amount: "$149.00", date: "15 mins ago", type: "Course" },
+    { id: 2, user: "John Smith", item: "AI Filmmaking Ecosystem", amount: "$249.00", date: "15 mins ago", type: "Course" },
     { id: 3, user: "Alice Lee", item: "Sci-Fi Characters Vol 1", amount: "$49.00", date: "1 hour ago", type: "Asset" },
     { id: 4, user: "Robert Johnson", item: "Advanced AI Cinematography", amount: "$199.00", date: "3 hours ago", type: "Course" },
     { id: 5, user: "Mike Brown", item: "Cinematic SFX Pack", amount: "$19.00", date: "5 hours ago", type: "Asset" },

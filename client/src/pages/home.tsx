@@ -111,7 +111,7 @@ export default function Home() {
                           
                           <div className="relative z-10">
                               <h2 className="font-header text-2xl text-white mb-2 group-hover:translate-x-2 transition-transform duration-300">THE ACADEMY</h2>
-                              <p className="text-sm text-gray-400 mb-6 leading-relaxed">Stop prompting blindly. Master the Google Filmmaking Ecosystem from Gemini to Veo.</p>
+                              <p className="text-sm text-gray-400 mb-6 leading-relaxed">Stop prompting blindly. Learn the full AI filmmaking pipeline from Gemini to Veo.</p>
                               <button
                                 onClick={() => document.getElementById("academy")?.scrollIntoView({ behavior: "smooth" })}
                                 className="inline-block bg-signalOrange text-black px-6 py-3 font-header text-xs font-bold uppercase tracking-wider hover:bg-white hover:scale-105 transition-all duration-300"
