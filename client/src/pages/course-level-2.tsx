@@ -78,9 +78,9 @@ export default function CourseLevel2() {
                       You know how to generate. Now learn how to direct. Master the physics engine, compound camera moves, and the "Invisible Cut" in Veo 3.1.
                   </p>
                   <div className="flex flex-wrap gap-4 mb-8 text-xs font-mono text-gray-500">
-                      <span className="flex items-center gap-2"><div className="w-2 h-2 bg-electricBlue rounded-full"></div> 6.0 HOURS CONTENT</span>
+                      <span className="flex items-center gap-2"><div className="w-2 h-2 bg-electricBlue rounded-full"></div> 6.0 HOURS</span>
                       <span className="flex items-center gap-2"><div className="w-2 h-2 bg-electricBlue rounded-full"></div> 30 LESSONS</span>
-                      <span className="flex items-center gap-2"><div className="w-2 h-2 bg-electricBlue rounded-full"></div> PRO CERTIFICATION</span>
+                      <span className="flex items-center gap-2"><div className="w-2 h-2 bg-electricBlue rounded-full"></div> LIFETIME ACCESS</span>
                   </div>
                   <button onClick={handleEnroll} className="inline-block bg-white text-black px-8 py-4 text-sm font-header font-bold uppercase hover:bg-electricBlue hover:text-white transition-all duration-300 tracking-wider cursor-pointer" data-testid="button-hero-enroll">
                       Start Training
