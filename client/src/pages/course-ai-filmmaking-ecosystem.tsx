@@ -253,9 +253,6 @@ export default function CourseAIFilmmakingEcosystem() {
                           <li className="flex items-center gap-3">
                               <Check className="w-4 h-4 text-signalOrange" /> Private WhatsApp Access
                           </li>
-                          <li className="flex items-center gap-3">
-                              <Check className="w-4 h-4 text-signalOrange" /> Industry Certification
-                          </li>
                       </ul>
                   </div>
 
