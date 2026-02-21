@@ -205,7 +205,7 @@ export default function CourseNanoBanana() {
                       <div className="text-center mb-6">
                           <span className="text-xs font-mono text-gray-400 line-through">$249</span>
                           <h2 className="text-4xl font-header font-bold text-white mt-2">$129</h2>
-                          <span className="text-[10px] font-mono text-electricBlue bg-electricBlue/10 px-2 py-1 rounded mt-2 inline-block">LIMITED TIME OFFER</span>
+                          <span className="text-[10px] font-mono text-electricBlue bg-electricBlue/10 px-2 py-1 rounded mt-2 inline-block">LIFETIME ACCESS</span>
                       </div>
                       
                       <button 
