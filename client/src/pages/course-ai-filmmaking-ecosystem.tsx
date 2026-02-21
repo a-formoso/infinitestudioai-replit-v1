@@ -228,7 +228,7 @@ export default function CourseAIFilmmakingEcosystem() {
                       <div className="text-center mb-6">
                           <span className="text-xs font-mono text-gray-400 line-through">$399</span>
                           <h2 className="text-4xl font-header font-bold text-white mt-2">$249</h2>
-                          <span className="text-[10px] font-mono text-signalOrange bg-signalOrange/10 px-2 py-1 rounded mt-2 inline-block">PRO CERTIFICATION</span>
+                          <span className="text-[10px] font-mono text-signalOrange bg-signalOrange/10 px-2 py-1 rounded mt-2 inline-block">LIFETIME ACCESS</span>
                       </div>
                       
                       <button 
