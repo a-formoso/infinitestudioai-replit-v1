@@ -76,7 +76,7 @@ export default function CourseLevel2() {
               {/* Left: Text */}
               <div>
                   <div className="inline-block border border-signalOrange/50 px-3 py-1 mb-6 text-[10px] font-mono text-signalOrange tracking-widest uppercase">
-                      Course Level 02 // Advanced
+                      Specialist Track
                   </div>
                   <h1 className="font-header text-3xl md:text-5xl font-bold text-white leading-tight mb-6">
                       ADVANCED AI<br />

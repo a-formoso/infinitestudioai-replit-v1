@@ -76,7 +76,7 @@ export default function CourseLevel1() {
               {/* Left: Text */}
               <div>
                   <div className="inline-block border border-electricBlue/50 px-3 py-1 mb-6 text-[10px] font-mono text-electricBlue tracking-widest uppercase">
-                      Level 01 Certification
+                      Foundation Track
                   </div>
                   <h1 className="font-header text-3xl md:text-5xl font-bold text-white leading-tight mb-6">
                       MASTER THE GOOGLE<br />
