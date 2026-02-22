@@ -71,6 +71,7 @@ function Router() {
       <Route path="/academy/specialist/google-ai-filmmaking-ecosystem" component={CourseAIFilmmakingEcosystem} />
       <Route path="/academy/foundation/:slug" component={CourseDetail} />
       <Route path="/academy/specialist/:slug" component={CourseDetail} />
+      <Route path="/academy/:tierSlug/:slug" component={CourseDetail} />
       <Route path="/mentorship" component={Mentorship} />
       <Route path="/reset-password" component={ResetPassword} />
       <Route path="/dashboard" component={Dashboard} />

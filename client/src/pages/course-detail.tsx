@@ -4,7 +4,7 @@ import { useState } from "react";
 import { Check, ChevronRight, AlertTriangle, Loader2 } from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
 import { useLocation, Link, useRoute } from "wouter";
-import { getCurrentUser, getCourseBySlug } from "@/lib/api";
+import { getCurrentUser, getCourseBySlug, getCourseTiers } from "@/lib/api";
 
 export default function CourseDetail() {
   const [openModule, setOpenModule] = useState<number | null>(null);
@@ -12,7 +12,8 @@ export default function CourseDetail() {
 
   const [, paramsFoundation] = useRoute("/academy/foundation/:slug");
   const [, paramsSpecialist] = useRoute("/academy/specialist/:slug");
-  const slug = paramsFoundation?.slug || paramsSpecialist?.slug || "";
+  const [, paramsTier] = useRoute("/academy/:tierSlug/:slug");
+  const slug = paramsFoundation?.slug || paramsSpecialist?.slug || paramsTier?.slug || "";
 
   const { data: userData } = useQuery({
     queryKey: ["currentUser"],
@@ -25,13 +26,19 @@ export default function CourseDetail() {
     enabled: !!slug,
   });
 
+  const { data: tiersData } = useQuery({
+    queryKey: ["courseTiers"],
+    queryFn: getCourseTiers,
+  });
+
+  const dbTiers = tiersData?.data?.tiers || [];
   const course = courseData?.data?.course;
   const lessons = courseData?.data?.lessons || [];
-  const isDraft = course?.status === "draft";
-  const isFoundation = course?.level === "Foundation";
-  const accentColor = isFoundation ? "electricBlue" : "signalOrange";
-  const tierLabel = isFoundation ? "Foundation" : "Specialist";
-  const tierFilter = isFoundation ? "foundation" : "specialist";
+  const isDraft = course?.status === "draft" || course?.status === "archived";
+  const matchedTier = dbTiers.find((t: any) => t.name === course?.level);
+  const tierColor = matchedTier?.color || (course?.level === "Specialist" ? "#FF3D00" : "#2962FF");
+  const tierLabel = course?.level || "Foundation";
+  const tierFilter = matchedTier?.slug || (course?.level === "Specialist" ? "specialist" : "foundation");
 
   const modules: Record<number, { name: string; lessons: any[] }> = {};
   lessons.forEach((lesson: any) => {
@@ -85,7 +92,7 @@ export default function CourseDetail() {
       <Navbar />
 
       {isDraft && (
-        <div className={`bg-neonPurple/20 border-b border-neonPurple/40 px-6 py-3 text-center relative z-20`}>
+        <div className="bg-neonPurple/20 border-b border-neonPurple/40 px-6 py-3 text-center relative z-20">
           <span className="text-[10px] font-mono text-neonPurple tracking-widest">ADMIN PREVIEW — THIS COURSE IS NOT YET PUBLISHED</span>
         </div>
       )}
@@ -96,22 +103,22 @@ export default function CourseDetail() {
             <div className="flex items-center gap-1.5 mb-6 text-[10px] font-mono text-gray-500 tracking-widest uppercase">
               <Link href="/academy" className="hover:text-white transition-colors">Academy</Link>
               <ChevronRight className="w-3 h-3" />
-              <Link href={`/academy?filter=${tierFilter}`} className={`text-${accentColor} hover:text-white transition-colors`}>{tierLabel}</Link>
+              <Link href={`/academy?filter=${tierFilter}`} className="hover:text-white transition-colors" style={{ color: tierColor }}>{tierLabel}</Link>
             </div>
             <h1 className="font-header text-3xl md:text-5xl font-bold text-white leading-tight mb-6">
               {firstHalf}<br />
-              <span className={`text-transparent bg-clip-text bg-gradient-to-r ${isFoundation ? 'from-electricBlue to-cyan-400' : 'from-signalOrange to-yellow-400'}`}>{secondHalf}</span>
+              <span className="text-transparent bg-clip-text bg-gradient-to-r" style={{ backgroundImage: `linear-gradient(to right, ${tierColor}, ${tierColor}80)` }}>{secondHalf}</span>
             </h1>
             <p className="text-base text-gray-400 leading-relaxed font-light mb-8 max-w-lg">
               {course.description || course.shortDescription}
             </p>
             <div className="flex flex-wrap gap-4 mb-8 text-xs font-mono text-gray-500">
-              {course.duration && <span className="flex items-center gap-2"><div className={`w-2 h-2 bg-${accentColor} rounded-full`}></div> {course.duration}</span>}
-              {course.lessonsCount && <span className="flex items-center gap-2"><div className={`w-2 h-2 bg-${accentColor} rounded-full`}></div> {course.lessonsCount} LESSONS</span>}
-              <span className="flex items-center gap-2"><div className={`w-2 h-2 bg-${accentColor} rounded-full`}></div> LIFETIME ACCESS</span>
+              {course.duration && <span className="flex items-center gap-2"><div className="w-2 h-2 rounded-full" style={{ backgroundColor: tierColor }}></div> {course.duration}</span>}
+              {course.lessonsCount && <span className="flex items-center gap-2"><div className="w-2 h-2 rounded-full" style={{ backgroundColor: tierColor }}></div> {course.lessonsCount} LESSONS</span>}
+              <span className="flex items-center gap-2"><div className="w-2 h-2 rounded-full" style={{ backgroundColor: tierColor }}></div> LIFETIME ACCESS</span>
             </div>
             {!isDraft && (
-              <button onClick={handleEnroll} className={`inline-block bg-white text-black px-8 py-4 text-sm font-header font-bold uppercase hover:bg-${accentColor} hover:text-white transition-all duration-300 tracking-wider cursor-pointer`} data-testid="button-hero-enroll">
+              <button onClick={handleEnroll} className="inline-block bg-white text-black px-8 py-4 text-sm font-header font-bold uppercase hover:text-white transition-all duration-300 tracking-wider cursor-pointer" style={{ ['--tw-hover-bg' as any]: tierColor }} data-testid="button-hero-enroll">
                 Start Training
               </button>
             )}
@@ -122,13 +129,17 @@ export default function CourseDetail() {
             )}
           </div>
 
-          <div className={`relative glass-panel p-2 group border-${accentColor}/20`}>
+          <div className="relative glass-panel p-2 group" style={{ borderColor: `${tierColor}33` }}>
             <div className="aspect-video bg-gray-900 relative overflow-hidden">
-              <div className={`absolute inset-0 bg-gradient-to-br ${isFoundation ? 'from-blue-900/40' : 'from-orange-900/40'} to-black flex items-center justify-center group-hover:scale-105 transition-transform duration-500`}>
-                <div className={`w-16 h-16 rounded-full bg-white/10 backdrop-blur-sm flex items-center justify-center border border-white/20 group-hover:bg-${accentColor} group-hover:border-${accentColor} transition-colors cursor-pointer`}>
-                  <span className="text-2xl ml-1 text-white">▶</span>
+              {course.imageUrl ? (
+                <div className="absolute inset-0 bg-cover bg-center group-hover:scale-105 transition-transform duration-500" style={{ backgroundImage: `url(${course.imageUrl})` }}></div>
+              ) : (
+                <div className="absolute inset-0 flex items-center justify-center group-hover:scale-105 transition-transform duration-500" style={{ background: `linear-gradient(to bottom right, ${tierColor}30, black)` }}>
+                  <div className="w-16 h-16 rounded-full bg-white/10 backdrop-blur-sm flex items-center justify-center border border-white/20 cursor-pointer">
+                    <span className="text-2xl ml-1 text-white">▶</span>
+                  </div>
                 </div>
-              </div>
+              )}
               <div className="absolute bottom-4 left-4 font-mono text-[10px] text-white bg-black/50 px-2 py-1">COURSE_TRAILER.MP4</div>
             </div>
           </div>
@@ -150,7 +161,7 @@ export default function CourseDetail() {
                         data-testid={`button-module-${num}`}
                       >
                         <span className="font-header text-sm text-white">MODULE {num}: {mod.name}</span>
-                        <span className={`text-${accentColor} text-xl`}>{openModule === Number(num) ? '−' : '+'}</span>
+                        <span className="text-xl" style={{ color: tierColor }}>{openModule === Number(num) ? '−' : '+'}</span>
                       </button>
                       <div className={`transition-all duration-300 ease-out overflow-hidden ${openModule === Number(num) ? 'max-h-[500px] opacity-100' : 'max-h-0 opacity-0'}`}>
                         <div className="bg-black/30 p-6">
@@ -181,12 +192,12 @@ export default function CourseDetail() {
           </div>
 
           <div className="lg:col-span-4 space-y-8">
-            <div className={`glass-panel p-8 sticky top-24 border-t-2 border-t-${accentColor}`}>
+            <div className="glass-panel p-8 sticky top-24 border-t-2" style={{ borderTopColor: tierColor }}>
               <div className="text-center mb-6">
                 {course.price && (
                   <>
                     <h2 className="text-4xl font-header font-bold text-white mt-2">${course.price}</h2>
-                    <span className={`text-[10px] font-mono text-${accentColor} bg-${accentColor}/10 px-2 py-1 rounded mt-2 inline-block`}>LIFETIME ACCESS</span>
+                    <span className="text-[10px] font-mono px-2 py-1 rounded mt-2 inline-block" style={{ color: tierColor, backgroundColor: `${tierColor}15` }}>LIFETIME ACCESS</span>
                   </>
                 )}
                 {!course.price && isDraft && (
@@ -198,7 +209,8 @@ export default function CourseDetail() {
                 <button
                   onClick={handleEnroll}
                   data-testid="button-enroll"
-                  className={`w-full bg-${accentColor} text-white font-header font-bold text-sm uppercase py-4 hover:bg-white hover:text-black transition-all duration-300 tracking-wider mb-4 shadow-[0_0_20px_rgba(41,98,255,0.4)] cursor-pointer`}
+                  className="w-full text-white font-header font-bold text-sm uppercase py-4 hover:bg-white hover:text-black transition-all duration-300 tracking-wider mb-4 cursor-pointer"
+                  style={{ backgroundColor: tierColor, boxShadow: `0 0 20px ${tierColor}66` }}
                 >
                   Enroll Now
                 </button>
@@ -212,14 +224,14 @@ export default function CourseDetail() {
               <ul className="space-y-4 text-xs text-gray-400 font-mono border-t border-white/10 pt-6">
                 {course.duration && (
                   <li className="flex items-center gap-3">
-                    <Check className={`w-4 h-4 text-${accentColor}`} /> {course.duration} of Training
+                    <Check className="w-4 h-4" style={{ color: tierColor }} /> {course.duration} of Training
                   </li>
                 )}
                 <li className="flex items-center gap-3">
-                  <Check className={`w-4 h-4 text-${accentColor}`} /> Private WhatsApp Access
+                  <Check className="w-4 h-4" style={{ color: tierColor }} /> Private WhatsApp Access
                 </li>
                 <li className="flex items-center gap-3">
-                  <Check className={`w-4 h-4 text-${accentColor}`} /> Lifetime Access
+                  <Check className="w-4 h-4" style={{ color: tierColor }} /> Lifetime Access
                 </li>
               </ul>
             </div>

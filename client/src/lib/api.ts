@@ -89,6 +89,31 @@ export async function changePassword(currentPassword: string, newPassword: strin
   });
 }
 
+// Course Tiers
+export async function getCourseTiers() {
+  return apiFetch<{ tiers: any[] }>('/course-tiers');
+}
+
+export async function createCourseTier(data: Record<string, any>) {
+  return apiFetch<{ tier: any }>('/course-tiers', {
+    method: 'POST',
+    body: JSON.stringify(data),
+  });
+}
+
+export async function updateCourseTier(id: string, data: Record<string, any>) {
+  return apiFetch<{ tier: any }>(`/course-tiers/${id}`, {
+    method: 'PUT',
+    body: JSON.stringify(data),
+  });
+}
+
+export async function deleteCourseTier(id: string) {
+  return apiFetch<{ message: string }>(`/course-tiers/${id}`, {
+    method: 'DELETE',
+  });
+}
+
 // Courses
 export async function getCourses() {
   return apiFetch<{ courses: any[]; isAdmin?: boolean }>('/courses');

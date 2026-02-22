@@ -6,6 +6,7 @@ import { nanoid } from "nanoid";
 import { insertUserSchema, insertEnrollmentSchema, insertLessonProgressSchema, insertOrderSchema, insertOrderItemSchema } from "@shared/schema";
 import { z } from "zod";
 import { sendVerificationEmail, sendPasswordResetEmail } from "./email";
+import { registerObjectStorageRoutes } from "./replit_integrations/object_storage";
 
 declare module "express-session" {
   interface SessionData {
@@ -316,6 +317,96 @@ export async function registerRoutes(
     }
   });
 
+  // Register object storage routes for file uploads
+  registerObjectStorageRoutes(app);
+
+  // ===== Course Tier Routes =====
+
+  app.get("/api/course-tiers", async (req, res) => {
+    try {
+      const tiers = await storage.getAllCourseTiers();
+      res.json({ tiers });
+    } catch (error) {
+      res.status(500).json({ message: "Failed to fetch tiers" });
+    }
+  });
+
+  app.post("/api/course-tiers", async (req, res) => {
+    if (!req.session.userId) {
+      return res.status(401).json({ message: "Not authenticated" });
+    }
+    const user = await storage.getUser(req.session.userId);
+    if (!user?.isAdmin) {
+      return res.status(403).json({ message: "Admin access required" });
+    }
+    try {
+      const { name, color, sortOrder } = req.body;
+      if (!name) {
+        return res.status(400).json({ message: "Tier name is required" });
+      }
+      const slug = (name as string).toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
+      const existing = await storage.getCourseTierBySlug(slug);
+      if (existing) {
+        return res.status(400).json({ message: "A tier with a similar name already exists" });
+      }
+      const tier = await storage.createCourseTier({
+        name,
+        slug,
+        color: color || "#2962FF",
+        sortOrder: sortOrder ?? 0,
+      });
+      res.status(201).json({ tier });
+    } catch (error) {
+      res.status(500).json({ message: "Failed to create tier" });
+    }
+  });
+
+  app.put("/api/course-tiers/:id", async (req, res) => {
+    if (!req.session.userId) {
+      return res.status(401).json({ message: "Not authenticated" });
+    }
+    const user = await storage.getUser(req.session.userId);
+    if (!user?.isAdmin) {
+      return res.status(403).json({ message: "Admin access required" });
+    }
+    try {
+      const { name, color, sortOrder } = req.body;
+      const updates: Record<string, any> = {};
+      if (name !== undefined) {
+        updates.name = name;
+        updates.slug = (name as string).toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
+      }
+      if (color !== undefined) updates.color = color;
+      if (sortOrder !== undefined) updates.sortOrder = sortOrder;
+      const tier = await storage.updateCourseTier(req.params.id, updates);
+      if (!tier) {
+        return res.status(404).json({ message: "Tier not found" });
+      }
+      res.json({ tier });
+    } catch (error) {
+      res.status(500).json({ message: "Failed to update tier" });
+    }
+  });
+
+  app.delete("/api/course-tiers/:id", async (req, res) => {
+    if (!req.session.userId) {
+      return res.status(401).json({ message: "Not authenticated" });
+    }
+    const user = await storage.getUser(req.session.userId);
+    if (!user?.isAdmin) {
+      return res.status(403).json({ message: "Admin access required" });
+    }
+    try {
+      const deleted = await storage.deleteCourseTier(req.params.id);
+      if (!deleted) {
+        return res.status(404).json({ message: "Tier not found" });
+      }
+      res.json({ message: "Tier deleted" });
+    } catch (error) {
+      res.status(500).json({ message: "Failed to delete tier" });
+    }
+  });
+
   // ===== Course Routes =====
   
   // Get all courses
@@ -341,7 +432,7 @@ export async function registerRoutes(
         return res.status(404).json({ message: "Course not found" });
       }
       
-      if (course.status === 'draft') {
+      if (course.status !== 'published') {
         let isAdmin = false;
         if (req.session.userId) {
           const user = await storage.getUser(req.session.userId);
@@ -443,7 +534,7 @@ export async function registerRoutes(
         }
         updates.price = String(numPrice);
       }
-      if (updates.status !== undefined && !["published", "draft"].includes(updates.status)) {
+      if (updates.status !== undefined && !["published", "draft", "archived"].includes(updates.status)) {
         return res.status(400).json({ message: "Invalid status value" });
       }
       if (Object.keys(updates).length === 0) {

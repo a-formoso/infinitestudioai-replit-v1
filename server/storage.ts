@@ -1,6 +1,7 @@
 import {
   users,
   courses,
+  courseTiers,
   lessons,
   enrollments,
   lessonProgress,
@@ -11,6 +12,8 @@ import {
   type InsertUser,
   type Course,
   type InsertCourse,
+  type CourseTier,
+  type InsertCourseTier,
   type Lesson,
   type InsertLesson,
   type Enrollment,
@@ -40,12 +43,19 @@ export interface IStorage {
   clearPasswordResetToken(id: string): Promise<void>;
   getUserByVerificationToken(token: string): Promise<User | undefined>;
 
+  // Course tier operations
+  getAllCourseTiers(): Promise<CourseTier[]>;
+  getCourseTier(id: string): Promise<CourseTier | undefined>;
+  getCourseTierBySlug(slug: string): Promise<CourseTier | undefined>;
+  createCourseTier(tier: InsertCourseTier): Promise<CourseTier>;
+  updateCourseTier(id: string, data: Partial<InsertCourseTier>): Promise<CourseTier | undefined>;
+  deleteCourseTier(id: string): Promise<boolean>;
+
   // Course operations
   getAllCourses(): Promise<Course[]>;
   getCourse(id: string): Promise<Course | undefined>;
   getCourseBySlug(slug: string): Promise<Course | undefined>;
   createCourse(course: InsertCourse): Promise<Course>;
-
   updateCourse(id: string, data: Partial<InsertCourse>): Promise<Course | undefined>;
   deleteCourse(id: string): Promise<boolean>;
 
@@ -147,6 +157,36 @@ export class DatabaseStorage implements IStorage {
   async getUserByVerificationToken(token: string): Promise<User | undefined> {
     const [user] = await db.select().from(users).where(eq(users.verificationToken, token));
     return user || undefined;
+  }
+
+  // Course tier operations
+  async getAllCourseTiers(): Promise<CourseTier[]> {
+    return await db.select().from(courseTiers).orderBy(courseTiers.sortOrder);
+  }
+
+  async getCourseTier(id: string): Promise<CourseTier | undefined> {
+    const [tier] = await db.select().from(courseTiers).where(eq(courseTiers.id, id));
+    return tier || undefined;
+  }
+
+  async getCourseTierBySlug(slug: string): Promise<CourseTier | undefined> {
+    const [tier] = await db.select().from(courseTiers).where(eq(courseTiers.slug, slug));
+    return tier || undefined;
+  }
+
+  async createCourseTier(insertTier: InsertCourseTier): Promise<CourseTier> {
+    const [tier] = await db.insert(courseTiers).values(insertTier).returning();
+    return tier;
+  }
+
+  async updateCourseTier(id: string, data: Partial<InsertCourseTier>): Promise<CourseTier | undefined> {
+    const [tier] = await db.update(courseTiers).set(data).where(eq(courseTiers.id, id)).returning();
+    return tier || undefined;
+  }
+
+  async deleteCourseTier(id: string): Promise<boolean> {
+    const result = await db.delete(courseTiers).where(eq(courseTiers.id, id)).returning();
+    return result.length > 0;
   }
 
   // Course operations

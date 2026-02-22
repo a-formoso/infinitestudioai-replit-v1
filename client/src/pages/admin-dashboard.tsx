@@ -1,12 +1,13 @@
 import { Link, useSearch } from "wouter";
 import { useState, useEffect, useRef } from "react";
-import { LayoutDashboard, BookOpen, Users, ShoppingBag, BarChart2, Plus, Download, Bold, Italic, Underline, Link as LinkIcon, Code, X, Search, Edit2, Trash2, ArrowUp, ArrowDown, ArrowLeft, ArrowRight, ZoomIn, ZoomOut, Move, TrendingUp, DollarSign, Activity, Workflow, Pencil, Check, ExternalLink } from "lucide-react";
+import { LayoutDashboard, BookOpen, Users, ShoppingBag, BarChart2, Plus, Download, Bold, Italic, Underline, Link as LinkIcon, Code, X, Search, Edit2, Trash2, ArrowUp, ArrowDown, ArrowLeft, ArrowRight, ZoomIn, ZoomOut, Move, TrendingUp, DollarSign, Activity, Workflow, Pencil, Check, ExternalLink, Archive, Upload } from "lucide-react";
 import { LineChart, Line, AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, BarChart, Bar, PieChart, Pie, Cell } from 'recharts';
 import PipelineContent from "./pipeline";
 import { Navbar } from "@/components/navbar";
 import { Footer } from "@/components/footer";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { getCourses, createCourse as apiCreateCourse, updateCourse as apiUpdateCourse, deleteCourse as apiDeleteCourse } from "@/lib/api";
+import { getCourses, createCourse as apiCreateCourse, updateCourse as apiUpdateCourse, deleteCourse as apiDeleteCourse, getCourseTiers, createCourseTier as apiCreateCourseTier, updateCourseTier as apiUpdateCourseTier, deleteCourseTier as apiDeleteCourseTier } from "@/lib/api";
+import { useUpload } from "@/hooks/use-upload";
 
 const INITIAL_LESSONS = {
   "1.1": { id: "1.1", title: "The Multimodal Script", duration: "12:45", video: "multimodal_script_v3.mp4", notes: "Introduction to multimodal scripting techniques using Gemini 1.5 Pro.", keyPrompt: "Analyze this image as a Director of Photography...", resources: [{ name: "Visual_Bible_Template.pdf", size: "2.4 MB", type: "PDF" }] },
@@ -112,6 +113,27 @@ export default function AdminDashboard() {
   });
   const dbCourses = coursesData?.data?.courses || [];
 
+  const { data: tiersData } = useQuery({
+    queryKey: ["courseTiers"],
+    queryFn: getCourseTiers,
+  });
+  const dbTiers = tiersData?.data?.tiers || [];
+
+  const createTierMutation = useMutation({
+    mutationFn: (data: Record<string, any>) => apiCreateCourseTier(data),
+    onSuccess: () => { queryClient.invalidateQueries({ queryKey: ["courseTiers"] }); },
+  });
+
+  const updateTierMutation = useMutation({
+    mutationFn: ({ id, data }: { id: string; data: Record<string, any> }) => apiUpdateCourseTier(id, data),
+    onSuccess: () => { queryClient.invalidateQueries({ queryKey: ["courseTiers"] }); },
+  });
+
+  const deleteTierMutation = useMutation({
+    mutationFn: (id: string) => apiDeleteCourseTier(id),
+    onSuccess: () => { queryClient.invalidateQueries({ queryKey: ["courseTiers"] }); },
+  });
+
   const createCourseMutation = useMutation({
     mutationFn: (data: Record<string, any>) => apiCreateCourse(data),
     onSuccess: () => { queryClient.invalidateQueries({ queryKey: ["adminCourses"] }); queryClient.invalidateQueries({ queryKey: ["courses"] }); },
@@ -141,6 +163,17 @@ export default function AdminDashboard() {
     color: "#2962FF",
     status: "draft",
     imageUrl: "",
+  });
+
+  const [showTierManager, setShowTierManager] = useState(false);
+  const [newTierName, setNewTierName] = useState("");
+  const [newTierColor, setNewTierColor] = useState("#2962FF");
+  const [editingTier, setEditingTier] = useState<any>(null);
+
+  const { uploadFile, isUploading: isImageUploading, progress: uploadProgress } = useUpload({
+    onSuccess: (response) => {
+      setCourseForm(prev => ({ ...prev, imageUrl: response.objectPath }));
+    },
   });
 
   const [studentsList, setStudentsList] = useState<Student[]>([
@@ -550,7 +583,8 @@ export default function AdminDashboard() {
   };
 
   const handleTogglePublish = async (course: any) => {
-    const newStatus = course.status === "published" ? "draft" : "published";
+    const statusCycle: Record<string, string> = { draft: "published", published: "draft", archived: "draft" };
+    const newStatus = statusCycle[course.status] || "draft";
     await updateCourseMutation.mutateAsync({ id: course.id, data: { status: newStatus } });
   };
 
@@ -971,7 +1005,7 @@ export default function AdminDashboard() {
                       <div className="flex items-center gap-2 mt-1">
                         <span className="text-[10px] text-gray-400 font-mono">/{course.slug}</span>
                         <span className="text-gray-600">•</span>
-                        <span className={`text-[10px] px-1.5 py-0.5 rounded font-bold ${course.level === 'Specialist' ? 'bg-purple-500/20 text-purple-400' : 'bg-blue-500/20 text-blue-400'}`}>{course.level}</span>
+                        <span className="text-[10px] px-1.5 py-0.5 rounded font-bold" style={{ backgroundColor: `${(dbTiers.find((t: any) => t.name === course.level)?.color || '#2962FF')}20`, color: dbTiers.find((t: any) => t.name === course.level)?.color || '#2962FF' }}>{course.level}</span>
                         <span className="text-gray-600">•</span>
                         <span className="text-[10px] text-gray-500 font-mono">{course.lessonsCount} lessons</span>
                         <span className="text-gray-600">•</span>
@@ -990,9 +1024,13 @@ export default function AdminDashboard() {
                         handleTogglePublish(course);
                       }}
                       data-testid={`button-toggle-publish-${course.id}`}
-                      className={`px-3 py-1 rounded text-[10px] font-bold border hover:opacity-80 transition-opacity ${course.status === 'published' ? 'bg-green-500/10 text-green-500 border-green-500/20' : 'bg-yellow-500/10 text-yellow-500 border-yellow-500/20'}`}
+                      className={`px-3 py-1 rounded text-[10px] font-bold border hover:opacity-80 transition-opacity ${
+                        course.status === 'published' ? 'bg-green-500/10 text-green-500 border-green-500/20' : 
+                        course.status === 'archived' ? 'bg-gray-500/10 text-gray-400 border-gray-500/20' :
+                        'bg-yellow-500/10 text-yellow-500 border-yellow-500/20'
+                      }`}
                     >
-                      {course.status === 'published' ? 'PUBLISHED' : 'DRAFT'}
+                      {course.status === 'published' ? 'PUBLISHED' : course.status === 'archived' ? 'ARCHIVED' : 'DRAFT'}
                     </button>
                     <div className="flex gap-2">
                       <button 
@@ -1010,6 +1048,18 @@ export default function AdminDashboard() {
                         data-testid={`button-delete-course-${course.id}`}
                       >
                         <Trash2 className="w-4 h-4" />
+                      </button>
+                      <button 
+                        onClick={(e) => { 
+                          e.stopPropagation(); 
+                          const newStatus = course.status === 'archived' ? 'draft' : 'archived';
+                          updateCourseMutation.mutate({ id: course.id, data: { status: newStatus } });
+                        }}
+                        className={`transition-colors p-1 ${course.status === 'archived' ? 'text-green-400 hover:text-green-300' : 'text-gray-400 hover:text-yellow-500'}`}
+                        title={course.status === 'archived' ? "Unarchive Course" : "Archive Course"}
+                        data-testid={`button-archive-course-${course.id}`}
+                      >
+                        <Archive className="w-4 h-4" />
                       </button>
                       <button className="text-gray-400 hover:text-white transition-colors p-1">
                         {expandedCourseId === course.id ? '▲' : '▼'}
@@ -1117,8 +1167,16 @@ export default function AdminDashboard() {
                       className="bg-black/50 border border-white/10 text-white text-xs px-4 py-3 w-full focus:border-electricBlue outline-none appearance-none"
                       data-testid="select-course-level"
                     >
-                      <option value="Foundation">Foundation</option>
-                      <option value="Specialist">Specialist</option>
+                      {dbTiers.length > 0 ? (
+                        dbTiers.map((tier: any) => (
+                          <option key={tier.id} value={tier.name}>{tier.name}</option>
+                        ))
+                      ) : (
+                        <>
+                          <option value="Foundation">Foundation</option>
+                          <option value="Specialist">Specialist</option>
+                        </>
+                      )}
                     </select>
                   </div>
                 </div>
@@ -1173,19 +1231,62 @@ export default function AdminDashboard() {
                   >
                     <option value="draft">Draft</option>
                     <option value="published">Published</option>
+                    <option value="archived">Archived</option>
                   </select>
                 </div>
 
                 <div>
-                  <label className="block text-[10px] font-mono text-gray-500 mb-2 uppercase">Image URL</label>
-                  <input 
-                    type="text" 
-                    value={courseForm.imageUrl}
-                    onChange={(e) => setCourseForm({ ...courseForm, imageUrl: e.target.value })}
-                    placeholder="https://..."
-                    className="bg-black/50 border border-white/10 text-white text-xs px-4 py-3 w-full focus:border-electricBlue outline-none font-mono"
-                    data-testid="input-course-image-url"
-                  />
+                  <label className="block text-[10px] font-mono text-gray-500 mb-2 uppercase">Course Image</label>
+                  {courseForm.imageUrl && (
+                    <div className="mb-2 relative group">
+                      <img 
+                        src={courseForm.imageUrl.startsWith('/objects/') ? courseForm.imageUrl : courseForm.imageUrl}
+                        alt="Course preview"
+                        className="w-full h-32 object-cover rounded border border-white/10"
+                        onError={(e) => { (e.target as HTMLImageElement).style.display = 'none'; }}
+                      />
+                      <button
+                        onClick={() => setCourseForm({ ...courseForm, imageUrl: "" })}
+                        className="absolute top-1 right-1 bg-black/80 text-white p-1 rounded opacity-0 group-hover:opacity-100 transition-opacity"
+                      >
+                        <X className="w-3 h-3" />
+                      </button>
+                    </div>
+                  )}
+                  <div className="flex gap-2">
+                    <label className="flex-1 cursor-pointer">
+                      <div className={`border border-dashed border-white/20 hover:border-electricBlue/50 transition-colors px-4 py-3 text-center ${isImageUploading ? 'opacity-50' : ''}`}>
+                        <Upload className="w-4 h-4 mx-auto mb-1 text-gray-500" />
+                        <p className="text-[10px] font-mono text-gray-400">
+                          {isImageUploading ? `Uploading... ${uploadProgress}%` : 'Click to upload image (JPG, PNG, GIF)'}
+                        </p>
+                      </div>
+                      <input
+                        type="file"
+                        accept="image/jpeg,image/png,image/gif,image/webp"
+                        className="hidden"
+                        onChange={async (e) => {
+                          const file = e.target.files?.[0];
+                          if (file) {
+                            await uploadFile(file);
+                          }
+                          e.target.value = '';
+                        }}
+                        disabled={isImageUploading}
+                        data-testid="input-course-image-upload"
+                      />
+                    </label>
+                  </div>
+                  <div className="mt-2">
+                    <input 
+                      type="text" 
+                      value={courseForm.imageUrl}
+                      onChange={(e) => setCourseForm({ ...courseForm, imageUrl: e.target.value })}
+                      placeholder="Or paste image URL..."
+                      className="bg-black/50 border border-white/10 text-white text-[10px] px-3 py-2 w-full focus:border-electricBlue outline-none font-mono"
+                      data-testid="input-course-image-url"
+                    />
+                  </div>
                 </div>
                 
                 <div className="pt-4 flex gap-3">
@@ -1208,6 +1309,128 @@ export default function AdminDashboard() {
             </div>
           </div>
         )}
+
+        <div className="mt-8 border-t border-white/10 pt-8">
+          <div className="flex justify-between items-center mb-4">
+            <div>
+              <h2 className="font-header text-lg text-white">TIER MANAGEMENT</h2>
+              <p className="text-[10px] text-gray-500 font-mono">Create and manage course categories</p>
+            </div>
+            <button
+              onClick={() => setShowTierManager(!showTierManager)}
+              className="text-[10px] font-mono text-electricBlue hover:text-white transition-colors"
+              data-testid="button-toggle-tier-manager"
+            >
+              {showTierManager ? 'COLLAPSE' : 'EXPAND'}
+            </button>
+          </div>
+          
+          {showTierManager && (
+            <div className="space-y-4 animate-in slide-in-from-top-2 duration-200">
+              <div className="flex gap-2">
+                <input
+                  type="text"
+                  value={newTierName}
+                  onChange={(e) => setNewTierName(e.target.value)}
+                  placeholder="New tier name (e.g. Flagship)"
+                  className="bg-black/50 border border-white/10 text-white text-xs px-4 py-2 flex-1 focus:border-electricBlue outline-none"
+                  data-testid="input-new-tier-name"
+                />
+                <div className="flex gap-1">
+                  {['#2962FF', '#FF3D00', '#D500F9', '#FFD700', '#00E676', '#FF6D00'].map((c) => (
+                    <button
+                      key={c}
+                      onClick={() => setNewTierColor(c)}
+                      className={`w-8 h-8 rounded border-2 transition-all ${newTierColor === c ? 'border-white scale-110' : 'border-white/10'}`}
+                      style={{ backgroundColor: c }}
+                    />
+                  ))}
+                </div>
+                <button
+                  onClick={async () => {
+                    if (!newTierName.trim()) return;
+                    await createTierMutation.mutateAsync({ name: newTierName.trim(), color: newTierColor });
+                    setNewTierName("");
+                  }}
+                  disabled={createTierMutation.isPending || !newTierName.trim()}
+                  className="bg-electricBlue text-white px-4 py-2 text-[10px] font-header font-bold uppercase hover:bg-white hover:text-black transition-colors disabled:opacity-50"
+                  data-testid="button-create-tier"
+                >
+                  {createTierMutation.isPending ? '...' : '+ ADD'}
+                </button>
+              </div>
+              
+              <div className="space-y-2">
+                {dbTiers.map((tier: any) => (
+                  <div key={tier.id} className="glass-panel p-4 flex items-center justify-between border border-white/10" data-testid={`tier-card-${tier.id}`}>
+                    <div className="flex items-center gap-3">
+                      <div className="w-4 h-4 rounded" style={{ backgroundColor: tier.color }}></div>
+                      {editingTier?.id === tier.id ? (
+                        <input
+                          type="text"
+                          value={editingTier.name}
+                          onChange={(e) => setEditingTier({ ...editingTier, name: e.target.value })}
+                          className="bg-black/50 border border-electricBlue text-white text-xs px-2 py-1 outline-none"
+                          autoFocus
+                        />
+                      ) : (
+                        <span className="text-sm text-white font-header">{tier.name}</span>
+                      )}
+                      <span className="text-[10px] text-gray-500 font-mono">/{tier.slug}</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      {editingTier?.id === tier.id ? (
+                        <>
+                          <div className="flex gap-1">
+                            {['#2962FF', '#FF3D00', '#D500F9', '#FFD700', '#00E676', '#FF6D00'].map((c) => (
+                              <button
+                                key={c}
+                                onClick={() => setEditingTier({ ...editingTier, color: c })}
+                                className={`w-5 h-5 rounded border ${editingTier.color === c ? 'border-white' : 'border-white/10'}`}
+                                style={{ backgroundColor: c }}
+                              />
+                            ))}
+                          </div>
+                          <button
+                            onClick={async () => {
+                              await updateTierMutation.mutateAsync({ id: tier.id, data: { name: editingTier.name, color: editingTier.color } });
+                              setEditingTier(null);
+                            }}
+                            className="text-green-400 hover:text-green-300 p-1"
+                          >
+                            <Check className="w-4 h-4" />
+                          </button>
+                          <button onClick={() => setEditingTier(null)} className="text-gray-400 hover:text-white p-1">
+                            <X className="w-4 h-4" />
+                          </button>
+                        </>
+                      ) : (
+                        <>
+                          <button onClick={() => setEditingTier({ id: tier.id, name: tier.name, color: tier.color })} className="text-gray-400 hover:text-electricBlue p-1">
+                            <Edit2 className="w-3 h-3" />
+                          </button>
+                          <button
+                            onClick={async () => {
+                              if (confirm('Delete this tier? Courses using it will keep their current level value.')) {
+                                await deleteTierMutation.mutateAsync(tier.id);
+                              }
+                            }}
+                            className="text-gray-400 hover:text-red-500 p-1"
+                          >
+                            <Trash2 className="w-3 h-3" />
+                          </button>
+                        </>
+                      )}
+                    </div>
+                  </div>
+                ))}
+                {dbTiers.length === 0 && (
+                  <p className="text-[10px] text-gray-500 font-mono text-center py-4">No tiers defined yet. Add one above.</p>
+                )}
+              </div>
+            </div>
+          )}
+        </div>
       </div>
     );
   };
