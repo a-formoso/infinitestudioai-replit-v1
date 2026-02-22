@@ -3,6 +3,8 @@ import { useState, useEffect, useRef } from "react";
 import { LayoutDashboard, BookOpen, Users, ShoppingBag, BarChart2, Plus, Download, Bold, Italic, Underline, Link as LinkIcon, Code, X, Search, Edit2, Trash2, ArrowUp, ArrowDown, ArrowLeft, ArrowRight, ZoomIn, ZoomOut, Move, TrendingUp, DollarSign, Activity, Workflow } from "lucide-react";
 import { LineChart, Line, AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, BarChart, Bar, PieChart, Pie, Cell } from 'recharts';
 import PipelineContent from "./pipeline";
+import { Navbar } from "@/components/navbar";
+import { Footer } from "@/components/footer";
 
 const INITIAL_LESSONS = {
   "1.1": { id: "1.1", title: "The Multimodal Script", duration: "12:45", video: "multimodal_script_v3.mp4", notes: "Introduction to multimodal scripting techniques using Gemini 1.5 Pro.", keyPrompt: "Analyze this image as a Director of Photography...", resources: [{ name: "Visual_Bible_Template.pdf", size: "2.4 MB", type: "PDF" }] },
@@ -172,7 +174,7 @@ export default function AdminDashboard() {
   ];
 
   const renderAnalytics = () => (
-    <div className="relative z-10 p-8 max-w-7xl mx-auto space-y-6">
+    <div className="relative z-10 space-y-6">
       <div className="flex justify-between items-center">
         <h1 className="text-2xl font-header font-bold text-white tracking-widest">ANALYTICS OVERVIEW</h1>
         <div className="flex gap-2">
@@ -757,7 +759,7 @@ export default function AdminDashboard() {
   }, [logs]);
 
   const renderDashboard = () => (
-    <div className="relative z-10 p-8 max-w-7xl mx-auto">
+    <div className="relative z-10">
       {/* HEADER */}
       <div className="flex justify-between items-end mb-8">
         <div>
@@ -908,7 +910,7 @@ export default function AdminDashboard() {
     };
 
     return (
-      <div className="relative z-10 p-8 max-w-7xl mx-auto">
+      <div className="relative z-10">
         {/* HEADER */}
         <div className="flex justify-between items-end mb-8">
           <div>
@@ -1055,7 +1057,7 @@ export default function AdminDashboard() {
     const currentLesson = lessons[selectedLessonId] || { title: "Select a Lesson", duration: "00:00", video: "placeholder.mp4", notes: "No lesson selected." };
 
     return (
-    <div className="relative z-10 p-8 max-w-7xl mx-auto">
+    <div className="relative z-10">
       {/* BREADCRUMBS & HEADER */}
       <div className="mb-8">
           <div className="flex items-center gap-2 text-[10px] font-mono text-gray-500 mb-2">
@@ -1086,7 +1088,7 @@ export default function AdminDashboard() {
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
         
         {/* LEFT: STRUCTURE TREE */}
-        <div className="lg:col-span-1 glass-panel p-0 overflow-hidden border border-white/10 h-[calc(100vh-200px)] flex flex-col">
+        <div className="lg:col-span-1 glass-panel p-0 overflow-hidden border border-white/10 h-[600px] flex flex-col">
           <div className="p-4 border-b border-white/10 bg-white/5 flex justify-between items-center">
             <h3 className="font-header text-xs text-white">CURRICULUM</h3>
             <button onClick={handleAddModule} className="text-electricBlue text-xs hover:underline">+ New Module</button>
@@ -1533,7 +1535,7 @@ export default function AdminDashboard() {
   };
 
   const renderStudents = () => (
-    <div className="relative z-10 p-8 max-w-7xl mx-auto">
+    <div className="relative z-10">
       {/* HEADER */}
       <div className="flex justify-between items-end mb-8">
         <div>
@@ -1761,7 +1763,7 @@ export default function AdminDashboard() {
   };
 
   const renderAssetStore = () => (
-    <div className="relative z-10 p-8 max-w-7xl mx-auto">
+    <div className="relative z-10">
       {/* HEADER */}
       <div className="flex justify-between items-end mb-8">
         <div>
@@ -2090,91 +2092,71 @@ export default function AdminDashboard() {
     </div>
   );
 
+  const tabs = [
+    { id: "dashboard", label: "OVERVIEW", icon: LayoutDashboard },
+    { id: "courses", label: "COURSES", icon: BookOpen },
+    { id: "students", label: "STUDENTS", icon: Users },
+    { id: "store", label: "ASSETS", icon: ShoppingBag },
+    { id: "analytics", label: "ANALYTICS", icon: BarChart2 },
+    { id: "pipeline", label: "PIPELINE", icon: Workflow },
+  ];
+
   return (
-    <div className="bg-obsidian text-offWhite font-body antialiased selection:bg-electricBlue selection:text-white overflow-hidden h-screen flex">
-      {/* SIDEBAR */}
-      <aside className="w-64 bg-black border-r border-white/10 flex flex-col justify-between hidden md:flex">
-        <div>
-          <div className="p-6 border-b border-white/10">
-            <Link href="/" className="font-header font-bold text-lg tracking-widest text-white flex items-center gap-2">
-              <span className="text-electricBlue text-xl">∞</span> ADMIN
-            </Link>
-          </div>
-          
-          <nav className="p-4 space-y-2">
-            <p className="text-[10px] font-mono text-gray-500 px-4 py-2 uppercase tracking-widest">Main Menu</p>
-            <button 
-              onClick={() => setActiveTab("dashboard")}
-              className={`w-full flex items-center gap-3 px-4 py-3 text-xs font-header font-bold rounded transition-colors ${activeTab === "dashboard" ? "bg-white/10 text-white border-l-2 border-electricBlue" : "text-gray-400 hover:bg-white/5 hover:text-white"}`}
-            >
-              <LayoutDashboard className="w-4 h-4" /> DASHBOARD
-            </button>
-            <button 
-              onClick={() => { setActiveTab("courses"); setCourseView("list"); }}
-              className={`w-full flex items-center gap-3 px-4 py-3 text-xs font-header font-bold rounded transition-colors ${activeTab === "courses" ? "bg-white/10 text-white border-l-2 border-electricBlue" : "text-gray-400 hover:bg-white/5 hover:text-white"}`}
-            >
-              <BookOpen className="w-4 h-4" /> COURSES
-            </button>
-            <button 
-              onClick={() => setActiveTab("students")}
-              className={`w-full flex items-center gap-3 px-4 py-3 text-xs font-header font-bold rounded transition-colors ${activeTab === "students" ? "bg-white/10 text-white border-l-2 border-electricBlue" : "text-gray-400 hover:bg-white/5 hover:text-white"}`}
-            >
-              <Users className="w-4 h-4" /> STUDENTS
-            </button>
-            <button 
-              onClick={() => setActiveTab("store")}
-              className={`w-full flex items-center gap-3 px-4 py-3 text-xs font-header font-bold rounded transition-colors ${activeTab === "store" ? "bg-white/10 text-white border-l-2 border-electricBlue" : "text-gray-400 hover:bg-white/5 hover:text-white"}`}
-            >
-              <ShoppingBag className="w-4 h-4" /> ASSET STORE
-            </button>
-            <button 
-              onClick={() => setActiveTab("analytics")}
-              className={`w-full flex items-center gap-3 px-4 py-3 text-xs font-header font-bold rounded transition-colors ${activeTab === "analytics" ? "bg-white/10 text-white border-l-2 border-electricBlue" : "text-gray-400 hover:bg-white/5 hover:text-white"}`}
-            >
-              <BarChart2 className="w-4 h-4" /> ANALYTICS
-            </button>
+    <div className="min-h-screen bg-obsidian text-offWhite font-body antialiased selection:bg-electricBlue selection:text-white overflow-x-hidden flex flex-col">
+      
+      <div className="fixed inset-0 bg-grid-pattern bg-[size:40px_40px] opacity-20 pointer-events-none z-0"></div>
 
-            <p className="text-[10px] font-mono text-gray-500 px-4 py-2 uppercase tracking-widest mt-4">Production</p>
-            <button 
-              onClick={() => setActiveTab("pipeline")}
-              data-testid="tab-pipeline"
-              className={`w-full flex items-center gap-3 px-4 py-3 text-xs font-header font-bold rounded transition-colors ${activeTab === "pipeline" ? "bg-white/10 text-white border-l-2 border-electricBlue" : "text-gray-400 hover:bg-white/5 hover:text-white"}`}
-            >
-              <Workflow className="w-4 h-4" /> PIPELINE
-            </button>
-          </nav>
-        </div>
+      <Navbar />
 
-        <div className="p-4 border-t border-white/10">
-          <div className="flex items-center gap-3">
-            <div className="w-8 h-8 rounded-full bg-gray-800 border border-white/20 relative overflow-hidden">
-              <div className="absolute inset-0 bg-gradient-to-br from-blue-900 to-black"></div>
-              <span className="absolute inset-0 flex items-center justify-center font-header text-white text-[10px]">AD</span>
+      <main className="flex-grow pt-32 pb-20 px-6 max-w-7xl mx-auto w-full z-10">
+        
+        <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-8 gap-4">
+          <div>
+            <div className="flex items-center gap-3 mb-2">
+              <span className="text-electricBlue text-xl font-header">∞</span>
+              <h1 className="font-header text-3xl md:text-4xl text-white">ADMIN PANEL</h1>
             </div>
-            <div>
-              <p className="text-xs font-bold text-white">ALEX DIRECTOR</p>
-              <p className="text-[10px] text-green-500 font-mono">SYSTEM ADMIN</p>
-            </div>
+            <p className="text-sm text-gray-400 font-mono">System management and content control.</p>
           </div>
         </div>
-      </aside>
 
-      {/* MAIN CONTENT */}
-      <main className={`flex-grow relative ${activeTab === "pipeline" ? "flex flex-col overflow-hidden" : "overflow-y-auto"}`}>
-        {/* GRID OVERLAY */}
-        <div className="fixed inset-0 bg-grid-pattern bg-[size:40px_40px] opacity-20 pointer-events-none z-0"></div>
+        <div className="flex gap-1 mb-8 border-b border-white/10 overflow-x-auto no-scrollbar">
+          {tabs.map((tab) => {
+            const Icon = tab.icon;
+            return (
+              <button
+                key={tab.id}
+                onClick={() => {
+                  setActiveTab(tab.id);
+                  if (tab.id === "courses") setCourseView("list");
+                }}
+                data-testid={`tab-${tab.id}`}
+                className={`flex items-center gap-2 px-5 py-3 text-xs font-header font-bold whitespace-nowrap border-b-2 transition-colors ${
+                  activeTab === tab.id
+                    ? "text-white border-electricBlue"
+                    : "text-gray-500 hover:text-white border-transparent hover:border-white/20"
+                }`}
+              >
+                <Icon className="w-4 h-4" />
+                {tab.label}
+              </button>
+            );
+          })}
+        </div>
 
-        {activeTab === "dashboard" && renderDashboard()}
-        {activeTab === "courses" && (
-          courseView === "list" ? renderCourseList() : 
-          courseView === "preview" ? renderCoursePreview() : 
-          renderCourseEditor()
-        )}
-        {activeTab === "students" && renderStudents()}
-        {activeTab === "store" && renderAssetStore()}
-        {activeTab === "analytics" && renderAnalytics()}
-        {activeTab === "pipeline" && <PipelineContent />}
-        {/* DELETE CONFIRMATION MODAL */}
+        <div className={`${activeTab === "pipeline" ? "flex flex-col" : ""}`}>
+          {activeTab === "dashboard" && renderDashboard()}
+          {activeTab === "courses" && (
+            courseView === "list" ? renderCourseList() : 
+            courseView === "preview" ? renderCoursePreview() : 
+            renderCourseEditor()
+          )}
+          {activeTab === "students" && renderStudents()}
+          {activeTab === "store" && renderAssetStore()}
+          {activeTab === "analytics" && renderAnalytics()}
+          {activeTab === "pipeline" && <PipelineContent />}
+        </div>
+
         {deleteConfirmation?.isOpen && (
           <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm animate-in fade-in duration-200">
             <div className="bg-[#0a0a0a] border border-white/10 p-6 max-w-sm w-full shadow-2xl relative">
@@ -2213,6 +2195,8 @@ export default function AdminDashboard() {
           </div>
         )}
       </main>
+
+      <Footer />
     </div>
   );
 }
