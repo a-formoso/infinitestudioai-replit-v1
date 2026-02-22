@@ -35,6 +35,9 @@ export interface IStorage {
   createUser(user: InsertUser): Promise<User>;
   updateUser(id: string, data: { username?: string; email?: string; emailVerified?: boolean; verificationToken?: string | null }): Promise<User | undefined>;
   updateUserPassword(id: string, hashedPassword: string): Promise<User | undefined>;
+  setPasswordResetToken(id: string, token: string, expires: Date): Promise<User | undefined>;
+  getUserByPasswordResetToken(token: string): Promise<User | undefined>;
+  clearPasswordResetToken(id: string): Promise<void>;
   getUserByVerificationToken(token: string): Promise<User | undefined>;
 
   // Course operations
@@ -114,6 +117,27 @@ export class DatabaseStorage implements IStorage {
       .where(eq(users.id, id))
       .returning();
     return user || undefined;
+  }
+
+  async setPasswordResetToken(id: string, token: string, expires: Date): Promise<User | undefined> {
+    const [user] = await db
+      .update(users)
+      .set({ passwordResetToken: token, passwordResetExpires: expires })
+      .where(eq(users.id, id))
+      .returning();
+    return user || undefined;
+  }
+
+  async getUserByPasswordResetToken(token: string): Promise<User | undefined> {
+    const [user] = await db.select().from(users).where(eq(users.passwordResetToken, token));
+    return user || undefined;
+  }
+
+  async clearPasswordResetToken(id: string): Promise<void> {
+    await db
+      .update(users)
+      .set({ passwordResetToken: null, passwordResetExpires: null })
+      .where(eq(users.id, id));
   }
 
   async getUserByVerificationToken(token: string): Promise<User | undefined> {

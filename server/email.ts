@@ -91,3 +91,56 @@ export async function sendVerificationEmail(toEmail: string, token: string, redi
 
   return data;
 }
+
+export async function sendPasswordResetEmail(toEmail: string, token: string) {
+  const { client, fromEmail } = await getUncachableResendClient();
+
+  const baseUrl = process.env.REPLIT_DEV_DOMAIN
+    ? `https://${process.env.REPLIT_DEV_DOMAIN}`
+    : process.env.REPLIT_DEPLOYMENT_URL
+    ? `https://${process.env.REPLIT_DEPLOYMENT_URL}`
+    : 'http://localhost:5000';
+
+  const resetUrl = `${baseUrl}/reset-password?token=${token}`;
+
+  const { data, error } = await client.emails.send({
+    from: fromEmail || 'Infinite Studio <onboarding@resend.dev>',
+    to: [toEmail],
+    subject: 'Reset Your Password — Infinite Studio',
+    html: `
+      <div style="background-color:#0A0A0A;padding:40px 20px;font-family:'Inter',Arial,sans-serif;">
+        <div style="max-width:480px;margin:0 auto;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);padding:40px;border-radius:2px;">
+          <div style="text-align:center;margin-bottom:32px;">
+            <span style="color:#2962FF;font-size:32px;">∞</span>
+            <h1 style="color:#FFFFFF;font-size:18px;letter-spacing:4px;margin:8px 0 0;">INFINITE STUDIO</h1>
+          </div>
+          <p style="color:#CCCCCC;font-size:14px;line-height:1.6;margin-bottom:24px;">
+            We received a request to reset your password. Click the button below to choose a new password.
+          </p>
+          <div style="text-align:center;margin:32px 0;">
+            <a href="${resetUrl}" style="display:inline-block;background-color:#FF3D00;color:#FFFFFF;font-size:13px;font-weight:700;letter-spacing:2px;text-decoration:none;padding:16px 40px;border-radius:0;">
+              RESET PASSWORD
+            </a>
+          </div>
+          <p style="color:#999999;font-size:12px;line-height:1.5;margin-top:24px;">
+            This link expires in 1 hour. If you didn't request a password reset, you can safely ignore this email.
+          </p>
+          <p style="color:#666666;font-size:11px;line-height:1.5;margin-top:16px;">
+            If the button doesn't work, copy and paste this link into your browser:<br/>
+            <a href="${resetUrl}" style="color:#2962FF;word-break:break-all;">${resetUrl}</a>
+          </p>
+          <div style="border-top:1px solid rgba(255,255,255,0.1);margin-top:32px;padding-top:16px;text-align:center;">
+            <p style="color:#444444;font-size:10px;letter-spacing:1px;">© 2025 INFINITE STUDIO</p>
+          </div>
+        </div>
+      </div>
+    `,
+  });
+
+  if (error) {
+    console.error('Failed to send password reset email:', error);
+    throw new Error('Failed to send password reset email');
+  }
+
+  return data;
+}

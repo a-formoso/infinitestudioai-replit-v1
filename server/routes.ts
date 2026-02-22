@@ -5,7 +5,7 @@ import bcrypt from "bcryptjs";
 import { nanoid } from "nanoid";
 import { insertUserSchema, insertEnrollmentSchema, insertLessonProgressSchema, insertOrderSchema, insertOrderItemSchema } from "@shared/schema";
 import { z } from "zod";
-import { sendVerificationEmail } from "./email";
+import { sendVerificationEmail, sendPasswordResetEmail } from "./email";
 
 declare module "express-session" {
   interface SessionData {
@@ -220,6 +220,66 @@ export async function registerRoutes(
     }
   });
   
+  // Forgot password - request reset link
+  app.post("/api/auth/forgot-password", async (req, res) => {
+    try {
+      const forgotSchema = z.object({ email: z.string().email() });
+      const parsed = forgotSchema.safeParse(req.body);
+      if (!parsed.success) {
+        return res.status(400).json({ message: "A valid email is required" });
+      }
+
+      const user = await storage.getUserByEmail(parsed.data.email);
+      if (!user) {
+        return res.json({ message: "If an account with that email exists, a reset link has been sent." });
+      }
+
+      const resetToken = nanoid(32);
+      const expires = new Date(Date.now() + 60 * 60 * 1000);
+      await storage.setPasswordResetToken(user.id, resetToken, expires);
+
+      await sendPasswordResetEmail(user.email, resetToken);
+
+      res.json({ message: "If an account with that email exists, a reset link has been sent." });
+    } catch (error) {
+      console.error("Forgot password error:", error);
+      res.status(500).json({ message: "Failed to process request. Please try again." });
+    }
+  });
+
+  // Reset password with token
+  app.post("/api/auth/reset-password", async (req, res) => {
+    try {
+      const resetSchema = z.object({
+        token: z.string().min(1),
+        newPassword: z.string().min(6, "Password must be at least 6 characters"),
+      });
+      const parsed = resetSchema.safeParse(req.body);
+      if (!parsed.success) {
+        return res.status(400).json({ message: parsed.error.errors[0]?.message || "Invalid input" });
+      }
+
+      const user = await storage.getUserByPasswordResetToken(parsed.data.token);
+      if (!user) {
+        return res.status(400).json({ message: "Invalid or expired reset link" });
+      }
+
+      if (!user.passwordResetExpires || new Date() > user.passwordResetExpires) {
+        await storage.clearPasswordResetToken(user.id);
+        return res.status(400).json({ message: "Reset link has expired. Please request a new one." });
+      }
+
+      const hashedPassword = await bcrypt.hash(parsed.data.newPassword, 10);
+      await storage.updateUserPassword(user.id, hashedPassword);
+      await storage.clearPasswordResetToken(user.id);
+
+      res.json({ message: "Password has been reset successfully. You can now log in." });
+    } catch (error) {
+      console.error("Reset password error:", error);
+      res.status(500).json({ message: "Failed to reset password. Please try again." });
+    }
+  });
+
   // Change password
   app.put("/api/auth/password", async (req, res) => {
     if (!req.session.userId) {
