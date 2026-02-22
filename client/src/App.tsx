@@ -25,6 +25,7 @@ import CourseNanoBanana from "@/pages/course-nano-banana";
 import CourseAIFilmmakingEcosystem from "@/pages/course-ai-filmmaking-ecosystem";
 import Mentorship from "@/pages/mentorship";
 import ResetPassword from "@/pages/reset-password";
+import CourseDetail from "@/pages/course-detail";
 
 const SCROLL_RESTORED_PATHS = [
   "/academy/foundation/advanced-ai-cinematography",
@@ -69,6 +70,8 @@ function Router() {
       <Route path="/academy/foundation/advanced-ai-cinematography" component={CourseLevel2} />
       <Route path="/academy/foundation/nano-banana-mastery" component={CourseNanoBanana} />
       <Route path="/academy/specialist/google-ai-filmmaking-ecosystem" component={CourseAIFilmmakingEcosystem} />
+      <Route path="/academy/foundation/:slug" component={CourseDetail} />
+      <Route path="/academy/specialist/:slug" component={CourseDetail} />
       <Route path="/mentorship" component={Mentorship} />
       <Route path="/reset-password" component={ResetPassword} />
       <Route path="/dashboard" component={Dashboard} />
