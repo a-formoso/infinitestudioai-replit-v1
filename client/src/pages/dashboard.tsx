@@ -13,6 +13,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
+import AdminDashboard from "@/pages/admin-dashboard";
 
 export default function Dashboard() {
   const { toast } = useToast();
@@ -25,12 +26,13 @@ export default function Dashboard() {
     queryFn: getEnrollments,
   });
 
-  const { data: userData } = useQuery({
+  const { data: userData, isLoading: userLoading } = useQuery({
     queryKey: ["currentUser"],
     queryFn: getCurrentUser,
   });
 
   const user = userData?.data?.user;
+  const isAdmin = user?.isAdmin === true;
 
   useScrollRestoration(userData === undefined ? undefined : !!user);
 
@@ -105,6 +107,18 @@ export default function Dashboard() {
     }
     passwordMutation.mutate({ currentPassword, newPassword });
   };
+
+  if (userLoading) {
+    return (
+      <div className="min-h-screen bg-obsidian flex items-center justify-center">
+        <div className="w-8 h-8 border-2 border-electricBlue border-t-transparent rounded-full animate-spin"></div>
+      </div>
+    );
+  }
+
+  if (isAdmin) {
+    return <AdminDashboard />;
+  }
 
   const enrollments = data?.data?.enrollments || [];
 
