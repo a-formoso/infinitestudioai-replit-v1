@@ -22,6 +22,8 @@ export default function Academy() {
     queryFn: getCourses,
   });
 
+  const isAdmin = data?.data?.isAdmin === true;
+
   const allCourses = data?.data?.courses || [];
 
   const publishedCourses = allCourses.filter((course: any) => course.status === "published");
@@ -140,9 +142,12 @@ export default function Academy() {
                   </h2>
 
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                      {draftCourses.map((course: any) => (
-                        <div key={course.id} className="glass-panel p-6 hover:border-white/30 transition-all duration-300 group cursor-pointer relative opacity-60 hover:opacity-100" data-testid={`card-draft-${course.slug}`}>
+                      {draftCourses.map((course: any) => {
+                        const tier = course.level === 'Foundation' ? 'foundation' : 'specialist';
+                        const cardContent = (
+                          <>
                             <div className={`absolute top-2 right-2 z-10 text-[10px] font-mono ${course.level === 'Specialist' ? 'text-signalOrange border-signalOrange/30' : 'text-electricBlue border-electricBlue/30'} border px-2 py-1`}>{course.level === 'Specialist' ? 'SPECIALIST' : 'FOUNDATION'}</div>
+                            {isAdmin && <div className="absolute top-2 left-2 z-10 text-[10px] font-mono text-neonPurple border border-neonPurple/30 px-2 py-1">ADMIN PREVIEW</div>}
                             <div className="h-32 bg-gray-800 mb-4 overflow-hidden relative grayscale group-hover:grayscale-0 transition-all">
                                 {course.imageUrl && (
                                   <div className="absolute inset-0 bg-cover bg-center opacity-50" style={{ backgroundImage: `url(${course.imageUrl})` }}></div>
@@ -150,8 +155,19 @@ export default function Academy() {
                             </div>
                             <h3 className="font-header text-sm text-white mb-2">{course.title}</h3>
                             <p className="text-[10px] text-gray-400 font-mono mb-0">{course.shortDescription}</p>
-                        </div>
-                      ))}
+                          </>
+                        );
+
+                        return isAdmin ? (
+                          <Link key={course.id} href={`/academy/${tier}/${course.slug}`} className="glass-panel p-6 hover:border-neonPurple/50 transition-all duration-300 group cursor-pointer relative opacity-60 hover:opacity-100 block" data-testid={`card-draft-${course.slug}`}>
+                            {cardContent}
+                          </Link>
+                        ) : (
+                          <div key={course.id} className="glass-panel p-6 hover:border-white/30 transition-all duration-300 group cursor-pointer relative opacity-60 hover:opacity-100" data-testid={`card-draft-${course.slug}`}>
+                            {cardContent}
+                          </div>
+                        );
+                      })}
                   </div>
               </div>
               )}

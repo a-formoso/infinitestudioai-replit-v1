@@ -10,6 +10,7 @@ export const users = pgTable("users", {
   email: text("email").notNull().unique(),
   emailVerified: boolean("email_verified").default(false).notNull(),
   verificationToken: text("verification_token"),
+  isAdmin: boolean("is_admin").default(false).notNull(),
   createdAt: timestamp("created_at").defaultNow().notNull(),
 });
 
@@ -87,6 +88,7 @@ export const orderItems = pgTable("order_items", {
 
 export const insertUserSchema = createInsertSchema(users).omit({
   id: true,
+  isAdmin: true,
   createdAt: true,
 });
 

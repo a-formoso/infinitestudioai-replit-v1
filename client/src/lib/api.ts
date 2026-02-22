@@ -70,7 +70,7 @@ export async function updateProfile(username: string, email: string) {
 
 // Courses
 export async function getCourses() {
-  return apiFetch<{ courses: any[] }>('/courses');
+  return apiFetch<{ courses: any[]; isAdmin?: boolean }>('/courses');
 }
 
 export async function getCourseBySlug(slug: string) {
