@@ -7,6 +7,7 @@ import {
   assets,
   orders,
   orderItems,
+  siteContent,
   type User,
   type InsertUser,
   type Course,
@@ -23,6 +24,8 @@ import {
   type InsertOrder,
   type OrderItem,
   type InsertOrderItem,
+  type SiteContent,
+  type InsertSiteContent,
 } from "@shared/schema";
 import { db } from "./db";
 import { eq, and, sql, desc } from "drizzle-orm";
@@ -74,6 +77,11 @@ export interface IStorage {
   createOrder(order: InsertOrder): Promise<Order>;
   createOrderItem(orderItem: InsertOrderItem): Promise<OrderItem>;
   getOrderItems(orderId: string): Promise<OrderItem[]>;
+
+  // Site content operations
+  getPageContent(page: string): Promise<SiteContent[]>;
+  getAllSiteContent(): Promise<SiteContent[]>;
+  upsertContent(page: string, key: string, value: string): Promise<SiteContent>;
 }
 
 export class DatabaseStorage implements IStorage {
@@ -325,6 +333,37 @@ export class DatabaseStorage implements IStorage {
       .select()
       .from(orderItems)
       .where(eq(orderItems.orderId, orderId));
+  }
+
+  // Site content operations
+  async getPageContent(page: string): Promise<SiteContent[]> {
+    return await db.select().from(siteContent).where(eq(siteContent.page, page));
+  }
+
+  async getAllSiteContent(): Promise<SiteContent[]> {
+    return await db.select().from(siteContent).orderBy(siteContent.page, siteContent.key);
+  }
+
+  async upsertContent(page: string, key: string, value: string): Promise<SiteContent> {
+    const [existing] = await db
+      .select()
+      .from(siteContent)
+      .where(and(eq(siteContent.page, page), eq(siteContent.key, key)));
+
+    if (existing) {
+      const [updated] = await db
+        .update(siteContent)
+        .set({ value, updatedAt: new Date() })
+        .where(eq(siteContent.id, existing.id))
+        .returning();
+      return updated;
+    } else {
+      const [created] = await db
+        .insert(siteContent)
+        .values({ page, key, value })
+        .returning();
+      return created;
+    }
   }
 }
 

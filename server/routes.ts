@@ -581,5 +581,56 @@ export async function registerRoutes(
     }
   });
 
+  // ===== Site Content Routes =====
+
+  app.get("/api/content/:page", async (req, res) => {
+    try {
+      const content = await storage.getPageContent(req.params.page);
+      const contentMap: Record<string, string> = {};
+      for (const item of content) {
+        contentMap[item.key] = item.value;
+      }
+      res.json({ content: contentMap });
+    } catch (error) {
+      res.status(500).json({ message: "Failed to fetch content" });
+    }
+  });
+
+  app.get("/api/content", async (req, res) => {
+    if (!req.session.userId) {
+      return res.status(401).json({ message: "Not authenticated" });
+    }
+    const user = await storage.getUser(req.session.userId);
+    if (!user?.isAdmin) {
+      return res.status(403).json({ message: "Admin access required" });
+    }
+    try {
+      const content = await storage.getAllSiteContent();
+      res.json({ content });
+    } catch (error) {
+      res.status(500).json({ message: "Failed to fetch content" });
+    }
+  });
+
+  app.put("/api/content", async (req, res) => {
+    if (!req.session.userId) {
+      return res.status(401).json({ message: "Not authenticated" });
+    }
+    const user = await storage.getUser(req.session.userId);
+    if (!user?.isAdmin) {
+      return res.status(403).json({ message: "Admin access required" });
+    }
+    try {
+      const { page, key, value } = req.body;
+      if (!page || !key || value === undefined) {
+        return res.status(400).json({ message: "Page, key, and value are required" });
+      }
+      const updated = await storage.upsertContent(page, key, value);
+      res.json({ content: updated });
+    } catch (error) {
+      res.status(500).json({ message: "Failed to update content" });
+    }
+  });
+
   return httpServer;
 }

@@ -4,6 +4,7 @@ import { Link } from "wouter";
 import { useQuery } from "@tanstack/react-query";
 import { getCourses } from "@/lib/api";
 import { useState } from "react";
+import { EditableText } from "@/components/editable-text";
 
 type Filter = "all" | "foundation" | "specialist" | "workshops";
 
@@ -57,16 +58,41 @@ export default function Academy() {
           <div className="absolute inset-0 bg-[url('/images/academy-hero.jpeg')] bg-cover bg-center bg-no-repeat opacity-30"></div>
           <div className="absolute inset-0 bg-gradient-to-b from-obsidian/60 via-obsidian/70 to-obsidian"></div>
           <div className="relative max-w-7xl mx-auto px-6">
-                  <div className="inline-block border border-signalOrange/50 px-3 py-1 mb-6 text-[10px] font-mono text-signalOrange tracking-widest uppercase">
-                      The Curriculum
+                  <EditableText
+                    page="academy"
+                    contentKey="hero_badge"
+                    defaultValue="The Curriculum"
+                    as="div"
+                    className="inline-block border border-signalOrange/50 px-3 py-1 mb-6 text-[10px] font-mono text-signalOrange tracking-widest uppercase"
+                    data-testid="editable-hero-badge"
+                  />
+                  <div className="font-header text-4xl md:text-6xl font-bold text-white leading-tight mb-6">
+                    <EditableText
+                      page="academy"
+                      contentKey="hero_headline"
+                      defaultValue="DIRECT THE"
+                      as="div"
+                      className="font-header text-4xl md:text-6xl font-bold text-white"
+                      data-testid="editable-hero-headline"
+                    />
+                    <EditableText
+                      page="academy"
+                      contentKey="hero_headline_accent"
+                      defaultValue="ALGORITHM"
+                      as="div"
+                      className="font-header text-4xl md:text-6xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-signalOrange to-yellow-500"
+                      data-testid="editable-hero-accent"
+                    />
                   </div>
-                  <h1 className="font-header text-4xl md:text-6xl font-bold text-white leading-tight mb-6">
-                      DIRECT THE<br />
-                      <span className="text-transparent bg-clip-text bg-gradient-to-r from-signalOrange to-yellow-500">ALGORITHM</span>
-                  </h1>
-                  <p className="text-lg text-gray-400 max-w-2xl leading-relaxed font-light mb-8">
-                      From your first prompt to your final render. A structured education path for the modern AI Filmmaker.
-                  </p>
+                  <EditableText
+                    page="academy"
+                    contentKey="hero_tagline"
+                    defaultValue="From your first prompt to your final render. A structured education path for the modern AI Filmmaker."
+                    as="p"
+                    className="text-lg text-gray-400 max-w-2xl leading-relaxed font-light mb-8"
+                    multiline
+                    data-testid="editable-hero-tagline"
+                  />
                   
                   <div className="flex flex-wrap gap-4">
                       {filters.map((f) => (
@@ -92,9 +118,14 @@ export default function Academy() {
               
               {showCoreSection && (
               <div className="mb-16">
-                  <h2 className="font-header text-xl text-white mb-8 border-l-4 border-white pl-4">
-                      LIVE COURSES
-                  </h2>
+                  <EditableText
+                    page="academy"
+                    contentKey="section_live_courses"
+                    defaultValue="LIVE COURSES"
+                    as="h2"
+                    className="font-header text-xl text-white mb-8 border-l-4 border-white pl-4"
+                    data-testid="editable-section-live"
+                  />
                   
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                       {isLoading ? (
@@ -137,9 +168,14 @@ export default function Academy() {
 
               {showComingSoon && draftCourses.length > 0 && (
               <div className="mb-16">
-                  <h2 className="font-header text-xl text-white mb-8 border-l-4 border-gray-600 pl-4">
-                      COMING SOON
-                  </h2>
+                  <EditableText
+                    page="academy"
+                    contentKey="section_coming_soon"
+                    defaultValue="COMING SOON"
+                    as="h2"
+                    className="font-header text-xl text-white mb-8 border-l-4 border-gray-600 pl-4"
+                    data-testid="editable-section-coming"
+                  />
 
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                       {draftCourses.map((course: any) => {

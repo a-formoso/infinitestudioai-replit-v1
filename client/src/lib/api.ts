@@ -142,3 +142,19 @@ export async function createOrder(items: Array<{ itemType: string; itemId: strin
 export async function getOrders() {
   return apiFetch<{ orders: any[] }>('/orders');
 }
+
+// Site Content
+export async function getPageContent(page: string) {
+  return apiFetch<{ content: Record<string, string> }>(`/content/${page}`);
+}
+
+export async function getAllSiteContent() {
+  return apiFetch<{ content: any[] }>('/content');
+}
+
+export async function updateSiteContent(page: string, key: string, value: string) {
+  return apiFetch<{ content: any }>('/content', {
+    method: 'PUT',
+    body: JSON.stringify({ page, key, value }),
+  });
+}

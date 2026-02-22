@@ -50,6 +50,7 @@ Preferred communication style: Simple, everyday language.
   - `assets` — for store items (textures, character sheets, LUT packs)
   - `orders` — purchase records
   - `order_items` — individual items within orders
+  - `site_content` — page-level editable content (page, key, value) with unique constraint on (page, key). Allows admins to edit text directly on live pages.
 - **Validation**: Zod schemas auto-generated from Drizzle schema via `drizzle-zod` (`createInsertSchema`)
 - **Seeding**: `server/seed.ts` contains seed data for courses, lessons, and assets — needs to be run to populate the database
 
