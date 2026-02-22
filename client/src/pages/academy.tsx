@@ -2,10 +2,8 @@ import { Navbar } from "@/components/navbar";
 import { Footer } from "@/components/footer";
 import { Link } from "wouter";
 import { useQuery } from "@tanstack/react-query";
-import { getCourses, getCurrentUser } from "@/lib/api";
+import { getCourses } from "@/lib/api";
 import { useState } from "react";
-import { EditableText, useEditMode } from "@/components/editable-text";
-import { EditableCourseField } from "@/components/editable-course-field";
 
 type Filter = "all" | "foundation" | "specialist" | "workshops";
 
@@ -18,20 +16,11 @@ function getInitialFilter(): Filter {
 
 export default function Academy() {
   const [activeFilter, setActiveFilter] = useState<Filter>(getInitialFilter);
-  const { editMode } = useEditMode();
 
   const { data, isLoading } = useQuery({
     queryKey: ["courses"],
     queryFn: getCourses,
   });
-
-  const { data: userData } = useQuery({
-    queryKey: ["currentUser"],
-    queryFn: getCurrentUser,
-  });
-
-  const isAdmin = userData?.data?.user?.isAdmin === true;
-  const isEditActive = isAdmin && editMode;
 
   const allCourses = data?.data?.courses || [];
 
@@ -66,41 +55,12 @@ export default function Academy() {
           <div className="absolute inset-0 bg-[url('/images/academy-hero.jpeg')] bg-cover bg-center bg-no-repeat opacity-30"></div>
           <div className="absolute inset-0 bg-gradient-to-b from-obsidian/60 via-obsidian/70 to-obsidian"></div>
           <div className="relative max-w-7xl mx-auto px-6">
-                  <EditableText
-                    page="academy"
-                    contentKey="hero_badge"
-                    defaultValue="The Curriculum"
-                    as="div"
-                    className="inline-block border border-signalOrange/50 px-3 py-1 mb-6 text-[10px] font-mono text-signalOrange tracking-widest uppercase"
-                    data-testid="editable-hero-badge"
-                  />
+                  <div className="inline-block border border-signalOrange/50 px-3 py-1 mb-6 text-[10px] font-mono text-signalOrange tracking-widest uppercase" data-testid="editable-hero-badge">The Curriculum</div>
                   <div className="font-header text-4xl md:text-6xl font-bold text-white leading-tight mb-6">
-                    <EditableText
-                      page="academy"
-                      contentKey="hero_headline"
-                      defaultValue="DIRECT THE"
-                      as="div"
-                      className="font-header text-4xl md:text-6xl font-bold text-white"
-                      data-testid="editable-hero-headline"
-                    />
-                    <EditableText
-                      page="academy"
-                      contentKey="hero_headline_accent"
-                      defaultValue="ALGORITHM"
-                      as="div"
-                      className="font-header text-4xl md:text-6xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-signalOrange to-yellow-500"
-                      data-testid="editable-hero-accent"
-                    />
+                    <div className="font-header text-4xl md:text-6xl font-bold text-white" data-testid="editable-hero-headline">DIRECT THE</div>
+                    <div className="font-header text-4xl md:text-6xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-signalOrange to-yellow-500" data-testid="editable-hero-accent">ALGORITHM</div>
                   </div>
-                  <EditableText
-                    page="academy"
-                    contentKey="hero_tagline"
-                    defaultValue="From your first prompt to your final render. A structured education path for the modern AI Filmmaker."
-                    as="p"
-                    className="text-lg text-gray-400 max-w-2xl leading-relaxed font-light mb-8"
-                    multiline
-                    data-testid="editable-hero-tagline"
-                  />
+                  <p className="text-lg text-gray-400 max-w-2xl leading-relaxed font-light mb-8" data-testid="editable-hero-tagline">From your first prompt to your final render. A structured education path for the modern AI Filmmaker.</p>
                   
                   <div className="flex flex-wrap gap-4">
                       {filters.map((f) => (
@@ -126,14 +86,7 @@ export default function Academy() {
               
               {showCoreSection && (
               <div className="mb-16">
-                  <EditableText
-                    page="academy"
-                    contentKey="section_live_courses"
-                    defaultValue="LIVE COURSES"
-                    as="h2"
-                    className="font-header text-xl text-white mb-8 border-l-4 border-white pl-4"
-                    data-testid="editable-section-live"
-                  />
+                  <h2 className="font-header text-xl text-white mb-8 border-l-4 border-white pl-4" data-testid="editable-section-live">LIVE COURSES</h2>
                   
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                       {isLoading ? (
@@ -145,8 +98,8 @@ export default function Academy() {
                         filteredCourses.map((course: any) => {
                           const tier = course.level === 'Foundation' ? 'foundation' : 'specialist';
                           const cardClassName = `glass-panel p-0 group cursor-pointer hover:border-${course.color === 'electricBlue' ? 'electricBlue' : 'signalOrange'}/50 transition-all duration-300 block`;
-                          const cardContent = (
-                            <>
+                          return (
+                            <Link key={course.id} href={`/academy/${tier}/${course.slug}`} className={cardClassName} data-testid={`card-course-${course.slug}`}>
                                 <div className="h-48 bg-gray-900 relative overflow-hidden">
                                     <div className={`absolute inset-0 bg-gradient-to-br ${course.color === 'electricBlue' ? 'from-blue-900/40' : 'from-orange-900/40'} to-black`}></div>
                                     {course.badge && (
@@ -154,47 +107,13 @@ export default function Academy() {
                                     )}
                                 </div>
                                 <div className="p-8">
-                                    <EditableCourseField
-                                      courseId={course.id}
-                                      field="title"
-                                      value={course.title}
-                                      isAdmin={isAdmin}
-                                      as="h3"
-                                      className={`font-header text-xl text-white mb-2 group-hover:text-${course.color === 'electricBlue' ? 'electricBlue' : 'signalOrange'} transition-colors`}
-                                      data-testid={`text-course-title-${course.slug}`}
-                                    />
-                                    <EditableCourseField
-                                      courseId={course.id}
-                                      field="shortDescription"
-                                      value={course.shortDescription}
-                                      isAdmin={isAdmin}
-                                      as="p"
-                                      className="text-xs text-gray-400 font-mono mb-4 leading-relaxed"
-                                      multiline
-                                      data-testid={`text-course-desc-${course.slug}`}
-                                    />
+                                    <h3 className={`font-header text-xl text-white mb-2 group-hover:text-${course.color === 'electricBlue' ? 'electricBlue' : 'signalOrange'} transition-colors`} data-testid={`text-course-title-${course.slug}`}>{course.title}</h3>
+                                    <p className="text-xs text-gray-400 font-mono mb-4 leading-relaxed" data-testid={`text-course-desc-${course.slug}`}>{course.shortDescription}</p>
                                     <div className="flex justify-between items-center pt-4 border-t border-white/10">
                                         <span className="text-xs font-mono text-white">{course.duration} • {course.lessonsCount} LESSONS</span>
-                                        <EditableCourseField
-                                          courseId={course.id}
-                                          field="price"
-                                          value={`$${parseFloat(course.price).toFixed(0)}`}
-                                          isAdmin={isAdmin}
-                                          as="span"
-                                          className="text-sm font-header font-bold text-white"
-                                          data-testid={`text-price-${course.slug}`}
-                                        />
+                                        <span className="text-sm font-header font-bold text-white" data-testid={`text-price-${course.slug}`}>{`$${parseFloat(course.price).toFixed(0)}`}</span>
                                     </div>
                                 </div>
-                            </>
-                          );
-                          return isEditActive ? (
-                            <div key={course.id} className={cardClassName} data-testid={`card-course-${course.slug}`}>
-                                {cardContent}
-                            </div>
-                          ) : (
-                            <Link key={course.id} href={`/academy/${tier}/${course.slug}`} className={cardClassName} data-testid={`card-course-${course.slug}`}>
-                                {cardContent}
                             </Link>
                           );
                         })
@@ -209,59 +128,21 @@ export default function Academy() {
 
               {showComingSoon && draftCourses.length > 0 && (
               <div className="mb-16">
-                  <EditableText
-                    page="academy"
-                    contentKey="section_coming_soon"
-                    defaultValue="COMING SOON"
-                    as="h2"
-                    className="font-header text-xl text-white mb-8 border-l-4 border-gray-600 pl-4"
-                    data-testid="editable-section-coming"
-                  />
+                  <h2 className="font-header text-xl text-white mb-8 border-l-4 border-gray-600 pl-4" data-testid="editable-section-coming">COMING SOON</h2>
 
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                      {draftCourses.map((course: any) => {
-                        const tier = course.level === 'Foundation' ? 'foundation' : 'specialist';
-                        const cardContent = (
-                          <>
+                      {draftCourses.map((course: any) => (
+                          <div key={course.id} className="glass-panel p-6 hover:border-white/30 transition-all duration-300 group relative opacity-60 hover:opacity-100" data-testid={`card-draft-${course.slug}`}>
                             <div className={`absolute top-2 right-2 z-10 text-[10px] font-mono ${course.level === 'Specialist' ? 'text-signalOrange border-signalOrange/30' : 'text-electricBlue border-electricBlue/30'} border px-2 py-1`}>{course.level === 'Specialist' ? 'SPECIALIST' : 'FOUNDATION'}</div>
-                            {isAdmin && <div className="absolute top-2 left-2 z-10 text-[10px] font-mono text-neonPurple border border-neonPurple/30 px-2 py-1">ADMIN PREVIEW</div>}
                             <div className="h-32 bg-gray-800 mb-4 overflow-hidden relative grayscale group-hover:grayscale-0 transition-all">
                                 {course.imageUrl && (
                                   <div className="absolute inset-0 bg-cover bg-center opacity-50" style={{ backgroundImage: `url(${course.imageUrl})` }}></div>
                                 )}
                             </div>
-                            <EditableCourseField
-                              courseId={course.id}
-                              field="title"
-                              value={course.title}
-                              isAdmin={isAdmin}
-                              as="h3"
-                              className="font-header text-sm text-white mb-2"
-                              data-testid={`text-draft-title-${course.slug}`}
-                            />
-                            <EditableCourseField
-                              courseId={course.id}
-                              field="shortDescription"
-                              value={course.shortDescription}
-                              isAdmin={isAdmin}
-                              as="p"
-                              className="text-[10px] text-gray-400 font-mono mb-0"
-                              multiline
-                              data-testid={`text-draft-desc-${course.slug}`}
-                            />
-                          </>
-                        );
-
-                        return isAdmin ? (
-                          <Link key={course.id} href={`/academy/${tier}/${course.slug}`} className="glass-panel p-6 hover:border-neonPurple/50 transition-all duration-300 group cursor-pointer relative opacity-60 hover:opacity-100 block" data-testid={`card-draft-${course.slug}`}>
-                            {cardContent}
-                          </Link>
-                        ) : (
-                          <div key={course.id} className="glass-panel p-6 hover:border-white/30 transition-all duration-300 group relative opacity-60 hover:opacity-100" data-testid={`card-draft-${course.slug}`}>
-                            {cardContent}
+                            <h3 className="font-header text-sm text-white mb-2" data-testid={`text-draft-title-${course.slug}`}>{course.title}</h3>
+                            <p className="text-[10px] text-gray-400 font-mono mb-0" data-testid={`text-draft-desc-${course.slug}`}>{course.shortDescription}</p>
                           </div>
-                        );
-                      })}
+                      ))}
                   </div>
               </div>
               )}

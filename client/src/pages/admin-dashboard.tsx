@@ -1,12 +1,11 @@
 import { Link, useSearch } from "wouter";
 import { useState, useEffect, useRef } from "react";
-import { LayoutDashboard, BookOpen, Users, ShoppingBag, BarChart2, Plus, Download, Bold, Italic, Underline, Link as LinkIcon, Code, X, Search, Edit2, Trash2, ArrowUp, ArrowDown, ArrowLeft, ArrowRight, ZoomIn, ZoomOut, Move, TrendingUp, DollarSign, Activity, Workflow, FileText, Pencil, Check, ExternalLink } from "lucide-react";
+import { LayoutDashboard, BookOpen, Users, ShoppingBag, BarChart2, Plus, Download, Bold, Italic, Underline, Link as LinkIcon, Code, X, Search, Edit2, Trash2, ArrowUp, ArrowDown, ArrowLeft, ArrowRight, ZoomIn, ZoomOut, Move, TrendingUp, DollarSign, Activity, Workflow, Pencil, Check, ExternalLink } from "lucide-react";
 import { LineChart, Line, AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, BarChart, Bar, PieChart, Pie, Cell } from 'recharts';
 import PipelineContent from "./pipeline";
 import { Navbar } from "@/components/navbar";
 import { Footer } from "@/components/footer";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { getAllSiteContent, updateSiteContent } from "@/lib/api";
 
 const INITIAL_LESSONS = {
   "1.1": { id: "1.1", title: "The Multimodal Script", duration: "12:45", video: "multimodal_script_v3.mp4", notes: "Introduction to multimodal scripting techniques using Gemini 1.5 Pro.", keyPrompt: "Analyze this image as a Director of Photography...", resources: [{ name: "Visual_Bible_Template.pdf", size: "2.4 MB", type: "PDF" }] },
@@ -2094,151 +2093,12 @@ export default function AdminDashboard() {
     </div>
   );
 
-  const ContentManager = () => {
-    const queryClient = useQueryClient();
-    const [editingId, setEditingId] = useState<string | null>(null);
-    const [editValue, setEditValue] = useState("");
-
-    const { data, isLoading } = useQuery({
-      queryKey: ["allSiteContent"],
-      queryFn: getAllSiteContent,
-    });
-
-    const mutation = useMutation({
-      mutationFn: ({ page, key, value }: { page: string; key: string; value: string }) =>
-        updateSiteContent(page, key, value),
-      onSuccess: () => {
-        queryClient.invalidateQueries({ queryKey: ["allSiteContent"] });
-        queryClient.invalidateQueries({ queryKey: ["siteContent"] });
-        setEditingId(null);
-      },
-    });
-
-    const contentItems = data?.data?.content || [];
-
-    const grouped: Record<string, typeof contentItems> = {};
-    for (const item of contentItems) {
-      if (!grouped[item.page]) grouped[item.page] = [];
-      grouped[item.page].push(item);
-    }
-
-    const friendlyKey = (key: string) =>
-      key.replace(/_/g, " ").replace(/\b\w/g, (c: string) => c.toUpperCase());
-
-    return (
-      <div className="relative z-10">
-        <div className="flex justify-between items-end mb-8">
-          <div>
-            <h1 className="font-header text-2xl text-white mb-1">PAGE CONTENT</h1>
-            <p className="text-xs text-gray-500 font-mono">Edit text across your site. Changes sync to live pages instantly.</p>
-          </div>
-        </div>
-
-        {isLoading ? (
-          <div className="glass-panel p-12 text-center">
-            <p className="text-gray-500 font-mono text-sm">Loading content...</p>
-          </div>
-        ) : Object.keys(grouped).length === 0 ? (
-          <div className="glass-panel p-12 text-center border border-white/10">
-            <FileText className="w-12 h-12 text-gray-600 mx-auto mb-4" />
-            <h3 className="font-header text-lg text-white mb-2">NO CONTENT YET</h3>
-            <p className="text-xs text-gray-500 font-mono max-w-md mx-auto mb-6">
-              Page content appears here once you edit text on your live pages. Go to any page as an admin, hover over editable text, and click the pencil icon to make your first edit.
-            </p>
-            <a href="/academy" className="inline-flex items-center gap-2 border border-electricBlue/50 text-electricBlue px-4 py-2 text-xs font-header hover:bg-electricBlue/10 transition-colors">
-              <ExternalLink className="w-3 h-3" />
-              GO TO ACADEMY PAGE
-            </a>
-          </div>
-        ) : (
-          <div className="space-y-8">
-            {Object.entries(grouped).map(([page, items]) => (
-              <div key={page} className="glass-panel p-6 border border-white/10">
-                <div className="flex items-center justify-between mb-6 pb-4 border-b border-white/10">
-                  <div className="flex items-center gap-3">
-                    <div className="w-8 h-8 bg-electricBlue/10 border border-electricBlue/30 flex items-center justify-center">
-                      <FileText className="w-4 h-4 text-electricBlue" />
-                    </div>
-                    <div>
-                      <h2 className="font-header text-sm text-white">{page.toUpperCase()} PAGE</h2>
-                      <p className="text-[10px] text-gray-500 font-mono">{items.length} editable field{items.length !== 1 ? "s" : ""}</p>
-                    </div>
-                  </div>
-                  <a href={`/${page}`} className="text-[10px] text-electricBlue font-mono hover:underline flex items-center gap-1">
-                    VIEW PAGE <ExternalLink className="w-3 h-3" />
-                  </a>
-                </div>
-                <div className="space-y-4">
-                  {items.map((item: any) => (
-                    <div key={item.id} className="group" data-testid={`content-item-${item.page}-${item.key}`}>
-                      <label className="text-[10px] text-gray-500 font-mono uppercase tracking-wider mb-1 block">
-                        {friendlyKey(item.key)}
-                      </label>
-                      {editingId === item.id ? (
-                        <div className="flex gap-2">
-                          <textarea
-                            value={editValue}
-                            onChange={(e) => setEditValue(e.target.value)}
-                            className="flex-1 bg-white/5 border border-electricBlue/50 text-white text-sm px-3 py-2 outline-none focus:border-electricBlue font-body resize-y min-h-[40px]"
-                            rows={editValue.length > 60 ? 3 : 1}
-                            autoFocus
-                            onKeyDown={(e) => {
-                              if (e.key === "Enter" && !e.shiftKey) {
-                                e.preventDefault();
-                                mutation.mutate({ page: item.page, key: item.key, value: editValue.trim() });
-                              }
-                              if (e.key === "Escape") setEditingId(null);
-                            }}
-                          />
-                          <div className="flex flex-col gap-1 shrink-0">
-                            <button
-                              onClick={() => mutation.mutate({ page: item.page, key: item.key, value: editValue.trim() })}
-                              disabled={mutation.isPending}
-                              className="p-2 bg-green-600 hover:bg-green-500 text-white transition-colors"
-                              data-testid={`content-save-${item.key}`}
-                            >
-                              <Check className="w-3.5 h-3.5" />
-                            </button>
-                            <button
-                              onClick={() => setEditingId(null)}
-                              className="p-2 bg-red-600 hover:bg-red-500 text-white transition-colors"
-                            >
-                              <X className="w-3.5 h-3.5" />
-                            </button>
-                          </div>
-                        </div>
-                      ) : (
-                        <div
-                          className="flex items-start justify-between gap-4 bg-white/5 px-3 py-2 border border-white/5 hover:border-white/20 cursor-pointer transition-colors"
-                          onClick={() => { setEditingId(item.id); setEditValue(item.value); }}
-                        >
-                          <p className="text-sm text-gray-300 font-body">{item.value}</p>
-                          <Pencil className="w-3.5 h-3.5 text-gray-600 group-hover:text-electricBlue shrink-0 mt-0.5 transition-colors" />
-                        </div>
-                      )}
-                      <p className="text-[10px] text-gray-600 font-mono mt-1">
-                        Last updated: {new Date(item.updatedAt).toLocaleDateString()}
-                      </p>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            ))}
-          </div>
-        )}
-      </div>
-    );
-  };
-
-  const renderContentManager = () => <ContentManager />;
-
   const tabs = [
     { id: "dashboard", label: "OVERVIEW", icon: LayoutDashboard },
     { id: "courses", label: "COURSES", icon: BookOpen },
     { id: "students", label: "STUDENTS", icon: Users },
     { id: "store", label: "ASSETS", icon: ShoppingBag },
     { id: "analytics", label: "ANALYTICS", icon: BarChart2 },
-    { id: "content", label: "CONTENT", icon: FileText },
     { id: "pipeline", label: "PIPELINE", icon: Workflow },
   ];
 
@@ -2295,7 +2155,6 @@ export default function AdminDashboard() {
           {activeTab === "students" && renderStudents()}
           {activeTab === "store" && renderAssetStore()}
           {activeTab === "analytics" && renderAnalytics()}
-          {activeTab === "content" && renderContentManager()}
           {activeTab === "pipeline" && <PipelineContent />}
         </div>
 

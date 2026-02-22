@@ -122,19 +122,6 @@ export const insertOrderSchema = createInsertSchema(orders).omit({
   createdAt: true,
 });
 
-export const siteContent = pgTable("site_content", {
-  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
-  page: text("page").notNull(),
-  key: text("key").notNull(),
-  value: text("value").notNull(),
-  updatedAt: timestamp("updated_at").defaultNow().notNull(),
-});
-
-export const insertSiteContentSchema = createInsertSchema(siteContent).omit({
-  id: true,
-  updatedAt: true,
-});
-
 export const insertOrderItemSchema = createInsertSchema(orderItems).omit({
   id: true,
 });
@@ -163,5 +150,3 @@ export type Order = typeof orders.$inferSelect;
 export type InsertOrderItem = z.infer<typeof insertOrderItemSchema>;
 export type OrderItem = typeof orderItems.$inferSelect;
 
-export type InsertSiteContent = z.infer<typeof insertSiteContentSchema>;
-export type SiteContent = typeof siteContent.$inferSelect;
