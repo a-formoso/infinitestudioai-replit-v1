@@ -225,13 +225,12 @@ export async function registerRoutes(
   // Get all courses
   app.get("/api/courses", async (req, res) => {
     try {
-      const allCourses = await storage.getAllCourses();
+      const courses = await storage.getAllCourses();
       let isAdmin = false;
       if (req.session.userId) {
         const user = await storage.getUser(req.session.userId);
         isAdmin = user?.isAdmin === true;
       }
-      const courses = isAdmin ? allCourses : allCourses.filter(c => c.status === 'published');
       res.json({ courses, isAdmin });
     } catch (error) {
       res.status(500).json({ message: "Failed to fetch courses" });

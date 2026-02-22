@@ -163,7 +163,7 @@ export default function Academy() {
                             {cardContent}
                           </Link>
                         ) : (
-                          <div key={course.id} className="glass-panel p-6 hover:border-white/30 transition-all duration-300 group cursor-pointer relative opacity-60 hover:opacity-100" data-testid={`card-draft-${course.slug}`}>
+                          <div key={course.id} className="glass-panel p-6 hover:border-white/30 transition-all duration-300 group relative opacity-60 hover:opacity-100" data-testid={`card-draft-${course.slug}`}>
                             {cardContent}
                           </div>
                         );
