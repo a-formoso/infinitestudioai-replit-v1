@@ -68,6 +68,13 @@ export async function updateProfile(username: string, email: string) {
   });
 }
 
+export async function changePassword(currentPassword: string, newPassword: string) {
+  return apiFetch<{ message: string }>('/auth/password', {
+    method: 'PUT',
+    body: JSON.stringify({ currentPassword, newPassword }),
+  });
+}
+
 // Courses
 export async function getCourses() {
   return apiFetch<{ courses: any[]; isAdmin?: boolean }>('/courses');

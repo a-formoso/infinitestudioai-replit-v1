@@ -2,7 +2,7 @@ import { Navbar } from "@/components/navbar";
 import { Footer } from "@/components/footer";
 import { Link } from "wouter";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { getEnrollments, getCurrentUser, updateProfile } from "@/lib/api";
+import { getEnrollments, getCurrentUser, updateProfile, changePassword } from "@/lib/api";
 import { useState } from "react";
 import { useToast } from "@/hooks/use-toast";
 import { useScrollRestoration } from "@/hooks/use-scroll-restoration";
@@ -18,6 +18,7 @@ export default function Dashboard() {
   const { toast } = useToast();
   const queryClient = useQueryClient();
   const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [isPasswordDialogOpen, setIsPasswordDialogOpen] = useState(false);
 
   const { data, isLoading } = useQuery({
     queryKey: ["enrollments"],
@@ -53,12 +54,56 @@ export default function Dashboard() {
     },
   });
 
+  const passwordMutation = useMutation({
+    mutationFn: ({ currentPassword, newPassword }: { currentPassword: string; newPassword: string }) =>
+      changePassword(currentPassword, newPassword),
+    onSuccess: (result) => {
+      if (result.error) {
+        toast({
+          title: "Update failed",
+          description: result.error,
+          variant: "destructive",
+        });
+        return;
+      }
+      toast({
+        title: "Password updated",
+        description: "Your password has been changed successfully.",
+      });
+      setIsPasswordDialogOpen(false);
+    },
+    onError: (error: any) => {
+      toast({
+        title: "Update failed",
+        description: error.message || "Failed to change password",
+        variant: "destructive",
+      });
+    },
+  });
+
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const formData = new FormData(e.currentTarget);
     const username = formData.get("username") as string;
     const email = formData.get("email") as string;
     updateMutation.mutate({ username, email });
+  };
+
+  const handlePasswordSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const formData = new FormData(e.currentTarget);
+    const currentPassword = formData.get("currentPassword") as string;
+    const newPassword = formData.get("newPassword") as string;
+    const confirmPassword = formData.get("confirmPassword") as string;
+    if (newPassword !== confirmPassword) {
+      toast({
+        title: "Passwords don't match",
+        description: "New password and confirmation must match.",
+        variant: "destructive",
+      });
+      return;
+    }
+    passwordMutation.mutate({ currentPassword, newPassword });
   };
 
   const enrollments = data?.data?.enrollments || [];
@@ -124,6 +169,63 @@ export default function Dashboard() {
                           className="w-full bg-electricBlue text-white font-header font-bold text-sm uppercase py-4 hover:bg-white hover:text-black transition-all duration-300 tracking-wider disabled:opacity-50"
                         >
                           {updateMutation.isPending ? "SAVING..." : "Save Changes"}
+                        </button>
+                      </form>
+                    </DialogContent>
+                  </Dialog>
+                  <Dialog open={isPasswordDialogOpen} onOpenChange={setIsPasswordDialogOpen}>
+                    <DialogTrigger asChild>
+                      <button 
+                        className="border border-white/20 text-white px-6 py-3 text-xs font-header font-bold uppercase hover:bg-white/10 transition-colors"
+                        data-testid="button-change-password"
+                      >
+                          Change Password
+                      </button>
+                    </DialogTrigger>
+                    <DialogContent className="bg-obsidian border-white/10 text-white max-w-md">
+                      <DialogHeader>
+                        <DialogTitle className="font-header text-xl text-white">CHANGE PASSWORD</DialogTitle>
+                      </DialogHeader>
+                      <form onSubmit={handlePasswordSubmit} className="space-y-6 mt-4">
+                        <div>
+                          <label className="block text-[10px] font-mono text-gray-500 mb-2 uppercase tracking-wider">Current Password</label>
+                          <input 
+                            type="password"
+                            name="currentPassword"
+                            data-testid="input-current-password"
+                            className="w-full bg-black/50 border border-white/10 text-white p-4 font-body text-sm focus:outline-none focus:border-electricBlue transition-all"
+                            required
+                          />
+                        </div>
+                        <div>
+                          <label className="block text-[10px] font-mono text-gray-500 mb-2 uppercase tracking-wider">New Password</label>
+                          <input 
+                            type="password"
+                            name="newPassword"
+                            minLength={6}
+                            data-testid="input-new-password"
+                            className="w-full bg-black/50 border border-white/10 text-white p-4 font-body text-sm focus:outline-none focus:border-electricBlue transition-all"
+                            required
+                          />
+                        </div>
+                        <div>
+                          <label className="block text-[10px] font-mono text-gray-500 mb-2 uppercase tracking-wider">Confirm New Password</label>
+                          <input 
+                            type="password"
+                            name="confirmPassword"
+                            minLength={6}
+                            data-testid="input-confirm-password"
+                            className="w-full bg-black/50 border border-white/10 text-white p-4 font-body text-sm focus:outline-none focus:border-electricBlue transition-all"
+                            required
+                          />
+                        </div>
+                        <button 
+                          type="submit"
+                          disabled={passwordMutation.isPending}
+                          data-testid="button-save-password"
+                          className="w-full bg-electricBlue text-white font-header font-bold text-sm uppercase py-4 hover:bg-white hover:text-black transition-all duration-300 tracking-wider disabled:opacity-50"
+                        >
+                          {passwordMutation.isPending ? "UPDATING..." : "Update Password"}
                         </button>
                       </form>
                     </DialogContent>
