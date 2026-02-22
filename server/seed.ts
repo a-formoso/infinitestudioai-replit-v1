@@ -86,6 +86,38 @@ async function seed() {
           status: "draft",
           imageUrl: "https://images.unsplash.com/photo-1550751827-4bd374c3f58b?q=80&w=2670&auto=format&fit=crop",
         },
+        {
+          title: "AI CINEMATOGRAPHY & DIRECTION",
+          slug: "ai-cinematography-and-direction",
+          description:
+            "Master the visual language of AI filmmaking. From lighting design and lens choices to blocking, staging, and coverage patterns — learn to direct AI-generated scenes like a professional cinematographer.",
+          shortDescription:
+            "Lighting design, lens language, blocking & staging, and coverage patterns for AI filmmaking.",
+          price: "179.00",
+          level: "Specialist",
+          duration: "5.0 HOURS",
+          lessonsCount: 16,
+          badge: "SPECIALIST",
+          color: "signalOrange",
+          status: "draft",
+          imageUrl: "https://images.unsplash.com/photo-1485846234645-a62644f84728?q=80&w=2670&auto=format&fit=crop",
+        },
+        {
+          title: "AI POST-PRODUCTION & FINISHING",
+          slug: "ai-post-production-and-finishing",
+          description:
+            "The complete post-production pipeline for AI-generated content. Color grading, sound design, music scoring, and title design — transform raw AI output into polished, deliverable work.",
+          shortDescription:
+            "Color grading, sound design, music scoring, and title design for AI content.",
+          price: "149.00",
+          level: "Foundation",
+          duration: "4.5 HOURS",
+          lessonsCount: 12,
+          badge: "FOUNDATION",
+          color: "electricBlue",
+          status: "draft",
+          imageUrl: "https://images.unsplash.com/photo-1574717024653-61fd2cf4d44d?q=80&w=2670&auto=format&fit=crop",
+        },
       ])
       .returning();
 
