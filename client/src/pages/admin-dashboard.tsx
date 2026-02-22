@@ -6,6 +6,7 @@ import PipelineContent from "./pipeline";
 import { Navbar } from "@/components/navbar";
 import { Footer } from "@/components/footer";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { getCourses, createCourse as apiCreateCourse, updateCourse as apiUpdateCourse, deleteCourse as apiDeleteCourse } from "@/lib/api";
 
 const INITIAL_LESSONS = {
   "1.1": { id: "1.1", title: "The Multimodal Script", duration: "12:45", video: "multimodal_script_v3.mp4", notes: "Introduction to multimodal scripting techniques using Gemini 1.5 Pro.", keyPrompt: "Analyze this image as a Director of Photography...", resources: [{ name: "Visual_Bible_Template.pdf", size: "2.4 MB", type: "PDF" }] },
@@ -101,46 +102,46 @@ export default function AdminDashboard() {
   // State for Modules Structure
   const [modules, setModules] = useState<Module[]>(INITIAL_MODULES);
 
-  const [coursesList, setCoursesList] = useState<Course[]>([
-    {
-      id: "course-2",
-      title: "ADVANCED AI CINEMATOGRAPHY",
-      code: "AC",
-      color: "orange-900",
-      lastUpdated: "1d ago",
-      students: "1,105",
-      price: "$199",
-      status: "LIVE",
-      modules: [],
-      lessons: {}
-    },
-    {
-      id: "course-3",
-      title: "THE GOOGLE AI FILMMAKING ECOSYSTEM",
-      code: "FE",
-      color: "orange-900",
-      lastUpdated: "2h ago",
-      students: "3,420",
-      price: "$249",
-      status: "LIVE",
-      modules: INITIAL_MODULES,
-      lessons: INITIAL_LESSONS
-    },
-    {
-      id: "course-4",
-      title: "NANO BANANA MASTERY",
-      code: "NB",
-      color: "blue-900",
-      lastUpdated: "3d ago",
-      students: "2,180",
-      price: "$129",
-      status: "LIVE",
-      modules: [],
-      lessons: {}
-    }
-  ]);
   
   const [editorCourseId, setEditorCourseId] = useState<string | null>(null);
+
+  const queryClient = useQueryClient();
+  const { data: coursesData, isLoading: coursesLoading } = useQuery({
+    queryKey: ["adminCourses"],
+    queryFn: getCourses,
+  });
+  const dbCourses = coursesData?.data?.courses || [];
+
+  const createCourseMutation = useMutation({
+    mutationFn: (data: Record<string, any>) => apiCreateCourse(data),
+    onSuccess: () => { queryClient.invalidateQueries({ queryKey: ["adminCourses"] }); queryClient.invalidateQueries({ queryKey: ["courses"] }); },
+  });
+
+  const updateCourseMutation = useMutation({
+    mutationFn: ({ id, data }: { id: string; data: Record<string, any> }) => apiUpdateCourse(id, data),
+    onSuccess: () => { queryClient.invalidateQueries({ queryKey: ["adminCourses"] }); queryClient.invalidateQueries({ queryKey: ["courses"] }); },
+  });
+
+  const deleteCourseMutation = useMutation({
+    mutationFn: (id: string) => apiDeleteCourse(id),
+    onSuccess: () => { queryClient.invalidateQueries({ queryKey: ["adminCourses"] }); queryClient.invalidateQueries({ queryKey: ["courses"] }); },
+  });
+
+  const [isCourseModalOpen, setIsCourseModalOpen] = useState(false);
+  const [editingDbCourse, setEditingDbCourse] = useState<any>(null);
+  const [courseForm, setCourseForm] = useState({
+    title: "",
+    shortDescription: "",
+    description: "",
+    price: "0",
+    level: "Foundation",
+    duration: "0h",
+    lessonsCount: 0,
+    badge: "",
+    color: "#2962FF",
+    status: "draft",
+    imageUrl: "",
+  });
 
   const [studentsList, setStudentsList] = useState<Student[]>([
     { id: "s1", initials: "SJ", name: "Sarah Jenkins", email: "sarah.j@example.com", avatarColor: "purple-900", enrolledCourse: "AI Filmmaking Ecosystem", progress: 85, lastActive: "2 hours ago", status: "ACTIVE" },
@@ -503,68 +504,79 @@ export default function AdminDashboard() {
     setEditingProduct({ ...editingProduct, [field]: value });
   };
 
-  const handleCourseListUpdate = (courseId: string, field: keyof Course, value: string) => {
-    setCoursesList(coursesList.map(c => {
-      if (c.id === courseId) {
-        return { ...c, [field]: value };
-      }
-      return c;
-    }));
+  const handleOpenCreateCourseModal = () => {
+    setEditingDbCourse(null);
+    setCourseForm({
+      title: "",
+      shortDescription: "",
+      description: "",
+      price: "0",
+      level: "Foundation",
+      duration: "0h",
+      lessonsCount: 0,
+      badge: "",
+      color: "#2962FF",
+      status: "draft",
+      imageUrl: "",
+    });
+    setIsCourseModalOpen(true);
+  };
+
+  const handleOpenEditCourseModal = (course: any) => {
+    setEditingDbCourse(course);
+    setCourseForm({
+      title: course.title || "",
+      shortDescription: course.shortDescription || "",
+      description: course.description || "",
+      price: course.price || "0",
+      level: course.level || "Foundation",
+      duration: course.duration || "0h",
+      lessonsCount: course.lessonsCount || 0,
+      badge: course.badge || "",
+      color: course.color || "#2962FF",
+      status: course.status || "draft",
+      imageUrl: course.imageUrl || "",
+    });
+    setIsCourseModalOpen(true);
+  };
+
+  const handleSaveCourseForm = async () => {
+    if (editingDbCourse) {
+      await updateCourseMutation.mutateAsync({ id: editingDbCourse.id, data: courseForm });
+    } else {
+      await createCourseMutation.mutateAsync(courseForm);
+    }
+    setIsCourseModalOpen(false);
+  };
+
+  const handleTogglePublish = async (course: any) => {
+    const newStatus = course.status === "published" ? "draft" : "published";
+    await updateCourseMutation.mutateAsync({ id: course.id, data: { status: newStatus } });
+  };
+
+  const handleDeleteDbCourse = async (courseId: string) => {
+    await deleteCourseMutation.mutateAsync(courseId);
+    setDeleteConfirmation(null);
   };
 
   const handleCreateCourse = () => {
-    setActiveTab("courses");
-    setLessons({});
-    setModules([]);
-    setEditorCourseTitle("UNTITLED COURSE");
-    setSelectedLessonId("");
-    setEditorCourseId(null);
-    setCourseView('editor');
+    handleOpenCreateCourseModal();
   };
 
   const handleEditCourse = (courseId: string) => {
-    const course = coursesList.find(c => c.id === courseId);
-    if (course) {
-      setLessons(course.lessons);
-      setModules(course.modules);
-      setEditorCourseTitle(course.title);
-      setEditorCourseId(courseId);
-      // Select first lesson if available
-      if (course.modules.length > 0 && course.modules[0].lessons.length > 0) {
-        setSelectedLessonId(course.modules[0].lessons[0]);
-      } else {
-        setSelectedLessonId("");
-      }
-      setCourseView('editor');
+    setEditorCourseId(courseId);
+    setLessons(INITIAL_LESSONS);
+    setModules(INITIAL_MODULES);
+    setEditorCourseTitle("COURSE CURRICULUM");
+    if (INITIAL_MODULES.length > 0 && INITIAL_MODULES[0].lessons.length > 0) {
+      setSelectedLessonId(INITIAL_MODULES[0].lessons[0]);
+    } else {
+      setSelectedLessonId("");
     }
+    setCourseView('editor');
   };
   
   const handleSaveCourse = () => {
-    if (editorCourseId) {
-      // Update existing course
-      setCoursesList(coursesList.map(c => {
-        if (c.id === editorCourseId) {
-          return { ...c, title: editorCourseTitle, modules, lessons, lastUpdated: "Just now" };
-        }
-        return c;
-      }));
-    } else {
-      // Create new course
-      const newCourseId = `course-${coursesList.length + 1}`;
-      const newCourse = {
-        id: newCourseId,
-        title: editorCourseTitle,
-        code: `L${coursesList.length + 1}`,
-        color: "purple-900",
-        lastUpdated: "Just now",
-        students: "0",
-        price: "$0",
-        status: "DRAFT",
-        modules,
-        lessons
-      };
-      setCoursesList([...coursesList, newCourse]);
-    }
     setCourseView('list');
   };
 
@@ -625,7 +637,7 @@ export default function AdminDashboard() {
   };
 
   const requestDeleteCourse = (courseId: string) => {
-    const course = coursesList.find(c => c.id === courseId);
+    const course = dbCourses.find((c: any) => c.id === courseId);
     setDeleteConfirmation({
       isOpen: true,
       type: 'course',
@@ -672,8 +684,8 @@ export default function AdminDashboard() {
             }
         }
     } else if (deleteConfirmation.type === 'course') {
-      const courseId = deleteConfirmation.id;
-      setCoursesList(coursesList.filter(c => c.id !== courseId));
+      handleDeleteDbCourse(deleteConfirmation.id);
+      return;
     }
     setDeleteConfirmation(null);
   };
@@ -903,16 +915,10 @@ export default function AdminDashboard() {
   const renderCourseList = () => {
     const toggleCourse = (id: string) => {
       setExpandedCourseId(expandedCourseId === id ? null : id);
-      setExpandedModuleId(null); // Reset module selection when switching courses
-    };
-
-    const toggleModule = (id: string) => {
-      setExpandedModuleId(expandedModuleId === id ? null : id);
     };
 
     return (
       <div className="relative z-10">
-        {/* HEADER */}
         <div className="flex justify-between items-end mb-8">
           <div>
             <h1 className="font-header text-2xl text-white mb-1">COURSE MANAGEMENT</h1>
@@ -920,7 +926,8 @@ export default function AdminDashboard() {
           </div>
           <div className="flex gap-4">
             <button 
-              onClick={handleCreateCourse}
+              onClick={handleOpenCreateCourseModal}
+              data-testid="button-create-course"
               className="bg-electricBlue text-white px-4 py-2 text-[10px] font-header font-bold uppercase hover:bg-white hover:text-black transition-colors"
             >
               + Create New Course
@@ -928,128 +935,279 @@ export default function AdminDashboard() {
           </div>
         </div>
 
-          {/* COURSE LIST */}
-        <div className="space-y-6">
-          
-          {coursesList.map((course) => (
-            <div key={course.id} className={`glass-panel p-0 overflow-hidden border transition-colors group ${expandedCourseId === course.id ? 'border-electricBlue/50' : 'border-white/10 hover:border-electricBlue/30'} ${course.status === 'DRAFT' ? 'opacity-90' : ''}`}>
-              <div 
-                className="p-6 flex items-center justify-between border-b border-white/5 bg-white/5 cursor-pointer"
-                onClick={() => toggleCourse(course.id)}
-              >
-                <div className="flex items-center gap-4">
-                  <div className={`w-12 h-12 bg-gray-900 shrink-0 relative overflow-hidden rounded border border-white/10`}>
-                    <div className={`absolute inset-0 bg-gradient-to-br from-${course.color}/40 to-black`}></div>
-                    <span className="absolute inset-0 flex items-center justify-center font-header text-white text-xs">{course.code}</span>
+        {coursesLoading ? (
+          <div className="flex items-center justify-center py-20">
+            <div className="text-center space-y-4">
+              <div className="w-8 h-8 border-2 border-electricBlue border-t-transparent rounded-full animate-spin mx-auto"></div>
+              <p className="text-xs text-gray-500 font-mono">Loading courses...</p>
+            </div>
+          </div>
+        ) : dbCourses.length === 0 ? (
+          <div className="glass-panel p-12 border border-white/10 text-center">
+            <BookOpen className="w-12 h-12 text-gray-600 mx-auto mb-4" />
+            <h3 className="font-header text-lg text-white mb-2">NO COURSES YET</h3>
+            <p className="text-xs text-gray-500 font-mono mb-6">Create your first course to get started.</p>
+            <button 
+              onClick={handleOpenCreateCourseModal}
+              className="bg-electricBlue text-white px-6 py-3 text-[10px] font-header font-bold uppercase hover:bg-white hover:text-black transition-colors"
+            >
+              + Create First Course
+            </button>
+          </div>
+        ) : (
+          <div className="space-y-4">
+            {dbCourses.map((course: any) => (
+              <div key={course.id} data-testid={`card-course-${course.id}`} className={`glass-panel p-0 overflow-hidden border transition-colors group ${expandedCourseId === course.id ? 'border-electricBlue/50' : 'border-white/10 hover:border-electricBlue/30'} ${course.status === 'draft' ? 'opacity-90' : ''}`}>
+                <div 
+                  className="p-6 flex items-center justify-between border-b border-white/5 bg-white/5 cursor-pointer"
+                  onClick={() => toggleCourse(course.id)}
+                >
+                  <div className="flex items-center gap-4">
+                    <div className="w-12 h-12 shrink-0 relative overflow-hidden rounded border border-white/10" style={{ backgroundColor: course.color || '#2962FF' }}>
+                      <span className="absolute inset-0 flex items-center justify-center font-header text-white text-xs font-bold">{course.title?.substring(0, 2).toUpperCase()}</span>
+                    </div>
+                    <div>
+                      <h3 className="font-header text-sm text-white uppercase" data-testid={`text-course-title-${course.id}`}>{course.title}</h3>
+                      <div className="flex items-center gap-2 mt-1">
+                        <span className="text-[10px] text-gray-400 font-mono">/{course.slug}</span>
+                        <span className="text-gray-600">•</span>
+                        <span className={`text-[10px] px-1.5 py-0.5 rounded font-bold ${course.level === 'Specialist' ? 'bg-purple-500/20 text-purple-400' : 'bg-blue-500/20 text-blue-400'}`}>{course.level}</span>
+                        <span className="text-gray-600">•</span>
+                        <span className="text-[10px] text-gray-500 font-mono">{course.lessonsCount} lessons</span>
+                        <span className="text-gray-600">•</span>
+                        <span className="text-[10px] text-gray-500 font-mono">{course.createdAt ? new Date(course.createdAt).toLocaleDateString() : ''}</span>
+                      </div>
+                    </div>
                   </div>
-                  <div>
-                    <h3 className="font-header text-sm text-white uppercase">{course.title}</h3>
-                    <p className="text-[10px] text-gray-400 font-mono">ID: #{course.id.toUpperCase()} • Last Updated: {course.lastUpdated}</p>
-                  </div>
-                </div>
-                <div className="flex items-center gap-6">
-                  <div className="text-right">
-                    <p className="text-xs text-white font-bold">{course.students}</p>
-                    <p className="text-[10px] text-gray-500 uppercase">Students</p>
-                  </div>
-                  <div className="text-right">
-                    <input 
-                      type="text"
-                      value={course.price}
-                      onClick={(e) => e.stopPropagation()}
-                      onChange={(e) => handleCourseListUpdate(course.id, "price", e.target.value)}
-                      className="text-xs text-green-400 font-bold bg-transparent border-b border-transparent hover:border-white/20 focus:border-green-400 outline-none text-right w-16"
-                    />
-                    <p className="text-[10px] text-gray-500 uppercase">Price</p>
-                  </div>
-                  <button
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      handleCourseListUpdate(course.id, "status", course.status === "LIVE" ? "DRAFT" : "LIVE");
-                    }}
-                    className={`px-3 py-1 rounded text-[10px] font-bold border hover:opacity-80 transition-opacity ${course.status === 'LIVE' ? 'bg-green-500/10 text-green-500 border-green-500/20' : 'bg-yellow-500/10 text-yellow-500 border-yellow-500/20'}`}
-                  >
-                    {course.status}
-                  </button>
-                  <div className="flex gap-2">
-                    <button 
+                  <div className="flex items-center gap-6">
+                    <div className="text-right">
+                      <p className="text-xs text-green-400 font-bold font-mono">${Number(course.price || 0).toFixed(0)}</p>
+                      <p className="text-[10px] text-gray-500 uppercase">Price</p>
+                    </div>
+                    <button
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        handleTogglePublish(course);
+                      }}
+                      data-testid={`button-toggle-publish-${course.id}`}
+                      className={`px-3 py-1 rounded text-[10px] font-bold border hover:opacity-80 transition-opacity ${course.status === 'published' ? 'bg-green-500/10 text-green-500 border-green-500/20' : 'bg-yellow-500/10 text-yellow-500 border-yellow-500/20'}`}
+                    >
+                      {course.status === 'published' ? 'PUBLISHED' : 'DRAFT'}
+                    </button>
+                    <div className="flex gap-2">
+                      <button 
+                        onClick={(e) => { e.stopPropagation(); handleOpenEditCourseModal(course); }}
+                        className="text-gray-400 hover:text-electricBlue transition-colors p-1"
+                        title="Edit Course"
+                        data-testid={`button-edit-course-${course.id}`}
+                      >
+                        <Edit2 className="w-4 h-4" />
+                      </button>
+                      <button 
                         onClick={(e) => { e.stopPropagation(); requestDeleteCourse(course.id); }}
                         className="text-gray-400 hover:text-red-500 transition-colors p-1"
                         title="Delete Course"
-                    >
+                        data-testid={`button-delete-course-${course.id}`}
+                      >
                         <Trash2 className="w-4 h-4" />
-                    </button>
-                    <button className="text-gray-400 hover:text-white transition-colors p-1">
+                      </button>
+                      <button className="text-gray-400 hover:text-white transition-colors p-1">
                         {expandedCourseId === course.id ? '▲' : '▼'}
-                    </button>
+                      </button>
+                    </div>
                   </div>
                 </div>
-              </div>
-              
-              {/* Modules (Collapsible) */}
-              {expandedCourseId === course.id && (
-                <div className="bg-black/30 p-4 space-y-2 animate-in slide-in-from-top-2 duration-200">
-                  {course.modules.length === 0 ? (
-                     <div className="p-4 text-center text-gray-500 text-xs font-mono border border-dashed border-white/10 rounded">
-                        No modules created yet. <button onClick={(e) => { e.stopPropagation(); handleEditCourse(course.id); }} className="text-electricBlue hover:underline">Start building curriculum</button>
-                     </div>
-                  ) : (
-                    course.modules.map((module) => (
-                      <div key={module.id} className="bg-white/5 rounded border border-white/5 overflow-hidden">
-                        <div 
-                          className="flex justify-between items-center p-3 hover:bg-white/5 cursor-pointer"
-                          onClick={() => toggleModule(module.id)}
-                        >
-                          <div className="flex items-center gap-3">
-                            <span className="text-gray-600 text-xs">::</span>
-                            <span className="text-xs text-gray-300 font-medium">{module.title}</span>
-                          </div>
-                          <div className="flex gap-3 text-[10px]">
-                            <span className="text-gray-500">{module.lessons.length} Lessons</span>
-                            <button onClick={(e) => { e.stopPropagation(); handleEditCourse(course.id); }} className="text-electricBlue hover:underline">Edit</button>
-                          </div>
-                        </div>
-                        
-                        {/* Lessons for Module */}
-                        {expandedModuleId === module.id && (
-                          <div className="bg-black/20 border-t border-white/5 p-2 space-y-1">
-                            {module.lessons.map((lessonId) => {
-                                const lesson = course.lessons ? course.lessons[lessonId] : lessons[lessonId];
-                                if (!lesson) return null;
-                                return (
-                                  <div 
-                                    key={lessonId}
-                                    className="flex items-center justify-between p-2 pl-8 text-[10px] text-gray-400 hover:text-white hover:bg-white/5 rounded cursor-pointer group/lesson"
-                                    onClick={() => handleEditCourse(course.id)}
-                                  >
-                                    <span>{lesson.title}</span>
-                                    <div className="flex items-center gap-2">
-                                      <span className="text-gray-600 group-hover/lesson:hidden">{lesson.duration}</span>
-                                      <div className="hidden group-hover/lesson:flex gap-1">
-                                        <button className="p-1 hover:bg-white/10 rounded text-electricBlue" title="Edit">
-                                          <Edit2 className="w-3 h-3" />
-                                        </button>
-                                      </div>
-                                    </div>
-                                  </div>
-                                );
-                            })}
-                          </div>
-                        )}
+                
+                {expandedCourseId === course.id && (
+                  <div className="bg-black/30 p-6 space-y-4 animate-in slide-in-from-top-2 duration-200">
+                    {course.description && (
+                      <div>
+                        <p className="text-[10px] font-mono text-gray-500 uppercase mb-2">Description</p>
+                        <p className="text-xs text-gray-300 leading-relaxed">{course.description}</p>
                       </div>
-                    ))
-                  )}
-                  {course.modules.length > 0 && (
-                      <button onClick={(e) => { e.stopPropagation(); handleEditCourse(course.id); }} className="w-full py-2 text-[10px] text-gray-500 hover:text-white hover:bg-white/5 border border-dashed border-white/10 rounded transition-colors">
-                        + Edit Course Content
+                    )}
+                    {course.shortDescription && (
+                      <div>
+                        <p className="text-[10px] font-mono text-gray-500 uppercase mb-2">Short Description</p>
+                        <p className="text-xs text-gray-400">{course.shortDescription}</p>
+                      </div>
+                    )}
+                    <div className="flex items-center gap-4 pt-2">
+                      <Link href={`/courses/${course.slug}`} className="text-[10px] text-electricBlue hover:underline font-mono flex items-center gap-1">
+                        <ExternalLink className="w-3 h-3" /> View Course Page
+                      </Link>
+                      <button 
+                        onClick={() => handleOpenEditCourseModal(course)} 
+                        className="text-[10px] text-electricBlue hover:underline font-mono flex items-center gap-1"
+                      >
+                        <Edit2 className="w-3 h-3" /> Edit Details
                       </button>
-                  )}
-                </div>
-              )}
-            </div>
-          ))}
+                    </div>
+                  </div>
+                )}
+              </div>
+            ))}
+          </div>
+        )}
 
-        </div>
+        {isCourseModalOpen && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm animate-in fade-in duration-200">
+            <div className="glass-panel p-8 max-w-lg w-full border border-white/10 relative max-h-[90vh] overflow-y-auto">
+              <button 
+                onClick={() => setIsCourseModalOpen(false)}
+                className="absolute top-4 right-4 text-gray-500 hover:text-white"
+              >
+                <X className="w-4 h-4" />
+              </button>
+              
+              <h2 className="font-header text-xl text-white mb-6">
+                {editingDbCourse ? "EDIT COURSE" : "CREATE NEW COURSE"}
+              </h2>
+              
+              <div className="space-y-4">
+                <div>
+                  <label className="block text-[10px] font-mono text-gray-500 mb-2 uppercase">Title</label>
+                  <input 
+                    type="text" 
+                    value={courseForm.title}
+                    onChange={(e) => setCourseForm({ ...courseForm, title: e.target.value })}
+                    className="bg-black/50 border border-white/10 text-white text-xs px-4 py-3 w-full focus:border-electricBlue outline-none font-bold"
+                    data-testid="input-course-title"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-[10px] font-mono text-gray-500 mb-2 uppercase">Short Description</label>
+                  <textarea 
+                    value={courseForm.shortDescription}
+                    onChange={(e) => setCourseForm({ ...courseForm, shortDescription: e.target.value })}
+                    rows={2}
+                    className="bg-black/50 border border-white/10 text-white text-xs px-4 py-3 w-full focus:border-electricBlue outline-none resize-none"
+                    data-testid="input-course-short-description"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-[10px] font-mono text-gray-500 mb-2 uppercase">Description</label>
+                  <textarea 
+                    value={courseForm.description}
+                    onChange={(e) => setCourseForm({ ...courseForm, description: e.target.value })}
+                    rows={4}
+                    className="bg-black/50 border border-white/10 text-white text-xs px-4 py-3 w-full focus:border-electricBlue outline-none resize-none"
+                    data-testid="input-course-description"
+                  />
+                </div>
+
+                <div className="grid grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-[10px] font-mono text-gray-500 mb-2 uppercase">Price</label>
+                    <input 
+                      type="text" 
+                      value={courseForm.price}
+                      onChange={(e) => setCourseForm({ ...courseForm, price: e.target.value })}
+                      className="bg-black/50 border border-white/10 text-white text-xs px-4 py-3 w-full focus:border-electricBlue outline-none font-mono"
+                      data-testid="input-course-price"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-[10px] font-mono text-gray-500 mb-2 uppercase">Level</label>
+                    <select 
+                      value={courseForm.level}
+                      onChange={(e) => setCourseForm({ ...courseForm, level: e.target.value })}
+                      className="bg-black/50 border border-white/10 text-white text-xs px-4 py-3 w-full focus:border-electricBlue outline-none appearance-none"
+                      data-testid="select-course-level"
+                    >
+                      <option value="Foundation">Foundation</option>
+                      <option value="Specialist">Specialist</option>
+                    </select>
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-[10px] font-mono text-gray-500 mb-2 uppercase">Duration</label>
+                    <input 
+                      type="text" 
+                      value={courseForm.duration}
+                      onChange={(e) => setCourseForm({ ...courseForm, duration: e.target.value })}
+                      placeholder="e.g. 6h 30m"
+                      className="bg-black/50 border border-white/10 text-white text-xs px-4 py-3 w-full focus:border-electricBlue outline-none font-mono"
+                      data-testid="input-course-duration"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-[10px] font-mono text-gray-500 mb-2 uppercase">Badge (optional)</label>
+                    <input 
+                      type="text" 
+                      value={courseForm.badge}
+                      onChange={(e) => setCourseForm({ ...courseForm, badge: e.target.value })}
+                      placeholder="e.g. NEW, POPULAR"
+                      className="bg-black/50 border border-white/10 text-white text-xs px-4 py-3 w-full focus:border-electricBlue outline-none font-mono"
+                      data-testid="input-course-badge"
+                    />
+                  </div>
+                </div>
+
+                <div>
+                  <label className="block text-[10px] font-mono text-gray-500 mb-2 uppercase">Color</label>
+                  <div className="flex gap-2">
+                    {['#2962FF', '#FF3D00', '#D500F9', '#FFD700', '#00E676', '#FF6D00'].map((color) => (
+                      <button
+                        key={color}
+                        onClick={() => setCourseForm({ ...courseForm, color })}
+                        className={`w-8 h-8 rounded border-2 transition-all ${courseForm.color === color ? 'border-white scale-110' : 'border-white/10 hover:border-white/30'}`}
+                        style={{ backgroundColor: color }}
+                        data-testid={`button-color-${color}`}
+                      />
+                    ))}
+                  </div>
+                </div>
+
+                <div>
+                  <label className="block text-[10px] font-mono text-gray-500 mb-2 uppercase">Status</label>
+                  <select 
+                    value={courseForm.status}
+                    onChange={(e) => setCourseForm({ ...courseForm, status: e.target.value })}
+                    className="bg-black/50 border border-white/10 text-white text-xs px-4 py-3 w-full focus:border-electricBlue outline-none appearance-none"
+                    data-testid="select-course-status"
+                  >
+                    <option value="draft">Draft</option>
+                    <option value="published">Published</option>
+                  </select>
+                </div>
+
+                <div>
+                  <label className="block text-[10px] font-mono text-gray-500 mb-2 uppercase">Image URL</label>
+                  <input 
+                    type="text" 
+                    value={courseForm.imageUrl}
+                    onChange={(e) => setCourseForm({ ...courseForm, imageUrl: e.target.value })}
+                    placeholder="https://..."
+                    className="bg-black/50 border border-white/10 text-white text-xs px-4 py-3 w-full focus:border-electricBlue outline-none font-mono"
+                    data-testid="input-course-image-url"
+                  />
+                </div>
+                
+                <div className="pt-4 flex gap-3">
+                  <button 
+                    onClick={() => setIsCourseModalOpen(false)}
+                    className="flex-1 py-3 text-xs font-header font-bold text-gray-400 bg-white/5 hover:bg-white/10 transition-colors"
+                  >
+                    CANCEL
+                  </button>
+                  <button 
+                    onClick={handleSaveCourseForm}
+                    disabled={createCourseMutation.isPending || updateCourseMutation.isPending}
+                    className="flex-1 py-3 text-xs font-header font-bold text-black bg-electricBlue hover:bg-white transition-colors disabled:opacity-50"
+                    data-testid="button-save-course"
+                  >
+                    {createCourseMutation.isPending || updateCourseMutation.isPending ? 'SAVING...' : 'SAVE COURSE'}
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
       </div>
     );
   };

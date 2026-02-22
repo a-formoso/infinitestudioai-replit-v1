@@ -47,6 +47,7 @@ export interface IStorage {
   createCourse(course: InsertCourse): Promise<Course>;
 
   updateCourse(id: string, data: Partial<InsertCourse>): Promise<Course | undefined>;
+  deleteCourse(id: string): Promise<boolean>;
 
   // Lesson operations
   getLessonsByCourse(courseId: string): Promise<Lesson[]>;
@@ -178,6 +179,12 @@ export class DatabaseStorage implements IStorage {
       .where(eq(courses.id, id))
       .returning();
     return course || undefined;
+  }
+
+  async deleteCourse(id: string): Promise<boolean> {
+    await db.delete(lessons).where(eq(lessons.courseId, id));
+    const result = await db.delete(courses).where(eq(courses.id, id)).returning();
+    return result.length > 0;
   }
 
   // Lesson operations

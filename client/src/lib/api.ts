@@ -98,10 +98,23 @@ export async function getCourseBySlug(slug: string) {
   return apiFetch<{ course: any; lessons: any[] }>(`/courses/${slug}`);
 }
 
+export async function createCourse(data: Record<string, any>) {
+  return apiFetch<{ course: any }>('/courses', {
+    method: 'POST',
+    body: JSON.stringify(data),
+  });
+}
+
 export async function updateCourse(id: string, data: Record<string, any>) {
   return apiFetch<{ course: any }>(`/courses/${id}`, {
     method: 'PUT',
     body: JSON.stringify(data),
+  });
+}
+
+export async function deleteCourse(id: string) {
+  return apiFetch<{ message: string }>(`/courses/${id}`, {
+    method: 'DELETE',
   });
 }
 

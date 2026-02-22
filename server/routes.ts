@@ -359,6 +359,66 @@ export async function registerRoutes(
     }
   });
   
+  // Create course (admin only)
+  app.post("/api/courses", async (req, res) => {
+    if (!req.session.userId) {
+      return res.status(401).json({ message: "Not authenticated" });
+    }
+    const user = await storage.getUser(req.session.userId);
+    if (!user?.isAdmin) {
+      return res.status(403).json({ message: "Admin access required" });
+    }
+    try {
+      const { title, description, shortDescription, price, level, duration, lessonsCount, badge, color, status, imageUrl } = req.body;
+      if (!title || !level) {
+        return res.status(400).json({ message: "Title and level are required" });
+      }
+      const slug = (title as string).toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
+      const existing = await storage.getCourseBySlug(slug);
+      if (existing) {
+        return res.status(400).json({ message: "A course with a similar title already exists" });
+      }
+      const numPrice = Number(String(price || "0").replace(/[$,\s]/g, ""));
+      const course = await storage.createCourse({
+        title,
+        slug,
+        description: description || "",
+        shortDescription: shortDescription || "",
+        price: String(isNaN(numPrice) ? 0 : numPrice),
+        level,
+        duration: duration || "0h",
+        lessonsCount: lessonsCount || 0,
+        badge: badge || null,
+        color: color || "#2962FF",
+        status: status || "draft",
+        imageUrl: imageUrl || null,
+      });
+      res.status(201).json({ course });
+    } catch (error) {
+      res.status(500).json({ message: "Failed to create course" });
+    }
+  });
+
+  // Delete course (admin only)
+  app.delete("/api/courses/:id", async (req, res) => {
+    if (!req.session.userId) {
+      return res.status(401).json({ message: "Not authenticated" });
+    }
+    const user = await storage.getUser(req.session.userId);
+    if (!user?.isAdmin) {
+      return res.status(403).json({ message: "Admin access required" });
+    }
+    try {
+      const deleted = await storage.deleteCourse(req.params.id);
+      if (!deleted) {
+        return res.status(404).json({ message: "Course not found" });
+      }
+      res.json({ message: "Course deleted" });
+    } catch (error) {
+      res.status(500).json({ message: "Failed to delete course" });
+    }
+  });
+
   // Update course (admin only)
   app.put("/api/courses/:id", async (req, res) => {
     if (!req.session.userId) {
@@ -369,7 +429,7 @@ export async function registerRoutes(
       return res.status(403).json({ message: "Admin access required" });
     }
     try {
-      const allowedFields = ["title", "shortDescription", "description", "price", "duration", "status", "badge", "imageUrl"];
+      const allowedFields = ["title", "slug", "shortDescription", "description", "price", "level", "duration", "lessonsCount", "status", "badge", "color", "imageUrl"];
       const updates: Record<string, any> = {};
       for (const field of allowedFields) {
         if (req.body[field] !== undefined) {
