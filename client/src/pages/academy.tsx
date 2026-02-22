@@ -2,9 +2,10 @@ import { Navbar } from "@/components/navbar";
 import { Footer } from "@/components/footer";
 import { Link } from "wouter";
 import { useQuery } from "@tanstack/react-query";
-import { getCourses } from "@/lib/api";
+import { getCourses, getCurrentUser } from "@/lib/api";
 import { useState } from "react";
-import { EditableText } from "@/components/editable-text";
+import { EditableText, useEditMode } from "@/components/editable-text";
+import { EditableCourseField } from "@/components/editable-course-field";
 
 type Filter = "all" | "foundation" | "specialist" | "workshops";
 
@@ -17,13 +18,20 @@ function getInitialFilter(): Filter {
 
 export default function Academy() {
   const [activeFilter, setActiveFilter] = useState<Filter>(getInitialFilter);
+  const { editMode } = useEditMode();
 
   const { data, isLoading } = useQuery({
     queryKey: ["courses"],
     queryFn: getCourses,
   });
 
-  const isAdmin = data?.data?.isAdmin === true;
+  const { data: userData } = useQuery({
+    queryKey: ["currentUser"],
+    queryFn: getCurrentUser,
+  });
+
+  const isAdmin = userData?.data?.user?.isAdmin === true;
+  const isEditActive = isAdmin && editMode;
 
   const allCourses = data?.data?.courses || [];
 
@@ -136,8 +144,9 @@ export default function Academy() {
                       ) : filteredCourses.length > 0 ? (
                         filteredCourses.map((course: any) => {
                           const tier = course.level === 'Foundation' ? 'foundation' : 'specialist';
-                          return (
-                            <Link key={course.id} href={`/academy/${tier}/${course.slug}`} className={`glass-panel p-0 group cursor-pointer hover:border-${course.color === 'electricBlue' ? 'electricBlue' : 'signalOrange'}/50 transition-all duration-300 block`} data-testid={`card-course-${course.slug}`}>
+                          const cardClassName = `glass-panel p-0 group cursor-pointer hover:border-${course.color === 'electricBlue' ? 'electricBlue' : 'signalOrange'}/50 transition-all duration-300 block`;
+                          const cardContent = (
+                            <>
                                 <div className="h-48 bg-gray-900 relative overflow-hidden">
                                     <div className={`absolute inset-0 bg-gradient-to-br ${course.color === 'electricBlue' ? 'from-blue-900/40' : 'from-orange-900/40'} to-black`}></div>
                                     {course.badge && (
@@ -145,15 +154,47 @@ export default function Academy() {
                                     )}
                                 </div>
                                 <div className="p-8">
-                                    <h3 className={`font-header text-xl text-white mb-2 group-hover:text-${course.color === 'electricBlue' ? 'electricBlue' : 'signalOrange'} transition-colors`} data-testid={`text-course-title-${course.slug}`}>{course.title}</h3>
-                                    <p className="text-xs text-gray-400 font-mono mb-4 leading-relaxed">
-                                        {course.shortDescription}
-                                    </p>
+                                    <EditableCourseField
+                                      courseId={course.id}
+                                      field="title"
+                                      value={course.title}
+                                      isAdmin={isAdmin}
+                                      as="h3"
+                                      className={`font-header text-xl text-white mb-2 group-hover:text-${course.color === 'electricBlue' ? 'electricBlue' : 'signalOrange'} transition-colors`}
+                                      data-testid={`text-course-title-${course.slug}`}
+                                    />
+                                    <EditableCourseField
+                                      courseId={course.id}
+                                      field="shortDescription"
+                                      value={course.shortDescription}
+                                      isAdmin={isAdmin}
+                                      as="p"
+                                      className="text-xs text-gray-400 font-mono mb-4 leading-relaxed"
+                                      multiline
+                                      data-testid={`text-course-desc-${course.slug}`}
+                                    />
                                     <div className="flex justify-between items-center pt-4 border-t border-white/10">
                                         <span className="text-xs font-mono text-white">{course.duration} • {course.lessonsCount} LESSONS</span>
-                                        <span className="text-sm font-header font-bold text-white" data-testid={`text-price-${course.slug}`}>${parseFloat(course.price).toFixed(0)}</span>
+                                        <EditableCourseField
+                                          courseId={course.id}
+                                          field="price"
+                                          value={`$${parseFloat(course.price).toFixed(0)}`}
+                                          isAdmin={isAdmin}
+                                          as="span"
+                                          className="text-sm font-header font-bold text-white"
+                                          data-testid={`text-price-${course.slug}`}
+                                        />
                                     </div>
                                 </div>
+                            </>
+                          );
+                          return isEditActive ? (
+                            <div key={course.id} className={cardClassName} data-testid={`card-course-${course.slug}`}>
+                                {cardContent}
+                            </div>
+                          ) : (
+                            <Link key={course.id} href={`/academy/${tier}/${course.slug}`} className={cardClassName} data-testid={`card-course-${course.slug}`}>
+                                {cardContent}
                             </Link>
                           );
                         })
@@ -189,8 +230,25 @@ export default function Academy() {
                                   <div className="absolute inset-0 bg-cover bg-center opacity-50" style={{ backgroundImage: `url(${course.imageUrl})` }}></div>
                                 )}
                             </div>
-                            <h3 className="font-header text-sm text-white mb-2">{course.title}</h3>
-                            <p className="text-[10px] text-gray-400 font-mono mb-0">{course.shortDescription}</p>
+                            <EditableCourseField
+                              courseId={course.id}
+                              field="title"
+                              value={course.title}
+                              isAdmin={isAdmin}
+                              as="h3"
+                              className="font-header text-sm text-white mb-2"
+                              data-testid={`text-draft-title-${course.slug}`}
+                            />
+                            <EditableCourseField
+                              courseId={course.id}
+                              field="shortDescription"
+                              value={course.shortDescription}
+                              isAdmin={isAdmin}
+                              as="p"
+                              className="text-[10px] text-gray-400 font-mono mb-0"
+                              multiline
+                              data-testid={`text-draft-desc-${course.slug}`}
+                            />
                           </>
                         );
 

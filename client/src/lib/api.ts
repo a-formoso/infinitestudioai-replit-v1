@@ -98,6 +98,13 @@ export async function getCourseBySlug(slug: string) {
   return apiFetch<{ course: any; lessons: any[] }>(`/courses/${slug}`);
 }
 
+export async function updateCourse(id: string, data: Record<string, any>) {
+  return apiFetch<{ course: any }>(`/courses/${id}`, {
+    method: 'PUT',
+    body: JSON.stringify(data),
+  });
+}
+
 // Enrollments
 export async function getEnrollments() {
   return apiFetch<{ enrollments: any[] }>('/enrollments');

@@ -359,6 +359,46 @@ export async function registerRoutes(
     }
   });
   
+  // Update course (admin only)
+  app.put("/api/courses/:id", async (req, res) => {
+    if (!req.session.userId) {
+      return res.status(401).json({ message: "Not authenticated" });
+    }
+    const user = await storage.getUser(req.session.userId);
+    if (!user?.isAdmin) {
+      return res.status(403).json({ message: "Admin access required" });
+    }
+    try {
+      const allowedFields = ["title", "shortDescription", "description", "price", "duration", "status", "badge", "imageUrl"];
+      const updates: Record<string, any> = {};
+      for (const field of allowedFields) {
+        if (req.body[field] !== undefined) {
+          updates[field] = req.body[field];
+        }
+      }
+      if (updates.price !== undefined) {
+        const numPrice = Number(String(updates.price).replace(/[$,\s]/g, ""));
+        if (isNaN(numPrice) || numPrice < 0) {
+          return res.status(400).json({ message: "Invalid price value" });
+        }
+        updates.price = String(numPrice);
+      }
+      if (updates.status !== undefined && !["published", "draft"].includes(updates.status)) {
+        return res.status(400).json({ message: "Invalid status value" });
+      }
+      if (Object.keys(updates).length === 0) {
+        return res.status(400).json({ message: "No valid fields to update" });
+      }
+      const course = await storage.updateCourse(req.params.id, updates);
+      if (!course) {
+        return res.status(404).json({ message: "Course not found" });
+      }
+      res.json({ course });
+    } catch (error) {
+      res.status(500).json({ message: "Failed to update course" });
+    }
+  });
+
   // ===== Enrollment Routes =====
   
   // Get user's enrollments
