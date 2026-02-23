@@ -81,7 +81,7 @@ export default function CourseAIFilmmakingEcosystem() {
                       <span className="flex items-center gap-2"><div className="w-2 h-2 bg-signalOrange rounded-full"></div> LIFETIME ACCESS</span>
                   </div>
                   <button onClick={handleEnroll} className="inline-block bg-white text-black px-8 py-4 text-sm font-header font-bold uppercase hover:bg-signalOrange hover:text-white transition-all duration-300 tracking-wider cursor-pointer" data-testid="button-hero-enroll">
-                      Start Advanced Training
+                      Start Training
                   </button>
               </div>
 
