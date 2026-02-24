@@ -1,5 +1,6 @@
 import { Link, useSearch } from "wouter";
 import { useState, useEffect, useRef } from "react";
+import { createPortal } from "react-dom";
 import { LayoutDashboard, BookOpen, Users, ShoppingBag, BarChart2, Plus, Download, Bold, Italic, Underline, Link as LinkIcon, Code, X, Search, Edit2, Trash2, ArrowUp, ArrowDown, ArrowLeft, ArrowRight, ZoomIn, ZoomOut, Move, TrendingUp, DollarSign, Activity, Workflow, Pencil, Check, ExternalLink, Archive, Upload } from "lucide-react";
 import { LineChart, Line, AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, BarChart, Bar, PieChart, Pie, Cell } from 'recharts';
 import PipelineContent from "./pipeline";
@@ -1160,7 +1161,7 @@ export default function AdminDashboard() {
             ))}
           </div>
         )}
-        {isCourseModalOpen && (
+        {isCourseModalOpen && createPortal(
           <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/80 backdrop-blur-sm animate-in fade-in duration-200">
             <div className="glass-panel p-8 max-w-lg w-full border border-white/10 relative max-h-[90vh] overflow-y-auto">
               <button 
@@ -1662,7 +1663,8 @@ export default function AdminDashboard() {
                 )}
               </div>
             </div>
-          </div>
+          </div>,
+          document.body
         )}
         <div className="mt-8 border-t border-white/10 pt-8">
           <div className="flex justify-between items-center mb-4">
