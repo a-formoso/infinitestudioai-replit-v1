@@ -30,8 +30,8 @@ export default function Academy() {
     return tier?.sortOrder ?? 999;
   };
 
-  const publishedCourses = allCourses.filter((course: any) => course.status === "published").sort((a: any, b: any) => getTierOrder(a) - getTierOrder(b));
-  const draftCourses = allCourses.filter((course: any) => course.status === "draft").sort((a: any, b: any) => getTierOrder(a) - getTierOrder(b));
+  const publishedCourses = allCourses.filter((course: any) => course.status === "published").sort((a: any, b: any) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime());
+  const draftCourses = allCourses.filter((course: any) => course.status === "draft").sort((a: any, b: any) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime());
 
   const filteredCourses = publishedCourses.filter((course: any) => {
     if (activeFilter === "all") return true;
