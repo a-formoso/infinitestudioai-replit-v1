@@ -1030,7 +1030,6 @@ export default function AdminDashboard() {
             </button>
           </div>
         </div>
-
         {coursesLoading ? (
           <div className="flex items-center justify-center py-20">
             <div className="text-center space-y-4">
@@ -1161,7 +1160,6 @@ export default function AdminDashboard() {
             ))}
           </div>
         )}
-
         {isCourseModalOpen && (
           <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/80 backdrop-blur-sm animate-in fade-in duration-200">
             <div className="glass-panel p-8 max-w-lg w-full border border-white/10 relative max-h-[90vh] overflow-y-auto">
@@ -1412,9 +1410,7 @@ export default function AdminDashboard() {
                     onClick={() => setCourseFormPage(2)}
                     className="flex-1 py-3 text-xs font-header font-bold text-white bg-electricBlue/80 hover:bg-electricBlue transition-colors"
                     data-testid="button-next-page"
-                  >
-                    NEXT: COURSE CONTENT →
-                  </button>
+                  >COURSE CONTENT →</button>
                 </div>
                   </>
                 )}
@@ -1668,7 +1664,6 @@ export default function AdminDashboard() {
             </div>
           </div>
         )}
-
         <div className="mt-8 border-t border-white/10 pt-8">
           <div className="flex justify-between items-center mb-4">
             <div>
