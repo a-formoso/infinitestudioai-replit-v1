@@ -130,7 +130,7 @@ export default function CourseAIFilmmakingEcosystem() {
                   </div>
 
                   <div className="mb-16">
-                      <h3 className="font-header text-xl text-white mb-8 border-l-4 border-white pl-4">CLASS SYLLABUS</h3>
+                      <h3 className="font-header text-xl text-white mb-8 border-l-4 border-signalOrange pl-4">CLASS SYLLABUS</h3>
                       
                       <div className="space-y-4">
                           <div className="border border-white/10 bg-white/5">
@@ -216,7 +216,7 @@ export default function CourseAIFilmmakingEcosystem() {
 
               <div className="lg:col-span-4 space-y-8">
                   
-                  <div id="enroll" className="glass-panel p-8 sticky top-24 border-t-2 border-t-signalOrange">
+                  <div id="enroll" className="glass-panel p-8 sticky top-24 border-t-4 border-t-signalOrange">
                       <div className="text-center mb-6">
                           <span className="text-xs font-mono text-gray-400 line-through">$399</span>
                           <h2 className="text-4xl font-header font-bold text-white mt-2">$249</h2>
