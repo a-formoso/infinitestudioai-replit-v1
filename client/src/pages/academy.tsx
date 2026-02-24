@@ -23,6 +23,7 @@ export default function Academy() {
 
   const dbTiers = tiersData?.data?.tiers || [];
   const allCourses = data?.data?.courses || [];
+  const isAdmin = data?.data?.isAdmin === true;
 
   const publishedCourses = allCourses.filter((course: any) => course.status === "published");
   const draftCourses = allCourses.filter((course: any) => course.status === "draft");
@@ -157,7 +158,7 @@ export default function Academy() {
                       {draftCourses.map((course: any) => {
                           const tierColor = getTierColor(course);
                           return (
-                          <div key={course.id} className="glass-panel p-6 hover:border-white/30 transition-all duration-300 group relative opacity-60 hover:opacity-100" data-testid={`card-draft-${course.slug}`}>
+                          <div key={course.id} className={`glass-panel p-6 hover:border-white/30 transition-all duration-300 group relative opacity-60 hover:opacity-100 ${isAdmin ? 'cursor-pointer' : ''}`} data-testid={`card-draft-${course.slug}`} onClick={() => isAdmin && (window.location.href = `/course/${course.slug}`)}>
                             <div className="absolute top-2 right-2 z-10 text-[10px] font-mono border px-2 py-1" style={{ color: tierColor, borderColor: `${tierColor}30` }}>{course.level?.toUpperCase()}</div>
                             <div className="h-32 bg-gray-800 mb-4 overflow-hidden relative grayscale group-hover:grayscale-0 transition-all">
                                 {course.imageUrl && (
@@ -166,6 +167,7 @@ export default function Academy() {
                             </div>
                             <h3 className="font-header text-sm text-white mb-2" data-testid={`text-draft-title-${course.slug}`}>{course.title}</h3>
                             <p className="text-[10px] text-gray-400 font-mono mb-0" data-testid={`text-draft-desc-${course.slug}`}>{course.shortDescription}</p>
+                            {isAdmin && <div className="mt-3 text-[10px] font-mono" style={{ color: tierColor }}>CLICK TO PREVIEW</div>}
                           </div>
                           );
                       })}
