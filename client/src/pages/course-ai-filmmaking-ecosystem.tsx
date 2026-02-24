@@ -216,7 +216,7 @@ export default function CourseAIFilmmakingEcosystem() {
 
               <div className="lg:col-span-4 space-y-8">
                   
-                  <div id="enroll" className="glass-panel p-8 sticky top-24 border-t-4 border-t-signalOrange">
+                  <div id="enroll" className="glass-panel p-8 sticky top-24" style={{ borderTop: '4px solid #FF3D00' }}>
                       <div className="text-center mb-6">
                           <span className="text-xs font-mono text-gray-400 line-through">$399</span>
                           <h2 className="text-4xl font-header font-bold text-white mt-2">$249</h2>

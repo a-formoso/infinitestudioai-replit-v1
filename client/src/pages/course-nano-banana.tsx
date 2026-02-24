@@ -201,7 +201,7 @@ export default function CourseNanoBanana() {
 
               <div className="lg:col-span-4 space-y-8">
                   
-                  <div id="enroll" className="glass-panel p-8 sticky top-24 border-t-4 border-t-electricBlue">
+                  <div id="enroll" className="glass-panel p-8 sticky top-24" style={{ borderTop: '4px solid #2962FF' }}>
                       <div className="text-center mb-6">
                           <span className="text-xs font-mono text-gray-400 line-through">$249</span>
                           <h2 className="text-4xl font-header font-bold text-white mt-2">$129</h2>
