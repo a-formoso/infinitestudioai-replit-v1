@@ -553,6 +553,45 @@ export async function registerRoutes(
     }
   });
 
+  // Save lessons for a course (admin only) - replaces all existing lessons
+  app.put("/api/courses/:id/lessons", async (req, res) => {
+    if (!req.session.userId) {
+      return res.status(401).json({ message: "Not authenticated" });
+    }
+    try {
+      const user = await storage.getUser(req.session.userId);
+      if (!user?.isAdmin) {
+        return res.status(403).json({ message: "Admin access required" });
+      }
+      const course = await storage.getCourse(req.params.id);
+      if (!course) {
+        return res.status(404).json({ message: "Course not found" });
+      }
+      const { lessons: lessonData } = req.body;
+      if (!Array.isArray(lessonData)) {
+        return res.status(400).json({ message: "lessons must be an array" });
+      }
+      await storage.deleteLessonsByCourse(course.id);
+      const created = [];
+      for (const l of lessonData) {
+        if (!l.moduleNumber || !l.moduleName || !l.lessonNumber || !l.title) continue;
+        const lesson = await storage.createLesson({
+          courseId: course.id,
+          moduleNumber: l.moduleNumber,
+          moduleName: l.moduleName,
+          lessonNumber: l.lessonNumber,
+          title: l.title,
+          videoUrl: l.videoUrl || null,
+          duration: l.duration || null,
+        });
+        created.push(lesson);
+      }
+      res.json({ lessons: created });
+    } catch (error) {
+      res.status(500).json({ message: "Failed to save lessons" });
+    }
+  });
+
   // ===== Enrollment Routes =====
   
   // Get user's enrollments

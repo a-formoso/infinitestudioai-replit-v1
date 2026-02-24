@@ -6,7 +6,7 @@ import PipelineContent from "./pipeline";
 import { Navbar } from "@/components/navbar";
 import { Footer } from "@/components/footer";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { getCourses, createCourse as apiCreateCourse, updateCourse as apiUpdateCourse, deleteCourse as apiDeleteCourse, getCourseTiers, createCourseTier as apiCreateCourseTier, updateCourseTier as apiUpdateCourseTier, deleteCourseTier as apiDeleteCourseTier } from "@/lib/api";
+import { getCourses, createCourse as apiCreateCourse, updateCourse as apiUpdateCourse, deleteCourse as apiDeleteCourse, getCourseTiers, createCourseTier as apiCreateCourseTier, updateCourseTier as apiUpdateCourseTier, deleteCourseTier as apiDeleteCourseTier, getCourseBySlug, saveCourseLessons } from "@/lib/api";
 import { useUpload } from "@/hooks/use-upload";
 
 const INITIAL_LESSONS = {
@@ -167,6 +167,7 @@ export default function AdminDashboard() {
     learningOutcomes: [] as Array<{ title: string; description: string }>,
     features: [] as string[],
     prerequisiteNote: "",
+    syllabus: [] as Array<{ moduleName: string; lessons: Array<{ title: string }> }>,
   });
 
   const [showTierManager, setShowTierManager] = useState(false);
@@ -558,6 +559,7 @@ export default function AdminDashboard() {
       learningOutcomes: [],
       features: [],
       prerequisiteNote: "",
+      syllabus: [],
     });
     setCourseFormPage(1);
     setIsCourseModalOpen(true);
@@ -569,8 +571,21 @@ export default function AdminDashboard() {
     try { return JSON.parse(val); } catch { return fallback; }
   };
 
-  const handleOpenEditCourseModal = (course: any) => {
+  const handleOpenEditCourseModal = async (course: any) => {
     setEditingDbCourse(course);
+    let syllabus: Array<{ moduleName: string; lessons: Array<{ title: string }> }> = [];
+    try {
+      const res = await getCourseBySlug(course.slug);
+      const lessons = res?.data?.lessons || [];
+      const moduleMap: Record<number, { moduleName: string; lessons: Array<{ title: string }> }> = {};
+      lessons.forEach((l: any) => {
+        if (!moduleMap[l.moduleNumber]) {
+          moduleMap[l.moduleNumber] = { moduleName: l.moduleName, lessons: [] };
+        }
+        moduleMap[l.moduleNumber].lessons.push({ title: l.title });
+      });
+      syllabus = Object.keys(moduleMap).sort((a, b) => Number(a) - Number(b)).map(k => moduleMap[Number(k)]);
+    } catch {}
     setCourseForm({
       title: course.title || "",
       shortDescription: course.shortDescription || "",
@@ -586,6 +601,7 @@ export default function AdminDashboard() {
       learningOutcomes: parseJsonField(course.learningOutcomes, []),
       features: parseJsonField(course.features, []),
       prerequisiteNote: course.prerequisiteNote || "",
+      syllabus,
     });
     setCourseFormPage(1);
     setIsCourseModalOpen(true);
@@ -594,16 +610,36 @@ export default function AdminDashboard() {
   const handleSaveCourseForm = async () => {
     const filteredOutcomes = courseForm.learningOutcomes.filter(o => o.title.trim() || o.description.trim());
     const filteredFeatures = courseForm.features.filter(f => f.trim());
+    const { syllabus, ...rest } = courseForm;
     const payload = {
-      ...courseForm,
+      ...rest,
       learningOutcomes: filteredOutcomes.length > 0 ? JSON.stringify(filteredOutcomes) : null,
       features: filteredFeatures.length > 0 ? JSON.stringify(filteredFeatures) : null,
       prerequisiteNote: courseForm.prerequisiteNote || null,
     };
+    let courseId: string;
     if (editingDbCourse) {
       await updateCourseMutation.mutateAsync({ id: editingDbCourse.id, data: payload });
+      courseId = editingDbCourse.id;
     } else {
-      await createCourseMutation.mutateAsync(payload);
+      const res = await createCourseMutation.mutateAsync(payload);
+      courseId = (res as any)?.data?.course?.id || (res as any)?.course?.id;
+    }
+    if (courseId) {
+      const lessonsPayload: any[] = [];
+      syllabus.forEach((mod, modIdx) => {
+        if (!mod.moduleName.trim()) return;
+        mod.lessons.forEach((lesson, lesIdx) => {
+          if (!lesson.title.trim()) return;
+          lessonsPayload.push({
+            moduleNumber: modIdx + 1,
+            moduleName: mod.moduleName,
+            lessonNumber: lesIdx + 1,
+            title: lesson.title,
+          });
+        });
+      });
+      await saveCourseLessons(courseId, lessonsPayload);
     }
     setIsCourseModalOpen(false);
   };
@@ -1465,6 +1501,92 @@ export default function AdminDashboard() {
                       data-testid="button-add-feature"
                     >
                       + ADD FEATURE
+                    </button>
+                  </div>
+                </div>
+
+                <div className="border-t border-white/10 pt-4">
+                  <label className="block text-[10px] font-mono text-gray-500 mb-2 uppercase">Class Syllabus (Modules & Lessons)</label>
+                  <div className="space-y-4">
+                    {courseForm.syllabus.map((mod, modIdx) => (
+                      <div key={modIdx} className="border border-white/10 bg-white/5 p-3 space-y-2">
+                        <div className="flex gap-2 items-center">
+                          <span className="text-electricBlue font-mono text-xs min-w-[60px]">MODULE {modIdx + 1}</span>
+                          <input
+                            type="text"
+                            value={mod.moduleName}
+                            onChange={(e) => {
+                              const updated = [...courseForm.syllabus];
+                              updated[modIdx] = { ...updated[modIdx], moduleName: e.target.value };
+                              setCourseForm({ ...courseForm, syllabus: updated });
+                            }}
+                            placeholder="Module Name"
+                            className="bg-black/50 border border-white/10 text-white text-xs px-3 py-2 flex-1 focus:border-electricBlue outline-none font-bold"
+                            data-testid={`input-module-name-${modIdx}`}
+                          />
+                          <button
+                            onClick={() => {
+                              const updated = courseForm.syllabus.filter((_, i) => i !== modIdx);
+                              setCourseForm({ ...courseForm, syllabus: updated });
+                            }}
+                            className="text-gray-500 hover:text-signalOrange"
+                            data-testid={`button-remove-module-${modIdx}`}
+                          >
+                            <X className="w-3 h-3" />
+                          </button>
+                        </div>
+                        <div className="pl-8 space-y-1">
+                          {mod.lessons.map((lesson, lesIdx) => (
+                            <div key={lesIdx} className="flex gap-2 items-center">
+                              <span className="text-gray-500 font-mono text-[10px] min-w-[28px]">{modIdx + 1}.{lesIdx + 1}</span>
+                              <input
+                                type="text"
+                                value={lesson.title}
+                                onChange={(e) => {
+                                  const updated = [...courseForm.syllabus];
+                                  const updatedLessons = [...updated[modIdx].lessons];
+                                  updatedLessons[lesIdx] = { title: e.target.value };
+                                  updated[modIdx] = { ...updated[modIdx], lessons: updatedLessons };
+                                  setCourseForm({ ...courseForm, syllabus: updated });
+                                }}
+                                placeholder="Lesson title"
+                                className="bg-black/50 border border-white/10 text-white text-[11px] px-3 py-1.5 flex-1 focus:border-electricBlue outline-none"
+                                data-testid={`input-lesson-title-${modIdx}-${lesIdx}`}
+                              />
+                              <button
+                                onClick={() => {
+                                  const updated = [...courseForm.syllabus];
+                                  const updatedLessons = updated[modIdx].lessons.filter((_, i) => i !== lesIdx);
+                                  updated[modIdx] = { ...updated[modIdx], lessons: updatedLessons };
+                                  setCourseForm({ ...courseForm, syllabus: updated });
+                                }}
+                                className="text-gray-500 hover:text-signalOrange"
+                                data-testid={`button-remove-lesson-${modIdx}-${lesIdx}`}
+                              >
+                                <X className="w-3 h-3" />
+                              </button>
+                            </div>
+                          ))}
+                          <button
+                            onClick={() => {
+                              const updated = [...courseForm.syllabus];
+                              updated[modIdx] = { ...updated[modIdx], lessons: [...updated[modIdx].lessons, { title: "" }] };
+                              setCourseForm({ ...courseForm, syllabus: updated });
+                            }}
+                            className="text-[10px] font-mono text-electricBlue hover:text-white transition-colors pl-8"
+                            data-testid={`button-add-lesson-${modIdx}`}
+                          >
+                            + ADD LESSON
+                          </button>
+                        </div>
+                      </div>
+                    ))}
+                    <button
+                      onClick={() => setCourseForm({ ...courseForm, syllabus: [...courseForm.syllabus, { moduleName: "", lessons: [{ title: "" }] }] })}
+                      className="text-[10px] font-mono text-electricBlue hover:text-white transition-colors"
+                      data-testid="button-add-module"
+                    >
+                      + ADD MODULE
                     </button>
                   </div>
                 </div>

@@ -143,6 +143,13 @@ export async function deleteCourse(id: string) {
   });
 }
 
+export async function saveCourseLessons(courseId: string, lessons: any[]) {
+  return apiFetch<{ lessons: any[] }>(`/courses/${courseId}/lessons`, {
+    method: 'PUT',
+    body: JSON.stringify({ lessons }),
+  });
+}
+
 // Enrollments
 export async function getEnrollments() {
   return apiFetch<{ enrollments: any[] }>('/enrollments');
