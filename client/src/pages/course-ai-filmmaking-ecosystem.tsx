@@ -1,7 +1,7 @@
 import { Navbar } from "@/components/navbar";
 import { Footer } from "@/components/footer";
 import { useState } from "react";
-import { Check, ChevronRight } from "lucide-react";
+import { Check, ChevronRight, Pencil } from "lucide-react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { useLocation, Link } from "wouter";
 import { getCurrentUser, getCourseBySlug, enrollInCourse } from "@/lib/api";
@@ -251,6 +251,18 @@ export default function CourseAIFilmmakingEcosystem() {
               </div>
           </div>
       </section>
+
+      {userData?.data?.user?.isAdmin && courseData?.data?.course?.id && (
+        <div className="fixed bottom-6 right-6 z-50">
+          <button
+            onClick={() => setLocation(`/dashboard?edit=${courseData?.data?.course?.id}`)}
+            className="flex items-center gap-2 bg-white/10 backdrop-blur-sm border border-white/20 text-white text-[10px] font-mono px-4 py-3 hover:bg-white/20 transition-colors cursor-pointer"
+            data-testid="button-admin-edit"
+          >
+            <Pencil className="w-3.5 h-3.5" /> EDIT COURSE
+          </button>
+        </div>
+      )}
 
       <Footer />
     </div>
