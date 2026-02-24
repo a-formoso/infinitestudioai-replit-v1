@@ -80,7 +80,7 @@ export default function CourseNanoBanana() {
                       <span className="flex items-center gap-2"><div className="w-2 h-2 bg-electricBlue rounded-full"></div> 11 LESSONS</span>
                       <span className="flex items-center gap-2"><div className="w-2 h-2 bg-electricBlue rounded-full"></div> LIFETIME ACCESS</span>
                   </div>
-                  <button onClick={handleEnroll} className="inline-block bg-white text-black px-8 py-4 text-sm font-header font-bold uppercase hover:bg-electricBlue hover:text-white transition-all duration-300 tracking-wider cursor-pointer" data-testid="button-hero-enroll">
+                  <button onClick={handleEnroll} className="inline-block bg-white text-black px-8 py-4 text-sm font-header font-bold uppercase hover:bg-electricBlue hover:text-white transition-all duration-300 tracking-wider cursor-pointer shadow-[0_0_20px_rgba(255,255,255,0.2)] hover:shadow-[0_0_20px_rgba(41,98,255,0.4)]" data-testid="button-hero-enroll">
                       Start Learning Now
                   </button>
               </div>
@@ -201,7 +201,7 @@ export default function CourseNanoBanana() {
 
               <div className="lg:col-span-4 space-y-8">
                   
-                  <div id="enroll" className="glass-panel p-8 sticky top-24 border-t-2 border-t-electricBlue">
+                  <div id="enroll" className="glass-panel p-8 sticky top-24 border-t-4 border-t-electricBlue">
                       <div className="text-center mb-6">
                           <span className="text-xs font-mono text-gray-400 line-through">$249</span>
                           <h2 className="text-4xl font-header font-bold text-white mt-2">$129</h2>
@@ -211,7 +211,7 @@ export default function CourseNanoBanana() {
                       <button 
                         onClick={handleEnroll}
                         data-testid="button-enroll"
-                        className="w-full bg-electricBlue text-white font-header font-bold text-sm uppercase py-4 hover:bg-white hover:text-black transition-all duration-300 tracking-wider mb-4 shadow-[0_0_20px_rgba(41,98,255,0.4)] cursor-pointer"
+                        className="w-full bg-electricBlue text-white font-header font-bold text-sm uppercase py-4 hover:bg-white hover:text-black transition-all duration-300 tracking-wider mb-4 shadow-[0_0_20px_rgba(41,98,255,0.4)] hover:shadow-[0_0_20px_rgba(255,255,255,0.2)] cursor-pointer"
                       >
                           Enroll Now
                       </button>
