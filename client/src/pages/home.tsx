@@ -248,23 +248,31 @@ export default function Home() {
               <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                   {featuredCourses.length > 0 ? (
                     featuredCourses.map((course: any) => {
-                      const isBlue = course.color === 'electricBlue';
+                      const colorMap: Record<string, string> = { electricBlue: '#2962FF', signalOrange: '#FF3D00', neonPurple: '#D500F9', gold: '#FFD700' };
+                      const tierColor = colorMap[course.color] || course.color || '#2962FF';
                       const tier = course.level === 'Foundation' ? 'foundation' : 'specialist';
                       return (
                         <Link
                           key={course.id}
                           href={`/academy/${tier}/${course.slug}`}
-                          className={`glass-panel p-0 hover:border-${isBlue ? 'electricBlue' : 'signalOrange'}/50 transition-all duration-300 group cursor-pointer block`}
+                          className="glass-panel p-0 transition-all duration-300 group cursor-pointer block"
+                          style={{ borderColor: 'rgba(255,255,255,0.1)' }}
+                          onMouseEnter={(e) => { e.currentTarget.style.borderColor = `${tierColor}80`; }}
+                          onMouseLeave={(e) => { e.currentTarget.style.borderColor = 'rgba(255,255,255,0.1)'; }}
                           data-testid={`card-course-home-${course.slug}`}
                         >
                             <div className="h-48 bg-gray-900 relative overflow-hidden">
-                                <div className={`absolute inset-0 bg-gradient-to-br ${isBlue ? 'from-blue-900/40' : 'from-orange-900/40'} to-black`}></div>
+                                {course.imageUrl ? (
+                                  <div className="absolute inset-0 bg-cover bg-center group-hover:scale-105 transition-transform duration-500" style={{ backgroundImage: `url(${course.imageUrl})` }}></div>
+                                ) : null}
+                                <div className="absolute inset-0" style={{ background: `linear-gradient(to bottom right, ${tierColor}30, black)` }}></div>
                                 {course.badge && (
-                                  <div className={`absolute top-4 right-4 ${isBlue ? 'bg-electricBlue text-white' : 'bg-signalOrange text-black'} text-[10px] font-bold px-2 py-1`}>{course.badge}</div>
+                                  <div className="absolute top-4 right-4 text-[10px] font-bold px-2 py-1 text-white" style={{ backgroundColor: tierColor }}>{course.badge}</div>
                                 )}
+                                <div className="absolute bottom-4 left-4 text-[10px] font-mono px-2 py-1 border" style={{ color: tierColor, borderColor: `${tierColor}50` }}>{course.level?.toUpperCase()}</div>
                             </div>
                             <div className="p-8">
-                                <h3 className={`font-header text-xl text-white mb-2 group-hover:text-${isBlue ? 'electricBlue' : 'signalOrange'} transition-colors leading-tight`}>{course.title}</h3>
+                                <h3 className="font-header text-xl text-white mb-2 transition-colors leading-tight">{course.title}</h3>
                                 <p className="text-xs text-gray-400 font-mono mb-4 leading-relaxed">{course.shortDescription}</p>
                                 <div className="flex justify-between items-center pt-4 border-t border-white/10">
                                     <span className="text-xs font-mono text-white">{course.duration} • {course.lessonsCount} LESSONS</span>

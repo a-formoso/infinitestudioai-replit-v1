@@ -119,19 +119,28 @@ export default function Academy() {
                           const tierSlug = getTierSlug(course);
                           const tierColor = getTierColor(course);
                           return (
-                            <Link key={course.id} href={`/academy/${tierSlug}/${course.slug}`} className="glass-panel p-0 group cursor-pointer hover:border-white/30 transition-all duration-300 block" data-testid={`card-course-${course.slug}`}>
+                            <Link
+                              key={course.id}
+                              href={`/academy/${tierSlug}/${course.slug}`}
+                              className="glass-panel p-0 group cursor-pointer transition-all duration-300 block"
+                              style={{ borderColor: 'rgba(255,255,255,0.1)' }}
+                              onMouseEnter={(e) => { e.currentTarget.style.borderColor = `${tierColor}80`; }}
+                              onMouseLeave={(e) => { e.currentTarget.style.borderColor = 'rgba(255,255,255,0.1)'; }}
+                              data-testid={`card-course-${course.slug}`}
+                            >
                                 <div className="h-48 bg-gray-900 relative overflow-hidden">
                                     {course.imageUrl ? (
-                                      <div className="absolute inset-0 bg-cover bg-center" style={{ backgroundImage: `url(${course.imageUrl})` }}></div>
+                                      <div className="absolute inset-0 bg-cover bg-center group-hover:scale-105 transition-transform duration-500" style={{ backgroundImage: `url(${course.imageUrl})` }}></div>
                                     ) : null}
-                                    <div className="absolute inset-0 bg-gradient-to-br to-black" style={{ backgroundColor: `${tierColor}15` }}></div>
+                                    <div className="absolute inset-0 bg-gradient-to-br to-black" style={{ background: `linear-gradient(to bottom right, ${tierColor}30, black)` }}></div>
                                     {course.badge && (
                                       <div className="absolute top-4 right-4 text-[10px] font-bold px-2 py-1 text-white" style={{ backgroundColor: tierColor }}>{course.badge}</div>
                                     )}
                                     <div className="absolute bottom-4 left-4 text-[10px] font-mono px-2 py-1 border" style={{ color: tierColor, borderColor: `${tierColor}50` }}>{course.level?.toUpperCase()}</div>
                                 </div>
                                 <div className="p-8">
-                                    <h3 className="font-header text-xl text-white mb-2 group-hover:opacity-80 transition-colors" data-testid={`text-course-title-${course.slug}`}>{course.title}</h3>
+                                    <h3 className="font-header text-xl text-white mb-2 transition-colors leading-tight" style={{ color: 'white' }}
+                                      data-testid={`text-course-title-${course.slug}`}>{course.title}</h3>
                                     <p className="text-xs text-gray-400 font-mono mb-4 leading-relaxed" data-testid={`text-course-desc-${course.slug}`}>{course.shortDescription}</p>
                                     <div className="flex justify-between items-center pt-4 border-t border-white/10">
                                         <span className="text-xs font-mono text-white">{course.duration} • {course.lessonsCount} LESSONS</span>
