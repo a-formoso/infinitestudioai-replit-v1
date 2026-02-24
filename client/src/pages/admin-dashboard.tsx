@@ -163,6 +163,9 @@ export default function AdminDashboard() {
     color: "#2962FF",
     status: "draft",
     imageUrl: "",
+    learningOutcomes: [] as Array<{ title: string; description: string }>,
+    features: [] as string[],
+    prerequisiteNote: "",
   });
 
   const [showTierManager, setShowTierManager] = useState(false);
@@ -551,8 +554,17 @@ export default function AdminDashboard() {
       color: "#2962FF",
       status: "draft",
       imageUrl: "",
+      learningOutcomes: [],
+      features: [],
+      prerequisiteNote: "",
     });
     setIsCourseModalOpen(true);
+  };
+
+  const parseJsonField = (val: any, fallback: any) => {
+    if (!val) return fallback;
+    if (typeof val === 'object') return val;
+    try { return JSON.parse(val); } catch { return fallback; }
   };
 
   const handleOpenEditCourseModal = (course: any) => {
@@ -569,15 +581,26 @@ export default function AdminDashboard() {
       color: course.color || "#2962FF",
       status: course.status || "draft",
       imageUrl: course.imageUrl || "",
+      learningOutcomes: parseJsonField(course.learningOutcomes, []),
+      features: parseJsonField(course.features, []),
+      prerequisiteNote: course.prerequisiteNote || "",
     });
     setIsCourseModalOpen(true);
   };
 
   const handleSaveCourseForm = async () => {
+    const filteredOutcomes = courseForm.learningOutcomes.filter(o => o.title.trim() || o.description.trim());
+    const filteredFeatures = courseForm.features.filter(f => f.trim());
+    const payload = {
+      ...courseForm,
+      learningOutcomes: filteredOutcomes.length > 0 ? JSON.stringify(filteredOutcomes) : null,
+      features: filteredFeatures.length > 0 ? JSON.stringify(filteredFeatures) : null,
+      prerequisiteNote: courseForm.prerequisiteNote || null,
+    };
     if (editingDbCourse) {
-      await updateCourseMutation.mutateAsync({ id: editingDbCourse.id, data: courseForm });
+      await updateCourseMutation.mutateAsync({ id: editingDbCourse.id, data: payload });
     } else {
-      await createCourseMutation.mutateAsync(courseForm);
+      await createCourseMutation.mutateAsync(payload);
     }
     setIsCourseModalOpen(false);
   };
@@ -1311,6 +1334,112 @@ export default function AdminDashboard() {
                   </div>
                 </div>
                 
+                <div className="border-t border-white/10 pt-4">
+                  <label className="block text-[10px] font-mono text-gray-500 mb-2 uppercase">Learning Outcomes (What You Will Learn)</label>
+                  <div className="space-y-3">
+                    {courseForm.learningOutcomes.map((outcome, idx) => (
+                      <div key={idx} className="flex gap-2 items-start">
+                        <span className="text-electricBlue font-mono text-xs mt-2 min-w-[24px]">{String(idx + 1).padStart(2, '0')}</span>
+                        <div className="flex-1 space-y-1">
+                          <input
+                            type="text"
+                            value={outcome.title}
+                            onChange={(e) => {
+                              const updated = [...courseForm.learningOutcomes];
+                              updated[idx] = { ...updated[idx], title: e.target.value };
+                              setCourseForm({ ...courseForm, learningOutcomes: updated });
+                            }}
+                            placeholder="Title"
+                            className="bg-black/50 border border-white/10 text-white text-xs px-3 py-2 w-full focus:border-electricBlue outline-none font-bold"
+                            data-testid={`input-outcome-title-${idx}`}
+                          />
+                          <textarea
+                            value={outcome.description}
+                            onChange={(e) => {
+                              const updated = [...courseForm.learningOutcomes];
+                              updated[idx] = { ...updated[idx], description: e.target.value };
+                              setCourseForm({ ...courseForm, learningOutcomes: updated });
+                            }}
+                            placeholder="Description"
+                            rows={2}
+                            className="bg-black/50 border border-white/10 text-white text-[11px] px-3 py-2 w-full focus:border-electricBlue outline-none resize-none"
+                            data-testid={`input-outcome-desc-${idx}`}
+                          />
+                        </div>
+                        <button
+                          onClick={() => {
+                            const updated = courseForm.learningOutcomes.filter((_, i) => i !== idx);
+                            setCourseForm({ ...courseForm, learningOutcomes: updated });
+                          }}
+                          className="text-gray-500 hover:text-signalOrange mt-2"
+                          data-testid={`button-remove-outcome-${idx}`}
+                        >
+                          <X className="w-3 h-3" />
+                        </button>
+                      </div>
+                    ))}
+                    <button
+                      onClick={() => setCourseForm({ ...courseForm, learningOutcomes: [...courseForm.learningOutcomes, { title: "", description: "" }] })}
+                      className="text-[10px] font-mono text-electricBlue hover:text-white transition-colors"
+                      data-testid="button-add-outcome"
+                    >
+                      + ADD OUTCOME
+                    </button>
+                  </div>
+                </div>
+
+                <div className="border-t border-white/10 pt-4">
+                  <label className="block text-[10px] font-mono text-gray-500 mb-2 uppercase">Sidebar Features (Checklist Items)</label>
+                  <div className="space-y-2">
+                    {courseForm.features.map((feature, idx) => (
+                      <div key={idx} className="flex gap-2 items-center">
+                        <Check className="w-3 h-3 text-electricBlue shrink-0" />
+                        <input
+                          type="text"
+                          value={feature}
+                          onChange={(e) => {
+                            const updated = [...courseForm.features];
+                            updated[idx] = e.target.value;
+                            setCourseForm({ ...courseForm, features: updated });
+                          }}
+                          placeholder="e.g. Lifetime Access"
+                          className="bg-black/50 border border-white/10 text-white text-xs px-3 py-2 flex-1 focus:border-electricBlue outline-none"
+                          data-testid={`input-feature-${idx}`}
+                        />
+                        <button
+                          onClick={() => {
+                            const updated = courseForm.features.filter((_, i) => i !== idx);
+                            setCourseForm({ ...courseForm, features: updated });
+                          }}
+                          className="text-gray-500 hover:text-signalOrange"
+                          data-testid={`button-remove-feature-${idx}`}
+                        >
+                          <X className="w-3 h-3" />
+                        </button>
+                      </div>
+                    ))}
+                    <button
+                      onClick={() => setCourseForm({ ...courseForm, features: [...courseForm.features, ""] })}
+                      className="text-[10px] font-mono text-electricBlue hover:text-white transition-colors"
+                      data-testid="button-add-feature"
+                    >
+                      + ADD FEATURE
+                    </button>
+                  </div>
+                </div>
+
+                <div>
+                  <label className="block text-[10px] font-mono text-gray-500 mb-2 uppercase">Prerequisite Note (optional)</label>
+                  <input
+                    type="text"
+                    value={courseForm.prerequisiteNote}
+                    onChange={(e) => setCourseForm({ ...courseForm, prerequisiteNote: e.target.value })}
+                    placeholder="e.g. RECOMMENDED: FOUNDATION TRACK COMPLETION"
+                    className="bg-black/50 border border-white/10 text-white text-[11px] px-4 py-3 w-full focus:border-electricBlue outline-none font-mono"
+                    data-testid="input-prerequisite-note"
+                  />
+                </div>
+
                 <div className="pt-4 flex gap-3">
                   <button 
                     onClick={() => setIsCourseModalOpen(false)}

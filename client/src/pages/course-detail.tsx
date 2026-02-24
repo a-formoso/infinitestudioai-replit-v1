@@ -149,6 +149,29 @@ export default function CourseDetail() {
       <section className="py-20 border-t border-white/10 bg-black/50 relative z-10">
         <div className="max-w-7xl mx-auto px-6 grid grid-cols-1 lg:grid-cols-12 gap-12">
           <div className="lg:col-span-8">
+            {(() => {
+              let parsedOutcomes: Array<{ title: string; description: string }> = [];
+              try {
+                if (course.learningOutcomes) {
+                  parsedOutcomes = typeof course.learningOutcomes === 'string' ? JSON.parse(course.learningOutcomes) : course.learningOutcomes;
+                }
+              } catch {}
+              return parsedOutcomes.length > 0 ? (
+                <div className="mb-16">
+                  <h3 className="font-header text-xl text-white mb-8 border-l-4 pl-4" style={{ borderColor: tierColor }}>WHAT YOU WILL LEARN</h3>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    {parsedOutcomes.map((outcome, idx) => (
+                      <div key={idx} className="glass-panel p-6 hover:border-white/20 transition-colors" data-testid={`card-outcome-${idx}`}>
+                        <div className="mb-2 text-xl" style={{ color: tierColor }}>{String(idx + 1).padStart(2, '0')}</div>
+                        <h4 className="font-bold text-white text-sm mb-2">{outcome.title}</h4>
+                        <p className="text-xs text-gray-400 leading-relaxed">{outcome.description}</p>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              ) : null;
+            })()}
+
             {Object.keys(modules).length > 0 && (
               <div className="mb-16">
                 <h3 className="font-header text-xl text-white mb-8 border-l-4 border-white pl-4">CLASS SYLLABUS</h3>
@@ -221,18 +244,43 @@ export default function CourseDetail() {
                 </div>
               )}
 
+              {course.prerequisiteNote && (
+                <p className="text-[10px] text-gray-500 text-center font-mono mb-6" data-testid="text-prerequisite-note">
+                  {course.prerequisiteNote}
+                </p>
+              )}
+
               <ul className="space-y-4 text-xs text-gray-400 font-mono border-t border-white/10 pt-6">
-                {course.duration && (
-                  <li className="flex items-center gap-3">
-                    <Check className="w-4 h-4" style={{ color: tierColor }} /> {course.duration} of Training
-                  </li>
-                )}
-                <li className="flex items-center gap-3">
-                  <Check className="w-4 h-4" style={{ color: tierColor }} /> Private WhatsApp Access
-                </li>
-                <li className="flex items-center gap-3">
-                  <Check className="w-4 h-4" style={{ color: tierColor }} /> Lifetime Access
-                </li>
+                {(() => {
+                  let parsedFeatures: string[] = [];
+                  try {
+                    if (course.features) {
+                      parsedFeatures = typeof course.features === 'string' ? JSON.parse(course.features) : course.features;
+                    }
+                  } catch {}
+                  if (parsedFeatures.length > 0) {
+                    return parsedFeatures.map((feature, idx) => (
+                      <li key={idx} className="flex items-center gap-3" data-testid={`text-feature-${idx}`}>
+                        <Check className="w-4 h-4" style={{ color: tierColor }} /> {feature}
+                      </li>
+                    ));
+                  }
+                  return (
+                    <>
+                      {course.duration && (
+                        <li className="flex items-center gap-3">
+                          <Check className="w-4 h-4" style={{ color: tierColor }} /> {course.duration} of Training
+                        </li>
+                      )}
+                      <li className="flex items-center gap-3">
+                        <Check className="w-4 h-4" style={{ color: tierColor }} /> Private WhatsApp Access
+                      </li>
+                      <li className="flex items-center gap-3">
+                        <Check className="w-4 h-4" style={{ color: tierColor }} /> Lifetime Access
+                      </li>
+                    </>
+                  );
+                })()}
               </ul>
             </div>
           </div>

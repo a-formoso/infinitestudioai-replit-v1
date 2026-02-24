@@ -43,7 +43,7 @@ Preferred communication style: Simple, everyday language.
 - **Migrations**: Output to `./migrations` directory
 - **Tables**:
   - `users` — id (UUID), username, password (hashed), email, emailVerified (bool), verificationToken, createdAt
-  - `courses` — id (UUID), title, slug (unique), description, shortDescription, price, level, duration, lessonsCount, badge, color
+  - `courses` — id (UUID), title, slug (unique), description, shortDescription, price, level, duration, lessonsCount, badge, color, status, imageUrl, learningOutcomes (JSON text), features (JSON text), prerequisiteNote
   - `lessons` — id (UUID), courseId (FK), moduleNumber, moduleName, lessonNumber, title, videoUrl, duration
   - `enrollments` — id (UUID), userId (FK), courseId (FK), enrolledAt
   - `lesson_progress` — id (UUID), enrollmentId (FK), lessonId (FK), completed
