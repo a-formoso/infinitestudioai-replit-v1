@@ -158,6 +158,7 @@ export default function AdminDashboard() {
     shortDescription: "",
     description: "",
     price: "0",
+    originalPrice: "",
     level: "Foundation",
     duration: "0h",
     lessonsCount: 0,
@@ -550,6 +551,7 @@ export default function AdminDashboard() {
       shortDescription: "",
       description: "",
       price: "0",
+      originalPrice: "",
       level: "Foundation",
       duration: "0h",
       lessonsCount: 0,
@@ -593,6 +595,7 @@ export default function AdminDashboard() {
       shortDescription: course.shortDescription || "",
       description: course.description || "",
       price: course.price || "0",
+      originalPrice: course.originalPrice || "",
       level: course.level || "Foundation",
       duration: course.duration || "0h",
       lessonsCount: course.lessonsCount || 0,
@@ -615,6 +618,7 @@ export default function AdminDashboard() {
     const { syllabus, ...rest } = courseForm;
     const payload = {
       ...rest,
+      originalPrice: courseForm.originalPrice ? String(Number(String(courseForm.originalPrice).replace(/[$,\s]/g, ""))) : null,
       learningOutcomes: filteredOutcomes.length > 0 ? JSON.stringify(filteredOutcomes) : null,
       features: filteredFeatures.length > 0 ? JSON.stringify(filteredFeatures) : null,
       prerequisiteNote: courseForm.prerequisiteNote || null,
@@ -1602,15 +1606,28 @@ export default function AdminDashboard() {
 
                 {courseFormPage === 3 && (
                   <>
-                <div>
-                  <label className="block text-[10px] font-mono text-gray-500 mb-2 uppercase">Price</label>
-                  <input 
-                    type="text" 
-                    value={courseForm.price}
-                    onChange={(e) => setCourseForm({ ...courseForm, price: e.target.value })}
-                    className="bg-black/50 border border-white/10 text-white text-xs px-4 py-3 w-full focus:border-electricBlue outline-none font-mono"
-                    data-testid="input-course-price"
-                  />
+                <div className="grid grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-[10px] font-mono text-gray-500 mb-2 uppercase">Price</label>
+                    <input 
+                      type="text" 
+                      value={courseForm.price}
+                      onChange={(e) => setCourseForm({ ...courseForm, price: e.target.value })}
+                      className="bg-black/50 border border-white/10 text-white text-xs px-4 py-3 w-full focus:border-electricBlue outline-none font-mono"
+                      data-testid="input-course-price"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-[10px] font-mono text-gray-500 mb-2 uppercase">Original Price <span className="text-gray-600">(strikethrough)</span></label>
+                    <input 
+                      type="text" 
+                      value={courseForm.originalPrice}
+                      onChange={(e) => setCourseForm({ ...courseForm, originalPrice: e.target.value })}
+                      placeholder="e.g. 399"
+                      className="bg-black/50 border border-white/10 text-white text-xs px-4 py-3 w-full focus:border-electricBlue outline-none font-mono"
+                      data-testid="input-course-original-price"
+                    />
+                  </div>
                 </div>
 
                 <div className="border-t border-white/10 pt-4">

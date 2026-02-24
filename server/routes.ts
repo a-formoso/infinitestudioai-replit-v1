@@ -460,7 +460,7 @@ export async function registerRoutes(
       return res.status(403).json({ message: "Admin access required" });
     }
     try {
-      const { title, description, shortDescription, price, level, duration, lessonsCount, badge, color, status, imageUrl, learningOutcomes, features, prerequisiteNote } = req.body;
+      const { title, description, shortDescription, price, originalPrice, level, duration, lessonsCount, badge, color, status, imageUrl, learningOutcomes, features, prerequisiteNote } = req.body;
       if (!title || !level) {
         return res.status(400).json({ message: "Title and level are required" });
       }
@@ -483,10 +483,11 @@ export async function registerRoutes(
         color: color || "#2962FF",
         status: status || "draft",
         imageUrl: imageUrl || null,
+        originalPrice: originalPrice ? String(Number(String(originalPrice).replace(/[$,\s]/g, ""))) : null,
         learningOutcomes: learningOutcomes || null,
         features: features || null,
         prerequisiteNote: prerequisiteNote || null,
-      });
+      } as any);
       res.status(201).json({ course });
     } catch (error) {
       res.status(500).json({ message: "Failed to create course" });
@@ -523,7 +524,7 @@ export async function registerRoutes(
       return res.status(403).json({ message: "Admin access required" });
     }
     try {
-      const allowedFields = ["title", "slug", "shortDescription", "description", "price", "level", "duration", "lessonsCount", "status", "badge", "color", "imageUrl", "learningOutcomes", "features", "prerequisiteNote"];
+      const allowedFields = ["title", "slug", "shortDescription", "description", "price", "originalPrice", "level", "duration", "lessonsCount", "status", "badge", "color", "imageUrl", "learningOutcomes", "features", "prerequisiteNote"];
       const updates: Record<string, any> = {};
       for (const field of allowedFields) {
         if (req.body[field] !== undefined) {

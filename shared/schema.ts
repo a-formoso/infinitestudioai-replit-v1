@@ -32,6 +32,7 @@ export const courses = pgTable("courses", {
   description: text("description").notNull(),
   shortDescription: text("short_description").notNull(),
   price: numeric("price", { precision: 10, scale: 2 }).notNull(),
+  originalPrice: numeric("original_price", { precision: 10, scale: 2 }),
   level: text("level").notNull(),
   duration: text("duration").notNull(),
   lessonsCount: integer("lessons_count").notNull(),

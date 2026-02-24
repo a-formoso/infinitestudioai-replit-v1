@@ -226,7 +226,10 @@ export default function CourseDetail() {
               <div className="text-center mb-6">
                 {course.price && (
                   <>
-                    <h2 className="text-4xl font-header font-bold text-white mt-2">${course.price}</h2>
+                    {course.originalPrice && (
+                      <span className="text-xs font-mono text-gray-400 line-through">${Number(course.originalPrice).toFixed(0)}</span>
+                    )}
+                    <h2 className="text-4xl font-header font-bold text-white mt-2">${Number(course.price).toFixed(0)}</h2>
                     <span className="text-[10px] font-mono px-2 py-1 rounded mt-2 inline-block" style={{ color: tierColor, backgroundColor: `${tierColor}15` }}>LIFETIME ACCESS</span>
                   </>
                 )}
