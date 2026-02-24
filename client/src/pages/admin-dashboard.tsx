@@ -587,6 +587,7 @@ export default function AdminDashboard() {
       });
       syllabus = Object.keys(moduleMap).sort((a, b) => Number(a) - Number(b)).map(k => moduleMap[Number(k)]);
     } catch {}
+    const tierColor = dbTiers.find((t: any) => t.name === (course.level || "Foundation"))?.color || '#2962FF';
     setCourseForm({
       title: course.title || "",
       shortDescription: course.shortDescription || "",
@@ -596,7 +597,7 @@ export default function AdminDashboard() {
       duration: course.duration || "0h",
       lessonsCount: course.lessonsCount || 0,
       badge: course.badge || "",
-      color: course.color || "#2962FF",
+      color: course.color || tierColor,
       status: course.status || "draft",
       imageUrl: course.imageUrl || "",
       learningOutcomes: parseJsonField(course.learningOutcomes, []),
@@ -1171,12 +1172,27 @@ export default function AdminDashboard() {
                 <X className="w-4 h-4" />
               </button>
               
-              <h2 className="font-header text-xl text-white mb-1">
-                {editingDbCourse ? "EDIT COURSE" : "CREATE NEW COURSE"}
-              </h2>
-              {editingDbCourse && (
-                <p className="text-[11px] font-mono mb-3 truncate" style={{ color: dbTiers.find((t: any) => t.name === courseForm.level)?.color || '#2962FF' }} data-testid="text-editing-course-name">{courseForm.title}</p>
-              )}
+              <div className="flex justify-between items-start pr-6">
+                <div className="min-w-0 flex-1">
+                  <h2 className="font-header text-xl text-white mb-1">
+                    {editingDbCourse ? "EDIT COURSE" : "CREATE NEW COURSE"}
+                  </h2>
+                  {editingDbCourse && (
+                    <p className="text-[11px] font-mono mb-3 truncate" style={{ color: dbTiers.find((t: any) => t.name === courseForm.level)?.color || '#2962FF' }} data-testid="text-editing-course-name">{courseForm.title}</p>
+                  )}
+                </div>
+                {editingDbCourse && (
+                  <Link
+                    href={`/academy/${(dbTiers.find((t: any) => t.name === editingDbCourse.level)?.slug || editingDbCourse.level?.toLowerCase() || 'foundation')}/${editingDbCourse.slug}`}
+                    className="text-[10px] font-mono text-gray-500 hover:text-electricBlue transition-colors flex items-center gap-1 shrink-0 mt-1"
+                    target="_blank"
+                    data-testid="link-view-course"
+                  >
+                    <ExternalLink className="w-3 h-3" />
+                    VIEW
+                  </Link>
+                )}
+              </div>
               <div className="flex items-center gap-3 mb-6 border-b border-white/10">
                 {[
                   { page: 1, label: 'HERO & SETUP', testId: 'button-form-page-1' },
