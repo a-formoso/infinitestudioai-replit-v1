@@ -1052,16 +1052,16 @@ export default function AdminDashboard() {
 
     return (
       <div className="relative z-10">
-        <div className="flex justify-between items-end mb-8">
+        <div className="flex flex-col sm:flex-row justify-between sm:items-end gap-4 mb-8">
           <div>
-            <h1 className="font-header text-2xl text-white mb-1">COURSE MANAGEMENT</h1>
+            <h1 className="font-header text-xl sm:text-2xl text-white mb-1">COURSE MANAGEMENT</h1>
             <p className="text-xs text-gray-400 font-mono">Manage curriculum, uploads, and pricing.</p>
           </div>
           <div className="flex gap-4">
             <button 
               onClick={handleOpenCreateCourseModal}
               data-testid="button-create-course"
-              className="bg-electricBlue text-white px-4 py-2 text-[10px] font-header font-bold uppercase hover:bg-white hover:text-black transition-colors"
+              className="bg-electricBlue text-white px-4 py-2 text-[10px] font-header font-bold uppercase hover:bg-white hover:text-black transition-colors w-full sm:w-auto"
             >
               + Create New Course
             </button>
@@ -1091,38 +1091,42 @@ export default function AdminDashboard() {
             {dbCourses.map((course: any) => (
               <div key={course.id} data-testid={`card-course-${course.id}`} className={`glass-panel p-0 overflow-hidden border transition-colors group ${expandedCourseId === course.id ? 'border-electricBlue/50' : 'border-white/10 hover:border-electricBlue/30'} ${course.status === 'draft' ? 'opacity-90' : ''}`}>
                 <div 
-                  className="p-6 flex items-center justify-between border-b border-white/5 bg-white/5 cursor-pointer"
+                  className="p-4 sm:p-6 border-b border-white/5 bg-white/5 cursor-pointer"
                   onClick={() => toggleCourse(course.id)}
                 >
-                  <div className="flex items-center gap-4">
-                    <div className="w-12 h-12 shrink-0 relative overflow-hidden rounded border border-white/10" style={{ backgroundColor: course.color || '#2962FF' }}>
-                      <span className="absolute inset-0 flex items-center justify-center font-header text-white text-xs font-bold">{course.title?.substring(0, 2).toUpperCase()}</span>
+                  <div className="flex items-start sm:items-center gap-3 sm:gap-4">
+                    <div className="w-10 h-10 sm:w-12 sm:h-12 shrink-0 relative overflow-hidden rounded border border-white/10" style={{ backgroundColor: course.color || '#2962FF' }}>
+                      <span className="absolute inset-0 flex items-center justify-center font-header text-white text-[10px] sm:text-xs font-bold">{course.title?.substring(0, 2).toUpperCase()}</span>
                     </div>
-                    <div>
-                      <h3 className="font-header text-sm text-white uppercase" data-testid={`text-course-title-${course.id}`}>{course.title}</h3>
-                      <div className="flex items-center gap-2 mt-1">
-                        <span className="text-[10px] text-gray-400 font-mono">/{course.slug}</span>
-                        <span className="text-gray-600">•</span>
-                        <span className="text-[10px] px-1.5 py-0.5 rounded font-bold" style={{ backgroundColor: `${(dbTiers.find((t: any) => t.name === course.level)?.color || '#2962FF')}20`, color: dbTiers.find((t: any) => t.name === course.level)?.color || '#2962FF' }}>{course.level}</span>
-                        <span className="text-gray-600">•</span>
-                        <span className="text-[10px] text-gray-500 font-mono">{course.lessonsCount} lessons</span>
+                    <div className="flex-1 min-w-0">
+                      <div className="flex items-start justify-between gap-2">
+                        <h3 className="font-header text-xs sm:text-sm text-white uppercase truncate" data-testid={`text-course-title-${course.id}`}>{course.title}</h3>
+                        <button className="text-gray-400 hover:text-white transition-colors p-1 shrink-0 sm:hidden">
+                          {expandedCourseId === course.id ? '▲' : '▼'}
+                        </button>
+                      </div>
+                      <div className="flex items-center gap-1.5 sm:gap-2 mt-1 flex-wrap">
+                        <span className="text-[9px] sm:text-[10px] px-1.5 py-0.5 rounded font-bold" style={{ backgroundColor: `${(dbTiers.find((t: any) => t.name === course.level)?.color || '#2962FF')}20`, color: dbTiers.find((t: any) => t.name === course.level)?.color || '#2962FF' }}>{course.level}</span>
+                        <span className="text-gray-600 hidden sm:inline">•</span>
+                        <span className="text-[9px] sm:text-[10px] text-gray-500 font-mono">{course.lessonsCount} lessons</span>
+                        <span className="text-gray-600 hidden sm:inline">•</span>
+                        <span className="text-[9px] sm:text-[10px] text-green-400 font-bold font-mono">${Number(course.price || 0).toFixed(0)}</span>
+                      </div>
+                      <div className="hidden sm:flex items-center gap-2 mt-1">
+                        <span className="text-[10px] text-gray-400 font-mono truncate">/{course.slug}</span>
                         <span className="text-gray-600">•</span>
                         <span className="text-[10px] text-gray-500 font-mono">{course.createdAt ? new Date(course.createdAt).toLocaleDateString() : ''}</span>
                       </div>
                     </div>
                   </div>
-                  <div className="flex items-center gap-6">
-                    <div className="text-right">
-                      <p className="text-xs text-green-400 font-bold font-mono">${Number(course.price || 0).toFixed(0)}</p>
-                      <p className="text-[10px] text-gray-500 uppercase">Price</p>
-                    </div>
+                  <div className="flex items-center justify-between mt-3 sm:mt-0 sm:justify-end gap-2 sm:gap-6 sm:-mt-2">
                     <button
                       onClick={(e) => {
                         e.stopPropagation();
                         handleTogglePublish(course);
                       }}
                       data-testid={`button-toggle-publish-${course.id}`}
-                      className={`px-3 py-1 rounded text-[10px] font-bold border hover:opacity-80 transition-opacity ${
+                      className={`px-2.5 sm:px-3 py-1 rounded text-[9px] sm:text-[10px] font-bold border hover:opacity-80 transition-opacity ${
                         course.status === 'published' ? 'bg-green-500/10 text-green-500 border-green-500/20' : 
                         course.status === 'archived' ? 'bg-gray-500/10 text-gray-400 border-gray-500/20' :
                         'bg-yellow-500/10 text-yellow-500 border-yellow-500/20'
@@ -1130,10 +1134,10 @@ export default function AdminDashboard() {
                     >
                       {course.status === 'published' ? 'PUBLISHED' : course.status === 'archived' ? 'ARCHIVED' : 'DRAFT'}
                     </button>
-                    <div className="flex gap-2">
+                    <div className="flex gap-1 sm:gap-2">
                       <button 
                         onClick={(e) => { e.stopPropagation(); handleOpenEditCourseModal(course); }}
-                        className="text-gray-400 hover:text-electricBlue transition-colors p-1"
+                        className="text-gray-400 hover:text-electricBlue transition-colors p-1.5 sm:p-1"
                         title="Edit Course"
                         data-testid={`button-edit-course-${course.id}`}
                       >
@@ -1141,7 +1145,7 @@ export default function AdminDashboard() {
                       </button>
                       <button 
                         onClick={(e) => { e.stopPropagation(); requestDeleteCourse(course.id); }}
-                        className="text-gray-400 hover:text-red-500 transition-colors p-1"
+                        className="text-gray-400 hover:text-red-500 transition-colors p-1.5 sm:p-1"
                         title="Delete Course"
                         data-testid={`button-delete-course-${course.id}`}
                       >
@@ -1153,13 +1157,13 @@ export default function AdminDashboard() {
                           const newStatus = course.status === 'archived' ? 'draft' : 'archived';
                           updateCourseMutation.mutate({ id: course.id, data: { status: newStatus } });
                         }}
-                        className={`transition-colors p-1 ${course.status === 'archived' ? 'text-green-400 hover:text-green-300' : 'text-gray-400 hover:text-yellow-500'}`}
+                        className={`transition-colors p-1.5 sm:p-1 ${course.status === 'archived' ? 'text-green-400 hover:text-green-300' : 'text-gray-400 hover:text-yellow-500'}`}
                         title={course.status === 'archived' ? "Unarchive Course" : "Archive Course"}
                         data-testid={`button-archive-course-${course.id}`}
                       >
                         <Archive className="w-4 h-4" />
                       </button>
-                      <button className="text-gray-400 hover:text-white transition-colors p-1">
+                      <button className="text-gray-400 hover:text-white transition-colors p-1 hidden sm:block">
                         {expandedCourseId === course.id ? '▲' : '▼'}
                       </button>
                     </div>
@@ -1167,7 +1171,7 @@ export default function AdminDashboard() {
                 </div>
                 
                 {expandedCourseId === course.id && (
-                  <div className="bg-black/30 p-6 space-y-4 animate-in slide-in-from-top-2 duration-200">
+                  <div className="bg-black/30 p-4 sm:p-6 space-y-4 animate-in slide-in-from-top-2 duration-200">
                     {course.description && (
                       <div>
                         <p className="text-[10px] font-mono text-gray-500 uppercase mb-2">Description</p>
@@ -1198,8 +1202,8 @@ export default function AdminDashboard() {
           </div>
         )}
         {isCourseModalOpen && createPortal(
-          <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/80 backdrop-blur-sm animate-in fade-in duration-200">
-            <div className="glass-panel p-8 max-w-lg w-full border border-white/10 relative max-h-[90vh] overflow-y-auto">
+          <div className="fixed inset-0 z-[9999] flex items-end sm:items-center justify-center bg-black/80 backdrop-blur-sm animate-in fade-in duration-200">
+            <div className="glass-panel p-5 sm:p-8 max-w-lg w-full border border-white/10 relative max-h-[95vh] sm:max-h-[90vh] overflow-y-auto rounded-t-xl sm:rounded-none">
               <button 
                 onClick={() => setIsCourseModalOpen(false)}
                 className="absolute top-4 right-4 text-gray-500 hover:text-white"
