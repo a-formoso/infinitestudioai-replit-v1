@@ -130,7 +130,7 @@ export default function CourseAIFilmmakingEcosystem() {
                   </div>
 
                   <div className="mb-16">
-                      <h3 className="font-header text-xl text-white mb-8 border-l-4 border-signalOrange pl-4">CLASS SYLLABUS</h3>
+                      <h3 className="font-header text-xl text-white mb-8 border-l-4 border-white pl-4">CLASS SYLLABUS</h3>
                       
                       <div className="space-y-4">
                           <div className="border border-white/10 bg-white/5">
