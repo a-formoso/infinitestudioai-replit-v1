@@ -40,6 +40,7 @@ export const courses = pgTable("courses", {
   color: text("color").notNull(),
   status: text("status").notNull().default("published"),
   imageUrl: text("image_url"),
+  trailerUrl: text("trailer_url"),
   learningOutcomes: text("learning_outcomes"),
   features: text("features"),
   prerequisiteNote: text("prerequisite_note"),
