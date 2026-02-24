@@ -112,7 +112,13 @@ export default function AdminDashboard() {
     queryKey: ["adminCourses"],
     queryFn: getCourses,
   });
-  const dbCourses = coursesData?.data?.courses || [];
+  const dbCourses = [...(coursesData?.data?.courses || [])].sort((a: any, b: any) => {
+    const statusOrder: Record<string, number> = { published: 0, draft: 1, archived: 2 };
+    const sa = statusOrder[a.status] ?? 1;
+    const sb = statusOrder[b.status] ?? 1;
+    if (sa !== sb) return sa - sb;
+    return (a.title || '').localeCompare(b.title || '');
+  });
 
   const { data: tiersData } = useQuery({
     queryKey: ["courseTiers"],
