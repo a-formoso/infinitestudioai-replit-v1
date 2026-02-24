@@ -1494,7 +1494,6 @@ export default function AdminDashboard() {
                       data-testid="input-course-trailer-url"
                     />
                   </div>
-                  <p className="text-[9px] font-mono text-gray-600 mt-1">Shown as a play button overlay on the course detail page header</p>
                 </div>
 
                 <div className="pt-4 flex gap-3">
