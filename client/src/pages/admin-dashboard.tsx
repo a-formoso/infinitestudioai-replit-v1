@@ -1208,7 +1208,7 @@ export default function AdminDashboard() {
 
                 <div>
                   <label className="block text-[10px] font-mono text-gray-500 mb-2 uppercase">Color</label>
-                  <div className="flex gap-2">
+                  <div className="flex gap-2 items-center flex-wrap">
                     {['#2962FF', '#FF3D00', '#D500F9', '#FFD700', '#00E676', '#FF6D00'].map((color) => (
                       <button
                         key={color}
@@ -1218,6 +1218,28 @@ export default function AdminDashboard() {
                         data-testid={`button-color-${color}`}
                       />
                     ))}
+                    <div className="flex items-center gap-1.5 ml-1">
+                      <label className="relative w-8 h-8 rounded border-2 border-white/10 hover:border-white/30 cursor-pointer overflow-hidden transition-all" style={{ backgroundColor: courseForm.color }}>
+                        <input
+                          type="color"
+                          value={courseForm.color || '#2962FF'}
+                          onChange={(e) => setCourseForm({ ...courseForm, color: e.target.value.toUpperCase() })}
+                          className="absolute inset-0 opacity-0 cursor-pointer"
+                          data-testid="input-course-color-picker"
+                        />
+                      </label>
+                      <input
+                        type="text"
+                        value={courseForm.color || ''}
+                        onChange={(e) => {
+                          const val = e.target.value;
+                          setCourseForm({ ...courseForm, color: val.startsWith('#') ? val.toUpperCase() : `#${val.toUpperCase()}` });
+                        }}
+                        placeholder="#HEX"
+                        className="bg-black/50 border border-white/10 text-white text-[10px] px-2 py-1.5 w-20 focus:border-electricBlue outline-none font-mono"
+                        data-testid="input-course-color-hex"
+                      />
+                    </div>
                   </div>
                 </div>
 
@@ -1336,7 +1358,7 @@ export default function AdminDashboard() {
                   className="bg-black/50 border border-white/10 text-white text-xs px-4 py-2 flex-1 focus:border-electricBlue outline-none"
                   data-testid="input-new-tier-name"
                 />
-                <div className="flex gap-1">
+                <div className="flex gap-1 items-center">
                   {['#2962FF', '#FF3D00', '#D500F9', '#FFD700', '#00E676', '#FF6D00'].map((c) => (
                     <button
                       key={c}
@@ -1345,6 +1367,26 @@ export default function AdminDashboard() {
                       style={{ backgroundColor: c }}
                     />
                   ))}
+                  <label className="relative w-8 h-8 rounded border-2 border-white/10 hover:border-white/30 cursor-pointer overflow-hidden transition-all" style={{ backgroundColor: newTierColor }}>
+                    <input
+                      type="color"
+                      value={newTierColor}
+                      onChange={(e) => setNewTierColor(e.target.value.toUpperCase())}
+                      className="absolute inset-0 opacity-0 cursor-pointer"
+                      data-testid="input-new-tier-color-picker"
+                    />
+                  </label>
+                  <input
+                    type="text"
+                    value={newTierColor}
+                    onChange={(e) => {
+                      const val = e.target.value;
+                      setNewTierColor(val.startsWith('#') ? val.toUpperCase() : `#${val.toUpperCase()}`);
+                    }}
+                    placeholder="#HEX"
+                    className="bg-black/50 border border-white/10 text-white text-[10px] px-2 py-1.5 w-20 focus:border-electricBlue outline-none font-mono"
+                    data-testid="input-new-tier-color-hex"
+                  />
                 </div>
                 <button
                   onClick={async () => {
@@ -1381,7 +1423,7 @@ export default function AdminDashboard() {
                     <div className="flex items-center gap-2">
                       {editingTier?.id === tier.id ? (
                         <>
-                          <div className="flex gap-1">
+                          <div className="flex gap-1 items-center">
                             {['#2962FF', '#FF3D00', '#D500F9', '#FFD700', '#00E676', '#FF6D00'].map((c) => (
                               <button
                                 key={c}
@@ -1390,6 +1432,24 @@ export default function AdminDashboard() {
                                 style={{ backgroundColor: c }}
                               />
                             ))}
+                            <label className="relative w-5 h-5 rounded border border-white/10 hover:border-white/30 cursor-pointer overflow-hidden transition-all" style={{ backgroundColor: editingTier.color }}>
+                              <input
+                                type="color"
+                                value={editingTier.color}
+                                onChange={(e) => setEditingTier({ ...editingTier, color: e.target.value.toUpperCase() })}
+                                className="absolute inset-0 opacity-0 cursor-pointer"
+                              />
+                            </label>
+                            <input
+                              type="text"
+                              value={editingTier.color}
+                              onChange={(e) => {
+                                const val = e.target.value;
+                                setEditingTier({ ...editingTier, color: val.startsWith('#') ? val.toUpperCase() : `#${val.toUpperCase()}` });
+                              }}
+                              placeholder="#HEX"
+                              className="bg-black/50 border border-white/10 text-white text-[10px] px-1.5 py-1 w-[4.5rem] focus:border-electricBlue outline-none font-mono"
+                            />
                           </div>
                           <button
                             onClick={async () => {
