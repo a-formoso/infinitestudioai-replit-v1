@@ -25,8 +25,13 @@ export default function Academy() {
   const allCourses = data?.data?.courses || [];
   const isAdmin = data?.data?.isAdmin === true;
 
-  const publishedCourses = allCourses.filter((course: any) => course.status === "published");
-  const draftCourses = allCourses.filter((course: any) => course.status === "draft");
+  const getTierOrder = (course: any) => {
+    const tier = dbTiers.find((t: any) => t.name === course.level);
+    return tier?.sortOrder ?? 999;
+  };
+
+  const publishedCourses = allCourses.filter((course: any) => course.status === "published").sort((a: any, b: any) => getTierOrder(a) - getTierOrder(b));
+  const draftCourses = allCourses.filter((course: any) => course.status === "draft").sort((a: any, b: any) => getTierOrder(a) - getTierOrder(b));
 
   const filteredCourses = publishedCourses.filter((course: any) => {
     if (activeFilter === "all") return true;
