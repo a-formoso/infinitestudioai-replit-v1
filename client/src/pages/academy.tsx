@@ -176,7 +176,6 @@ export default function Academy() {
                             </div>
                             <h3 className="font-header text-sm text-white mb-2" data-testid={`text-draft-title-${course.slug}`}>{course.title}</h3>
                             <p className="text-[10px] text-gray-400 font-mono mb-0" data-testid={`text-draft-desc-${course.slug}`}>{course.shortDescription}</p>
-                            {isAdmin && <div className="mt-3 text-[10px] font-mono" style={{ color: tierColor }}>CLICK TO PREVIEW</div>}
                           </div>
                           </Link>
                           );
