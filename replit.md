@@ -90,6 +90,10 @@ migrations/           # Drizzle migration files
 
 5. **HTML prototypes as reference**: The `attached_assets/` directory contains static HTML mockups for every page. These serve as the design specification — the React components should match these designs.
 
+6. **Editable course detail sections**: Course detail page content (learning outcomes, sidebar features, prerequisite note) is stored as JSON in the courses table and rendered dynamically in `course-detail.tsx`. Admins can edit this content via the Edit Course modal in the admin dashboard. The Edit Course modal has 3 pages: "Hero & Setup" (title, descriptions, level, status, duration, badge, color, image), "Course Content" (learning outcomes, class syllabus/modules), and "Sidebar & Pricing" (price, sidebar feature checklist, prerequisite note). The syllabus/modules editor manages lessons stored in the `lessons` table via `PUT /api/courses/:id/lessons`.
+
+7. **Custom tier categories**: Academy course tiers (e.g., Foundation, Specialist) are managed via the `course_tiers` table. Admins can create/delete tiers from the Tier Management section of the admin dashboard. The level/tier dropdown in the Edit Course form pulls from this table.
+
 ## External Dependencies
 
 ### Database

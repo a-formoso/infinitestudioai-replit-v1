@@ -1175,20 +1175,27 @@ export default function AdminDashboard() {
               <h2 className="font-header text-xl text-white mb-2">
                 {editingDbCourse ? "EDIT COURSE" : "CREATE NEW COURSE"}
               </h2>
-              <div className="flex items-center gap-4 mb-6">
+              <div className="flex items-center gap-3 mb-6 border-b border-white/10 pb-2">
                 <button
                   onClick={() => setCourseFormPage(1)}
                   className={`text-[10px] font-mono tracking-wider pb-1 border-b-2 transition-colors ${courseFormPage === 1 ? 'text-white border-electricBlue' : 'text-gray-500 border-transparent hover:text-gray-300'}`}
                   data-testid="button-form-page-1"
                 >
-                  BASIC INFO
+                  HERO & SETUP
                 </button>
                 <button
                   onClick={() => setCourseFormPage(2)}
                   className={`text-[10px] font-mono tracking-wider pb-1 border-b-2 transition-colors ${courseFormPage === 2 ? 'text-white border-electricBlue' : 'text-gray-500 border-transparent hover:text-gray-300'}`}
                   data-testid="button-form-page-2"
                 >
-                  PAGE CONTENT
+                  COURSE CONTENT
+                </button>
+                <button
+                  onClick={() => setCourseFormPage(3)}
+                  className={`text-[10px] font-mono tracking-wider pb-1 border-b-2 transition-colors ${courseFormPage === 3 ? 'text-white border-electricBlue' : 'text-gray-500 border-transparent hover:text-gray-300'}`}
+                  data-testid="button-form-page-3"
+                >
+                  SIDEBAR & PRICING
                 </button>
               </div>
               
@@ -1230,17 +1237,7 @@ export default function AdminDashboard() {
 
                 <div className="grid grid-cols-2 gap-4">
                   <div>
-                    <label className="block text-[10px] font-mono text-gray-500 mb-2 uppercase">Price</label>
-                    <input 
-                      type="text" 
-                      value={courseForm.price}
-                      onChange={(e) => setCourseForm({ ...courseForm, price: e.target.value })}
-                      className="bg-black/50 border border-white/10 text-white text-xs px-4 py-3 w-full focus:border-electricBlue outline-none font-mono"
-                      data-testid="input-course-price"
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-[10px] font-mono text-gray-500 mb-2 uppercase">Level</label>
+                    <label className="block text-[10px] font-mono text-gray-500 mb-2 uppercase">Level / Tier</label>
                     <select 
                       value={courseForm.level}
                       onChange={(e) => setCourseForm({ ...courseForm, level: e.target.value })}
@@ -1259,9 +1256,22 @@ export default function AdminDashboard() {
                       )}
                     </select>
                   </div>
+                  <div>
+                    <label className="block text-[10px] font-mono text-gray-500 mb-2 uppercase">Status</label>
+                    <select 
+                      value={courseForm.status}
+                      onChange={(e) => setCourseForm({ ...courseForm, status: e.target.value })}
+                      className="bg-black/50 border border-white/10 text-white text-xs px-4 py-3 w-full focus:border-electricBlue outline-none appearance-none"
+                      data-testid="select-course-status"
+                    >
+                      <option value="draft">Draft</option>
+                      <option value="published">Published</option>
+                      <option value="archived">Archived</option>
+                    </select>
+                  </div>
                 </div>
 
-                <div className="grid grid-cols-2 gap-4">
+                <div className="grid grid-cols-3 gap-4">
                   <div>
                     <label className="block text-[10px] font-mono text-gray-500 mb-2 uppercase">Duration</label>
                     <input 
@@ -1274,12 +1284,23 @@ export default function AdminDashboard() {
                     />
                   </div>
                   <div>
-                    <label className="block text-[10px] font-mono text-gray-500 mb-2 uppercase">Badge (optional)</label>
+                    <label className="block text-[10px] font-mono text-gray-500 mb-2 uppercase">Lessons Count</label>
+                    <input 
+                      type="number" 
+                      value={courseForm.lessonsCount}
+                      onChange={(e) => setCourseForm({ ...courseForm, lessonsCount: parseInt(e.target.value) || 0 })}
+                      placeholder="e.g. 11"
+                      className="bg-black/50 border border-white/10 text-white text-xs px-4 py-3 w-full focus:border-electricBlue outline-none font-mono"
+                      data-testid="input-course-lessons-count"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-[10px] font-mono text-gray-500 mb-2 uppercase">Badge</label>
                     <input 
                       type="text" 
                       value={courseForm.badge}
                       onChange={(e) => setCourseForm({ ...courseForm, badge: e.target.value })}
-                      placeholder="e.g. NEW, POPULAR"
+                      placeholder="e.g. NEW"
                       className="bg-black/50 border border-white/10 text-white text-xs px-4 py-3 w-full focus:border-electricBlue outline-none font-mono"
                       data-testid="input-course-badge"
                     />
@@ -1321,20 +1342,6 @@ export default function AdminDashboard() {
                       />
                     </div>
                   </div>
-                </div>
-
-                <div>
-                  <label className="block text-[10px] font-mono text-gray-500 mb-2 uppercase">Status</label>
-                  <select 
-                    value={courseForm.status}
-                    onChange={(e) => setCourseForm({ ...courseForm, status: e.target.value })}
-                    className="bg-black/50 border border-white/10 text-white text-xs px-4 py-3 w-full focus:border-electricBlue outline-none appearance-none"
-                    data-testid="select-course-status"
-                  >
-                    <option value="draft">Draft</option>
-                    <option value="published">Published</option>
-                    <option value="archived">Archived</option>
-                  </select>
                 </div>
 
                 <div>
@@ -1403,7 +1410,7 @@ export default function AdminDashboard() {
                     className="flex-1 py-3 text-xs font-header font-bold text-white bg-electricBlue/80 hover:bg-electricBlue transition-colors"
                     data-testid="button-next-page"
                   >
-                    NEXT: PAGE CONTENT →
+                    NEXT: COURSE CONTENT →
                   </button>
                 </div>
                   </>
@@ -1461,46 +1468,6 @@ export default function AdminDashboard() {
                       data-testid="button-add-outcome"
                     >
                       + ADD OUTCOME
-                    </button>
-                  </div>
-                </div>
-
-                <div className="border-t border-white/10 pt-4">
-                  <label className="block text-[10px] font-mono text-gray-500 mb-2 uppercase">Sidebar Features (Checklist Items)</label>
-                  <div className="space-y-2">
-                    {courseForm.features.map((feature, idx) => (
-                      <div key={idx} className="flex gap-2 items-center">
-                        <Check className="w-3 h-3 text-electricBlue shrink-0" />
-                        <input
-                          type="text"
-                          value={feature}
-                          onChange={(e) => {
-                            const updated = [...courseForm.features];
-                            updated[idx] = e.target.value;
-                            setCourseForm({ ...courseForm, features: updated });
-                          }}
-                          placeholder="e.g. Lifetime Access"
-                          className="bg-black/50 border border-white/10 text-white text-xs px-3 py-2 flex-1 focus:border-electricBlue outline-none"
-                          data-testid={`input-feature-${idx}`}
-                        />
-                        <button
-                          onClick={() => {
-                            const updated = courseForm.features.filter((_, i) => i !== idx);
-                            setCourseForm({ ...courseForm, features: updated });
-                          }}
-                          className="text-gray-500 hover:text-signalOrange"
-                          data-testid={`button-remove-feature-${idx}`}
-                        >
-                          <X className="w-3 h-3" />
-                        </button>
-                      </div>
-                    ))}
-                    <button
-                      onClick={() => setCourseForm({ ...courseForm, features: [...courseForm.features, ""] })}
-                      className="text-[10px] font-mono text-electricBlue hover:text-white transition-colors"
-                      data-testid="button-add-feature"
-                    >
-                      + ADD FEATURE
                     </button>
                   </div>
                 </div>
@@ -1591,7 +1558,79 @@ export default function AdminDashboard() {
                   </div>
                 </div>
 
+                <div className="pt-4 flex gap-3">
+                  <button 
+                    onClick={() => setCourseFormPage(1)}
+                    className="flex-1 py-3 text-xs font-header font-bold text-gray-400 bg-white/5 hover:bg-white/10 transition-colors"
+                    data-testid="button-back-page"
+                  >
+                    ← HERO & SETUP
+                  </button>
+                  <button 
+                    onClick={() => setCourseFormPage(3)}
+                    className="flex-1 py-3 text-xs font-header font-bold text-white bg-electricBlue/80 hover:bg-electricBlue transition-colors"
+                    data-testid="button-next-page-3"
+                  >
+                    NEXT: SIDEBAR & PRICING →
+                  </button>
+                </div>
+                  </>
+                )}
+
+                {courseFormPage === 3 && (
+                  <>
                 <div>
+                  <label className="block text-[10px] font-mono text-gray-500 mb-2 uppercase">Price</label>
+                  <input 
+                    type="text" 
+                    value={courseForm.price}
+                    onChange={(e) => setCourseForm({ ...courseForm, price: e.target.value })}
+                    className="bg-black/50 border border-white/10 text-white text-xs px-4 py-3 w-full focus:border-electricBlue outline-none font-mono"
+                    data-testid="input-course-price"
+                  />
+                </div>
+
+                <div className="border-t border-white/10 pt-4">
+                  <label className="block text-[10px] font-mono text-gray-500 mb-2 uppercase">Sidebar Features (Checklist Items)</label>
+                  <div className="space-y-2">
+                    {courseForm.features.map((feature, idx) => (
+                      <div key={idx} className="flex gap-2 items-center">
+                        <Check className="w-3 h-3 text-electricBlue shrink-0" />
+                        <input
+                          type="text"
+                          value={feature}
+                          onChange={(e) => {
+                            const updated = [...courseForm.features];
+                            updated[idx] = e.target.value;
+                            setCourseForm({ ...courseForm, features: updated });
+                          }}
+                          placeholder="e.g. Lifetime Access"
+                          className="bg-black/50 border border-white/10 text-white text-xs px-3 py-2 flex-1 focus:border-electricBlue outline-none"
+                          data-testid={`input-feature-${idx}`}
+                        />
+                        <button
+                          onClick={() => {
+                            const updated = courseForm.features.filter((_, i) => i !== idx);
+                            setCourseForm({ ...courseForm, features: updated });
+                          }}
+                          className="text-gray-500 hover:text-signalOrange"
+                          data-testid={`button-remove-feature-${idx}`}
+                        >
+                          <X className="w-3 h-3" />
+                        </button>
+                      </div>
+                    ))}
+                    <button
+                      onClick={() => setCourseForm({ ...courseForm, features: [...courseForm.features, ""] })}
+                      className="text-[10px] font-mono text-electricBlue hover:text-white transition-colors"
+                      data-testid="button-add-feature"
+                    >
+                      + ADD FEATURE
+                    </button>
+                  </div>
+                </div>
+
+                <div className="border-t border-white/10 pt-4">
                   <label className="block text-[10px] font-mono text-gray-500 mb-2 uppercase">Prerequisite Note (optional)</label>
                   <input
                     type="text"
@@ -1605,11 +1644,11 @@ export default function AdminDashboard() {
 
                 <div className="pt-4 flex gap-3">
                   <button 
-                    onClick={() => setCourseFormPage(1)}
+                    onClick={() => setCourseFormPage(2)}
                     className="flex-1 py-3 text-xs font-header font-bold text-gray-400 bg-white/5 hover:bg-white/10 transition-colors"
                     data-testid="button-back-page"
                   >
-                    ← BACK
+                    ← COURSE CONTENT
                   </button>
                   <button 
                     onClick={handleSaveCourseForm}
