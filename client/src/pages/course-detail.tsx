@@ -1,7 +1,7 @@
 import { Navbar } from "@/components/navbar";
 import { Footer } from "@/components/footer";
 import { useState } from "react";
-import { Check, ChevronRight, AlertTriangle, Loader2 } from "lucide-react";
+import { Check, ChevronRight, AlertTriangle, Loader2, Pencil } from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
 import { useLocation, Link, useRoute } from "wouter";
 import { getCurrentUser, getCourseBySlug, getCourseTiers } from "@/lib/api";
@@ -35,6 +35,7 @@ export default function CourseDetail() {
   const course = courseData?.data?.course;
   const lessons = courseData?.data?.lessons || [];
   const isDraft = course?.status === "draft" || course?.status === "archived";
+  const isAdmin = userData?.data?.user?.isAdmin === true;
   const matchedTier = dbTiers.find((t: any) => t.name === course?.level);
   const tierColor = matchedTier?.color || (course?.level === "Specialist" ? "#FF3D00" : "#2962FF");
   const tierLabel = course?.level || "Foundation";
@@ -92,8 +93,29 @@ export default function CourseDetail() {
       <Navbar />
 
       {isDraft && (
-        <div className="bg-neonPurple/20 border-b border-neonPurple/40 px-6 py-3 text-center relative z-20">
+        <div className="bg-neonPurple/20 border-b border-neonPurple/40 px-6 py-3 text-center relative z-20 flex items-center justify-center gap-4">
           <span className="text-[10px] font-mono text-neonPurple tracking-widest">ADMIN PREVIEW — THIS COURSE IS NOT YET PUBLISHED</span>
+          {isAdmin && (
+            <button
+              onClick={() => setLocation(`/dashboard?edit=${course.id}`)}
+              className="text-[10px] font-mono text-white bg-neonPurple/40 hover:bg-neonPurple/60 px-3 py-1 transition-colors flex items-center gap-1.5 cursor-pointer"
+              data-testid="button-admin-edit-draft"
+            >
+              <Pencil className="w-3 h-3" /> EDIT COURSE
+            </button>
+          )}
+        </div>
+      )}
+
+      {!isDraft && isAdmin && (
+        <div className="fixed bottom-6 right-6 z-50">
+          <button
+            onClick={() => setLocation(`/dashboard?edit=${course.id}`)}
+            className="flex items-center gap-2 bg-white/10 backdrop-blur-sm border border-white/20 text-white text-[10px] font-mono px-4 py-3 hover:bg-white/20 transition-colors cursor-pointer"
+            data-testid="button-admin-edit"
+          >
+            <Pencil className="w-3.5 h-3.5" /> EDIT COURSE
+          </button>
         </div>
       )}
 

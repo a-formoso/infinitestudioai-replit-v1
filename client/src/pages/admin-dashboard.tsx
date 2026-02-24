@@ -120,6 +120,22 @@ export default function AdminDashboard() {
   });
   const dbTiers = tiersData?.data?.tiers || [];
 
+  const editCourseId = searchParams.get("edit");
+  const [autoEditHandled, setAutoEditHandled] = useState(false);
+
+  useEffect(() => {
+    if (editCourseId && dbCourses.length > 0 && !autoEditHandled) {
+      const courseToEdit = dbCourses.find((c: any) => c.id === editCourseId);
+      if (courseToEdit) {
+        setActiveTab("courses");
+        setTimeout(() => {
+          handleOpenEditCourseModal(courseToEdit);
+          setAutoEditHandled(true);
+        }, 100);
+      }
+    }
+  }, [editCourseId, dbCourses, autoEditHandled]);
+
   const createTierMutation = useMutation({
     mutationFn: (data: Record<string, any>) => apiCreateCourseTier(data),
     onSuccess: () => { queryClient.invalidateQueries({ queryKey: ["courseTiers"] }); },
