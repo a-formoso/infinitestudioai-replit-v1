@@ -1570,7 +1570,7 @@ export default function AdminDashboard() {
                     className="flex-1 py-3 text-xs font-header font-bold text-white bg-electricBlue/80 hover:bg-electricBlue transition-colors"
                     data-testid="button-next-page-3"
                   >
-                    NEXT: SIDEBAR & PRICING →
+                    SIDEBAR & PRICING →
                   </button>
                 </div>
                   </>
