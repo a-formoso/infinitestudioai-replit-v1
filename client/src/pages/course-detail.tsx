@@ -118,7 +118,14 @@ export default function CourseDetail() {
               <span className="flex items-center gap-2"><div className="w-2 h-2 rounded-full" style={{ backgroundColor: tierColor }}></div> LIFETIME ACCESS</span>
             </div>
             {!isDraft && (
-              <button onClick={handleEnroll} className="inline-block bg-white text-black px-8 py-4 text-sm font-header font-bold uppercase hover:text-white transition-all duration-300 tracking-wider cursor-pointer" style={{ ['--tw-hover-bg' as any]: tierColor }} data-testid="button-hero-enroll">
+              <button
+                onClick={handleEnroll}
+                className="group inline-block bg-white text-black px-8 py-4 text-sm font-header font-bold uppercase transition-all duration-300 tracking-wider cursor-pointer"
+                style={{ boxShadow: `0 0 20px rgba(255,255,255,0.2)` }}
+                onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = tierColor; e.currentTarget.style.color = '#fff'; e.currentTarget.style.boxShadow = `0 0 20px ${tierColor}66`; }}
+                onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = '#fff'; e.currentTarget.style.color = '#000'; e.currentTarget.style.boxShadow = '0 0 20px rgba(255,255,255,0.2)'; }}
+                data-testid="button-hero-enroll"
+              >
                 Start Training
               </button>
             )}
@@ -232,8 +239,10 @@ export default function CourseDetail() {
                 <button
                   onClick={handleEnroll}
                   data-testid="button-enroll"
-                  className="w-full text-white font-header font-bold text-sm uppercase py-4 hover:bg-white hover:text-black transition-all duration-300 tracking-wider mb-4 cursor-pointer"
+                  className="w-full text-white font-header font-bold text-sm uppercase py-4 transition-all duration-300 tracking-wider mb-4 cursor-pointer"
                   style={{ backgroundColor: tierColor, boxShadow: `0 0 20px ${tierColor}66` }}
+                  onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = '#fff'; e.currentTarget.style.color = '#000'; e.currentTarget.style.boxShadow = '0 0 20px rgba(255,255,255,0.2)'; }}
+                  onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = tierColor; e.currentTarget.style.color = '#fff'; e.currentTarget.style.boxShadow = `0 0 20px ${tierColor}66`; }}
                 >
                   Enroll Now
                 </button>

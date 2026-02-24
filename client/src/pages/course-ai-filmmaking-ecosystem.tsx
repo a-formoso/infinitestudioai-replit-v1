@@ -80,7 +80,7 @@ export default function CourseAIFilmmakingEcosystem() {
                       <span className="flex items-center gap-2"><div className="w-2 h-2 bg-signalOrange rounded-full"></div> 14 LESSONS</span>
                       <span className="flex items-center gap-2"><div className="w-2 h-2 bg-signalOrange rounded-full"></div> LIFETIME ACCESS</span>
                   </div>
-                  <button onClick={handleEnroll} className="inline-block bg-white text-black px-8 py-4 text-sm font-header font-bold uppercase hover:bg-signalOrange hover:text-white transition-all duration-300 tracking-wider cursor-pointer" data-testid="button-hero-enroll">
+                  <button onClick={handleEnroll} className="inline-block bg-white text-black px-8 py-4 text-sm font-header font-bold uppercase hover:bg-signalOrange hover:text-white transition-all duration-300 tracking-wider cursor-pointer shadow-[0_0_20px_rgba(255,255,255,0.2)] hover:shadow-[0_0_20px_rgba(255,61,0,0.4)]" data-testid="button-hero-enroll">
                       Start Training
                   </button>
               </div>
@@ -226,7 +226,7 @@ export default function CourseAIFilmmakingEcosystem() {
                       <button 
                         onClick={handleEnroll}
                         data-testid="button-enroll"
-                        className="w-full bg-signalOrange text-black font-header font-bold text-sm uppercase py-4 hover:bg-white transition-all duration-300 tracking-wider mb-4 shadow-[0_0_20px_rgba(255,61,0,0.4)] cursor-pointer"
+                        className="w-full bg-signalOrange text-white font-header font-bold text-sm uppercase py-4 hover:bg-white hover:text-black transition-all duration-300 tracking-wider mb-4 shadow-[0_0_20px_rgba(255,61,0,0.4)] hover:shadow-[0_0_20px_rgba(255,255,255,0.2)] cursor-pointer"
                       >
                           Enroll Now
                       </button>
