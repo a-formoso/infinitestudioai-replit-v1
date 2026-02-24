@@ -1203,7 +1203,7 @@ export default function AdminDashboard() {
         )}
         {isCourseModalOpen && createPortal(
           <div className="fixed inset-0 z-[9999] flex items-end sm:items-center justify-center bg-black/80 backdrop-blur-sm animate-in fade-in duration-200">
-            <div className="glass-panel p-5 sm:p-8 max-w-lg w-full border border-white/10 relative max-h-[95vh] sm:max-h-[90vh] overflow-y-auto rounded-t-xl sm:rounded-none">
+            <div className="glass-panel p-5 sm:p-8 max-w-lg w-full border border-white/10 relative max-h-[95vh] sm:max-h-[90vh] overflow-y-auto rounded-none">
               <button 
                 onClick={() => setIsCourseModalOpen(false)}
                 className="absolute top-4 right-4 text-gray-500 hover:text-white"
