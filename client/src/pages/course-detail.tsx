@@ -87,7 +87,7 @@ export default function CourseDetail() {
   const secondHalf = titleParts.slice(Math.ceil(titleParts.length / 2)).join(" ");
 
   return (
-    <div className="min-h-screen bg-obsidian text-offWhite font-body antialiased selection:bg-electricBlue selection:text-white overflow-x-hidden">
+    <div className="min-h-screen bg-obsidian text-offWhite font-body antialiased selection:bg-electricBlue selection:text-white">
       <div className="fixed inset-0 bg-grid-pattern bg-[size:40px_40px] opacity-20 pointer-events-none z-0"></div>
 
       <Navbar />
@@ -260,7 +260,7 @@ export default function CourseDetail() {
             )}
           </div>
 
-          <div className="lg:col-span-4 space-y-8 lg:self-start lg:sticky lg:top-24 lg:max-h-[calc(100vh-8rem)] lg:overflow-y-auto scrollbar-hide">
+          <div className="lg:col-span-4 space-y-8 lg:self-start lg:sticky lg:top-24">
             <div className="glass-panel p-8" style={{ borderTop: `4px solid ${tierColor}` }}>
               <div className="text-center mb-6">
                 {course.price && (
