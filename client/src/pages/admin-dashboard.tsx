@@ -1163,7 +1163,7 @@ export default function AdminDashboard() {
         )}
 
         {isCourseModalOpen && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm animate-in fade-in duration-200">
+          <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/80 backdrop-blur-sm animate-in fade-in duration-200">
             <div className="glass-panel p-8 max-w-lg w-full border border-white/10 relative max-h-[90vh] overflow-y-auto">
               <button 
                 onClick={() => setIsCourseModalOpen(false)}
@@ -1172,9 +1172,12 @@ export default function AdminDashboard() {
                 <X className="w-4 h-4" />
               </button>
               
-              <h2 className="font-header text-xl text-white mb-2">
+              <h2 className="font-header text-xl text-white mb-1">
                 {editingDbCourse ? "EDIT COURSE" : "CREATE NEW COURSE"}
               </h2>
+              {editingDbCourse && (
+                <p className="text-[11px] font-mono text-electricBlue mb-3 truncate" data-testid="text-editing-course-name">{courseForm.title}</p>
+              )}
               <div className="flex items-center gap-3 mb-6 border-b border-white/10 pb-2">
                 <button
                   onClick={() => setCourseFormPage(1)}
