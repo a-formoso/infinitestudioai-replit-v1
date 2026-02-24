@@ -188,6 +188,7 @@ export default function AdminDashboard() {
     color: "#2962FF",
     status: "draft",
     imageUrl: "",
+    trailerUrl: "",
     learningOutcomes: [] as Array<{ title: string; description: string }>,
     features: [] as string[],
     prerequisiteNote: "",
@@ -581,6 +582,7 @@ export default function AdminDashboard() {
       color: "#2962FF",
       status: "draft",
       imageUrl: "",
+      trailerUrl: "",
       learningOutcomes: [],
       features: [],
       prerequisiteNote: "",
@@ -625,6 +627,7 @@ export default function AdminDashboard() {
       color: course.color || tierColor,
       status: course.status || "draft",
       imageUrl: course.imageUrl || "",
+      trailerUrl: course.trailerUrl || "",
       learningOutcomes: parseJsonField(course.learningOutcomes, []),
       features: parseJsonField(course.features, []),
       prerequisiteNote: course.prerequisiteNote || "",
@@ -1447,6 +1450,19 @@ export default function AdminDashboard() {
                       data-testid="input-course-image-url"
                     />
                   </div>
+                </div>
+
+                <div>
+                  <label className="block text-[10px] font-mono text-gray-500 mb-2 uppercase">Course Trailer URL</label>
+                  <input 
+                    type="text" 
+                    value={courseForm.trailerUrl}
+                    onChange={(e) => setCourseForm({ ...courseForm, trailerUrl: e.target.value })}
+                    placeholder="Paste trailer video URL (YouTube, Vimeo, or direct link)..."
+                    className="bg-black/50 border border-white/10 text-white text-[10px] px-3 py-2 w-full focus:border-electricBlue outline-none font-mono"
+                    data-testid="input-course-trailer-url"
+                  />
+                  <p className="text-[9px] font-mono text-gray-600 mt-1">Shown as a play button overlay on the course detail page header</p>
                 </div>
 
                 <div className="pt-4 flex gap-3">

@@ -159,18 +159,35 @@ export default function CourseDetail() {
           </div>
 
           <div className="relative glass-panel p-2 group" style={{ borderColor: `${tierColor}33` }}>
-            <div className="aspect-video bg-gray-900 relative overflow-hidden">
-              {course.imageUrl ? (
-                <div className="absolute inset-0 bg-cover bg-center group-hover:scale-105 transition-transform duration-500" style={{ backgroundImage: `url(${course.imageUrl})` }}></div>
-              ) : (
-                <div className="absolute inset-0 flex items-center justify-center group-hover:scale-105 transition-transform duration-500" style={{ background: `linear-gradient(to bottom right, ${tierColor}30, black)` }}>
+            {course.trailerUrl ? (
+              <a href={course.trailerUrl} target="_blank" rel="noopener noreferrer" className="block aspect-video bg-gray-900 relative overflow-hidden cursor-pointer" data-testid="link-course-trailer">
+                {course.imageUrl ? (
+                  <div className="absolute inset-0 bg-cover bg-center group-hover:scale-105 transition-transform duration-500" style={{ backgroundImage: `url(${course.imageUrl})` }}></div>
+                ) : (
+                  <div className="absolute inset-0 group-hover:scale-105 transition-transform duration-500" style={{ background: `linear-gradient(to bottom right, ${tierColor}30, black)` }}></div>
+                )}
+                <div className="absolute inset-0 bg-black/30 flex items-center justify-center">
+                  <div className="w-16 h-16 rounded-full bg-white/10 backdrop-blur-sm flex items-center justify-center border border-white/20 group-hover:bg-white/20 group-hover:border-white/40 transition-colors">
+                    <span className="text-2xl ml-1 text-white">▶</span>
+                  </div>
+                </div>
+                <div className="absolute bottom-4 left-4 font-mono text-[10px] text-white bg-black/50 px-2 py-1">COURSE_TRAILER.MP4</div>
+              </a>
+            ) : (
+              <div className="aspect-video bg-gray-900 relative overflow-hidden">
+                {course.imageUrl ? (
+                  <div className="absolute inset-0 bg-cover bg-center group-hover:scale-105 transition-transform duration-500" style={{ backgroundImage: `url(${course.imageUrl})` }}></div>
+                ) : (
+                  <div className="absolute inset-0 group-hover:scale-105 transition-transform duration-500" style={{ background: `linear-gradient(to bottom right, ${tierColor}30, black)` }}></div>
+                )}
+                <div className="absolute inset-0 flex items-center justify-center">
                   <div className="w-16 h-16 rounded-full bg-white/10 backdrop-blur-sm flex items-center justify-center border border-white/20 cursor-pointer">
                     <span className="text-2xl ml-1 text-white">▶</span>
                   </div>
                 </div>
-              )}
-              <div className="absolute bottom-4 left-4 font-mono text-[10px] text-white bg-black/50 px-2 py-1">COURSE_TRAILER.MP4</div>
-            </div>
+                <div className="absolute bottom-4 left-4 font-mono text-[10px] text-white bg-black/50 px-2 py-1">COURSE_TRAILER.MP4</div>
+              </div>
+            )}
           </div>
         </div>
       </header>
