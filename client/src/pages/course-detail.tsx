@@ -107,7 +107,7 @@ export default function CourseDetail() {
         </div>
       )}
 
-      {!isDraft && isAdmin && (
+      {isAdmin && (
         <div className="fixed bottom-6 right-6 z-50">
           <button
             onClick={() => setLocation(`/dashboard?edit=${course.id}`)}
