@@ -1175,30 +1175,28 @@ export default function AdminDashboard() {
                 {editingDbCourse ? "EDIT COURSE" : "CREATE NEW COURSE"}
               </h2>
               {editingDbCourse && (
-                <p className="text-[11px] font-mono text-electricBlue mb-3 truncate" data-testid="text-editing-course-name">{courseForm.title}</p>
+                <p className="text-[11px] font-mono mb-3 truncate" style={{ color: dbTiers.find((t: any) => t.name === courseForm.level)?.color || '#2962FF' }} data-testid="text-editing-course-name">{courseForm.title}</p>
               )}
               <div className="flex items-center gap-3 mb-6 border-b border-white/10">
-                <button
-                  onClick={() => setCourseFormPage(1)}
-                  className={`text-[10px] font-mono tracking-wider pb-2 -mb-px border-b-2 transition-colors ${courseFormPage === 1 ? 'text-white border-electricBlue' : 'text-gray-500 border-transparent hover:text-gray-300'}`}
-                  data-testid="button-form-page-1"
-                >
-                  HERO & SETUP
-                </button>
-                <button
-                  onClick={() => setCourseFormPage(2)}
-                  className={`text-[10px] font-mono tracking-wider pb-2 -mb-px border-b-2 transition-colors ${courseFormPage === 2 ? 'text-white border-electricBlue' : 'text-gray-500 border-transparent hover:text-gray-300'}`}
-                  data-testid="button-form-page-2"
-                >
-                  COURSE CONTENT
-                </button>
-                <button
-                  onClick={() => setCourseFormPage(3)}
-                  className={`text-[10px] font-mono tracking-wider pb-2 -mb-px border-b-2 transition-colors ${courseFormPage === 3 ? 'text-white border-electricBlue' : 'text-gray-500 border-transparent hover:text-gray-300'}`}
-                  data-testid="button-form-page-3"
-                >
-                  SIDEBAR & PRICING
-                </button>
+                {[
+                  { page: 1, label: 'HERO & SETUP', testId: 'button-form-page-1' },
+                  { page: 2, label: 'COURSE CONTENT', testId: 'button-form-page-2' },
+                  { page: 3, label: 'SIDEBAR & PRICING', testId: 'button-form-page-3' },
+                ].map(({ page, label, testId }) => {
+                  const isActive = courseFormPage === page;
+                  const tierColor = dbTiers.find((t: any) => t.name === courseForm.level)?.color || '#2962FF';
+                  return (
+                    <button
+                      key={page}
+                      onClick={() => setCourseFormPage(page)}
+                      className={`text-[10px] font-mono tracking-wider pb-2 -mb-px border-b-2 transition-colors ${isActive ? 'text-white' : 'text-gray-500 border-transparent hover:text-gray-300'}`}
+                      style={isActive ? { borderBottomColor: tierColor } : undefined}
+                      data-testid={testId}
+                    >
+                      {label}
+                    </button>
+                  );
+                })}
               </div>
               
               <div className="space-y-4">
