@@ -246,61 +246,61 @@ export default function AdminDashboard() {
 
   const renderAnalytics = () => (
     <div className="relative z-10 space-y-6">
-      <div className="flex justify-between items-center">
-        <h1 className="text-2xl font-header font-bold text-white tracking-widest">ANALYTICS OVERVIEW</h1>
+      <div className="flex flex-col sm:flex-row justify-between sm:items-center gap-4">
+        <h1 className="text-xl sm:text-2xl font-header font-bold text-white tracking-widest">ANALYTICS OVERVIEW</h1>
         <div className="flex gap-2">
-          <select className="bg-black/50 border border-white/10 text-white text-xs px-3 py-2 outline-none">
+          <select className="bg-black/50 border border-white/10 text-white text-xs px-3 py-2 outline-none flex-1 sm:flex-none">
             <option>Last 7 Days</option>
             <option>Last 30 Days</option>
             <option>This Year</option>
           </select>
-          <button className="bg-neonPurple text-white px-3 py-2 text-xs font-bold flex items-center gap-2 hover:bg-white hover:text-black transition-colors">
-            <Download className="w-3 h-3" /> EXPORT REPORT
+          <button className="bg-neonPurple text-white px-3 py-2 text-xs font-bold flex items-center gap-2 hover:bg-white hover:text-black transition-colors whitespace-nowrap">
+            <Download className="w-3 h-3" /> EXPORT
           </button>
         </div>
       </div>
 
       {/* KPI Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-        <div className="glass-panel p-6 border border-white/10 relative overflow-hidden group hover:border-neonPurple/50 transition-colors">
+      <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
+        <div className="glass-panel p-4 sm:p-6 border border-white/10 relative overflow-hidden group hover:border-neonPurple/50 transition-colors">
           <div className="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
             <DollarSign className="w-16 h-16 text-neonPurple" />
           </div>
           <p className="text-[10px] font-mono text-gray-500 uppercase mb-1">Total Revenue</p>
-          <h3 className="text-2xl font-header text-white">$17,657</h3>
+          <h3 className="text-xl sm:text-2xl font-header text-white">$17,657</h3>
           <div className="flex items-center gap-1 mt-2 text-[10px] text-green-500 font-mono">
             <ArrowUp className="w-3 h-3" /> +12.5% <span className="text-gray-500">vs last month</span>
           </div>
         </div>
 
-        <div className="glass-panel p-6 border border-white/10 relative overflow-hidden group hover:border-electricBlue/50 transition-colors">
+        <div className="glass-panel p-4 sm:p-6 border border-white/10 relative overflow-hidden group hover:border-electricBlue/50 transition-colors">
           <div className="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
             <ShoppingBag className="w-16 h-16 text-electricBlue" />
           </div>
           <p className="text-[10px] font-mono text-gray-500 uppercase mb-1">Total Sales</p>
-          <h3 className="text-2xl font-header text-white">482</h3>
+          <h3 className="text-xl sm:text-2xl font-header text-white">482</h3>
           <div className="flex items-center gap-1 mt-2 text-[10px] text-green-500 font-mono">
             <ArrowUp className="w-3 h-3" /> +8.2% <span className="text-gray-500">vs last month</span>
           </div>
         </div>
 
-        <div className="glass-panel p-6 border border-white/10 relative overflow-hidden group hover:border-green-500/50 transition-colors">
+        <div className="glass-panel p-4 sm:p-6 border border-white/10 relative overflow-hidden group hover:border-green-500/50 transition-colors">
           <div className="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
             <Users className="w-16 h-16 text-green-500" />
           </div>
           <p className="text-[10px] font-mono text-gray-500 uppercase mb-1">Active Students</p>
-          <h3 className="text-2xl font-header text-white">4,525</h3>
+          <h3 className="text-xl sm:text-2xl font-header text-white">4,525</h3>
           <div className="flex items-center gap-1 mt-2 text-[10px] text-green-500 font-mono">
             <ArrowUp className="w-3 h-3" /> +24% <span className="text-gray-500">vs last month</span>
           </div>
         </div>
 
-        <div className="glass-panel p-6 border border-white/10 relative overflow-hidden group hover:border-orange-500/50 transition-colors">
+        <div className="glass-panel p-4 sm:p-6 border border-white/10 relative overflow-hidden group hover:border-orange-500/50 transition-colors">
           <div className="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
             <Activity className="w-16 h-16 text-orange-500" />
           </div>
           <p className="text-[10px] font-mono text-gray-500 uppercase mb-1">Conversion Rate</p>
-          <h3 className="text-2xl font-header text-white">3.2%</h3>
+          <h3 className="text-xl sm:text-2xl font-header text-white">3.2%</h3>
           <div className="flex items-center gap-1 mt-2 text-[10px] text-red-500 font-mono">
             <ArrowDown className="w-3 h-3" /> -0.4% <span className="text-gray-500">vs last month</span>
           </div>
@@ -308,9 +308,9 @@ export default function AdminDashboard() {
       </div>
 
       {/* Main Charts */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-6">
         {/* Revenue Chart */}
-        <div className="lg:col-span-2 glass-panel p-6 border border-white/10">
+        <div className="lg:col-span-2 glass-panel p-4 sm:p-6 border border-white/10">
           <h3 className="font-header text-sm text-white mb-6">REVENUE OVERVIEW</h3>
           <div className="h-64 w-full">
             <ResponsiveContainer width="100%" height="100%">
@@ -336,7 +336,7 @@ export default function AdminDashboard() {
         </div>
 
         {/* Revenue Breakdown */}
-        <div className="glass-panel p-6 border border-white/10 flex flex-col">
+        <div className="glass-panel p-4 sm:p-6 border border-white/10 flex flex-col">
           <h3 className="font-header text-sm text-white mb-6">REVENUE BY SOURCE</h3>
           <div className="h-48 w-full flex-grow relative">
             <ResponsiveContainer width="100%" height="100%">
@@ -383,17 +383,17 @@ export default function AdminDashboard() {
       </div>
 
       {/* Recent Transactions */}
-      <div className="glass-panel p-6 border border-white/10">
-        <h3 className="font-header text-sm text-white mb-6">RECENT TRANSACTIONS</h3>
-        <div className="overflow-x-auto">
-          <table className="w-full text-left border-collapse">
+      <div className="glass-panel p-4 sm:p-6 border border-white/10">
+        <h3 className="font-header text-sm text-white mb-4 sm:mb-6">RECENT TRANSACTIONS</h3>
+        <div className="overflow-x-auto -mx-4 sm:mx-0">
+          <table className="w-full text-left border-collapse min-w-[600px]">
             <thead>
               <tr className="border-b border-white/10 text-[10px] text-gray-500 font-mono uppercase">
-                <th className="py-3 px-4 font-normal">Transaction ID</th>
-                <th className="py-3 px-4 font-normal">Customer</th>
-                <th className="py-3 px-4 font-normal">Item</th>
-                <th className="py-3 px-4 font-normal">Type</th>
-                <th className="py-3 px-4 font-normal text-right">Amount</th>
+                <th className="py-3 px-3 sm:px-4 font-normal">Transaction ID</th>
+                <th className="py-3 px-3 sm:px-4 font-normal">Customer</th>
+                <th className="py-3 px-3 sm:px-4 font-normal">Item</th>
+                <th className="py-3 px-3 sm:px-4 font-normal">Type</th>
+                <th className="py-3 px-3 sm:px-4 font-normal text-right">Amount</th>
                 <th className="py-3 px-4 font-normal text-right">Time</th>
               </tr>
             </thead>
@@ -907,69 +907,69 @@ export default function AdminDashboard() {
   const renderDashboard = () => (
     <div className="relative z-10">
       {/* HEADER */}
-      <div className="flex justify-between items-end mb-8">
+      <div className="flex flex-col sm:flex-row justify-between sm:items-end gap-4 mb-8">
         <div>
           <h1 className="font-header text-2xl text-white mb-1">SYSTEM OVERVIEW</h1>
           <p className="text-xs text-gray-400 font-mono">Last Sync: Just now</p>
         </div>
-        <div className="flex gap-4">
+        <div className="flex gap-2 sm:gap-4">
           <button 
             onClick={handleCreateCourse}
-            className="flex items-center gap-2 bg-electricBlue text-white px-4 py-2 text-[10px] font-header font-bold uppercase hover:bg-white hover:text-black transition-colors"
+            className="flex items-center justify-center gap-2 bg-electricBlue text-white px-3 sm:px-4 py-2 text-[10px] font-header font-bold uppercase hover:bg-white hover:text-black transition-colors flex-1 sm:flex-none"
           >
             <Plus className="w-3 h-3" /> New Course
           </button>
-          <button className="flex items-center gap-2 border border-white/20 text-white px-4 py-2 text-[10px] font-header font-bold uppercase hover:bg-white/10 transition-colors">
-            <Download className="w-3 h-3" /> Export Report
+          <button className="flex items-center justify-center gap-2 border border-white/20 text-white px-3 sm:px-4 py-2 text-[10px] font-header font-bold uppercase hover:bg-white/10 transition-colors flex-1 sm:flex-none">
+            <Download className="w-3 h-3" /> Export
           </button>
         </div>
       </div>
 
       {/* STATS GRID */}
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-6 mb-8">
         {/* Stat 1 */}
-        <div className="glass-panel p-6 stat-card cursor-pointer hover:border-white/30 hover:-translate-y-0.5 transition-all duration-300">
-          <div className="flex justify-between items-start mb-4">
+        <div className="glass-panel p-4 sm:p-6 stat-card cursor-pointer hover:border-white/30 hover:-translate-y-0.5 transition-all duration-300">
+          <div className="flex justify-between items-start mb-3 sm:mb-4">
             <span className="text-[10px] font-mono text-gray-400 uppercase">Total Revenue</span>
             <span className="text-green-500 text-xs font-mono">+12%</span>
           </div>
-          <h2 className="font-header text-3xl text-white">$124,500</h2>
+          <h2 className="font-header text-xl sm:text-3xl text-white">$124,500</h2>
           <div className="w-full h-1 bg-white/10 mt-4 rounded-full overflow-hidden">
             <div className="h-full bg-green-500 w-[75%]"></div>
           </div>
         </div>
 
         {/* Stat 2 */}
-        <div className="glass-panel p-6 stat-card cursor-pointer hover:border-white/30 hover:-translate-y-0.5 transition-all duration-300">
-          <div className="flex justify-between items-start mb-4">
+        <div className="glass-panel p-4 sm:p-6 stat-card cursor-pointer hover:border-white/30 hover:-translate-y-0.5 transition-all duration-300">
+          <div className="flex justify-between items-start mb-3 sm:mb-4">
             <span className="text-[10px] font-mono text-gray-400 uppercase">Active Students</span>
             <span className="text-electricBlue text-xs font-mono">+54</span>
           </div>
-          <h2 className="font-header text-3xl text-white">5,204</h2>
+          <h2 className="font-header text-xl sm:text-3xl text-white">5,204</h2>
           <div className="w-full h-1 bg-white/10 mt-4 rounded-full overflow-hidden">
             <div className="h-full bg-electricBlue w-[60%]"></div>
           </div>
         </div>
 
         {/* Stat 3 */}
-        <div className="glass-panel p-6 stat-card cursor-pointer hover:border-white/30 hover:-translate-y-0.5 transition-all duration-300">
-          <div className="flex justify-between items-start mb-4">
+        <div className="glass-panel p-4 sm:p-6 stat-card cursor-pointer hover:border-white/30 hover:-translate-y-0.5 transition-all duration-300">
+          <div className="flex justify-between items-start mb-3 sm:mb-4">
             <span className="text-[10px] font-mono text-gray-400 uppercase">Asset Downloads</span>
             <span className="text-neonPurple text-xs font-mono">NEW</span>
           </div>
-          <h2 className="font-header text-3xl text-white">12.5K</h2>
+          <h2 className="font-header text-xl sm:text-3xl text-white">12.5K</h2>
           <div className="w-full h-1 bg-white/10 mt-4 rounded-full overflow-hidden">
             <div className="h-full bg-neonPurple w-[85%]"></div>
           </div>
         </div>
 
         {/* Stat 4 */}
-        <div className="glass-panel p-6 stat-card cursor-pointer hover:border-white/30 hover:-translate-y-0.5 transition-all duration-300">
-          <div className="flex justify-between items-start mb-4">
+        <div className="glass-panel p-4 sm:p-6 stat-card cursor-pointer hover:border-white/30 hover:-translate-y-0.5 transition-all duration-300">
+          <div className="flex justify-between items-start mb-3 sm:mb-4">
             <span className="text-[10px] font-mono text-gray-400 uppercase">Server Load</span>
             <span className="text-signalOrange text-xs font-mono">STABLE</span>
           </div>
-          <h2 className="font-header text-3xl text-white">24%</h2>
+          <h2 className="font-header text-xl sm:text-3xl text-white">24%</h2>
           <div className="w-full h-1 bg-white/10 mt-4 rounded-full overflow-hidden">
             <div className="h-full bg-signalOrange w-[24%]"></div>
           </div>
@@ -981,17 +981,18 @@ export default function AdminDashboard() {
         
         {/* Recent Sales (Table) */}
         <div className="lg:col-span-2 glass-panel p-0 overflow-hidden">
-          <div className="p-6 border-b border-white/10 flex justify-between items-center">
+          <div className="p-4 sm:p-6 border-b border-white/10 flex justify-between items-center">
             <h3 className="font-header text-sm text-white">RECENT TRANSACTIONS</h3>
             <a href="#" className="text-[10px] font-mono text-electricBlue hover:underline">VIEW ALL</a>
           </div>
-          <table className="w-full text-left text-xs text-gray-400">
+          <div className="overflow-x-auto">
+          <table className="w-full text-left text-xs text-gray-400 min-w-[480px]">
             <thead className="bg-white/5 text-gray-200 font-header border-b border-white/10">
               <tr>
-                <th className="p-4">Customer</th>
-                <th className="p-4">Product</th>
-                <th className="p-4">Status</th>
-                <th className="p-4 text-right">Amount</th>
+                <th className="p-3 sm:p-4">Customer</th>
+                <th className="p-3 sm:p-4">Product</th>
+                <th className="p-3 sm:p-4">Status</th>
+                <th className="p-3 sm:p-4 text-right">Amount</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-white/5 font-mono">
@@ -1021,6 +1022,7 @@ export default function AdminDashboard() {
               </tr>
             </tbody>
           </table>
+          </div>
         </div>
 
         {/* System Logs (Live Terminal Feed) */}
@@ -2426,33 +2428,34 @@ export default function AdminDashboard() {
   const renderStudents = () => (
     <div className="relative z-10">
       {/* HEADER */}
-      <div className="flex justify-between items-end mb-8">
+      <div className="flex flex-col sm:flex-row justify-between sm:items-end gap-4 mb-8">
         <div>
-          <h1 className="font-header text-2xl text-white mb-1">STUDENT MANAGEMENT</h1>
+          <h1 className="font-header text-xl sm:text-2xl text-white mb-1">STUDENT MANAGEMENT</h1>
           <p className="text-xs text-gray-400 font-mono">Manage enrollments, progress, and support.</p>
         </div>
-        <div className="flex gap-4">
-          <div className="relative">
-            <input type="text" placeholder="Search Students..." className="bg-black/50 border border-white/10 text-white text-xs px-4 py-2 w-64 rounded-full focus:border-electricBlue outline-none pl-10" />
+        <div className="flex gap-2 sm:gap-4">
+          <div className="relative flex-1 sm:flex-none">
+            <input type="text" placeholder="Search Students..." className="bg-black/50 border border-white/10 text-white text-xs px-4 py-2 w-full sm:w-64 rounded-full focus:border-electricBlue outline-none pl-10" />
             <Search className="w-4 h-4 text-gray-500 absolute left-3 top-1/2 -translate-y-1/2" />
           </div>
-          <button className="bg-electricBlue text-white px-4 py-2 text-[10px] font-header font-bold uppercase hover:bg-white hover:text-black transition-colors">
-            Invite Student
+          <button className="bg-electricBlue text-white px-3 sm:px-4 py-2 text-[10px] font-header font-bold uppercase hover:bg-white hover:text-black transition-colors whitespace-nowrap">
+            Invite
           </button>
         </div>
       </div>
 
       {/* STUDENTS TABLE */}
       <div className="glass-panel p-0 overflow-hidden border border-white/10">
-        <table className="w-full text-left text-xs text-gray-400">
+        <div className="overflow-x-auto">
+        <table className="w-full text-left text-xs text-gray-400 min-w-[700px]">
           <thead className="bg-white/5 text-gray-200 font-header border-b border-white/10">
             <tr>
-              <th className="p-4">Name / Email</th>
-              <th className="p-4">Enrolled Course</th>
-              <th className="p-4">Progress</th>
-              <th className="p-4">Last Active</th>
-              <th className="p-4">Status</th>
-              <th className="p-4 text-right">Actions</th>
+              <th className="p-3 sm:p-4">Name / Email</th>
+              <th className="p-3 sm:p-4">Enrolled Course</th>
+              <th className="p-3 sm:p-4">Progress</th>
+              <th className="p-3 sm:p-4 hidden sm:table-cell">Last Active</th>
+              <th className="p-3 sm:p-4">Status</th>
+              <th className="p-3 sm:p-4 text-right">Actions</th>
             </tr>
           </thead>
           <tbody className="divide-y divide-white/5 font-mono">
@@ -2476,7 +2479,7 @@ export default function AdminDashboard() {
                     <span className={`${student.progress > 50 ? 'text-green-500' : student.progress > 0 ? 'text-signalOrange' : 'text-gray-500'}`}>{student.progress}%</span>
                   </div>
                 </td>
-                <td className="p-4">{student.lastActive}</td>
+                <td className="p-4 hidden sm:table-cell">{student.lastActive}</td>
                 <td className="p-4">
                   <span className={`px-2 py-1 rounded ${student.status === 'ACTIVE' ? 'bg-green-500/20 text-green-500' : student.status === 'PENDING' ? 'bg-yellow-500/20 text-yellow-500' : 'bg-red-500/20 text-red-500'}`}>
                     {student.status}
@@ -2490,21 +2493,22 @@ export default function AdminDashboard() {
             ))}
           </tbody>
         </table>
+        </div>
         
         {/* Pagination */}
-        <div className="p-4 border-t border-white/10 flex justify-between items-center text-[10px] text-gray-500">
+        <div className="p-3 sm:p-4 border-t border-white/10 flex flex-col sm:flex-row justify-between items-center gap-2 text-[10px] text-gray-500">
           <span>Showing {studentsList.length} of 1,204 Students</span>
           <div className="flex gap-2">
-            <button className="px-3 py-1 bg-white/5 rounded hover:bg-white/10 text-white">Previous</button>
-            <button className="px-3 py-1 bg-white/5 rounded hover:bg-white/10 text-white">Next</button>
+            <button className="px-3 py-1.5 bg-white/5 rounded hover:bg-white/10 text-white">Previous</button>
+            <button className="px-3 py-1.5 bg-white/5 rounded hover:bg-white/10 text-white">Next</button>
           </div>
         </div>
       </div>
       
       {/* Edit Student Modal */}
       {isStudentModalOpen && editingStudent && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm animate-in fade-in duration-200">
-          <div className="glass-panel p-8 max-w-md w-full border border-white/10 relative">
+        <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center bg-black/80 backdrop-blur-sm animate-in fade-in duration-200">
+          <div className="glass-panel p-5 sm:p-8 max-w-md w-full border border-white/10 relative rounded-none max-h-[95vh] sm:max-h-[90vh] overflow-y-auto">
             <button 
               onClick={() => setIsStudentModalOpen(false)}
               className="absolute top-4 right-4 text-gray-500 hover:text-white"
@@ -2654,15 +2658,15 @@ export default function AdminDashboard() {
   const renderAssetStore = () => (
     <div className="relative z-10">
       {/* HEADER */}
-      <div className="flex justify-between items-end mb-8">
+      <div className="flex flex-col sm:flex-row justify-between sm:items-end gap-4 mb-8">
         <div>
-          <h1 className="font-header text-2xl text-white mb-1">DIGITAL ASSETS</h1>
+          <h1 className="font-header text-xl sm:text-2xl text-white mb-1">DIGITAL ASSETS</h1>
           <p className="text-xs text-gray-400 font-mono">Manage product files, pricing, and licenses.</p>
         </div>
         <div className="flex gap-4">
           <button 
             onClick={handleAddProduct}
-            className="bg-neonPurple text-white px-4 py-2 text-[10px] font-header font-bold uppercase hover:bg-white hover:text-black transition-colors"
+            className="bg-neonPurple text-white px-4 py-2 text-[10px] font-header font-bold uppercase hover:bg-white hover:text-black transition-colors w-full sm:w-auto"
           >
             + Add New Product
           </button>
@@ -2670,8 +2674,8 @@ export default function AdminDashboard() {
       </div>
 
       {/* FILTERS */}
-      <div className="flex gap-4 mb-8 border-b border-white/10 pb-4 items-center">
-        <div className="flex gap-4 overflow-x-auto no-scrollbar">
+      <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 mb-8 border-b border-white/10 pb-4 sm:items-center">
+        <div className="flex gap-3 sm:gap-4 overflow-x-auto no-scrollbar flex-1">
           <button 
             onClick={() => setSelectedProductCategory("ALL")}
             className={`text-xs font-bold transition-colors pb-4 -mb-4.5 border-b-2 whitespace-nowrap ${
@@ -2696,7 +2700,7 @@ export default function AdminDashboard() {
             </button>
           ))}
         </div>
-        <div className="ml-auto pl-4 border-l border-white/10">
+        <div className="sm:ml-auto sm:pl-4 sm:border-l border-white/10">
            <button 
              onClick={() => setIsCategoryManagerOpen(true)}
              className="text-[10px] font-mono text-gray-500 hover:text-white flex items-center gap-1 transition-colors"
@@ -2708,8 +2712,8 @@ export default function AdminDashboard() {
 
       {/* Category Manager Modal */}
       {isCategoryManagerOpen && (
-        <div className="fixed inset-0 z-[60] flex items-center justify-center bg-black/80 backdrop-blur-sm animate-in fade-in duration-200">
-          <div className="glass-panel p-6 max-w-sm w-full border border-white/10 relative">
+        <div className="fixed inset-0 z-[60] flex items-end sm:items-center justify-center bg-black/80 backdrop-blur-sm animate-in fade-in duration-200">
+          <div className="glass-panel p-5 sm:p-6 max-w-sm w-full border border-white/10 relative rounded-none max-h-[95vh] sm:max-h-[90vh] overflow-y-auto">
             <button 
               onClick={() => setIsCategoryManagerOpen(false)}
               className="absolute top-4 right-4 text-gray-500 hover:text-white"
@@ -2819,8 +2823,8 @@ export default function AdminDashboard() {
 
       {/* Edit Product Modal */}
       {isProductModalOpen && editingProduct && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm animate-in fade-in duration-200">
-          <div className="glass-panel p-8 max-w-md w-full border border-white/10 relative">
+        <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center bg-black/80 backdrop-blur-sm animate-in fade-in duration-200">
+          <div className="glass-panel p-5 sm:p-8 max-w-md w-full border border-white/10 relative rounded-none max-h-[95vh] sm:max-h-[90vh] overflow-y-auto">
             <button 
               onClick={() => setIsProductModalOpen(false)}
               className="absolute top-4 right-4 text-gray-500 hover:text-white"
@@ -2997,7 +3001,7 @@ export default function AdminDashboard() {
 
       <Navbar />
 
-      <main className="flex-grow pt-32 pb-20 px-6 max-w-7xl mx-auto w-full z-10">
+      <main className="flex-grow pt-24 sm:pt-32 pb-20 px-3 sm:px-6 max-w-7xl mx-auto w-full z-10">
         
         <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-8 gap-4">
           <div>
@@ -3009,7 +3013,7 @@ export default function AdminDashboard() {
           </div>
         </div>
 
-        <div className="flex gap-1 mb-8 border-b border-white/10 overflow-x-auto no-scrollbar">
+        <div className="flex gap-0.5 sm:gap-1 mb-6 sm:mb-8 border-b border-white/10 overflow-x-auto no-scrollbar">
           {tabs.map((tab) => {
             const Icon = tab.icon;
             return (
@@ -3020,14 +3024,15 @@ export default function AdminDashboard() {
                   if (tab.id === "courses") setCourseView("list");
                 }}
                 data-testid={`tab-${tab.id}`}
-                className={`flex items-center gap-2 px-5 py-3 text-xs font-header font-bold whitespace-nowrap border-b-2 transition-colors ${
+                className={`flex items-center gap-1.5 sm:gap-2 px-2.5 sm:px-5 py-2.5 sm:py-3 text-[10px] sm:text-xs font-header font-bold whitespace-nowrap border-b-2 transition-colors ${
                   activeTab === tab.id
                     ? "text-white border-electricBlue"
                     : "text-gray-500 hover:text-white border-transparent hover:border-white/20"
                 }`}
               >
-                <Icon className="w-4 h-4" />
-                {tab.label}
+                <Icon className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
+                <span className="hidden sm:inline">{tab.label}</span>
+                <span className="sm:hidden">{tab.label.slice(0, 4)}</span>
               </button>
             );
           })}
