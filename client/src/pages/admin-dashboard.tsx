@@ -1,7 +1,7 @@
 import { Link, useSearch } from "wouter";
 import { useState, useEffect, useRef } from "react";
 import { createPortal } from "react-dom";
-import { LayoutDashboard, BookOpen, Users, ShoppingBag, BarChart2, Plus, Download, Bold, Italic, Underline, Link as LinkIcon, Code, X, Search, Edit2, Trash2, ArrowUp, ArrowDown, ArrowLeft, ArrowRight, ZoomIn, ZoomOut, Move, TrendingUp, DollarSign, Activity, Workflow, Pencil, Check, ExternalLink, Archive, Upload } from "lucide-react";
+import { LayoutDashboard, BookOpen, Users, ShoppingBag, BarChart2, Plus, Download, Bold, Italic, Underline, Link as LinkIcon, Code, X, Search, Edit2, Trash2, ArrowUp, ArrowDown, ArrowLeft, ArrowRight, ZoomIn, ZoomOut, Move, TrendingUp, DollarSign, Activity, Workflow, Pencil, Check, ExternalLink, Archive, Upload, Palette } from "lucide-react";
 import { LineChart, Line, AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, BarChart, Bar, PieChart, Pie, Cell } from 'recharts';
 import PipelineContent from "./pipeline";
 import { Navbar } from "@/components/navbar";
@@ -1310,37 +1310,46 @@ export default function AdminDashboard() {
                 <div>
                   <label className="block text-[10px] font-mono text-gray-500 mb-2 uppercase">Color</label>
                   <div className="flex gap-2 items-center flex-wrap">
-                    {['#2962FF', '#FF3D00', '#D500F9', '#FFD700', '#00E676', '#FF6D00'].map((color) => (
-                      <button
-                        key={color}
-                        onClick={() => setCourseForm({ ...courseForm, color })}
-                        className={`w-8 h-8 rounded border-2 transition-all ${courseForm.color === color ? 'border-white scale-110' : 'border-white/10 hover:border-white/30'}`}
-                        style={{ backgroundColor: color }}
-                        data-testid={`button-color-${color}`}
-                      />
-                    ))}
-                    <div className="flex items-center gap-1.5 ml-1">
-                      <label className="relative w-8 h-8 rounded border-2 border-white/10 hover:border-white/30 cursor-pointer overflow-hidden transition-all" style={{ backgroundColor: courseForm.color }}>
-                        <input
-                          type="color"
-                          value={courseForm.color || '#2962FF'}
-                          onChange={(e) => setCourseForm({ ...courseForm, color: e.target.value.toUpperCase() })}
-                          className="absolute inset-0 opacity-0 cursor-pointer"
-                          data-testid="input-course-color-picker"
-                        />
-                      </label>
-                      <input
-                        type="text"
-                        value={courseForm.color || ''}
-                        onChange={(e) => {
-                          const val = e.target.value;
-                          setCourseForm({ ...courseForm, color: val.startsWith('#') ? val.toUpperCase() : `#${val.toUpperCase()}` });
-                        }}
-                        placeholder="#HEX"
-                        className="bg-black/50 border border-white/10 text-white text-[10px] px-2 py-1.5 w-20 focus:border-electricBlue outline-none font-mono"
-                        data-testid="input-course-color-hex"
-                      />
-                    </div>
+                    {(() => {
+                      const tierColors = dbTiers.map((t: any) => t.color?.toUpperCase()).filter(Boolean);
+                      const presetColors = tierColors.length > 0 ? tierColors.slice(0, 5) : ['#2962FF', '#FF3D00', '#D500F9'];
+                      const isCustom = !presetColors.includes(courseForm.color?.toUpperCase());
+                      return (
+                        <>
+                          {presetColors.map((color: string) => (
+                            <button
+                              key={color}
+                              onClick={() => setCourseForm({ ...courseForm, color })}
+                              className={`w-8 h-8 rounded border-2 transition-all ${courseForm.color?.toUpperCase() === color ? 'border-white scale-110' : 'border-white/10 hover:border-white/30'}`}
+                              style={{ backgroundColor: color }}
+                              data-testid={`button-color-${color}`}
+                            />
+                          ))}
+                          <div className="w-px h-6 bg-white/10 mx-1" />
+                          <label className={`relative w-8 h-8 rounded-full border-2 cursor-pointer overflow-hidden transition-all flex items-center justify-center ${isCustom ? 'border-white scale-110' : 'border-dashed border-white/20 hover:border-white/40'}`} style={{ backgroundColor: isCustom ? courseForm.color : 'transparent' }}>
+                            {!isCustom && <Plus className="w-3 h-3 text-gray-500" />}
+                            <input
+                              type="color"
+                              value={courseForm.color || '#2962FF'}
+                              onChange={(e) => setCourseForm({ ...courseForm, color: e.target.value.toUpperCase() })}
+                              className="absolute inset-0 opacity-0 cursor-pointer"
+                              data-testid="input-course-color-picker"
+                            />
+                          </label>
+                          <input
+                            type="text"
+                            value={courseForm.color || ''}
+                            onChange={(e) => {
+                              const val = e.target.value;
+                              setCourseForm({ ...courseForm, color: val.startsWith('#') ? val.toUpperCase() : `#${val.toUpperCase()}` });
+                            }}
+                            placeholder="#HEX"
+                            className="bg-black/50 border border-white/10 text-white text-[10px] px-2 py-1.5 w-20 focus:border-electricBlue outline-none font-mono"
+                            data-testid="input-course-color-hex"
+                          />
+                        </>
+                      );
+                    })()}
                   </div>
                 </div>
 
