@@ -150,6 +150,7 @@ export default function AdminDashboard() {
   });
 
   const [isCourseModalOpen, setIsCourseModalOpen] = useState(false);
+  const [courseFormPage, setCourseFormPage] = useState(1);
   const [editingDbCourse, setEditingDbCourse] = useState<any>(null);
   const [courseForm, setCourseForm] = useState({
     title: "",
@@ -558,6 +559,7 @@ export default function AdminDashboard() {
       features: [],
       prerequisiteNote: "",
     });
+    setCourseFormPage(1);
     setIsCourseModalOpen(true);
   };
 
@@ -585,6 +587,7 @@ export default function AdminDashboard() {
       features: parseJsonField(course.features, []),
       prerequisiteNote: course.prerequisiteNote || "",
     });
+    setCourseFormPage(1);
     setIsCourseModalOpen(true);
   };
 
@@ -1106,7 +1109,7 @@ export default function AdminDashboard() {
                       </div>
                     )}
                     <div className="flex items-center gap-4 pt-2">
-                      <Link href={`/courses/${course.slug}`} className="text-[10px] text-electricBlue hover:underline font-mono flex items-center gap-1">
+                      <Link href={`/academy/${(dbTiers.find((t: any) => t.name === course.level)?.slug || course.level?.toLowerCase() || 'foundation')}/${course.slug}`} className="text-[10px] text-electricBlue hover:underline font-mono flex items-center gap-1">
                         <ExternalLink className="w-3 h-3" /> View Course Page
                       </Link>
                       <button 
@@ -1133,11 +1136,29 @@ export default function AdminDashboard() {
                 <X className="w-4 h-4" />
               </button>
               
-              <h2 className="font-header text-xl text-white mb-6">
+              <h2 className="font-header text-xl text-white mb-2">
                 {editingDbCourse ? "EDIT COURSE" : "CREATE NEW COURSE"}
               </h2>
+              <div className="flex items-center gap-4 mb-6">
+                <button
+                  onClick={() => setCourseFormPage(1)}
+                  className={`text-[10px] font-mono tracking-wider pb-1 border-b-2 transition-colors ${courseFormPage === 1 ? 'text-white border-electricBlue' : 'text-gray-500 border-transparent hover:text-gray-300'}`}
+                  data-testid="button-form-page-1"
+                >
+                  BASIC INFO
+                </button>
+                <button
+                  onClick={() => setCourseFormPage(2)}
+                  className={`text-[10px] font-mono tracking-wider pb-1 border-b-2 transition-colors ${courseFormPage === 2 ? 'text-white border-electricBlue' : 'text-gray-500 border-transparent hover:text-gray-300'}`}
+                  data-testid="button-form-page-2"
+                >
+                  PAGE CONTENT
+                </button>
+              </div>
               
               <div className="space-y-4">
+                {courseFormPage === 1 && (
+                  <>
                 <div>
                   <label className="block text-[10px] font-mono text-gray-500 mb-2 uppercase">Title</label>
                   <input 
@@ -1333,8 +1354,28 @@ export default function AdminDashboard() {
                     />
                   </div>
                 </div>
-                
-                <div className="border-t border-white/10 pt-4">
+
+                <div className="pt-4 flex gap-3">
+                  <button 
+                    onClick={() => setIsCourseModalOpen(false)}
+                    className="flex-1 py-3 text-xs font-header font-bold text-gray-400 bg-white/5 hover:bg-white/10 transition-colors"
+                  >
+                    CANCEL
+                  </button>
+                  <button 
+                    onClick={() => setCourseFormPage(2)}
+                    className="flex-1 py-3 text-xs font-header font-bold text-white bg-electricBlue/80 hover:bg-electricBlue transition-colors"
+                    data-testid="button-next-page"
+                  >
+                    NEXT: PAGE CONTENT →
+                  </button>
+                </div>
+                  </>
+                )}
+
+                {courseFormPage === 2 && (
+                  <>
+                <div>
                   <label className="block text-[10px] font-mono text-gray-500 mb-2 uppercase">Learning Outcomes (What You Will Learn)</label>
                   <div className="space-y-3">
                     {courseForm.learningOutcomes.map((outcome, idx) => (
@@ -1442,10 +1483,11 @@ export default function AdminDashboard() {
 
                 <div className="pt-4 flex gap-3">
                   <button 
-                    onClick={() => setIsCourseModalOpen(false)}
+                    onClick={() => setCourseFormPage(1)}
                     className="flex-1 py-3 text-xs font-header font-bold text-gray-400 bg-white/5 hover:bg-white/10 transition-colors"
+                    data-testid="button-back-page"
                   >
-                    CANCEL
+                    ← BACK
                   </button>
                   <button 
                     onClick={handleSaveCourseForm}
@@ -1456,6 +1498,8 @@ export default function AdminDashboard() {
                     {createCourseMutation.isPending || updateCourseMutation.isPending ? 'SAVING...' : 'SAVE COURSE'}
                   </button>
                 </div>
+                  </>
+                )}
               </div>
             </div>
           </div>
