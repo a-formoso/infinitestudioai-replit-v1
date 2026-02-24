@@ -1177,24 +1177,24 @@ export default function AdminDashboard() {
               {editingDbCourse && (
                 <p className="text-[11px] font-mono text-electricBlue mb-3 truncate" data-testid="text-editing-course-name">{courseForm.title}</p>
               )}
-              <div className="flex items-center gap-3 mb-6 border-b border-white/10 pb-2">
+              <div className="flex items-center gap-3 mb-6 border-b border-white/10">
                 <button
                   onClick={() => setCourseFormPage(1)}
-                  className={`text-[10px] font-mono tracking-wider pb-1 border-b-2 transition-colors ${courseFormPage === 1 ? 'text-white border-electricBlue' : 'text-gray-500 border-transparent hover:text-gray-300'}`}
+                  className={`text-[10px] font-mono tracking-wider pb-2 -mb-px border-b-2 transition-colors ${courseFormPage === 1 ? 'text-white border-electricBlue' : 'text-gray-500 border-transparent hover:text-gray-300'}`}
                   data-testid="button-form-page-1"
                 >
                   HERO & SETUP
                 </button>
                 <button
                   onClick={() => setCourseFormPage(2)}
-                  className={`text-[10px] font-mono tracking-wider pb-1 border-b-2 transition-colors ${courseFormPage === 2 ? 'text-white border-electricBlue' : 'text-gray-500 border-transparent hover:text-gray-300'}`}
+                  className={`text-[10px] font-mono tracking-wider pb-2 -mb-px border-b-2 transition-colors ${courseFormPage === 2 ? 'text-white border-electricBlue' : 'text-gray-500 border-transparent hover:text-gray-300'}`}
                   data-testid="button-form-page-2"
                 >
                   COURSE CONTENT
                 </button>
                 <button
                   onClick={() => setCourseFormPage(3)}
-                  className={`text-[10px] font-mono tracking-wider pb-1 border-b-2 transition-colors ${courseFormPage === 3 ? 'text-white border-electricBlue' : 'text-gray-500 border-transparent hover:text-gray-300'}`}
+                  className={`text-[10px] font-mono tracking-wider pb-2 -mb-px border-b-2 transition-colors ${courseFormPage === 3 ? 'text-white border-electricBlue' : 'text-gray-500 border-transparent hover:text-gray-300'}`}
                   data-testid="button-form-page-3"
                 >
                   SIDEBAR & PRICING
