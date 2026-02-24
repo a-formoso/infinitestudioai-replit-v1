@@ -269,7 +269,6 @@ export default function Home() {
                                 {course.badge && (
                                   <div className="absolute top-4 right-4 text-[10px] font-bold px-2 py-1 text-white" style={{ backgroundColor: tierColor }}>{course.badge}</div>
                                 )}
-                                <div className="absolute bottom-4 left-4 text-[10px] font-mono px-2 py-1 border" style={{ color: tierColor, borderColor: `${tierColor}50` }}>{course.level?.toUpperCase()}</div>
                             </div>
                             <div className="p-8">
                                 <h3 className="font-header text-xl text-white mb-2 transition-colors leading-tight">{course.title}</h3>
