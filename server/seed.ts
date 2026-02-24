@@ -25,8 +25,8 @@ async function seed() {
           status: "draft",
         },
         {
-          title: "THE GOOGLE AI FILMMAKING ECOSYSTEM",
-          slug: "google-ai-filmmaking-ecosystem",
+          title: "THE GOOGLE AI FILMMAKER",
+          slug: "the-google-ai-filmmaker",
           description:
             'The complete AI Production Pipeline. From Narrative Seed to Final Render — learn to direct Gemini, ImageFX, and Veo as a single production system using the Operations Guide methodology.',
           shortDescription:

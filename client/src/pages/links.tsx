@@ -207,7 +207,7 @@ export default function Links() {
 
             {/* 2. CORE COURSE (MAIN REVENUE) */}
             <Link
-              href="/academy/specialist/google-ai-filmmaking-ecosystem"
+              href="/academy/specialist/the-google-ai-filmmaker"
               className="glass-btn glow-blue rounded-xl p-4 flex items-center gap-4 group animate-fade-in-up"
               style={{ animationDelay: "0.3s" }}
             >
