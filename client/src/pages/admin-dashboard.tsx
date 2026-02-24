@@ -206,6 +206,12 @@ export default function AdminDashboard() {
     },
   });
 
+  const { uploadFile: uploadTrailerFile, isUploading: isTrailerUploading, progress: trailerUploadProgress } = useUpload({
+    onSuccess: (response) => {
+      setCourseForm(prev => ({ ...prev, trailerUrl: response.objectPath }));
+    },
+  });
+
   const [studentsList, setStudentsList] = useState<Student[]>([
     { id: "s1", initials: "SJ", name: "Sarah Jenkins", email: "sarah.j@example.com", avatarColor: "purple-900", enrolledCourse: "AI Filmmaking Ecosystem", progress: 85, lastActive: "2 hours ago", status: "ACTIVE" },
     { id: "s2", initials: "MD", name: "Mike Davis", email: "mike.dfx@studio.net", avatarColor: "orange-900", enrolledCourse: "Advanced Cinematography", progress: 12, lastActive: "1 day ago", status: "ACTIVE" },
@@ -1453,15 +1459,41 @@ export default function AdminDashboard() {
                 </div>
 
                 <div>
-                  <label className="block text-[10px] font-mono text-gray-500 mb-2 uppercase">Course Trailer URL</label>
-                  <input 
-                    type="text" 
-                    value={courseForm.trailerUrl}
-                    onChange={(e) => setCourseForm({ ...courseForm, trailerUrl: e.target.value })}
-                    placeholder="Paste trailer video URL (YouTube, Vimeo, or direct link)..."
-                    className="bg-black/50 border border-white/10 text-white text-[10px] px-3 py-2 w-full focus:border-electricBlue outline-none font-mono"
-                    data-testid="input-course-trailer-url"
-                  />
+                  <label className="block text-[10px] font-mono text-gray-500 mb-2 uppercase">Course Trailer Video</label>
+                  <div className="flex gap-2 items-start">
+                    <label className="flex-1 cursor-pointer">
+                      <div className={`border border-dashed border-white/20 hover:border-signalOrange/50 transition-colors px-4 py-3 text-center ${isTrailerUploading ? 'opacity-50' : ''}`}>
+                        <Upload className="w-4 h-4 mx-auto mb-1 text-gray-500" />
+                        <p className="text-[10px] font-mono text-gray-400">
+                          {isTrailerUploading ? `Uploading... ${trailerUploadProgress}%` : 'Click to upload video (MP4, MOV, WEBM)'}
+                        </p>
+                      </div>
+                      <input
+                        type="file"
+                        accept="video/mp4,video/quicktime,video/webm"
+                        className="hidden"
+                        onChange={async (e) => {
+                          const file = e.target.files?.[0];
+                          if (file) {
+                            await uploadTrailerFile(file);
+                          }
+                          e.target.value = '';
+                        }}
+                        disabled={isTrailerUploading}
+                        data-testid="input-course-trailer-upload"
+                      />
+                    </label>
+                  </div>
+                  <div className="mt-2">
+                    <input 
+                      type="text" 
+                      value={courseForm.trailerUrl}
+                      onChange={(e) => setCourseForm({ ...courseForm, trailerUrl: e.target.value })}
+                      placeholder="Or paste trailer URL (YouTube, Vimeo, or direct link)..."
+                      className="bg-black/50 border border-white/10 text-white text-[10px] px-3 py-2 w-full focus:border-electricBlue outline-none font-mono"
+                      data-testid="input-course-trailer-url"
+                    />
+                  </div>
                   <p className="text-[9px] font-mono text-gray-600 mt-1">Shown as a play button overlay on the course detail page header</p>
                 </div>
 
