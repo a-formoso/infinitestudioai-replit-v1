@@ -125,7 +125,7 @@ export default function CourseDetail() {
             <div className="flex items-center gap-1.5 mb-6 text-[10px] font-mono text-gray-500 tracking-widest uppercase">
               <Link href="/academy" className="hover:text-white transition-colors">Academy</Link>
               <ChevronRight className="w-3 h-3" />
-              <Link href={`/academy?filter=${tierFilter}`} className="hover:text-white transition-colors" style={{ color: tierColor }}>{tierLabel}</Link>
+              <Link href={`/academy?filter=${tierFilter}`} className="transition-colors" style={{ color: tierColor }} onMouseEnter={(e) => { e.currentTarget.style.color = '#fff'; }} onMouseLeave={(e) => { e.currentTarget.style.color = tierColor; }}>{tierLabel}</Link>
             </div>
             <h1 className="font-header text-3xl md:text-5xl font-bold text-white leading-tight mb-6">
               {firstHalf}<br />
