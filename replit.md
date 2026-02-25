@@ -19,7 +19,7 @@ Preferred communication style: Simple, everyday language.
 - **Styling**: Tailwind CSS v4 (using `@tailwindcss/vite` plugin), with shadcn/ui components (Radix UI primitives + CVA)
 - **Animations**: Framer Motion
 - **Fonts**: Syncopate (headings) and Inter (body text)
-- **Design System**: Dark theme with brand colors — Electric Blue (#2962FF), Signal Orange (#FF3D00), Neon Purple (#D500F9), Gold (#FFD700), Obsidian (#0A0A0A) background
+- **Design System**: Dark theme with brand colors — Electric Blue (#2962FF), Signal Orange (#FF3D00), Purple (#a855f7), Gold (#FFD700), Obsidian (#0A0A0A) background
 - **API Layer**: Custom `apiFetch` wrapper in `client/src/lib/api.ts` that hits `/api/*` endpoints with credentials included
 - **Key Pages**: Home, Academy, Course Detail (Level 1 & 2), Course Player, Dashboard, Asset Store, Checkout, Admin Dashboard, Hire, Support, About, Login, Register, Links, Privacy, Terms, Pipeline (AI Production Control Center)
 

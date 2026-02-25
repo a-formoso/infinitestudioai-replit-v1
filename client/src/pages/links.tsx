@@ -90,8 +90,8 @@ export default function Links() {
         transform: scale(1.02);
     }
     .glow-purple:hover {
-        border-color: #D500F9;
-        box-shadow: 0 0 25px rgba(213, 0, 249, 0.3);
+        border-color: #a855f7;
+        box-shadow: 0 0 25px rgba(168, 85, 247, 0.3);
         transform: scale(1.02);
     }
     .glow-orange:hover {

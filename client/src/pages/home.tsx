@@ -248,7 +248,7 @@ export default function Home() {
               <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                   {featuredCourses.length > 0 ? (
                     featuredCourses.map((course: any) => {
-                      const colorMap: Record<string, string> = { electricBlue: '#2962FF', signalOrange: '#FF3D00', neonPurple: '#D500F9', gold: '#FFD700' };
+                      const colorMap: Record<string, string> = { electricBlue: '#2962FF', signalOrange: '#FF3D00', neonPurple: '#a855f7', gold: '#FFD700' };
                       const tierColor = colorMap[course.color] || course.color || '#2962FF';
                       const tier = course.level === 'Foundation' ? 'foundation' : 'specialist';
                       return (

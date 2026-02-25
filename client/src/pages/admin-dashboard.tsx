@@ -351,7 +351,7 @@ export default function AdminDashboard() {
                   dataKey="value"
                 >
                   {categoryData.map((entry, index) => (
-                    <Cell key={`cell-${index}`} fill={index === 0 ? '#8b5cf6' : index === 1 ? '#00f0ff' : index === 2 ? '#10b981' : '#f97316'} />
+                    <Cell key={`cell-${index}`} fill={index === 0 ? '#8b5cf6' : index === 1 ? '#00f0ff' : index === 2 ? '#10b981' : '#FF3D00'} />
                   ))}
                 </Pie>
                 <Tooltip 
@@ -1369,7 +1369,7 @@ export default function AdminDashboard() {
                   <div className="flex gap-2 items-center flex-wrap">
                     {(() => {
                       const tierColors = dbTiers.map((t: any) => t.color?.toUpperCase()).filter(Boolean);
-                      const presetColors = tierColors.length > 0 ? tierColors.slice(0, 5) : ['#2962FF', '#FF3D00', '#D500F9'];
+                      const presetColors = tierColors.length > 0 ? tierColors.slice(0, 5) : ['#2962FF', '#FF3D00', '#a855f7'];
                       const isCustom = !presetColors.includes(courseForm.color?.toUpperCase());
                       return (
                         <>
@@ -1808,7 +1808,7 @@ export default function AdminDashboard() {
                   data-testid="input-new-tier-name"
                 />
                 <div className="flex gap-1 items-center">
-                  {['#2962FF', '#FF3D00', '#D500F9', '#FFD700', '#00E676', '#FF6D00'].map((c) => (
+                  {['#2962FF', '#FF3D00', '#a855f7', '#FFD700', '#00E676', '#FF6D00'].map((c) => (
                     <button
                       key={c}
                       onClick={() => setNewTierColor(c)}
@@ -1873,7 +1873,7 @@ export default function AdminDashboard() {
                       {editingTier?.id === tier.id ? (
                         <>
                           <div className="flex gap-1 items-center">
-                            {['#2962FF', '#FF3D00', '#D500F9', '#FFD700', '#00E676', '#FF6D00'].map((c) => (
+                            {['#2962FF', '#FF3D00', '#a855f7', '#FFD700', '#00E676', '#FF6D00'].map((c) => (
                               <button
                                 key={c}
                                 onClick={() => setEditingTier({ ...editingTier, color: c })}
