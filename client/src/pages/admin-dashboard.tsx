@@ -3426,29 +3426,16 @@ export default function AdminDashboard() {
             <h3 className="font-header text-lg text-white mb-6">EDIT HERO VIDEO</h3>
 
             <div className="space-y-4">
-              <div className="grid grid-cols-2 gap-3">
-                <div>
-                  <label className="block text-[10px] font-mono text-gray-500 uppercase mb-1">Overlay Text</label>
-                  <input
-                    type="text"
-                    value={heroVideoForm.overlayText}
-                    onChange={(e) => setHeroVideoForm(prev => ({ ...prev, overlayText: e.target.value }))}
-                    placeholder="e.g. SHOWREEL_2025.MP4"
-                    className="bg-black/50 border border-white/10 text-white text-xs px-4 py-3 w-full focus:border-electricBlue outline-none font-mono"
-                    data-testid="input-hero-overlay"
-                  />
-                </div>
-                <div>
-                  <label className="block text-[10px] font-mono text-gray-500 uppercase mb-1">Badge Text</label>
-                  <input
-                    type="text"
-                    value={heroVideoForm.badgeText}
-                    onChange={(e) => setHeroVideoForm(prev => ({ ...prev, badgeText: e.target.value }))}
-                    placeholder="e.g. VEO 3.1 RENDER"
-                    className="bg-black/50 border border-white/10 text-white text-xs px-4 py-3 w-full focus:border-electricBlue outline-none font-mono"
-                    data-testid="input-hero-badge"
-                  />
-                </div>
+              <div>
+                <label className="block text-[10px] font-mono text-gray-500 uppercase mb-1">Badge Text</label>
+                <input
+                  type="text"
+                  value={heroVideoForm.badgeText}
+                  onChange={(e) => setHeroVideoForm(prev => ({ ...prev, badgeText: e.target.value }))}
+                  placeholder="e.g. VEO 3.1 RENDER"
+                  className="bg-black/50 border border-white/10 text-white text-xs px-4 py-3 w-full focus:border-electricBlue outline-none font-mono"
+                  data-testid="input-hero-badge"
+                />
               </div>
 
               <div>

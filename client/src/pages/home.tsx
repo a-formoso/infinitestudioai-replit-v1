@@ -107,7 +107,6 @@ export default function Home() {
                           ) : null}
                           <div className="text-center opacity-30 group-hover:opacity-50 transition-opacity duration-500">
                               <div className="text-6xl mb-4 text-electricBlue animate-pulse">▶</div>
-                              <p className="font-header tracking-widest text-xs md:text-sm">{hero?.overlayText || "SHOWREEL_2025.MP4"}</p>
                           </div>
                           <div className="absolute top-4 left-4 text-[10px] font-mono text-electricBlue flex items-center gap-2">
                               <div className="w-2 h-2 bg-red-500 rounded-full animate-ping"></div> REC ● [00:01:24:12]
