@@ -1,7 +1,7 @@
 import { Link, useSearch } from "wouter";
 import { useState, useEffect, useRef } from "react";
 import { createPortal } from "react-dom";
-import { LayoutDashboard, BookOpen, Users, ShoppingBag, BarChart2, Plus, Download, Bold, Italic, Underline, Link as LinkIcon, Code, X, Search, Edit2, Trash2, ArrowUp, ArrowDown, ArrowLeft, ArrowRight, ZoomIn, ZoomOut, Move, TrendingUp, DollarSign, Activity, Workflow, Pencil, Check, ExternalLink, Archive, Upload, Palette, Film } from "lucide-react";
+import { BookOpen, Users, ShoppingBag, BarChart2, Plus, Download, Bold, Italic, Underline, Link as LinkIcon, Code, X, Search, Edit2, Trash2, ArrowUp, ArrowDown, ArrowLeft, ArrowRight, ZoomIn, ZoomOut, Move, TrendingUp, DollarSign, Activity, Workflow, Pencil, Check, ExternalLink, Archive, Upload, Palette, Film } from "lucide-react";
 import { LineChart, Line, AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, BarChart, Bar, PieChart, Pie, Cell } from 'recharts';
 import PipelineContent from "./pipeline";
 import { Navbar } from "@/components/navbar";
@@ -88,15 +88,13 @@ interface Product {
 export default function AdminDashboard() {
   const searchString = useSearch();
   const searchParams = new URLSearchParams(searchString);
-  const initialTab = searchParams.get("tab") || "dashboard";
+  const initialTab = searchParams.get("tab") || "featured";
   const [activeTab, setActiveTab] = useState(initialTab);
   const [courseView, setCourseView] = useState<"list" | "editor" | "preview">("list");
   const [expandedCourseId, setExpandedCourseId] = useState<string | null>("course-2");
   const [expandedModuleId, setExpandedModuleId] = useState<string | null>(null);
   const [selectedLessonId, setSelectedLessonId] = useState<string>("1.1");
-  const [logs, setLogs] = useState<string[]>([]);
   const [editorCourseTitle, setEditorCourseTitle] = useState("THE GOOGLE AI FILMMAKING ECOSYSTEM");
-  const terminalRef = useRef<HTMLDivElement>(null);
 
   // State for Lessons Data
   const [lessons, setLessons] = useState<Record<string, Lesson>>(INITIAL_LESSONS);
@@ -1020,187 +1018,6 @@ export default function AdminDashboard() {
       [selectedLessonId]: { ...lessons[selectedLessonId], [field]: value }
     });
   };
-
-  useEffect(() => {
-    const adminLogs = [
-      "[SYS] New user registration: ID #9942",
-      "[PAYMENT] Stripe Webhook received: success",
-      "[EMAIL] Welcome sequence triggered for user #9942",
-      "[VEO] Rendering preview for Asset Store item #04",
-      "[SYS] Database backup complete (145ms)",
-      "[SEC] Failed login attempt from IP 192.168.x.x",
-      "[CMS] Course content updated: Module 3.2",
-      "[ANALYTICS] Daily traffic report generated"
-    ];
-
-    const addLog = () => {
-      const log = adminLogs[Math.floor(Math.random() * adminLogs.length)];
-      const time = new Date().toLocaleTimeString([], { hour12: false });
-      const formattedLog = `<span class="text-gray-600">[${time}]</span> <span class="text-green-400">></span> ${log}`;
-      
-      setLogs(prev => {
-        const newLogs = [...prev, formattedLog];
-        if (newLogs.length > 15) return newLogs.slice(newLogs.length - 15);
-        return newLogs;
-      });
-    };
-
-    // Fill initial
-    for(let i=0; i<8; i++) addLog();
-
-    const interval = setInterval(addLog, 1500);
-    return () => clearInterval(interval);
-  }, []);
-
-  // Auto-scroll to bottom of terminal
-  useEffect(() => {
-    if (terminalRef.current) {
-      terminalRef.current.scrollTop = terminalRef.current.scrollHeight;
-    }
-  }, [logs]);
-
-  const renderDashboard = () => (
-    <div className="relative z-10">
-      {/* HEADER */}
-      <div className="flex flex-col sm:flex-row justify-between sm:items-end gap-4 mb-8">
-        <div>
-          <h1 className="font-header text-2xl text-white mb-1">SYSTEM OVERVIEW</h1>
-          <p className="text-xs text-gray-400 font-mono">Last Sync: Just now</p>
-        </div>
-        <div className="flex gap-2 sm:gap-4">
-          <button 
-            onClick={handleCreateCourse}
-            className="flex items-center justify-center gap-2 bg-electricBlue text-white px-3 sm:px-4 py-2 text-[10px] font-header font-bold uppercase hover:bg-white hover:text-black transition-colors flex-1 sm:flex-none"
-          >
-            <Plus className="w-3 h-3" /> New Course
-          </button>
-          <button className="flex items-center justify-center gap-2 border border-white/20 text-white px-3 sm:px-4 py-2 text-[10px] font-header font-bold uppercase hover:bg-white/10 transition-colors flex-1 sm:flex-none">
-            <Download className="w-3 h-3" /> Export
-          </button>
-        </div>
-      </div>
-
-      {/* STATS GRID */}
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-6 mb-8">
-        {/* Stat 1 */}
-        <div className="glass-panel p-4 sm:p-6 stat-card cursor-pointer hover:border-white/30 hover:-translate-y-0.5 transition-all duration-300">
-          <div className="flex justify-between items-start mb-3 sm:mb-4">
-            <span className="text-[10px] font-mono text-gray-400 uppercase">Total Revenue</span>
-            <span className="text-green-500 text-xs font-mono">+12%</span>
-          </div>
-          <h2 className="font-header text-xl sm:text-3xl text-white">$124,500</h2>
-          <div className="w-full h-1 bg-white/10 mt-4 rounded-full overflow-hidden">
-            <div className="h-full bg-green-500 w-[75%]"></div>
-          </div>
-        </div>
-
-        {/* Stat 2 */}
-        <div className="glass-panel p-4 sm:p-6 stat-card cursor-pointer hover:border-white/30 hover:-translate-y-0.5 transition-all duration-300">
-          <div className="flex justify-between items-start mb-3 sm:mb-4">
-            <span className="text-[10px] font-mono text-gray-400 uppercase">Active Students</span>
-            <span className="text-electricBlue text-xs font-mono">+54</span>
-          </div>
-          <h2 className="font-header text-xl sm:text-3xl text-white">5,204</h2>
-          <div className="w-full h-1 bg-white/10 mt-4 rounded-full overflow-hidden">
-            <div className="h-full bg-electricBlue w-[60%]"></div>
-          </div>
-        </div>
-
-        {/* Stat 3 */}
-        <div className="glass-panel p-4 sm:p-6 stat-card cursor-pointer hover:border-white/30 hover:-translate-y-0.5 transition-all duration-300">
-          <div className="flex justify-between items-start mb-3 sm:mb-4">
-            <span className="text-[10px] font-mono text-gray-400 uppercase">Asset Downloads</span>
-            <span className="text-neonPurple text-xs font-mono">NEW</span>
-          </div>
-          <h2 className="font-header text-xl sm:text-3xl text-white">12.5K</h2>
-          <div className="w-full h-1 bg-white/10 mt-4 rounded-full overflow-hidden">
-            <div className="h-full bg-neonPurple w-[85%]"></div>
-          </div>
-        </div>
-
-        {/* Stat 4 */}
-        <div className="glass-panel p-4 sm:p-6 stat-card cursor-pointer hover:border-white/30 hover:-translate-y-0.5 transition-all duration-300">
-          <div className="flex justify-between items-start mb-3 sm:mb-4">
-            <span className="text-[10px] font-mono text-gray-400 uppercase">Server Load</span>
-            <span className="text-signalOrange text-xs font-mono">STABLE</span>
-          </div>
-          <h2 className="font-header text-xl sm:text-3xl text-white">24%</h2>
-          <div className="w-full h-1 bg-white/10 mt-4 rounded-full overflow-hidden">
-            <div className="h-full bg-signalOrange w-[24%]"></div>
-          </div>
-        </div>
-      </div>
-
-      {/* CONTENT GRID */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-        
-        {/* Recent Sales (Table) */}
-        <div className="lg:col-span-2 glass-panel p-0 overflow-hidden">
-          <div className="p-4 sm:p-6 border-b border-white/10 flex justify-between items-center">
-            <h3 className="font-header text-sm text-white">RECENT TRANSACTIONS</h3>
-            <a href="#" className="text-[10px] font-mono text-electricBlue hover:underline">VIEW ALL</a>
-          </div>
-          <div className="overflow-x-auto">
-          <table className="w-full text-left text-xs text-gray-400 min-w-[480px]">
-            <thead className="bg-white/5 text-gray-200 font-header border-b border-white/10">
-              <tr>
-                <th className="p-3 sm:p-4">Customer</th>
-                <th className="p-3 sm:p-4">Product</th>
-                <th className="p-3 sm:p-4">Status</th>
-                <th className="p-3 sm:p-4 text-right">Amount</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-white/5 font-mono">
-              <tr className="hover:bg-white/5 transition-colors">
-                <td className="p-4 text-white">sarah_j_films</td>
-                <td className="p-4">AI Filmmaking Ecosystem</td>
-                <td className="p-4"><span className="bg-green-500/20 text-green-500 px-2 py-1 rounded">PAID</span></td>
-                <td className="p-4 text-right">$249.00</td>
-              </tr>
-              <tr className="hover:bg-white/5 transition-colors">
-                <td className="p-4 text-white">mike_vfx_pro</td>
-                <td className="p-4">Advanced Cinematography</td>
-                <td className="p-4"><span className="bg-green-500/20 text-green-500 px-2 py-1 rounded">PAID</span></td>
-                <td className="p-4 text-right">$199.00</td>
-              </tr>
-              <tr className="hover:bg-white/5 transition-colors">
-                <td className="p-4 text-white">studio_asset_bot</td>
-                <td className="p-4">Nano Texture Pack</td>
-                <td className="p-4"><span className="bg-green-500/20 text-green-500 px-2 py-1 rounded">PAID</span></td>
-                <td className="p-4 text-right">$29.00</td>
-              </tr>
-              <tr className="hover:bg-white/5 transition-colors">
-                <td className="p-4 text-white">guest_user_22</td>
-                <td className="p-4">Nano Banana Mastery</td>
-                <td className="p-4"><span className="bg-red-500/20 text-red-500 px-2 py-1 rounded">FAILED</span></td>
-                <td className="p-4 text-right">$129.00</td>
-              </tr>
-            </tbody>
-          </table>
-          </div>
-        </div>
-
-        {/* System Logs (Live Terminal Feed) */}
-        <div className="glass-panel p-0 overflow-hidden flex flex-col h-full bg-black/50 border border-white/10 min-h-[300px]">
-          <div className="p-4 border-b border-white/10 bg-[#050505]">
-            <h3 className="font-header text-xs text-white flex items-center gap-2">
-              <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
-              LIVE SYSTEM LOGS
-            </h3>
-          </div>
-          <div 
-            className="p-4 font-mono text-[10px] space-y-2 text-gray-400 overflow-y-auto flex-grow" 
-            ref={terminalRef}
-          >
-            {logs.map((log, i) => (
-              <div key={i} dangerouslySetInnerHTML={{ __html: log }} />
-            ))}
-          </div>
-        </div>
-
-      </div>
-    </div>
-  );
 
   const renderCourseList = () => {
     const toggleCourse = (id: string) => {
@@ -3298,11 +3115,10 @@ export default function AdminDashboard() {
   );
 
   const tabs = [
-    { id: "dashboard", label: "OVERVIEW", icon: LayoutDashboard },
-    { id: "courses", label: "COURSES", icon: BookOpen },
     { id: "featured", label: "VIDEOS", icon: Film },
-    { id: "students", label: "STUDENTS", icon: Users },
+    { id: "courses", label: "COURSES", icon: BookOpen },
     { id: "store", label: "ASSETS", icon: ShoppingBag },
+    { id: "students", label: "STUDENTS", icon: Users },
     { id: "analytics", label: "ANALYTICS", icon: BarChart2 },
     { id: "pipeline", label: "PIPELINE", icon: Workflow },
   ];
@@ -3352,7 +3168,6 @@ export default function AdminDashboard() {
         </div>
 
         <div className={`${activeTab === "pipeline" ? "flex flex-col" : ""}`}>
-          {activeTab === "dashboard" && renderDashboard()}
           {activeTab === "courses" && (
             courseView === "list" ? renderCourseList() : 
             courseView === "preview" ? renderCoursePreview() : 
