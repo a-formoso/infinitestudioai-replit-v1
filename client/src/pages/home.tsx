@@ -111,7 +111,6 @@ export default function Home() {
                           <div className="absolute top-4 left-4 text-[10px] font-mono text-electricBlue flex items-center gap-2">
                               <div className="w-2 h-2 bg-red-500 rounded-full animate-ping"></div> REC ● [00:01:24:12]
                           </div>
-                          <div className="absolute bottom-4 right-4 text-[10px] font-mono text-white opacity-50">{hero?.badgeText || "VEO 3.1 RENDER"}</div>
                           <div className="absolute inset-0 border border-white/5 m-4 pointer-events-none"></div>
                           <div className="absolute inset-0 bg-[linear-gradient(rgba(18,16,16,0)_50%,rgba(0,0,0,0.25)_50%),linear-gradient(90deg,rgba(255,0,0,0.06),rgba(0,255,0,0.02),rgba(0,0,255,0.06))] z-10 bg-[length:100%_2px,3px_100%] pointer-events-none opacity-20"></div>
                       </div>

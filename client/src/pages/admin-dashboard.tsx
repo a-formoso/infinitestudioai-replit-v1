@@ -3427,18 +3427,6 @@ export default function AdminDashboard() {
 
             <div className="space-y-4">
               <div>
-                <label className="block text-[10px] font-mono text-gray-500 uppercase mb-1">Badge Text</label>
-                <input
-                  type="text"
-                  value={heroVideoForm.badgeText}
-                  onChange={(e) => setHeroVideoForm(prev => ({ ...prev, badgeText: e.target.value }))}
-                  placeholder="e.g. VEO 3.1 RENDER"
-                  className="bg-black/50 border border-white/10 text-white text-xs px-4 py-3 w-full focus:border-electricBlue outline-none font-mono"
-                  data-testid="input-hero-badge"
-                />
-              </div>
-
-              <div>
                 <label className="block text-[10px] font-mono text-gray-500 uppercase mb-1">Thumbnail / Background Image</label>
                 <div className="flex gap-2">
                   <input
