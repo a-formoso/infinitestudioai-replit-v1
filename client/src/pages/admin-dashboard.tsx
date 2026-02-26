@@ -3569,31 +3569,6 @@ export default function AdminDashboard() {
             <h3 className="font-header text-lg text-white mb-6">EDIT HERO VIDEO</h3>
 
             <div className="space-y-4">
-              <div className="grid grid-cols-2 gap-3">
-                <div>
-                  <label className="block text-[10px] font-mono text-gray-500 uppercase mb-1">Title Line 1 *</label>
-                  <input
-                    type="text"
-                    value={heroVideoForm.title}
-                    onChange={(e) => setHeroVideoForm(prev => ({ ...prev, title: e.target.value }))}
-                    placeholder="e.g. DIRECT THE"
-                    className="bg-black/50 border border-white/10 text-white text-xs px-4 py-3 w-full focus:border-electricBlue outline-none font-mono"
-                    data-testid="input-hero-title"
-                  />
-                </div>
-                <div>
-                  <label className="block text-[10px] font-mono text-gray-500 uppercase mb-1">Title Line 2 (Gradient) *</label>
-                  <input
-                    type="text"
-                    value={heroVideoForm.subtitle}
-                    onChange={(e) => setHeroVideoForm(prev => ({ ...prev, subtitle: e.target.value }))}
-                    placeholder="e.g. ALGORITHM"
-                    className="bg-black/50 border border-white/10 text-white text-xs px-4 py-3 w-full focus:border-electricBlue outline-none font-mono"
-                    data-testid="input-hero-subtitle"
-                  />
-                </div>
-              </div>
-
               <div>
                 <label className="block text-[10px] font-mono text-gray-500 uppercase mb-1">Badge Text</label>
                 <input
