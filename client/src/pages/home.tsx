@@ -107,6 +107,7 @@ export default function Home() {
                           ) : null}
                           <div className="text-center opacity-30 group-hover:opacity-50 transition-opacity duration-500">
                               <div className="text-6xl mb-4 text-electricBlue animate-pulse">▶</div>
+                              <p className="font-header tracking-widest text-xs md:text-sm">{hero?.overlayText || "SHOWREEL_2025.MP4"}</p>
                           </div>
                           <div className="absolute top-4 left-4 text-[10px] font-mono text-electricBlue flex items-center gap-2">
                               <div className="w-2 h-2 bg-red-500 rounded-full animate-ping"></div> REC ● [00:01:24:12]
@@ -116,6 +117,11 @@ export default function Home() {
                           <div className="absolute inset-0 bg-[linear-gradient(rgba(18,16,16,0)_50%,rgba(0,0,0,0.25)_50%),linear-gradient(90deg,rgba(255,0,0,0.06),rgba(0,255,0,0.02),rgba(0,0,255,0.06))] z-10 bg-[length:100%_2px,3px_100%] pointer-events-none opacity-20"></div>
                       </div>
                       
+                      <div className="absolute bottom-0 left-0 p-8 md:p-12 z-20">
+                          <h1 className="font-header text-4xl md:text-6xl font-bold text-white leading-tight glitch-hover cursor-default drop-shadow-lg">
+                              {hero?.title || "DIRECT THE"}<br /><span className="text-transparent bg-clip-text bg-gradient-to-r from-electricBlue to-purple-600">{hero?.subtitle || "ALGORITHM"}</span>
+                          </h1>
+                      </div>
                   </div>
 
                   {/* ACADEMY CTA (Top Right - 40%) */}
