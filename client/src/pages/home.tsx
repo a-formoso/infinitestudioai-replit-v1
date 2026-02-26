@@ -124,7 +124,7 @@ export default function Home() {
                               <p className="text-sm text-gray-400 mb-6 leading-relaxed">Stop prompting blindly. Learn the full AI filmmaking pipeline from Gemini to Veo.</p>
                               <button
                                 onClick={() => document.getElementById("academy")?.scrollIntoView({ behavior: "smooth" })}
-                                className="inline-block bg-signalOrange text-white px-6 py-3 font-header text-xs font-bold uppercase tracking-wider hover:bg-white hover:text-black hover:scale-105 transition-all duration-300"
+                                className="inline-block bg-signalOrange text-white px-6 py-3 font-header text-xs font-bold uppercase tracking-wider hover:bg-white hover:text-black hover:scale-105 transition-all duration-300 cursor-pointer"
                                 data-testid="btn-view-courses-hero"
                               >
                                   View Courses

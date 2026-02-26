@@ -816,3 +816,4 @@ Uncaught Exception: Error: listen EADDRINUSE: address already in use 0.0.0.0:500
 5:55:32 PM [express] GET /api/course-tiers 304 in 9ms :: {"tiers":[{"id":"568d3daf-117b-4513-b86d-84e9b9b9b86f","name":"Foundation","slug":"foundation","color":"#2962FF","sortOrder":0,"createdAt":"2026-02-22T18:06:42.931Z"},{"id":"999f52a8-feb6-4e16-99b1-18...
 5:57:24 PM [vite] (client) hmr update /src/pages/home.tsx, /src/index.css
 5:57:30 PM [vite] (client) hmr update /src/pages/home.tsx, /src/index.css
+6:00:50 PM [vite] (client) hmr update /src/pages/home.tsx, /src/index.css
