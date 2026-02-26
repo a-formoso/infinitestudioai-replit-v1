@@ -2987,9 +2987,6 @@ export default function AdminDashboard() {
                 </div>
               </div>
             )}
-            <div className="absolute top-2 left-2 text-[10px] font-mono text-electricBlue flex items-center gap-1">
-              <div className="w-1.5 h-1.5 bg-red-500 rounded-full"></div> REC
-            </div>
           </div>
 
           <div className="flex-grow min-w-0">
