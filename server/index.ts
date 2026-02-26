@@ -6,6 +6,14 @@ import session from "express-session";
 import { pool } from "./db";
 import connectPg from "connect-pg-simple";
 
+process.on("uncaughtException", (err) => {
+  console.error("Uncaught Exception:", err);
+});
+
+process.on("unhandledRejection", (reason) => {
+  console.error("Unhandled Rejection:", reason);
+});
+
 const app = express();
 const httpServer = createServer(app);
 
