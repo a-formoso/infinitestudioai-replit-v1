@@ -6,6 +6,15 @@ import session from "express-session";
 import { pool } from "./db";
 import connectPg from "connect-pg-simple";
 
+const originalExit = process.exit;
+process.exit = function (code?: number) {
+  if (code !== 0) {
+    console.error(`process.exit(${code}) called, stack:`, new Error().stack);
+    return undefined as never;
+  }
+  return originalExit.call(process, code);
+} as typeof process.exit;
+
 process.on("uncaughtException", (err) => {
   console.error("Uncaught Exception:", err);
 });
