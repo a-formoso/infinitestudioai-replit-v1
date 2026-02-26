@@ -400,176 +400,134 @@ export default function AdminDashboard() {
   ];
 
   const renderAnalytics = () => (
-    <div className="relative z-10 space-y-6">
-      <div className="flex flex-col sm:flex-row justify-between sm:items-center gap-4">
-        <h1 className="text-xl sm:text-2xl font-header font-bold text-white tracking-widest">ANALYTICS OVERVIEW</h1>
-        <div className="flex gap-2">
-          <select className="bg-black/50 border border-white/10 text-white text-xs px-3 py-2 outline-none flex-1 sm:flex-none">
-            <option>Last 7 Days</option>
-            <option>Last 30 Days</option>
-            <option>This Year</option>
-          </select>
-          <button className="bg-neonPurple text-white px-3 py-2 text-xs font-bold flex items-center gap-2 hover:bg-white hover:text-black transition-colors whitespace-nowrap">
-            <Download className="w-3 h-3" /> EXPORT
+    <div className="relative z-10">
+      <div className="flex flex-col sm:flex-row justify-between sm:items-end gap-4 mb-8">
+        <div>
+          <h1 className="font-header text-2xl text-white mb-1">SYSTEM OVERVIEW</h1>
+          <p className="text-xs text-gray-400 font-mono">Last Sync: Just now</p>
+        </div>
+        <div className="flex gap-2 sm:gap-4">
+          <button 
+            onClick={handleCreateCourse}
+            className="flex items-center justify-center gap-2 bg-electricBlue text-white px-3 sm:px-4 py-2 text-[10px] font-header font-bold uppercase hover:bg-white hover:text-black transition-colors flex-1 sm:flex-none"
+          >
+            <Plus className="w-3 h-3" /> New Course
+          </button>
+          <button className="flex items-center justify-center gap-2 border border-white/20 text-white px-3 sm:px-4 py-2 text-[10px] font-header font-bold uppercase hover:bg-white/10 transition-colors flex-1 sm:flex-none">
+            <Download className="w-3 h-3" /> Export
           </button>
         </div>
       </div>
 
-      {/* KPI Cards */}
-      <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
-        <div className="glass-panel p-4 sm:p-6 border border-white/10 relative overflow-hidden group hover:border-neonPurple/50 transition-colors">
-          <div className="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
-            <DollarSign className="w-16 h-16 text-neonPurple" />
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-6 mb-8">
+        <div className="glass-panel p-4 sm:p-6 stat-card cursor-pointer hover:border-white/30 hover:-translate-y-0.5 transition-all duration-300">
+          <div className="flex justify-between items-start mb-3 sm:mb-4">
+            <span className="text-[10px] font-mono text-gray-400 uppercase">Total Revenue</span>
+            <span className="text-green-500 text-xs font-mono">+12%</span>
           </div>
-          <p className="text-[10px] font-mono text-gray-500 uppercase mb-1">Total Revenue</p>
-          <h3 className="text-xl sm:text-2xl font-header text-white">$17,657</h3>
-          <div className="flex items-center gap-1 mt-2 text-[10px] text-green-500 font-mono">
-            <ArrowUp className="w-3 h-3" /> +12.5% <span className="text-gray-500">vs last month</span>
-          </div>
-        </div>
-
-        <div className="glass-panel p-4 sm:p-6 border border-white/10 relative overflow-hidden group hover:border-electricBlue/50 transition-colors">
-          <div className="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
-            <ShoppingBag className="w-16 h-16 text-electricBlue" />
-          </div>
-          <p className="text-[10px] font-mono text-gray-500 uppercase mb-1">Total Sales</p>
-          <h3 className="text-xl sm:text-2xl font-header text-white">482</h3>
-          <div className="flex items-center gap-1 mt-2 text-[10px] text-green-500 font-mono">
-            <ArrowUp className="w-3 h-3" /> +8.2% <span className="text-gray-500">vs last month</span>
+          <h2 className="font-header text-xl sm:text-3xl text-white">$124,500</h2>
+          <div className="w-full h-1 bg-white/10 mt-4 rounded-full overflow-hidden">
+            <div className="h-full bg-green-500 w-[75%]"></div>
           </div>
         </div>
 
-        <div className="glass-panel p-4 sm:p-6 border border-white/10 relative overflow-hidden group hover:border-green-500/50 transition-colors">
-          <div className="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
-            <Users className="w-16 h-16 text-green-500" />
+        <div className="glass-panel p-4 sm:p-6 stat-card cursor-pointer hover:border-white/30 hover:-translate-y-0.5 transition-all duration-300">
+          <div className="flex justify-between items-start mb-3 sm:mb-4">
+            <span className="text-[10px] font-mono text-gray-400 uppercase">Active Students</span>
+            <span className="text-electricBlue text-xs font-mono">+54</span>
           </div>
-          <p className="text-[10px] font-mono text-gray-500 uppercase mb-1">Active Students</p>
-          <h3 className="text-xl sm:text-2xl font-header text-white">4,525</h3>
-          <div className="flex items-center gap-1 mt-2 text-[10px] text-green-500 font-mono">
-            <ArrowUp className="w-3 h-3" /> +24% <span className="text-gray-500">vs last month</span>
+          <h2 className="font-header text-xl sm:text-3xl text-white">5,204</h2>
+          <div className="w-full h-1 bg-white/10 mt-4 rounded-full overflow-hidden">
+            <div className="h-full bg-electricBlue w-[60%]"></div>
           </div>
         </div>
 
-        <div className="glass-panel p-4 sm:p-6 border border-white/10 relative overflow-hidden group hover:border-orange-500/50 transition-colors">
-          <div className="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
-            <Activity className="w-16 h-16 text-orange-500" />
+        <div className="glass-panel p-4 sm:p-6 stat-card cursor-pointer hover:border-white/30 hover:-translate-y-0.5 transition-all duration-300">
+          <div className="flex justify-between items-start mb-3 sm:mb-4">
+            <span className="text-[10px] font-mono text-gray-400 uppercase">Asset Downloads</span>
+            <span className="text-neonPurple text-xs font-mono">NEW</span>
           </div>
-          <p className="text-[10px] font-mono text-gray-500 uppercase mb-1">Conversion Rate</p>
-          <h3 className="text-xl sm:text-2xl font-header text-white">3.2%</h3>
-          <div className="flex items-center gap-1 mt-2 text-[10px] text-red-500 font-mono">
-            <ArrowDown className="w-3 h-3" /> -0.4% <span className="text-gray-500">vs last month</span>
+          <h2 className="font-header text-xl sm:text-3xl text-white">12.5K</h2>
+          <div className="w-full h-1 bg-white/10 mt-4 rounded-full overflow-hidden">
+            <div className="h-full bg-neonPurple w-[85%]"></div>
+          </div>
+        </div>
+
+        <div className="glass-panel p-4 sm:p-6 stat-card cursor-pointer hover:border-white/30 hover:-translate-y-0.5 transition-all duration-300">
+          <div className="flex justify-between items-start mb-3 sm:mb-4">
+            <span className="text-[10px] font-mono text-gray-400 uppercase">Server Load</span>
+            <span className="text-signalOrange text-xs font-mono">STABLE</span>
+          </div>
+          <h2 className="font-header text-xl sm:text-3xl text-white">24%</h2>
+          <div className="w-full h-1 bg-white/10 mt-4 rounded-full overflow-hidden">
+            <div className="h-full bg-signalOrange w-[24%]"></div>
           </div>
         </div>
       </div>
 
-      {/* Main Charts */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-6">
-        {/* Revenue Chart */}
-        <div className="lg:col-span-2 glass-panel p-4 sm:p-6 border border-white/10">
-          <h3 className="font-header text-sm text-white mb-6">REVENUE OVERVIEW</h3>
-          <div className="h-64 w-full">
-            <ResponsiveContainer width="100%" height="100%">
-              <AreaChart data={salesData}>
-                <defs>
-                  <linearGradient id="colorRevenue" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="5%" stopColor="#8b5cf6" stopOpacity={0.8}/>
-                    <stop offset="95%" stopColor="#8b5cf6" stopOpacity={0}/>
-                  </linearGradient>
-                </defs>
-                <CartesianGrid strokeDasharray="3 3" stroke="#ffffff10" vertical={false} />
-                <XAxis dataKey="name" stroke="#6b7280" fontSize={10} tickLine={false} axisLine={false} />
-                <YAxis stroke="#6b7280" fontSize={10} tickLine={false} axisLine={false} tickFormatter={(value) => `$${value}`} />
-                <Tooltip 
-                  contentStyle={{ backgroundColor: '#000', border: '1px solid #333', borderRadius: '4px' }}
-                  itemStyle={{ color: '#fff', fontSize: '12px' }}
-                  labelStyle={{ color: '#888', fontSize: '10px', marginBottom: '4px' }}
-                />
-                <Area type="monotone" dataKey="revenue" stroke="#8b5cf6" strokeWidth={2} fillOpacity={1} fill="url(#colorRevenue)" />
-              </AreaChart>
-            </ResponsiveContainer>
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        <div className="lg:col-span-2 glass-panel p-0 overflow-hidden">
+          <div className="p-4 sm:p-6 border-b border-white/10 flex justify-between items-center">
+            <h3 className="font-header text-sm text-white">RECENT TRANSACTIONS</h3>
+            <a href="#" className="text-[10px] font-mono text-electricBlue hover:underline">VIEW ALL</a>
+          </div>
+          <div className="overflow-x-auto">
+          <table className="w-full text-left text-xs text-gray-400 min-w-[480px]">
+            <thead className="bg-white/5 text-gray-200 font-header border-b border-white/10">
+              <tr>
+                <th className="p-3 sm:p-4">Customer</th>
+                <th className="p-3 sm:p-4">Product</th>
+                <th className="p-3 sm:p-4">Status</th>
+                <th className="p-3 sm:p-4 text-right">Amount</th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-white/5 font-mono">
+              <tr className="hover:bg-white/5 transition-colors">
+                <td className="p-4 text-white">sarah_j_films</td>
+                <td className="p-4">AI Filmmaking Ecosystem</td>
+                <td className="p-4"><span className="bg-green-500/20 text-green-500 px-2 py-1 rounded">PAID</span></td>
+                <td className="p-4 text-right">$249.00</td>
+              </tr>
+              <tr className="hover:bg-white/5 transition-colors">
+                <td className="p-4 text-white">mike_vfx_pro</td>
+                <td className="p-4">Advanced Cinematography</td>
+                <td className="p-4"><span className="bg-green-500/20 text-green-500 px-2 py-1 rounded">PAID</span></td>
+                <td className="p-4 text-right">$199.00</td>
+              </tr>
+              <tr className="hover:bg-white/5 transition-colors">
+                <td className="p-4 text-white">studio_asset_bot</td>
+                <td className="p-4">Nano Texture Pack</td>
+                <td className="p-4"><span className="bg-green-500/20 text-green-500 px-2 py-1 rounded">PAID</span></td>
+                <td className="p-4 text-right">$29.00</td>
+              </tr>
+              <tr className="hover:bg-white/5 transition-colors">
+                <td className="p-4 text-white">guest_user_22</td>
+                <td className="p-4">Nano Banana Mastery</td>
+                <td className="p-4"><span className="bg-red-500/20 text-red-500 px-2 py-1 rounded">FAILED</span></td>
+                <td className="p-4 text-right">$129.00</td>
+              </tr>
+            </tbody>
+          </table>
           </div>
         </div>
 
-        {/* Revenue Breakdown */}
-        <div className="glass-panel p-4 sm:p-6 border border-white/10 flex flex-col">
-          <h3 className="font-header text-sm text-white mb-6">REVENUE BY SOURCE</h3>
-          <div className="h-48 w-full flex-grow relative">
-            <ResponsiveContainer width="100%" height="100%">
-              <PieChart>
-                <Pie
-                  data={categoryData}
-                  cx="50%"
-                  cy="50%"
-                  innerRadius={60}
-                  outerRadius={80}
-                  paddingAngle={5}
-                  dataKey="value"
-                >
-                  {categoryData.map((entry, index) => (
-                    <Cell key={`cell-${index}`} fill={index === 0 ? '#8b5cf6' : index === 1 ? '#00f0ff' : index === 2 ? '#10b981' : '#FF3D00'} />
-                  ))}
-                </Pie>
-                <Tooltip 
-                   contentStyle={{ backgroundColor: '#000', border: '1px solid #333', borderRadius: '4px' }}
-                   itemStyle={{ color: '#fff', fontSize: '12px' }}
-                />
-              </PieChart>
-            </ResponsiveContainer>
-            {/* Center Text */}
-            <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-              <div className="text-center">
-                <span className="block text-2xl font-bold text-white">45%</span>
-                <span className="text-[9px] text-gray-500 uppercase">Courses</span>
-              </div>
-            </div>
+        <div className="glass-panel p-0 overflow-hidden flex flex-col h-full bg-black/50 border border-white/10 min-h-[300px]">
+          <div className="p-4 border-b border-white/10 bg-[#050505]">
+            <h3 className="font-header text-xs text-white flex items-center gap-2">
+              <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
+              LIVE SYSTEM LOGS
+            </h3>
           </div>
-          <div className="mt-6 space-y-3">
-            {categoryData.map((item, index) => (
-              <div key={index} className="flex items-center justify-between text-xs">
-                <div className="flex items-center gap-2">
-                  <div className={`w-2 h-2 rounded-full ${index === 0 ? 'bg-neonPurple' : index === 1 ? 'bg-electricBlue' : index === 2 ? 'bg-green-500' : 'bg-orange-500'}`}></div>
-                  <span className="text-gray-300">{item.name}</span>
-                </div>
-                <span className="font-mono text-white">${item.value.toLocaleString()}</span>
-              </div>
+          <div 
+            className="p-4 font-mono text-[10px] space-y-2 text-gray-400 overflow-y-auto flex-grow" 
+            ref={terminalRef}
+          >
+            {logs.map((log, i) => (
+              <div key={i} dangerouslySetInnerHTML={{ __html: log }} />
             ))}
           </div>
         </div>
-      </div>
 
-      {/* Recent Transactions */}
-      <div className="glass-panel p-4 sm:p-6 border border-white/10">
-        <h3 className="font-header text-sm text-white mb-4 sm:mb-6">RECENT TRANSACTIONS</h3>
-        <div className="overflow-x-auto -mx-4 sm:mx-0">
-          <table className="w-full text-left border-collapse min-w-[600px]">
-            <thead>
-              <tr className="border-b border-white/10 text-[10px] text-gray-500 font-mono uppercase">
-                <th className="py-3 px-3 sm:px-4 font-normal">Transaction ID</th>
-                <th className="py-3 px-3 sm:px-4 font-normal">Customer</th>
-                <th className="py-3 px-3 sm:px-4 font-normal">Item</th>
-                <th className="py-3 px-3 sm:px-4 font-normal">Type</th>
-                <th className="py-3 px-3 sm:px-4 font-normal text-right">Amount</th>
-                <th className="py-3 px-4 font-normal text-right">Time</th>
-              </tr>
-            </thead>
-            <tbody>
-              {recentTransactions.map((tx) => (
-                <tr key={tx.id} className="border-b border-white/5 hover:bg-white/5 transition-colors">
-                  <td className="py-3 px-4 text-xs font-mono text-gray-400">#TRX-{29384 + tx.id}</td>
-                  <td className="py-3 px-4 text-xs font-bold text-white">{tx.user}</td>
-                  <td className="py-3 px-4 text-xs text-gray-300">{tx.item}</td>
-                  <td className="py-3 px-4">
-                    <span className={`text-[10px] px-2 py-1 rounded ${tx.type === 'Course' ? 'bg-orange-500/20 text-orange-500' : 'bg-blue-500/20 text-blue-500'}`}>
-                      {tx.type}
-                    </span>
-                  </td>
-                  <td className="py-3 px-4 text-xs font-mono font-bold text-white text-right">{tx.amount}</td>
-                  <td className="py-3 px-4 text-[10px] text-gray-500 text-right">{tx.date}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
       </div>
     </div>
   );
