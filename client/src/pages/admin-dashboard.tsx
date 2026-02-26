@@ -1,13 +1,13 @@
 import { Link, useSearch } from "wouter";
 import { useState, useEffect, useRef } from "react";
 import { createPortal } from "react-dom";
-import { LayoutDashboard, BookOpen, Users, ShoppingBag, BarChart2, Plus, Download, Bold, Italic, Underline, Link as LinkIcon, Code, X, Search, Edit2, Trash2, ArrowUp, ArrowDown, ArrowLeft, ArrowRight, ZoomIn, ZoomOut, Move, TrendingUp, DollarSign, Activity, Workflow, Pencil, Check, ExternalLink, Archive, Upload, Palette } from "lucide-react";
+import { LayoutDashboard, BookOpen, Users, ShoppingBag, BarChart2, Plus, Download, Bold, Italic, Underline, Link as LinkIcon, Code, X, Search, Edit2, Trash2, ArrowUp, ArrowDown, ArrowLeft, ArrowRight, ZoomIn, ZoomOut, Move, TrendingUp, DollarSign, Activity, Workflow, Pencil, Check, ExternalLink, Archive, Upload, Palette, Film } from "lucide-react";
 import { LineChart, Line, AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, BarChart, Bar, PieChart, Pie, Cell } from 'recharts';
 import PipelineContent from "./pipeline";
 import { Navbar } from "@/components/navbar";
 import { Footer } from "@/components/footer";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { getCourses, createCourse as apiCreateCourse, updateCourse as apiUpdateCourse, deleteCourse as apiDeleteCourse, getCourseTiers, createCourseTier as apiCreateCourseTier, updateCourseTier as apiUpdateCourseTier, deleteCourseTier as apiDeleteCourseTier, getCourseBySlug, saveCourseLessons } from "@/lib/api";
+import { getCourses, createCourse as apiCreateCourse, updateCourse as apiUpdateCourse, deleteCourse as apiDeleteCourse, getCourseTiers, createCourseTier as apiCreateCourseTier, updateCourseTier as apiUpdateCourseTier, deleteCourseTier as apiDeleteCourseTier, getCourseBySlug, saveCourseLessons, getFeaturedVideos, createFeaturedVideo as apiCreateFeaturedVideo, updateFeaturedVideo as apiUpdateFeaturedVideo, deleteFeaturedVideo as apiDeleteFeaturedVideo } from "@/lib/api";
 import { useUpload } from "@/hooks/use-upload";
 
 const INITIAL_LESSONS = {
@@ -211,6 +211,96 @@ export default function AdminDashboard() {
       setCourseForm(prev => ({ ...prev, trailerUrl: response.objectPath }));
     },
   });
+
+  const { data: featuredVideosData } = useQuery({
+    queryKey: ["featuredVideos"],
+    queryFn: getFeaturedVideos,
+  });
+  const dbFeaturedVideos = featuredVideosData?.data?.videos || [];
+
+  const createFeaturedVideoMutation = useMutation({
+    mutationFn: (data: Record<string, any>) => apiCreateFeaturedVideo(data),
+    onSuccess: () => { queryClient.invalidateQueries({ queryKey: ["featuredVideos"] }); },
+  });
+
+  const updateFeaturedVideoMutation = useMutation({
+    mutationFn: ({ id, data }: { id: string; data: Record<string, any> }) => apiUpdateFeaturedVideo(id, data),
+    onSuccess: () => { queryClient.invalidateQueries({ queryKey: ["featuredVideos"] }); },
+  });
+
+  const deleteFeaturedVideoMutation = useMutation({
+    mutationFn: (id: string) => apiDeleteFeaturedVideo(id),
+    onSuccess: () => { queryClient.invalidateQueries({ queryKey: ["featuredVideos"] }); },
+  });
+
+  const [isFeaturedVideoModalOpen, setIsFeaturedVideoModalOpen] = useState(false);
+  const [editingFeaturedVideo, setEditingFeaturedVideo] = useState<any>(null);
+  const [featuredVideoForm, setFeaturedVideoForm] = useState({
+    title: "",
+    category: "",
+    description: "",
+    thumbnailUrl: "",
+    videoUrl: "",
+    duration: "",
+    year: new Date().getFullYear().toString(),
+    accentColor: "electricBlue",
+    sortOrder: 0,
+    status: "published",
+  });
+
+  const { uploadFile: uploadThumbnailFile, isUploading: isThumbnailUploading } = useUpload({
+    onSuccess: (response) => {
+      setFeaturedVideoForm(prev => ({ ...prev, thumbnailUrl: response.objectPath }));
+    },
+  });
+
+  const handleOpenFeaturedVideoModal = (video?: any) => {
+    if (video) {
+      setEditingFeaturedVideo(video);
+      setFeaturedVideoForm({
+        title: video.title || "",
+        category: video.category || "",
+        description: video.description || "",
+        thumbnailUrl: video.thumbnailUrl || "",
+        videoUrl: video.videoUrl || "",
+        duration: video.duration || "",
+        year: video.year || new Date().getFullYear().toString(),
+        accentColor: video.accentColor || "electricBlue",
+        sortOrder: video.sortOrder ?? 0,
+        status: video.status || "published",
+      });
+    } else {
+      setEditingFeaturedVideo(null);
+      setFeaturedVideoForm({
+        title: "",
+        category: "",
+        description: "",
+        thumbnailUrl: "",
+        videoUrl: "",
+        duration: "",
+        year: new Date().getFullYear().toString(),
+        accentColor: "electricBlue",
+        sortOrder: dbFeaturedVideos.length,
+        status: "published",
+      });
+    }
+    setIsFeaturedVideoModalOpen(true);
+  };
+
+  const handleSaveFeaturedVideo = async () => {
+    if (!featuredVideoForm.title || !featuredVideoForm.category || !featuredVideoForm.duration || !featuredVideoForm.year) return;
+    if (editingFeaturedVideo) {
+      await updateFeaturedVideoMutation.mutateAsync({ id: editingFeaturedVideo.id, data: featuredVideoForm });
+    } else {
+      await createFeaturedVideoMutation.mutateAsync(featuredVideoForm);
+    }
+    setIsFeaturedVideoModalOpen(false);
+    setEditingFeaturedVideo(null);
+  };
+
+  const handleDeleteFeaturedVideo = async (id: string) => {
+    await deleteFeaturedVideoMutation.mutateAsync(id);
+  };
 
   const [studentsList, setStudentsList] = useState<Student[]>([
     { id: "s1", initials: "SJ", name: "Sarah Jenkins", email: "sarah.j@example.com", avatarColor: "purple-900", enrolledCourse: "AI Filmmaking Ecosystem", progress: 85, lastActive: "2 hours ago", status: "ACTIVE" },
@@ -2985,9 +3075,305 @@ export default function AdminDashboard() {
     </div>
   );
 
+  const accentColorOptions = [
+    { value: "electricBlue", label: "Electric Blue", hex: "#2962FF" },
+    { value: "signalOrange", label: "Signal Orange", hex: "#FF3D00" },
+    { value: "purple-500", label: "Purple", hex: "#a855f7" },
+    { value: "gold", label: "Gold", hex: "#FFD700" },
+    { value: "green-500", label: "Green", hex: "#22c55e" },
+  ];
+
+  const renderFeaturedVideos = () => (
+    <div className="relative z-10 space-y-6">
+      <div className="flex flex-col sm:flex-row justify-between sm:items-center gap-4">
+        <div>
+          <h1 className="text-xl sm:text-2xl font-header font-bold text-white tracking-widest" data-testid="heading-featured-videos">FEATURED VIDEOS</h1>
+          <p className="text-xs text-gray-500 font-mono mt-1">Manage video assets displayed on the homepage Production carousel.</p>
+        </div>
+        <button
+          onClick={() => handleOpenFeaturedVideoModal()}
+          className="bg-electricBlue text-white px-4 py-2 text-xs font-header font-bold flex items-center gap-2 hover:bg-white hover:text-black transition-colors"
+          data-testid="btn-add-featured-video"
+        >
+          <Plus className="w-3 h-3" /> ADD VIDEO
+        </button>
+      </div>
+
+      {dbFeaturedVideos.length === 0 ? (
+        <div className="glass-panel border border-white/10 p-12 text-center">
+          <Film className="w-12 h-12 text-gray-600 mx-auto mb-4" />
+          <h3 className="font-header text-lg text-gray-400 mb-2">NO FEATURED VIDEOS</h3>
+          <p className="text-xs text-gray-600 font-mono mb-6">Add video projects to showcase on the homepage Production carousel.</p>
+          <button
+            onClick={() => handleOpenFeaturedVideoModal()}
+            className="bg-electricBlue text-white px-6 py-3 text-xs font-header font-bold hover:bg-white hover:text-black transition-colors"
+            data-testid="btn-add-first-video"
+          >
+            ADD YOUR FIRST VIDEO
+          </button>
+        </div>
+      ) : (
+        <div className="space-y-3">
+          {dbFeaturedVideos.map((video: any, index: number) => {
+            const colorOption = accentColorOptions.find(c => c.value === video.accentColor);
+            return (
+              <div
+                key={video.id}
+                className="glass-panel border border-white/10 hover:border-electricBlue/30 transition-colors p-4 flex flex-col sm:flex-row gap-4 items-start sm:items-center"
+                data-testid={`featured-video-row-${video.id}`}
+              >
+                <div className="w-full sm:w-48 h-28 bg-gray-900 relative overflow-hidden flex-shrink-0 border border-white/5">
+                  {video.thumbnailUrl ? (
+                    <div
+                      className="w-full h-full bg-cover bg-center"
+                      style={{ backgroundImage: `url(${video.thumbnailUrl})` }}
+                    />
+                  ) : (
+                    <div className="w-full h-full flex items-center justify-center">
+                      <Film className="w-8 h-8 text-gray-700" />
+                    </div>
+                  )}
+                  <div className="absolute top-2 left-2 flex gap-1">
+                    <span className="bg-black/70 text-white text-[10px] font-mono px-1.5 py-0.5 border border-white/20">{video.duration}</span>
+                    <span className="bg-black/70 text-gray-400 text-[10px] font-mono px-1.5 py-0.5 border border-white/20">{video.year}</span>
+                  </div>
+                  <div className="absolute bottom-2 right-2">
+                    <span className={`text-[10px] px-2 py-0.5 font-bold ${video.status === "published" ? "bg-green-500/20 text-green-400" : "bg-yellow-500/20 text-yellow-400"}`}>
+                      {video.status?.toUpperCase()}
+                    </span>
+                  </div>
+                </div>
+
+                <div className="flex-grow min-w-0">
+                  <div className="flex items-center gap-2 mb-1">
+                    <h3 className="font-header text-sm text-white truncate">{video.title}</h3>
+                    <div className="w-3 h-3 rounded-full flex-shrink-0" style={{ backgroundColor: colorOption?.hex || "#2962FF" }} />
+                  </div>
+                  <p className="text-[10px] text-gray-500 font-mono mb-1">{video.category}</p>
+                  <p className="text-xs text-gray-400 line-clamp-2">{video.description}</p>
+                  <div className="flex items-center gap-3 mt-2">
+                    <span className="text-[10px] text-gray-600 font-mono">ORDER: {video.sortOrder}</span>
+                  </div>
+                </div>
+
+                <div className="flex gap-2 flex-shrink-0">
+                  <button
+                    onClick={() => handleOpenFeaturedVideoModal(video)}
+                    className="p-2 bg-white/5 border border-white/10 text-gray-400 hover:text-white hover:border-electricBlue transition-colors"
+                    data-testid={`btn-edit-video-${video.id}`}
+                  >
+                    <Edit2 className="w-3.5 h-3.5" />
+                  </button>
+                  <button
+                    onClick={() => handleDeleteFeaturedVideo(video.id)}
+                    className="p-2 bg-white/5 border border-white/10 text-gray-400 hover:text-red-500 hover:border-red-500 transition-colors"
+                    data-testid={`btn-delete-video-${video.id}`}
+                  >
+                    <Trash2 className="w-3.5 h-3.5" />
+                  </button>
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      )}
+
+      {isFeaturedVideoModalOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm animate-in fade-in duration-200 p-4">
+          <div className="bg-[#0a0a0a] border border-white/10 p-6 max-w-lg w-full shadow-2xl relative max-h-[90vh] overflow-y-auto">
+            <button
+              onClick={() => setIsFeaturedVideoModalOpen(false)}
+              className="absolute top-4 right-4 text-gray-500 hover:text-white"
+              data-testid="btn-close-video-modal"
+            >
+              <X className="w-4 h-4" />
+            </button>
+
+            <h3 className="font-header text-lg text-white mb-6">
+              {editingFeaturedVideo ? "EDIT FEATURED VIDEO" : "ADD FEATURED VIDEO"}
+            </h3>
+
+            <div className="space-y-4">
+              <div>
+                <label className="block text-[10px] font-mono text-gray-500 uppercase mb-1">Title *</label>
+                <input
+                  type="text"
+                  value={featuredVideoForm.title}
+                  onChange={(e) => setFeaturedVideoForm(prev => ({ ...prev, title: e.target.value }))}
+                  placeholder="e.g. ECHO PROTOCOL"
+                  className="bg-black/50 border border-white/10 text-white text-xs px-4 py-3 w-full focus:border-electricBlue outline-none font-mono"
+                  data-testid="input-video-title"
+                />
+              </div>
+
+              <div className="grid grid-cols-2 gap-3">
+                <div>
+                  <label className="block text-[10px] font-mono text-gray-500 uppercase mb-1">Category *</label>
+                  <input
+                    type="text"
+                    value={featuredVideoForm.category}
+                    onChange={(e) => setFeaturedVideoForm(prev => ({ ...prev, category: e.target.value }))}
+                    placeholder="e.g. Sci-Fi Short Film"
+                    className="bg-black/50 border border-white/10 text-white text-xs px-4 py-3 w-full focus:border-electricBlue outline-none font-mono"
+                    data-testid="input-video-category"
+                  />
+                </div>
+                <div>
+                  <label className="block text-[10px] font-mono text-gray-500 uppercase mb-1">Accent Color</label>
+                  <select
+                    value={featuredVideoForm.accentColor}
+                    onChange={(e) => setFeaturedVideoForm(prev => ({ ...prev, accentColor: e.target.value }))}
+                    className="bg-black/50 border border-white/10 text-white text-xs px-4 py-3 w-full focus:border-electricBlue outline-none"
+                    data-testid="select-video-color"
+                  >
+                    {accentColorOptions.map(opt => (
+                      <option key={opt.value} value={opt.value}>{opt.label}</option>
+                    ))}
+                  </select>
+                </div>
+              </div>
+
+              <div>
+                <label className="block text-[10px] font-mono text-gray-500 uppercase mb-1">Description</label>
+                <textarea
+                  value={featuredVideoForm.description}
+                  onChange={(e) => setFeaturedVideoForm(prev => ({ ...prev, description: e.target.value }))}
+                  placeholder="Brief description of the project..."
+                  rows={3}
+                  className="bg-black/50 border border-white/10 text-white text-xs px-4 py-3 w-full focus:border-electricBlue outline-none font-mono resize-none"
+                  data-testid="input-video-description"
+                />
+              </div>
+
+              <div className="grid grid-cols-3 gap-3">
+                <div>
+                  <label className="block text-[10px] font-mono text-gray-500 uppercase mb-1">Duration *</label>
+                  <input
+                    type="text"
+                    value={featuredVideoForm.duration}
+                    onChange={(e) => setFeaturedVideoForm(prev => ({ ...prev, duration: e.target.value }))}
+                    placeholder="e.g. 2:34"
+                    className="bg-black/50 border border-white/10 text-white text-xs px-4 py-3 w-full focus:border-electricBlue outline-none font-mono"
+                    data-testid="input-video-duration"
+                  />
+                </div>
+                <div>
+                  <label className="block text-[10px] font-mono text-gray-500 uppercase mb-1">Year *</label>
+                  <input
+                    type="text"
+                    value={featuredVideoForm.year}
+                    onChange={(e) => setFeaturedVideoForm(prev => ({ ...prev, year: e.target.value }))}
+                    placeholder="e.g. 2025"
+                    className="bg-black/50 border border-white/10 text-white text-xs px-4 py-3 w-full focus:border-electricBlue outline-none font-mono"
+                    data-testid="input-video-year"
+                  />
+                </div>
+                <div>
+                  <label className="block text-[10px] font-mono text-gray-500 uppercase mb-1">Sort Order</label>
+                  <input
+                    type="number"
+                    value={featuredVideoForm.sortOrder}
+                    onChange={(e) => setFeaturedVideoForm(prev => ({ ...prev, sortOrder: parseInt(e.target.value) || 0 }))}
+                    className="bg-black/50 border border-white/10 text-white text-xs px-4 py-3 w-full focus:border-electricBlue outline-none font-mono"
+                    data-testid="input-video-sort-order"
+                  />
+                </div>
+              </div>
+
+              <div>
+                <label className="block text-[10px] font-mono text-gray-500 uppercase mb-1">Thumbnail Image</label>
+                <div className="flex gap-2">
+                  <input
+                    type="text"
+                    value={featuredVideoForm.thumbnailUrl}
+                    onChange={(e) => setFeaturedVideoForm(prev => ({ ...prev, thumbnailUrl: e.target.value }))}
+                    placeholder="Paste URL or upload..."
+                    className="bg-black/50 border border-white/10 text-white text-xs px-4 py-3 flex-1 focus:border-electricBlue outline-none font-mono"
+                    data-testid="input-video-thumbnail"
+                  />
+                  <div className="relative">
+                    <input
+                      type="file"
+                      id="featured-video-thumbnail-upload"
+                      className="hidden"
+                      accept="image/*"
+                      onChange={(e) => {
+                        const file = e.target.files?.[0];
+                        if (file) uploadThumbnailFile(file);
+                      }}
+                    />
+                    <label
+                      htmlFor="featured-video-thumbnail-upload"
+                      className={`h-full bg-white/5 border border-white/10 text-white hover:bg-white/10 px-4 flex items-center justify-center cursor-pointer transition-colors ${isThumbnailUploading ? 'opacity-50' : ''}`}
+                      data-testid="btn-upload-thumbnail"
+                    >
+                      <Upload className="w-4 h-4" />
+                    </label>
+                  </div>
+                </div>
+                {featuredVideoForm.thumbnailUrl && (
+                  <div className="mt-2 h-32 w-full bg-gray-900 border border-white/5 overflow-hidden">
+                    <div
+                      className="w-full h-full bg-cover bg-center opacity-70"
+                      style={{ backgroundImage: `url(${featuredVideoForm.thumbnailUrl})` }}
+                    />
+                  </div>
+                )}
+              </div>
+
+              <div>
+                <label className="block text-[10px] font-mono text-gray-500 uppercase mb-1">Video URL</label>
+                <input
+                  type="text"
+                  value={featuredVideoForm.videoUrl}
+                  onChange={(e) => setFeaturedVideoForm(prev => ({ ...prev, videoUrl: e.target.value }))}
+                  placeholder="Video file URL or embed link..."
+                  className="bg-black/50 border border-white/10 text-white text-xs px-4 py-3 w-full focus:border-electricBlue outline-none font-mono"
+                  data-testid="input-video-url"
+                />
+              </div>
+
+              <div>
+                <label className="block text-[10px] font-mono text-gray-500 uppercase mb-1">Status</label>
+                <select
+                  value={featuredVideoForm.status}
+                  onChange={(e) => setFeaturedVideoForm(prev => ({ ...prev, status: e.target.value }))}
+                  className="bg-black/50 border border-white/10 text-white text-xs px-4 py-3 w-full focus:border-electricBlue outline-none"
+                  data-testid="select-video-status"
+                >
+                  <option value="published">Published</option>
+                  <option value="draft">Draft</option>
+                </select>
+              </div>
+
+              <div className="pt-4 flex gap-3">
+                <button
+                  onClick={() => setIsFeaturedVideoModalOpen(false)}
+                  className="flex-1 py-3 text-xs font-header font-bold text-gray-400 bg-white/5 hover:bg-white/10 transition-colors"
+                  data-testid="btn-cancel-video"
+                >
+                  CANCEL
+                </button>
+                <button
+                  onClick={handleSaveFeaturedVideo}
+                  disabled={!featuredVideoForm.title || !featuredVideoForm.category || !featuredVideoForm.duration || !featuredVideoForm.year}
+                  className="flex-1 py-3 text-xs font-header font-bold text-white bg-electricBlue hover:bg-white hover:text-black transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                  data-testid="btn-save-video"
+                >
+                  {editingFeaturedVideo ? "UPDATE VIDEO" : "ADD VIDEO"}
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+
   const tabs = [
     { id: "dashboard", label: "OVERVIEW", icon: LayoutDashboard },
     { id: "courses", label: "COURSES", icon: BookOpen },
+    { id: "featured", label: "VIDEOS", icon: Film },
     { id: "students", label: "STUDENTS", icon: Users },
     { id: "store", label: "ASSETS", icon: ShoppingBag },
     { id: "analytics", label: "ANALYTICS", icon: BarChart2 },
@@ -3045,6 +3431,7 @@ export default function AdminDashboard() {
             courseView === "preview" ? renderCoursePreview() : 
             renderCourseEditor()
           )}
+          {activeTab === "featured" && renderFeaturedVideos()}
           {activeTab === "students" && renderStudents()}
           {activeTab === "store" && renderAssetStore()}
           {activeTab === "analytics" && renderAnalytics()}

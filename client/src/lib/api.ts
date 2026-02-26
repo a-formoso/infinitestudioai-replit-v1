@@ -174,6 +174,31 @@ export async function getEnrollmentProgress(enrollmentId: string) {
   return apiFetch<{ progress: any[] }>(`/enrollments/${enrollmentId}/progress`);
 }
 
+// Featured Videos
+export async function getFeaturedVideos() {
+  return apiFetch<{ videos: any[] }>('/featured-videos');
+}
+
+export async function createFeaturedVideo(data: Record<string, any>) {
+  return apiFetch<{ video: any }>('/featured-videos', {
+    method: 'POST',
+    body: JSON.stringify(data),
+  });
+}
+
+export async function updateFeaturedVideo(id: string, data: Record<string, any>) {
+  return apiFetch<{ video: any }>(`/featured-videos/${id}`, {
+    method: 'PUT',
+    body: JSON.stringify(data),
+  });
+}
+
+export async function deleteFeaturedVideo(id: string) {
+  return apiFetch<{ message: string }>(`/featured-videos/${id}`, {
+    method: 'DELETE',
+  });
+}
+
 // Assets
 export async function getAssets() {
   return apiFetch<{ assets: any[] }>('/assets');

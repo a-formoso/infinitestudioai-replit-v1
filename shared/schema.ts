@@ -145,6 +145,26 @@ export const insertOrderItemSchema = createInsertSchema(orderItems).omit({
   id: true,
 });
 
+export const featuredVideos = pgTable("featured_videos", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  title: text("title").notNull(),
+  category: text("category").notNull(),
+  description: text("description").notNull(),
+  thumbnailUrl: text("thumbnail_url"),
+  videoUrl: text("video_url"),
+  duration: text("duration").notNull(),
+  year: text("year").notNull(),
+  accentColor: text("accent_color").notNull().default("electricBlue"),
+  sortOrder: integer("sort_order").notNull().default(0),
+  status: text("status").notNull().default("published"),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+});
+
+export const insertFeaturedVideoSchema = createInsertSchema(featuredVideos).omit({
+  id: true,
+  createdAt: true,
+});
+
 export type InsertUser = z.infer<typeof insertUserSchema>;
 export type User = typeof users.$inferSelect;
 
@@ -171,4 +191,7 @@ export type Order = typeof orders.$inferSelect;
 
 export type InsertOrderItem = z.infer<typeof insertOrderItemSchema>;
 export type OrderItem = typeof orderItems.$inferSelect;
+
+export type InsertFeaturedVideo = z.infer<typeof insertFeaturedVideoSchema>;
+export type FeaturedVideo = typeof featuredVideos.$inferSelect;
 

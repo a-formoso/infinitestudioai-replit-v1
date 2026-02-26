@@ -8,6 +8,7 @@ import {
   assets,
   orders,
   orderItems,
+  featuredVideos,
   type User,
   type InsertUser,
   type Course,
@@ -26,6 +27,8 @@ import {
   type InsertOrder,
   type OrderItem,
   type InsertOrderItem,
+  type FeaturedVideo,
+  type InsertFeaturedVideo,
 } from "@shared/schema";
 import { db } from "./db";
 import { eq, and, sql, desc } from "drizzle-orm";
@@ -88,6 +91,14 @@ export interface IStorage {
   createOrder(order: InsertOrder): Promise<Order>;
   createOrderItem(orderItem: InsertOrderItem): Promise<OrderItem>;
   getOrderItems(orderId: string): Promise<OrderItem[]>;
+
+  // Featured video operations
+  getAllFeaturedVideos(): Promise<FeaturedVideo[]>;
+  getPublishedFeaturedVideos(): Promise<FeaturedVideo[]>;
+  getFeaturedVideo(id: string): Promise<FeaturedVideo | undefined>;
+  createFeaturedVideo(video: InsertFeaturedVideo): Promise<FeaturedVideo>;
+  updateFeaturedVideo(id: string, data: Partial<InsertFeaturedVideo>): Promise<FeaturedVideo | undefined>;
+  deleteFeaturedVideo(id: string): Promise<boolean>;
 
 }
 
@@ -389,6 +400,35 @@ export class DatabaseStorage implements IStorage {
       .select()
       .from(orderItems)
       .where(eq(orderItems.orderId, orderId));
+  }
+
+  // Featured video operations
+  async getAllFeaturedVideos(): Promise<FeaturedVideo[]> {
+    return await db.select().from(featuredVideos).orderBy(featuredVideos.sortOrder);
+  }
+
+  async getPublishedFeaturedVideos(): Promise<FeaturedVideo[]> {
+    return await db.select().from(featuredVideos).where(eq(featuredVideos.status, "published")).orderBy(featuredVideos.sortOrder);
+  }
+
+  async getFeaturedVideo(id: string): Promise<FeaturedVideo | undefined> {
+    const [video] = await db.select().from(featuredVideos).where(eq(featuredVideos.id, id));
+    return video || undefined;
+  }
+
+  async createFeaturedVideo(insertVideo: InsertFeaturedVideo): Promise<FeaturedVideo> {
+    const [video] = await db.insert(featuredVideos).values(insertVideo).returning();
+    return video;
+  }
+
+  async updateFeaturedVideo(id: string, data: Partial<InsertFeaturedVideo>): Promise<FeaturedVideo | undefined> {
+    const [video] = await db.update(featuredVideos).set(data).where(eq(featuredVideos.id, id)).returning();
+    return video || undefined;
+  }
+
+  async deleteFeaturedVideo(id: string): Promise<boolean> {
+    const result = await db.delete(featuredVideos).where(eq(featuredVideos.id, id)).returning();
+    return result.length > 0;
   }
 
 }

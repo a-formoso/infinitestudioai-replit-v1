@@ -4,45 +4,45 @@ import { Footer } from "@/components/footer";
 import { Play, ChevronLeft, ChevronRight } from "lucide-react";
 import { Link } from "wouter";
 import { useQuery } from "@tanstack/react-query";
-import { getCourses } from "@/lib/api";
+import { getCourses, getFeaturedVideos } from "@/lib/api";
 
-const projects = [
+const fallbackProjects = [
   {
-    id: 1,
+    id: "1",
     title: "ECHO PROTOCOL",
     category: "Sci-Fi Short Film",
     description: "A cyberpunk detective navigates neon-soaked streets, hunting for answers in a world where memories can be stolen.",
-    image: "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=2564&auto=format&fit=crop",
+    thumbnailUrl: "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=2564&auto=format&fit=crop",
     duration: "2:34",
     year: "2025",
     accentColor: "electricBlue",
   },
   {
-    id: 2,
+    id: "2",
     title: "AURUM DYNAMICS",
     category: "Luxury Brand Commercial",
     description: "A mesmerizing visual journey through liquid gold and obsidian, crafted for a luxury jewelry brand's global campaign.",
-    image: "https://images.unsplash.com/photo-1534447677768-be436bb09401?q=80&w=2694&auto=format&fit=crop",
+    thumbnailUrl: "https://images.unsplash.com/photo-1534447677768-be436bb09401?q=80&w=2694&auto=format&fit=crop",
     duration: "1:45",
     year: "2025",
     accentColor: "signalOrange",
   },
   {
-    id: 3,
+    id: "3",
     title: "NEURAL BLOOM",
     category: "Experimental Art Film",
     description: "An abstract exploration of consciousness, where neural networks blossom into organic patterns of light and color.",
-    image: "https://images.unsplash.com/photo-1620641788421-7a1c342ea42e?q=80&w=2574&auto=format&fit=crop",
+    thumbnailUrl: "https://images.unsplash.com/photo-1620641788421-7a1c342ea42e?q=80&w=2574&auto=format&fit=crop",
     duration: "3:12",
     year: "2024",
     accentColor: "purple-500",
   },
   {
-    id: 4,
+    id: "4",
     title: "PHANTOM SIGNAL",
     category: "Sci-Fi Short Film",
     description: "A lone astronaut receives a mysterious transmission that challenges everything she knows about humanity's place in the cosmos.",
-    image: "https://images.unsplash.com/photo-1446776811953-b23d57bd21aa?q=80&w=2672&auto=format&fit=crop",
+    thumbnailUrl: "https://images.unsplash.com/photo-1446776811953-b23d57bd21aa?q=80&w=2672&auto=format&fit=crop",
     duration: "5:30",
     year: "2025",
     accentColor: "electricBlue",
@@ -55,7 +55,13 @@ export default function Home() {
     queryKey: ["courses"],
     queryFn: getCourses,
   });
+  const { data: videosData } = useQuery({
+    queryKey: ["featuredVideos"],
+    queryFn: getFeaturedVideos,
+  });
   const featuredCourses = (coursesData?.data?.courses || []).filter((c: any) => c.status === "published").slice(0, 2);
+  const dbVideos = videosData?.data?.videos || [];
+  const projects = dbVideos.length > 0 ? dbVideos : fallbackProjects;
 
   const nextSlide = () => {
     setCurrentSlide((prev) => (prev + 1) % projects.length);
@@ -184,7 +190,7 @@ export default function Home() {
                           className="flex transition-transform duration-500 ease-in-out"
                           style={{ transform: `translateX(-${currentSlide * 100}%)` }}
                         >
-                          {projects.map((project) => (
+                          {projects.map((project: any) => (
                             <div 
                               key={project.id}
                               className="group relative h-[450px] w-full flex-shrink-0 glass-panel overflow-hidden border border-white/5 hover:border-electricBlue/50 transition-all duration-500"
@@ -192,7 +198,7 @@ export default function Home() {
                               <div className="absolute inset-0 bg-gray-800 group-hover:scale-105 transition-transform duration-700">
                                 <div 
                                   className="w-full h-full bg-cover bg-center opacity-70 group-hover:opacity-50 transition-opacity duration-500"
-                                  style={{ backgroundImage: `url('${project.image}')` }}
+                                  style={{ backgroundImage: `url('${project.thumbnailUrl || project.image || ''}')` }}
                                 ></div>
                               </div>
                               

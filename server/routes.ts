@@ -3,7 +3,7 @@ import { createServer, type Server } from "http";
 import { storage } from "./storage";
 import bcrypt from "bcryptjs";
 import { nanoid } from "nanoid";
-import { insertUserSchema, insertEnrollmentSchema, insertLessonProgressSchema, insertOrderSchema, insertOrderItemSchema } from "@shared/schema";
+import { insertUserSchema, insertEnrollmentSchema, insertLessonProgressSchema, insertOrderSchema, insertOrderItemSchema, insertFeaturedVideoSchema } from "@shared/schema";
 import { z } from "zod";
 import { sendVerificationEmail, sendPasswordResetEmail } from "./email";
 import { registerObjectStorageRoutes } from "./replit_integrations/object_storage";
@@ -813,6 +813,88 @@ export async function registerRoutes(
       res.status(201).json({ order, items: orderItems });
     } catch (error) {
       res.status(500).json({ message: "Failed to create order" });
+    }
+  });
+
+  // ===== Featured Videos Routes =====
+
+  app.get("/api/featured-videos", async (req, res) => {
+    try {
+      let isAdmin = false;
+      if (req.session.userId) {
+        const user = await storage.getUser(req.session.userId);
+        isAdmin = user?.isAdmin === true;
+      }
+      const videos = isAdmin ? await storage.getAllFeaturedVideos() : await storage.getPublishedFeaturedVideos();
+      res.json({ videos });
+    } catch (error) {
+      res.status(500).json({ message: "Failed to fetch featured videos" });
+    }
+  });
+
+  app.post("/api/featured-videos", async (req, res) => {
+    if (!req.session.userId) {
+      return res.status(401).json({ message: "Not authenticated" });
+    }
+    const user = await storage.getUser(req.session.userId);
+    if (!user?.isAdmin) {
+      return res.status(403).json({ message: "Admin access required" });
+    }
+    try {
+      const parsed = insertFeaturedVideoSchema.parse(req.body);
+      const video = await storage.createFeaturedVideo(parsed);
+      res.status(201).json({ video });
+    } catch (error) {
+      if (error instanceof z.ZodError) {
+        return res.status(400).json({ message: "Invalid input", errors: error.errors });
+      }
+      res.status(500).json({ message: "Failed to create featured video" });
+    }
+  });
+
+  app.put("/api/featured-videos/:id", async (req, res) => {
+    if (!req.session.userId) {
+      return res.status(401).json({ message: "Not authenticated" });
+    }
+    const user = await storage.getUser(req.session.userId);
+    if (!user?.isAdmin) {
+      return res.status(403).json({ message: "Admin access required" });
+    }
+    try {
+      const partialSchema = insertFeaturedVideoSchema.partial();
+      const parsed = partialSchema.parse(req.body);
+      if (Object.keys(parsed).length === 0) {
+        return res.status(400).json({ message: "No valid fields to update" });
+      }
+      const video = await storage.updateFeaturedVideo(req.params.id, parsed);
+      if (!video) {
+        return res.status(404).json({ message: "Featured video not found" });
+      }
+      res.json({ video });
+    } catch (error) {
+      if (error instanceof z.ZodError) {
+        return res.status(400).json({ message: "Invalid input", errors: error.errors });
+      }
+      res.status(500).json({ message: "Failed to update featured video" });
+    }
+  });
+
+  app.delete("/api/featured-videos/:id", async (req, res) => {
+    if (!req.session.userId) {
+      return res.status(401).json({ message: "Not authenticated" });
+    }
+    const user = await storage.getUser(req.session.userId);
+    if (!user?.isAdmin) {
+      return res.status(403).json({ message: "Admin access required" });
+    }
+    try {
+      const deleted = await storage.deleteFeaturedVideo(req.params.id);
+      if (!deleted) {
+        return res.status(404).json({ message: "Featured video not found" });
+      }
+      res.json({ message: "Featured video deleted" });
+    } catch (error) {
+      res.status(500).json({ message: "Failed to delete featured video" });
     }
   });
 
