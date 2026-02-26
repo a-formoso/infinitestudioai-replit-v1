@@ -148,7 +148,7 @@ export default function CourseDetail() {
                 onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = '#fff'; e.currentTarget.style.color = '#000'; e.currentTarget.style.boxShadow = '0 0 20px rgba(255,255,255,0.2)'; }}
                 data-testid="button-hero-enroll"
               >
-                START LEARNING
+                Start Training
               </button>
             )}
             {isDraft && (
