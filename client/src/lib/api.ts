@@ -216,8 +216,28 @@ export async function getAssets() {
   return apiFetch<{ assets: any[] }>('/assets');
 }
 
-export async function getAsset(id: string) {
-  return apiFetch<{ asset: any }>(`/assets/${id}`);
+export async function getAsset(idOrSlug: string) {
+  return apiFetch<{ asset: any }>(`/assets/${idOrSlug}`);
+}
+
+export async function createAsset(data: Record<string, any>) {
+  return apiFetch<{ asset: any }>('/assets', {
+    method: 'POST',
+    body: JSON.stringify(data),
+  });
+}
+
+export async function updateAsset(id: string, data: Record<string, any>) {
+  return apiFetch<{ asset: any }>(`/assets/${id}`, {
+    method: 'PUT',
+    body: JSON.stringify(data),
+  });
+}
+
+export async function deleteAsset(id: string) {
+  return apiFetch<{ message: string }>(`/assets/${id}`, {
+    method: 'DELETE',
+  });
 }
 
 // Orders

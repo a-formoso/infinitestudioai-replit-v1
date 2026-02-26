@@ -7,7 +7,7 @@ import PipelineContent from "./pipeline";
 import { Navbar } from "@/components/navbar";
 import { Footer } from "@/components/footer";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { getCourses, createCourse as apiCreateCourse, updateCourse as apiUpdateCourse, deleteCourse as apiDeleteCourse, getCourseTiers, createCourseTier as apiCreateCourseTier, updateCourseTier as apiUpdateCourseTier, deleteCourseTier as apiDeleteCourseTier, getCourseBySlug, saveCourseLessons, getFeaturedVideos, createFeaturedVideo as apiCreateFeaturedVideo, updateFeaturedVideo as apiUpdateFeaturedVideo, deleteFeaturedVideo as apiDeleteFeaturedVideo, getHeroVideo, updateHeroVideo as apiUpdateHeroVideo } from "@/lib/api";
+import { getCourses, createCourse as apiCreateCourse, updateCourse as apiUpdateCourse, deleteCourse as apiDeleteCourse, getCourseTiers, createCourseTier as apiCreateCourseTier, updateCourseTier as apiUpdateCourseTier, deleteCourseTier as apiDeleteCourseTier, getCourseBySlug, saveCourseLessons, getFeaturedVideos, createFeaturedVideo as apiCreateFeaturedVideo, updateFeaturedVideo as apiUpdateFeaturedVideo, deleteFeaturedVideo as apiDeleteFeaturedVideo, getHeroVideo, updateHeroVideo as apiUpdateHeroVideo, getAssets, createAsset as apiCreateAsset, updateAsset as apiUpdateAsset, deleteAsset as apiDeleteAsset } from "@/lib/api";
 import { useUpload } from "@/hooks/use-upload";
 
 const INITIAL_LESSONS = {
@@ -73,17 +73,6 @@ interface Student {
   status: "ACTIVE" | "PENDING" | "INACTIVE";
 }
 
-interface Product {
-  id: string;
-  title: string;
-  price: string;
-  sales: number;
-  revenue: string;
-  status: "ACTIVE" | "DRAFT";
-  category: string;
-  image: string;
-  imagePosition: { x: number; y: number; zoom: number };
-}
 
 export default function AdminDashboard() {
   const searchString = useSearch();
@@ -600,130 +589,114 @@ export default function AdminDashboard() {
     setEditingStudent({ ...editingStudent, [field]: value });
   };
 
-  const [productsList, setProductsList] = useState<Product[]>([
-    {
-      id: "p1",
-      title: "NEON NOIR TEXTURES",
-      price: "$29",
-      sales: 124,
-      revenue: "$3,596",
-      status: "ACTIVE",
-      category: "TEXTURES",
-      image: "https://images.unsplash.com/photo-1550684848-fac1c5b4e853?q=80&w=2670&auto=format&fit=crop",
-      imagePosition: { x: 50, y: 50, zoom: 1 }
+  const { data: assetsData, isLoading: assetsLoading } = useQuery({
+    queryKey: ["adminAssets"],
+    queryFn: getAssets,
+  });
+  const dbAssets = assetsData?.data?.assets || [];
+  const assetCategories = Array.from(new Set(dbAssets.map((a: any) => a.category).filter(Boolean)));
+
+  const createAssetMutation = useMutation({
+    mutationFn: (data: Record<string, any>) => apiCreateAsset(data),
+    onSuccess: () => { queryClient.invalidateQueries({ queryKey: ["adminAssets"] }); queryClient.invalidateQueries({ queryKey: ["assets"] }); },
+  });
+
+  const updateAssetMutation = useMutation({
+    mutationFn: ({ id, data }: { id: string; data: Record<string, any> }) => apiUpdateAsset(id, data),
+    onSuccess: () => { queryClient.invalidateQueries({ queryKey: ["adminAssets"] }); queryClient.invalidateQueries({ queryKey: ["assets"] }); },
+  });
+
+  const deleteAssetMutation = useMutation({
+    mutationFn: (id: string) => apiDeleteAsset(id),
+    onSuccess: () => { queryClient.invalidateQueries({ queryKey: ["adminAssets"] }); queryClient.invalidateQueries({ queryKey: ["assets"] }); },
+  });
+
+  const [isAssetModalOpen, setIsAssetModalOpen] = useState(false);
+  const [editingAsset, setEditingAsset] = useState<any>(null);
+  const [selectedAssetCategory, setSelectedAssetCategory] = useState<string>("ALL");
+  const [assetForm, setAssetForm] = useState({
+    title: "",
+    slug: "",
+    description: "",
+    shortDescription: "",
+    price: "0",
+    originalPrice: "",
+    category: "",
+    badge: "",
+    imageUrl: "",
+    fileFormat: "",
+    fileSize: "",
+    color: "neonPurple",
+    status: "draft",
+  });
+
+  const { uploadFile: uploadAssetImageFile, isUploading: isAssetImageUploading } = useUpload({
+    onSuccess: (response) => {
+      setAssetForm(prev => ({ ...prev, imageUrl: response.objectPath }));
     },
-    {
-      id: "p2",
-      title: "SCI-FI CHARACTERS VOL. 1",
-      price: "$49",
-      sales: 89,
-      revenue: "$4,361",
-      status: "ACTIVE",
-      category: "CHARACTER SHEETS",
-      image: "https://images.unsplash.com/photo-1535905557558-afc4877a26fc?q=80&w=2574&auto=format&fit=crop",
-      imagePosition: { x: 50, y: 50, zoom: 1 }
-    },
-    {
-      id: "p3",
-      title: "CINEMATIC SFX PACK",
-      price: "$19",
-      sales: 0,
-      revenue: "Unreleased",
-      status: "DRAFT",
-      category: "AUDIO PACKS",
-      image: "",
-      imagePosition: { x: 50, y: 50, zoom: 1 }
-    }
-  ]);
+  });
 
-  const [categories, setCategories] = useState<string[]>(["TEXTURES", "CHARACTER SHEETS", "AUDIO PACKS", "MISC"]);
-  const [isProductModalOpen, setIsProductModalOpen] = useState(false);
-  const [editingProduct, setEditingProduct] = useState<Product | null>(null);
-  const [selectedProductCategory, setSelectedProductCategory] = useState<string>("ALL");
-  const [isDragging, setIsDragging] = useState(false);
-  const dragStartRef = useRef<{ x: number, y: number } | null>(null);
-  const [newCategoryName, setNewCategoryName] = useState("");
-  const [isCategoryManagerOpen, setIsCategoryManagerOpen] = useState(false);
-  const [editingCategoryIndex, setEditingCategoryIndex] = useState<number | null>(null);
-  const [editingCategoryName, setEditingCategoryName] = useState("");
-
-  const handleAddCategory = () => {
-    if (newCategoryName && !categories.includes(newCategoryName)) {
-      setCategories([...categories, newCategoryName]);
-      setNewCategoryName("");
-    }
-  };
-
-  const handleDeleteCategory = (index: number) => {
-    const categoryToDelete = categories[index];
-    const newCategories = categories.filter((_, i) => i !== index);
-    setCategories(newCategories);
-    
-    // Update products that were in this category to MISC
-    setProductsList(productsList.map(p => 
-      p.category === categoryToDelete ? { ...p, category: "MISC" } : p
-    ));
-  };
-
-  const handleEditCategoryStart = (index: number) => {
-    setEditingCategoryIndex(index);
-    setEditingCategoryName(categories[index]);
-  };
-
-  const handleEditCategorySave = (index: number) => {
-    if (editingCategoryName && !categories.includes(editingCategoryName)) {
-      const oldCategoryName = categories[index];
-      const newCategories = [...categories];
-      newCategories[index] = editingCategoryName;
-      setCategories(newCategories);
-      
-      // Update products to new category name
-      setProductsList(productsList.map(p => 
-        p.category === oldCategoryName ? { ...p, category: editingCategoryName } : p
-      ));
-    }
-    setEditingCategoryIndex(null);
-    setEditingCategoryName("");
-  };
-
-  const handleAddProduct = () => {
-    const newProduct: Product = {
-      id: `p${productsList.length + 1}`,
-      title: "NEW PRODUCT",
-      price: "$0",
-      sales: 0,
-      revenue: "$0",
-      status: "DRAFT",
-      category: "MISC",
-      image: "",
-      imagePosition: { x: 50, y: 50, zoom: 1 }
-    };
-    setEditingProduct(newProduct);
-    setIsProductModalOpen(true);
-  };
-
-  const handleEditProduct = (product: Product) => {
-    setEditingProduct({ ...product });
-    setIsProductModalOpen(true);
-  };
-
-  const handleSaveProduct = () => {
-    if (!editingProduct) return;
-    
-    const existingIndex = productsList.findIndex(p => p.id === editingProduct.id);
-    if (existingIndex >= 0) {
-      setProductsList(productsList.map(p => p.id === editingProduct.id ? editingProduct : p));
+  const handleOpenAssetModal = (asset?: any) => {
+    if (asset) {
+      setEditingAsset(asset);
+      setAssetForm({
+        title: asset.title || "",
+        slug: asset.slug || "",
+        description: asset.description || "",
+        shortDescription: asset.shortDescription || "",
+        price: asset.price || "0",
+        originalPrice: asset.originalPrice || "",
+        category: asset.category || "",
+        badge: asset.badge || "",
+        imageUrl: asset.imageUrl || "",
+        fileFormat: asset.fileFormat || "",
+        fileSize: asset.fileSize || "",
+        color: asset.color || "neonPurple",
+        status: asset.status || "draft",
+      });
     } else {
-      setProductsList([...productsList, editingProduct]);
+      setEditingAsset(null);
+      setAssetForm({
+        title: "",
+        slug: "",
+        description: "",
+        shortDescription: "",
+        price: "0",
+        originalPrice: "",
+        category: "",
+        badge: "",
+        imageUrl: "",
+        fileFormat: "",
+        fileSize: "",
+        color: "neonPurple",
+        status: "draft",
+      });
     }
-    
-    setIsProductModalOpen(false);
-    setEditingProduct(null);
+    setIsAssetModalOpen(true);
   };
 
-  const handleProductFormChange = (field: keyof Product, value: any) => {
-    if (!editingProduct) return;
-    setEditingProduct({ ...editingProduct, [field]: value });
+  const handleSaveAsset = async () => {
+    if (!assetForm.title || !assetForm.category || !assetForm.fileFormat) return;
+    const slug = assetForm.slug || assetForm.title.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
+    const payload = { ...assetForm, slug, originalPrice: assetForm.originalPrice || null, badge: assetForm.badge || null };
+    if (editingAsset) {
+      await updateAssetMutation.mutateAsync({ id: editingAsset.id, data: payload });
+    } else {
+      await createAssetMutation.mutateAsync(payload);
+    }
+    setIsAssetModalOpen(false);
+    setEditingAsset(null);
+  };
+
+  const handleDeleteAsset = (asset: any) => {
+    setDeleteConfirmation({
+      isOpen: true,
+      title: asset.title,
+      onConfirm: async () => {
+        await deleteAssetMutation.mutateAsync(asset.id);
+        setDeleteConfirmation(null);
+      },
+    });
   };
 
   const handleOpenCreateCourseModal = () => {
@@ -2554,268 +2527,193 @@ export default function AdminDashboard() {
     </div>
   );
 
-  const handleProductImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (!editingProduct || !e.target.files || e.target.files.length === 0) return;
-    
-    const file = e.target.files[0];
-    const imageUrl = URL.createObjectURL(file);
-    
-    setEditingProduct({ ...editingProduct, image: imageUrl });
-    
-    // Reset the input value so the same file can be selected again if needed
-    e.target.value = '';
-  };
-
-  const handleImagePositionChange = (direction: 'up' | 'down' | 'left' | 'right' | 'zoomIn' | 'zoomOut') => {
-    if (!editingProduct) return;
-    
-    const currentPos = editingProduct.imagePosition || { x: 50, y: 50, zoom: 1 };
-    let { x, y, zoom } = currentPos;
-    
-    // Ensure zoom is defined if coming from older data
-    if (zoom === undefined) zoom = 1;
-    
-    const STEP = 5;
-    const ZOOM_STEP = 0.1;
-    
-    switch (direction) {
-      case 'up': y = Math.max(0, y - STEP); break;
-      case 'down': y = Math.min(100, y + STEP); break;
-      case 'left': x = Math.max(0, x - STEP); break;
-      case 'right': x = Math.min(100, x + STEP); break;
-      case 'zoomIn': zoom = Math.min(3, zoom + ZOOM_STEP); break;
-      case 'zoomOut': zoom = Math.max(1, zoom - ZOOM_STEP); break;
-    }
-    
-    setEditingProduct({ ...editingProduct, imagePosition: { x, y, zoom } });
-  };
-
-  const handleMouseDown = (e: React.MouseEvent) => {
-    e.preventDefault();
-    setIsDragging(true);
-    dragStartRef.current = { x: e.clientX, y: e.clientY };
-  };
-
-  const handleMouseMove = (e: React.MouseEvent) => {
-    if (!isDragging || !editingProduct || !dragStartRef.current) return;
-    
-    const deltaX = e.clientX - dragStartRef.current.x;
-    const deltaY = e.clientY - dragStartRef.current.y;
-    
-    // Reset drag start to current position for next frame
-    dragStartRef.current = { x: e.clientX, y: e.clientY };
-    
-    const currentPos = editingProduct.imagePosition || { x: 50, y: 50, zoom: 1 };
-    
-    // Inverse logic: dragging mouse right moves background left (so x increases in bg position logic usually, but let's test)
-    // Actually background-position percentage: 0% is left, 100% is right.
-    // To move the image "right" within the container, we decrease the percentage? No, 0% aligns left edge of image to left edge of container.
-    // Let's just create a sensitivity factor
-    const sensitivity = 0.5;
-    
-    let newX = Math.max(0, Math.min(100, currentPos.x - (deltaX * sensitivity)));
-    let newY = Math.max(0, Math.min(100, currentPos.y - (deltaY * sensitivity)));
-    
-    setEditingProduct({ 
-      ...editingProduct, 
-      imagePosition: { ...currentPos, x: newX, y: newY } 
-    });
-  };
-
-  const handleMouseUp = () => {
-    setIsDragging(false);
-    dragStartRef.current = null;
-  };
+  const assetColorOptions = [
+    { value: "neonPurple", label: "Neon Purple" },
+    { value: "electricBlue", label: "Electric Blue" },
+    { value: "signalOrange", label: "Signal Orange" },
+    { value: "white", label: "White" },
+  ];
 
   const renderAssetStore = () => (
     <div className="relative z-10">
-      {/* HEADER */}
       <div className="flex flex-col sm:flex-row justify-between sm:items-end gap-4 mb-8">
         <div>
-          <h1 className="font-header text-xl sm:text-2xl text-white mb-1">DIGITAL ASSETS</h1>
+          <h1 className="font-header text-xl sm:text-2xl text-white mb-1" data-testid="heading-assets">DIGITAL ASSETS</h1>
           <p className="text-xs text-gray-400 font-mono">Manage product files, pricing, and licenses.</p>
         </div>
-        <div className="flex gap-4">
-          <button 
-            onClick={handleAddProduct}
-            className="bg-neonPurple text-white px-4 py-2 text-[10px] font-header font-bold uppercase hover:bg-white hover:text-black transition-colors w-full sm:w-auto"
-          >
-            + Add New Product
-          </button>
-        </div>
+        <button 
+          onClick={() => handleOpenAssetModal()}
+          data-testid="btn-add-asset"
+          className="bg-neonPurple text-white px-4 py-2 text-[10px] font-header font-bold uppercase hover:bg-white hover:text-black transition-colors w-full sm:w-auto cursor-pointer"
+        >
+          + ADD NEW ASSET
+        </button>
       </div>
 
-      {/* FILTERS */}
-      <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 mb-8 border-b border-white/10 pb-4 sm:items-center">
-        <div className="flex gap-3 sm:gap-4 overflow-x-auto no-scrollbar flex-1">
+      <div className="flex gap-3 sm:gap-4 mb-8 border-b border-white/10 pb-4 overflow-x-auto no-scrollbar">
+        <button 
+          onClick={() => setSelectedAssetCategory("ALL")}
+          data-testid="filter-all-assets"
+          className={`text-xs font-bold transition-colors pb-4 -mb-4.5 border-b-2 whitespace-nowrap cursor-pointer ${
+            selectedAssetCategory === "ALL" 
+              ? "text-white border-neonPurple" 
+              : "text-gray-500 hover:text-white border-transparent"
+          }`}
+        >
+          ALL ASSETS
+        </button>
+        {assetCategories.map((category: string) => (
           <button 
-            onClick={() => setSelectedProductCategory("ALL")}
-            className={`text-xs font-bold transition-colors pb-4 -mb-4.5 border-b-2 whitespace-nowrap ${
-              selectedProductCategory === "ALL" 
+            key={category}
+            onClick={() => setSelectedAssetCategory(category)}
+            data-testid={`filter-category-${category.toLowerCase().replace(/\s+/g, '-')}`}
+            className={`text-xs font-bold transition-colors pb-4 -mb-4.5 border-b-2 whitespace-nowrap cursor-pointer ${
+              selectedAssetCategory === category 
                 ? "text-white border-neonPurple" 
                 : "text-gray-500 hover:text-white border-transparent"
             }`}
           >
-            ALL PRODUCTS
+            {category}
           </button>
-          {categories.map((category) => (
-            <button 
-              key={category}
-              onClick={() => setSelectedProductCategory(category)}
-              className={`text-xs font-bold transition-colors pb-4 -mb-4.5 border-b-2 whitespace-nowrap ${
-                selectedProductCategory === category 
-                  ? "text-white border-neonPurple" 
-                  : "text-gray-500 hover:text-white border-transparent"
-              }`}
-            >
-              {category}
-            </button>
-          ))}
-        </div>
-        <div className="sm:ml-auto sm:pl-4 sm:border-l border-white/10">
-           <button 
-             onClick={() => setIsCategoryManagerOpen(true)}
-             className="text-[10px] font-mono text-gray-500 hover:text-white flex items-center gap-1 transition-colors"
-           >
-             <Edit2 className="w-3 h-3" /> MANAGE CATEGORIES
-           </button>
-        </div>
-      </div>
-
-      {/* Category Manager Modal */}
-      {isCategoryManagerOpen && (
-        <div className="fixed inset-0 z-[60] flex items-end sm:items-center justify-center bg-black/80 backdrop-blur-sm animate-in fade-in duration-200">
-          <div className="glass-panel p-5 sm:p-6 max-w-sm w-full border border-white/10 relative rounded-none max-h-[95vh] sm:max-h-[90vh] overflow-y-auto">
-            <button 
-              onClick={() => setIsCategoryManagerOpen(false)}
-              className="absolute top-4 right-4 text-gray-500 hover:text-white"
-            >
-              <X className="w-4 h-4" />
-            </button>
-            
-            <h2 className="font-header text-lg text-white mb-6">MANAGE CATEGORIES</h2>
-            
-            <div className="space-y-4 mb-6">
-               <div className="flex gap-2">
-                 <input 
-                   type="text" 
-                   value={newCategoryName}
-                   onChange={(e) => setNewCategoryName(e.target.value.toUpperCase())}
-                   placeholder="NEW CATEGORY NAME"
-                   className="flex-grow bg-black/50 border border-white/10 text-white text-xs px-3 py-2 focus:border-neonPurple outline-none font-bold placeholder:font-normal"
-                 />
-                 <button 
-                   onClick={handleAddCategory}
-                   disabled={!newCategoryName}
-                   className="bg-white/10 hover:bg-white/20 text-white p-2 rounded disabled:opacity-50 disabled:cursor-not-allowed"
-                 >
-                   <Plus className="w-4 h-4" />
-                 </button>
-               </div>
-               
-               <div className="space-y-2 max-h-60 overflow-y-auto pr-2">
-                 {categories.map((category, index) => (
-                   <div key={index} className="flex items-center justify-between bg-white/5 p-2 rounded border border-white/5 group">
-                     {editingCategoryIndex === index ? (
-                       <div className="flex items-center gap-2 w-full">
-                         <input 
-                           type="text" 
-                           value={editingCategoryName}
-                           onChange={(e) => setEditingCategoryName(e.target.value.toUpperCase())}
-                           className="flex-grow bg-black border border-neonPurple text-white text-[10px] px-2 py-1 outline-none font-bold"
-                           autoFocus
-                         />
-                         <button onClick={() => handleEditCategorySave(index)} className="text-green-500 hover:text-green-400"><Code className="w-3 h-3" /></button> {/* Using Code icon as Check replacement temporarily */}
-                       </div>
-                     ) : (
-                       <>
-                         <span className="text-[10px] font-bold text-gray-300">{category}</span>
-                         <div className="flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
-                           <button onClick={() => handleEditCategoryStart(index)} className="text-gray-500 hover:text-white"><Edit2 className="w-3 h-3" /></button>
-                           <button onClick={() => handleDeleteCategory(index)} className="text-gray-500 hover:text-red-500"><Trash2 className="w-3 h-3" /></button>
-                         </div>
-                       </>
-                     )}
-                   </div>
-                 ))}
-               </div>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* PRODUCT GRID */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {productsList
-          .filter(p => selectedProductCategory === "ALL" || p.category === selectedProductCategory)
-          .map((product) => (
-          <div key={product.id} className={`glass-panel p-0 overflow-hidden border border-white/10 ${product.status === 'ACTIVE' ? 'hover:border-neonPurple/50' : 'hover:border-white/30 opacity-70'} transition-colors group relative`}>
-            <div className="h-40 bg-gray-900 relative flex items-center justify-center border-b border-white/5 overflow-hidden">
-              {product.image ? (
-                <div 
-                  className="absolute inset-0 bg-cover opacity-60 group-hover:opacity-80 transition-opacity" 
-                  style={{ 
-                    backgroundImage: `url('${product.image}')`,
-                    backgroundPosition: `${product.imagePosition?.x || 50}% ${product.imagePosition?.y || 50}%`,
-                    transform: `scale(${product.imagePosition?.zoom || 1})`,
-                    transformOrigin: `${product.imagePosition?.x || 50}% ${product.imagePosition?.y || 50}%` // This ensures zoom happens around the focal point
-                  }}
-                ></div>
-              ) : (
-                <div className="text-white/20 text-4xl font-header">+</div>
-              )}
-              <div className={`absolute top-2 right-2 ${product.status === 'ACTIVE' ? 'bg-green-500' : 'bg-yellow-500'} text-black text-[10px] font-bold px-2 py-1 rounded`}>
-                {product.status}
-              </div>
-            </div>
-            <div className="p-6">
-              <p className="text-[9px] font-bold text-neonPurple mb-2 tracking-widest">{product.category}</p>
-              <div className="flex justify-between items-start mb-2">
-                <h3 className="font-header text-sm text-white">{product.title}</h3>
-                <span className={`font-mono font-bold ${product.status === 'ACTIVE' ? 'text-neonPurple' : 'text-gray-500'}`}>{product.price}</span>
-              </div>
-              <p className="text-[10px] text-gray-400 mb-4">{product.sales} Sales • {product.revenue}</p>
-              
-              <div className="flex gap-2">
-                {product.status === 'DRAFT' && (
-                   <button className="flex-1 bg-neonPurple/20 text-neonPurple hover:bg-neonPurple/30 text-[10px] py-2 rounded border border-neonPurple/30 transition-colors">Publish</button>
-                )}
-                <button 
-                  onClick={() => handleEditProduct(product)}
-                  className="flex-1 bg-white/10 hover:bg-white/20 text-white text-[10px] py-2 rounded border border-white/10 transition-colors"
-                >
-                  Edit Details
-                </button>
-                <button className="flex-1 bg-white/10 hover:bg-white/20 text-white text-[10px] py-2 rounded border border-white/10 transition-colors">Update Files</button>
-              </div>
-            </div>
-          </div>
         ))}
       </div>
 
-      {/* Edit Product Modal */}
-      {isProductModalOpen && editingProduct && (
-        <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center bg-black/80 backdrop-blur-sm animate-in fade-in duration-200">
-          <div className="glass-panel p-5 sm:p-8 max-w-md w-full border border-white/10 relative rounded-none max-h-[95vh] sm:max-h-[90vh] overflow-y-auto">
+      {assetsLoading ? (
+        <div className="text-center py-20 text-gray-500 font-mono text-sm">Loading assets...</div>
+      ) : dbAssets.length === 0 ? (
+        <div className="text-center py-20">
+          <p className="text-gray-500 font-mono text-sm mb-4">No assets yet. Create your first asset.</p>
+          <button onClick={() => handleOpenAssetModal()} className="bg-neonPurple text-white px-6 py-2 text-xs font-header font-bold hover:bg-white hover:text-black transition-colors cursor-pointer">+ ADD ASSET</button>
+        </div>
+      ) : (
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {dbAssets
+            .filter((a: any) => selectedAssetCategory === "ALL" || a.category === selectedAssetCategory)
+            .map((asset: any) => (
+            <div key={asset.id} data-testid={`card-asset-${asset.id}`} className={`glass-panel p-0 overflow-hidden border border-white/10 ${asset.status === 'published' ? 'hover:border-neonPurple/50' : 'hover:border-white/30 opacity-70'} transition-colors group relative`}>
+              <div className="h-40 bg-gray-900 relative flex items-center justify-center border-b border-white/5 overflow-hidden">
+                {asset.imageUrl ? (
+                  <div 
+                    className="absolute inset-0 bg-cover bg-center opacity-60 group-hover:opacity-80 transition-opacity" 
+                    style={{ backgroundImage: `url('${asset.imageUrl}')` }}
+                  />
+                ) : (
+                  <div className="text-white/20 text-4xl font-header">+</div>
+                )}
+                {asset.badge && (
+                  <div className="absolute top-2 left-2 bg-neonPurple text-white text-[10px] font-bold px-2 py-1 uppercase tracking-wider">{asset.badge}</div>
+                )}
+                <div className={`absolute top-2 right-2 ${asset.status === 'published' ? 'bg-green-500' : asset.status === 'archived' ? 'bg-gray-500' : 'bg-yellow-500'} text-black text-[10px] font-bold px-2 py-1 rounded`}>
+                  {asset.status?.toUpperCase()}
+                </div>
+              </div>
+              <div className="p-6">
+                <p className="text-[9px] font-bold text-neonPurple mb-2 tracking-widest">{asset.category}</p>
+                <div className="flex justify-between items-start mb-2">
+                  <h3 className="font-header text-sm text-white">{asset.title}</h3>
+                  <span className={`font-mono font-bold ${asset.status === 'published' ? 'text-neonPurple' : 'text-gray-500'}`}>${parseFloat(asset.price || "0").toFixed(0)}</span>
+                </div>
+                <p className="text-[10px] text-gray-400 mb-1">{asset.shortDescription || asset.description}</p>
+                <p className="text-[10px] text-gray-500 mb-4">{asset.fileFormat} • {asset.fileSize || "—"}</p>
+                
+                <div className="flex gap-2">
+                  {asset.status === 'draft' && (
+                    <button 
+                      onClick={async () => { await updateAssetMutation.mutateAsync({ id: asset.id, data: { status: "published" } }); }}
+                      className="flex-1 bg-neonPurple/20 text-neonPurple hover:bg-neonPurple/30 text-[10px] py-2 rounded border border-neonPurple/30 transition-colors cursor-pointer"
+                      data-testid={`btn-publish-asset-${asset.id}`}
+                    >
+                      Publish
+                    </button>
+                  )}
+                  {asset.status === 'published' && (
+                    <button 
+                      onClick={async () => { await updateAssetMutation.mutateAsync({ id: asset.id, data: { status: "draft" } }); }}
+                      className="flex-1 bg-yellow-500/10 text-yellow-500 hover:bg-yellow-500/20 text-[10px] py-2 rounded border border-yellow-500/20 transition-colors cursor-pointer"
+                      data-testid={`btn-unpublish-asset-${asset.id}`}
+                    >
+                      Unpublish
+                    </button>
+                  )}
+                  <button 
+                    onClick={() => handleOpenAssetModal(asset)}
+                    className="flex-1 bg-white/10 hover:bg-white/20 text-white text-[10px] py-2 rounded border border-white/10 transition-colors cursor-pointer"
+                    data-testid={`btn-edit-asset-${asset.id}`}
+                  >
+                    Edit
+                  </button>
+                  <button 
+                    onClick={() => handleDeleteAsset(asset)}
+                    className="bg-white/10 hover:bg-red-500/20 text-gray-400 hover:text-red-400 text-[10px] py-2 px-3 rounded border border-white/10 transition-colors cursor-pointer"
+                    data-testid={`btn-delete-asset-${asset.id}`}
+                  >
+                    <Trash2 className="w-3 h-3" />
+                  </button>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
+
+      {isAssetModalOpen && createPortal(
+        <div className="fixed inset-0 z-[9999] flex items-end sm:items-center justify-center bg-black/80 backdrop-blur-sm animate-in fade-in duration-200">
+          <div className="glass-panel p-5 sm:p-8 max-w-lg w-full border border-white/10 relative rounded-none max-h-[95vh] sm:max-h-[90vh] overflow-y-auto">
             <button 
-              onClick={() => setIsProductModalOpen(false)}
-              className="absolute top-4 right-4 text-gray-500 hover:text-white"
+              onClick={() => setIsAssetModalOpen(false)}
+              className="absolute top-4 right-4 text-gray-500 hover:text-white cursor-pointer"
+              data-testid="btn-close-asset-modal"
             >
               <X className="w-4 h-4" />
             </button>
             
             <h2 className="font-header text-xl text-white mb-6">
-              {productsList.find(p => p.id === editingProduct.id) ? "EDIT PRODUCT" : "NEW PRODUCT"}
+              {editingAsset ? "EDIT ASSET" : "NEW ASSET"}
             </h2>
             
             <div className="space-y-4">
               <div>
-                <label className="block text-[10px] font-mono text-gray-500 mb-2 uppercase">Product Title</label>
+                <label className="block text-[10px] font-mono text-gray-500 mb-2 uppercase">Title</label>
                 <input 
                   type="text" 
-                  value={editingProduct.title}
-                  onChange={(e) => handleProductFormChange("title", e.target.value)}
+                  value={assetForm.title}
+                  onChange={(e) => setAssetForm(prev => ({ ...prev, title: e.target.value }))}
                   className="bg-black/50 border border-white/10 text-white text-xs px-4 py-3 w-full focus:border-neonPurple outline-none uppercase font-bold"
+                  data-testid="input-asset-title"
+                />
+              </div>
+
+              <div>
+                <label className="block text-[10px] font-mono text-gray-500 mb-2 uppercase">Slug</label>
+                <input 
+                  type="text" 
+                  value={assetForm.slug}
+                  onChange={(e) => setAssetForm(prev => ({ ...prev, slug: e.target.value }))}
+                  placeholder="auto-generated-from-title"
+                  className="bg-black/50 border border-white/10 text-white text-xs px-4 py-3 w-full focus:border-neonPurple outline-none font-mono"
+                  data-testid="input-asset-slug"
+                />
+              </div>
+
+              <div>
+                <label className="block text-[10px] font-mono text-gray-500 mb-2 uppercase">Short Description</label>
+                <input 
+                  type="text" 
+                  value={assetForm.shortDescription}
+                  onChange={(e) => setAssetForm(prev => ({ ...prev, shortDescription: e.target.value }))}
+                  className="bg-black/50 border border-white/10 text-white text-xs px-4 py-3 w-full focus:border-neonPurple outline-none"
+                  data-testid="input-asset-short-description"
+                />
+              </div>
+
+              <div>
+                <label className="block text-[10px] font-mono text-gray-500 mb-2 uppercase">Full Description</label>
+                <textarea 
+                  value={assetForm.description}
+                  onChange={(e) => setAssetForm(prev => ({ ...prev, description: e.target.value }))}
+                  rows={3}
+                  className="bg-black/50 border border-white/10 text-white text-xs px-4 py-3 w-full focus:border-neonPurple outline-none resize-none"
+                  data-testid="input-asset-description"
                 />
               </div>
               
@@ -2824,135 +2722,166 @@ export default function AdminDashboard() {
                   <label className="block text-[10px] font-mono text-gray-500 mb-2 uppercase">Price</label>
                   <input 
                     type="text" 
-                    value={editingProduct.price}
-                    onChange={(e) => handleProductFormChange("price", e.target.value)}
+                    value={assetForm.price}
+                    onChange={(e) => setAssetForm(prev => ({ ...prev, price: e.target.value }))}
                     className="bg-black/50 border border-white/10 text-white text-xs px-4 py-3 w-full focus:border-neonPurple outline-none font-mono"
+                    data-testid="input-asset-price"
+                  />
+                </div>
+                <div>
+                  <label className="block text-[10px] font-mono text-gray-500 mb-2 uppercase">Original Price</label>
+                  <input 
+                    type="text" 
+                    value={assetForm.originalPrice}
+                    onChange={(e) => setAssetForm(prev => ({ ...prev, originalPrice: e.target.value }))}
+                    placeholder="Optional strikethrough"
+                    className="bg-black/50 border border-white/10 text-white text-xs px-4 py-3 w-full focus:border-neonPurple outline-none font-mono"
+                    data-testid="input-asset-original-price"
+                  />
+                </div>
+              </div>
+
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-[10px] font-mono text-gray-500 mb-2 uppercase">Category</label>
+                  <input 
+                    type="text" 
+                    value={assetForm.category}
+                    onChange={(e) => setAssetForm(prev => ({ ...prev, category: e.target.value.toUpperCase() }))}
+                    placeholder="e.g. TEXTURES"
+                    className="bg-black/50 border border-white/10 text-white text-xs px-4 py-3 w-full focus:border-neonPurple outline-none font-bold"
+                    data-testid="input-asset-category"
                   />
                 </div>
                 <div>
                   <label className="block text-[10px] font-mono text-gray-500 mb-2 uppercase">Status</label>
                   <select 
-                    value={editingProduct.status}
-                    onChange={(e) => handleProductFormChange("status", e.target.value)}
+                    value={assetForm.status}
+                    onChange={(e) => setAssetForm(prev => ({ ...prev, status: e.target.value }))}
                     className="bg-black/50 border border-white/10 text-white text-xs px-4 py-3 w-full focus:border-neonPurple outline-none appearance-none"
+                    data-testid="select-asset-status"
                   >
-                    <option value="DRAFT">DRAFT</option>
-                    <option value="ACTIVE">ACTIVE</option>
+                    <option value="draft">DRAFT</option>
+                    <option value="published">PUBLISHED</option>
+                    <option value="archived">ARCHIVED</option>
                   </select>
                 </div>
               </div>
 
-              <div>
-                <label className="block text-[10px] font-mono text-gray-500 mb-2 uppercase">Category</label>
-                <div className="flex gap-2">
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-[10px] font-mono text-gray-500 mb-2 uppercase">File Format</label>
+                  <input 
+                    type="text" 
+                    value={assetForm.fileFormat}
+                    onChange={(e) => setAssetForm(prev => ({ ...prev, fileFormat: e.target.value }))}
+                    placeholder="e.g. PNG + JSON"
+                    className="bg-black/50 border border-white/10 text-white text-xs px-4 py-3 w-full focus:border-neonPurple outline-none font-mono"
+                    data-testid="input-asset-file-format"
+                  />
+                </div>
+                <div>
+                  <label className="block text-[10px] font-mono text-gray-500 mb-2 uppercase">File Size</label>
+                  <input 
+                    type="text" 
+                    value={assetForm.fileSize}
+                    onChange={(e) => setAssetForm(prev => ({ ...prev, fileSize: e.target.value }))}
+                    placeholder="e.g. 240MB"
+                    className="bg-black/50 border border-white/10 text-white text-xs px-4 py-3 w-full focus:border-neonPurple outline-none font-mono"
+                    data-testid="input-asset-file-size"
+                  />
+                </div>
+              </div>
+
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-[10px] font-mono text-gray-500 mb-2 uppercase">Badge</label>
+                  <input 
+                    type="text" 
+                    value={assetForm.badge}
+                    onChange={(e) => setAssetForm(prev => ({ ...prev, badge: e.target.value.toUpperCase() }))}
+                    placeholder="e.g. BESTSELLER"
+                    className="bg-black/50 border border-white/10 text-white text-xs px-4 py-3 w-full focus:border-neonPurple outline-none font-bold"
+                    data-testid="input-asset-badge"
+                  />
+                </div>
+                <div>
+                  <label className="block text-[10px] font-mono text-gray-500 mb-2 uppercase">Accent Color</label>
                   <select 
-                    value={editingProduct.category}
-                    onChange={(e) => handleProductFormChange("category", e.target.value)}
-                    className="flex-grow bg-black/50 border border-white/10 text-white text-xs px-4 py-3 focus:border-neonPurple outline-none appearance-none"
+                    value={assetForm.color}
+                    onChange={(e) => setAssetForm(prev => ({ ...prev, color: e.target.value }))}
+                    className="bg-black/50 border border-white/10 text-white text-xs px-4 py-3 w-full focus:border-neonPurple outline-none appearance-none"
+                    data-testid="select-asset-color"
                   >
-                    {categories.map(cat => (
-                      <option key={cat} value={cat}>{cat}</option>
+                    {assetColorOptions.map(opt => (
+                      <option key={opt.value} value={opt.value}>{opt.label}</option>
                     ))}
                   </select>
-                  <button 
-                    onClick={() => setIsCategoryManagerOpen(true)}
-                    className="bg-white/5 border border-white/10 text-white hover:bg-white/10 px-3 flex items-center justify-center transition-colors"
-                    title="Manage Categories"
-                  >
-                    <Edit2 className="w-3 h-3" />
-                  </button>
                 </div>
               </div>
 
               <div>
                 <label className="block text-[10px] font-mono text-gray-500 mb-2 uppercase">Cover Image</label>
-                
                 <div className="flex gap-2 items-stretch">
-                  <div className="flex-grow">
-                    <input 
-                      type="text" 
-                      value={editingProduct.image}
-                      onChange={(e) => handleProductFormChange("image", e.target.value)}
-                      placeholder="https://..."
-                      className="bg-black/50 border border-white/10 text-white text-xs px-4 py-3 w-full focus:border-neonPurple outline-none font-mono"
-                    />
-                  </div>
+                  <input 
+                    type="text" 
+                    value={assetForm.imageUrl}
+                    onChange={(e) => setAssetForm(prev => ({ ...prev, imageUrl: e.target.value }))}
+                    placeholder="https://..."
+                    className="flex-grow bg-black/50 border border-white/10 text-white text-xs px-4 py-3 focus:border-neonPurple outline-none font-mono"
+                    data-testid="input-asset-image-url"
+                  />
                   <div className="relative">
                     <input 
-                        type="file" 
-                        id="product-image-upload" 
-                        className="hidden" 
-                        accept="image/*"
-                        onChange={handleProductImageUpload}
+                      type="file" 
+                      id="asset-image-upload" 
+                      className="hidden" 
+                      accept="image/*"
+                      onChange={(e) => {
+                        if (e.target.files?.[0]) {
+                          uploadAssetImageFile(e.target.files[0]);
+                          e.target.value = '';
+                        }
+                      }}
                     />
                     <label 
-                        htmlFor="product-image-upload"
-                        className="h-full bg-white/5 border border-white/10 text-white hover:bg-white/10 px-4 flex items-center justify-center cursor-pointer transition-colors"
-                        title="Upload Image"
+                      htmlFor="asset-image-upload"
+                      className="h-full bg-white/5 border border-white/10 text-white hover:bg-white/10 px-4 flex items-center justify-center cursor-pointer transition-colors"
                     >
-                        <Plus className="w-4 h-4" />
+                      {isAssetImageUploading ? <span className="text-[10px] font-mono">...</span> : <Upload className="w-4 h-4" />}
                     </label>
                   </div>
                 </div>
-                {editingProduct.image && (
-                  <div 
-                    className={`mt-2 h-40 w-full bg-gray-900 border border-white/5 rounded overflow-hidden relative group cursor-move ${isDragging ? 'border-neonPurple' : ''}`}
-                    onMouseDown={handleMouseDown}
-                    onMouseMove={handleMouseMove}
-                    onMouseUp={handleMouseUp}
-                    onMouseLeave={handleMouseUp}
-                  >
+                {assetForm.imageUrl && (
+                  <div className="mt-2 h-32 w-full bg-gray-900 border border-white/5 rounded overflow-hidden">
                     <div 
-                      className="w-full h-full bg-cover bg-no-repeat"
-                      style={{ 
-                        backgroundImage: `url('${editingProduct.image}')`,
-                        backgroundPosition: `${editingProduct.imagePosition?.x || 50}% ${editingProduct.imagePosition?.y || 50}%`,
-                        transform: `scale(${editingProduct.imagePosition?.zoom || 1})`,
-                        transformOrigin: `${editingProduct.imagePosition?.x || 50}% ${editingProduct.imagePosition?.y || 50}%`, // Focus zoom on the position
-                        opacity: 0.6
-                      }}
+                      className="w-full h-full bg-cover bg-center opacity-60"
+                      style={{ backgroundImage: `url('${assetForm.imageUrl}')` }}
                     />
-                    
-                    {/* Position Controls Overlay */}
-                    <div className="absolute inset-0 flex flex-col justify-between p-4 pointer-events-none">
-                      <div className="flex justify-end gap-2 pointer-events-auto opacity-0 group-hover:opacity-100 transition-opacity">
-                         <button onClick={(e) => { e.preventDefault(); handleImagePositionChange('zoomIn'); }} className="p-2 bg-black/80 text-white hover:bg-neonPurple rounded shadow-lg border border-white/10" title="Zoom In"><ZoomIn className="w-4 h-4" /></button>
-                         <button onClick={(e) => { e.preventDefault(); handleImagePositionChange('zoomOut'); }} className="p-2 bg-black/80 text-white hover:bg-neonPurple rounded shadow-lg border border-white/10" title="Zoom Out"><ZoomOut className="w-4 h-4" /></button>
-                      </div>
-                      
-                      <div className="flex items-center justify-center pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity">
-                         <div className="bg-black/50 p-2 rounded-full border border-white/10 backdrop-blur-sm">
-                            <Move className="w-6 h-6 text-white/80" />
-                         </div>
-                      </div>
-
-                      <div className="flex justify-end pointer-events-none">
-                        <span className="text-[10px] bg-black/50 px-2 py-1 rounded text-white font-mono backdrop-blur-sm border border-white/5">
-                          POS: {Math.round(editingProduct.imagePosition?.x || 50)}% {Math.round(editingProduct.imagePosition?.y || 50)}% • ZOOM: {((editingProduct.imagePosition?.zoom || 1) * 100).toFixed(0)}%
-                        </span>
-                      </div>
-                    </div>
                   </div>
                 )}
               </div>
               
               <div className="pt-4 flex gap-3">
                 <button 
-                  onClick={() => setIsProductModalOpen(false)}
-                  className="flex-1 py-3 text-xs font-header font-bold text-gray-400 bg-white/5 hover:bg-white/10 transition-colors"
+                  onClick={() => setIsAssetModalOpen(false)}
+                  className="flex-1 py-3 text-xs font-header font-bold text-gray-400 bg-white/5 hover:bg-white/10 transition-colors cursor-pointer"
                 >
                   CANCEL
                 </button>
                 <button 
-                  onClick={handleSaveProduct}
-                  className="flex-1 py-3 text-xs font-header font-bold text-white bg-neonPurple hover:bg-white hover:text-black transition-colors"
+                  onClick={handleSaveAsset}
+                  disabled={createAssetMutation.isPending || updateAssetMutation.isPending}
+                  className="flex-1 py-3 text-xs font-header font-bold text-white bg-neonPurple hover:bg-white hover:text-black transition-colors disabled:opacity-50 cursor-pointer"
+                  data-testid="btn-save-asset"
                 >
-                  SAVE PRODUCT
+                  {createAssetMutation.isPending || updateAssetMutation.isPending ? "SAVING..." : "SAVE ASSET"}
                 </button>
               </div>
             </div>
           </div>
-        </div>
+        </div>,
+        document.body
       )}
     </div>
   );

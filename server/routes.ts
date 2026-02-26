@@ -3,7 +3,7 @@ import { createServer, type Server } from "http";
 import { storage } from "./storage";
 import bcrypt from "bcryptjs";
 import { nanoid } from "nanoid";
-import { insertUserSchema, insertEnrollmentSchema, insertLessonProgressSchema, insertOrderSchema, insertOrderItemSchema, insertFeaturedVideoSchema, insertHeroVideoSchema } from "@shared/schema";
+import { insertUserSchema, insertEnrollmentSchema, insertLessonProgressSchema, insertOrderSchema, insertOrderItemSchema, insertFeaturedVideoSchema, insertHeroVideoSchema, insertAssetSchema } from "@shared/schema";
 import { z } from "zod";
 import { sendVerificationEmail, sendPasswordResetEmail } from "./email";
 import { registerObjectStorageRoutes } from "./replit_integrations/object_storage";
@@ -704,7 +704,6 @@ export async function registerRoutes(
   
   // ===== Asset Routes =====
   
-  // Get all assets
   app.get("/api/assets", async (req, res) => {
     try {
       const assets = await storage.getAllAssets();
@@ -714,16 +713,74 @@ export async function registerRoutes(
     }
   });
   
-  // Get single asset
-  app.get("/api/assets/:id", async (req, res) => {
+  app.get("/api/assets/:idOrSlug", async (req, res) => {
     try {
-      const asset = await storage.getAsset(req.params.id);
+      let asset = await storage.getAsset(req.params.idOrSlug);
+      if (!asset) {
+        asset = await storage.getAssetBySlug(req.params.idOrSlug);
+      }
       if (!asset) {
         return res.status(404).json({ message: "Asset not found" });
       }
       res.json({ asset });
     } catch (error) {
       res.status(500).json({ message: "Failed to fetch asset" });
+    }
+  });
+
+  app.post("/api/assets", async (req, res) => {
+    if (!req.session.userId) {
+      return res.status(401).json({ message: "Not authenticated" });
+    }
+    const user = await storage.getUser(req.session.userId);
+    if (!user?.isAdmin) {
+      return res.status(403).json({ message: "Admin access required" });
+    }
+    try {
+      const parsed = insertAssetSchema.parse(req.body);
+      const asset = await storage.createAsset(parsed);
+      res.status(201).json({ asset });
+    } catch (error: any) {
+      if (error?.name === "ZodError") {
+        return res.status(400).json({ message: "Validation failed", errors: error.errors });
+      }
+      res.status(500).json({ message: error.message || "Failed to create asset" });
+    }
+  });
+
+  app.put("/api/assets/:id", async (req, res) => {
+    if (!req.session.userId) {
+      return res.status(401).json({ message: "Not authenticated" });
+    }
+    const user = await storage.getUser(req.session.userId);
+    if (!user?.isAdmin) {
+      return res.status(403).json({ message: "Admin access required" });
+    }
+    try {
+      const existing = await storage.getAsset(req.params.id);
+      if (!existing) {
+        return res.status(404).json({ message: "Asset not found" });
+      }
+      const asset = await storage.updateAsset(req.params.id, req.body);
+      res.json({ asset });
+    } catch (error: any) {
+      res.status(500).json({ message: error.message || "Failed to update asset" });
+    }
+  });
+
+  app.delete("/api/assets/:id", async (req, res) => {
+    if (!req.session.userId) {
+      return res.status(401).json({ message: "Not authenticated" });
+    }
+    const user = await storage.getUser(req.session.userId);
+    if (!user?.isAdmin) {
+      return res.status(403).json({ message: "Admin access required" });
+    }
+    try {
+      await storage.deleteAsset(req.params.id);
+      res.json({ message: "Asset deleted" });
+    } catch (error: any) {
+      res.status(500).json({ message: error.message || "Failed to delete asset" });
     }
   });
   

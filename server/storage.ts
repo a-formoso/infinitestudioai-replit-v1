@@ -86,7 +86,10 @@ export interface IStorage {
   // Asset operations
   getAllAssets(): Promise<Asset[]>;
   getAsset(id: string): Promise<Asset | undefined>;
+  getAssetBySlug(slug: string): Promise<Asset | undefined>;
   createAsset(asset: InsertAsset): Promise<Asset>;
+  updateAsset(id: string, asset: Partial<InsertAsset>): Promise<Asset>;
+  deleteAsset(id: string): Promise<void>;
 
   // Order operations
   getUserOrders(userId: string): Promise<Order[]>;
@@ -364,12 +367,30 @@ export class DatabaseStorage implements IStorage {
     return asset || undefined;
   }
 
+  async getAssetBySlug(slug: string): Promise<Asset | undefined> {
+    const [asset] = await db.select().from(assets).where(eq(assets.slug, slug));
+    return asset || undefined;
+  }
+
   async createAsset(insertAsset: InsertAsset): Promise<Asset> {
     const [asset] = await db
       .insert(assets)
       .values(insertAsset)
       .returning();
     return asset;
+  }
+
+  async updateAsset(id: string, data: Partial<InsertAsset>): Promise<Asset> {
+    const [asset] = await db
+      .update(assets)
+      .set(data)
+      .where(eq(assets.id, id))
+      .returning();
+    return asset;
+  }
+
+  async deleteAsset(id: string): Promise<void> {
+    await db.delete(assets).where(eq(assets.id, id));
   }
 
   // Order operations

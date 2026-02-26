@@ -76,14 +76,19 @@ export const lessonProgress = pgTable("lesson_progress", {
 export const assets = pgTable("assets", {
   id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
   title: text("title").notNull(),
+  slug: text("slug").notNull().unique(),
   description: text("description").notNull(),
+  shortDescription: text("short_description"),
   price: numeric("price", { precision: 10, scale: 2 }).notNull(),
+  originalPrice: numeric("original_price", { precision: 10, scale: 2 }),
   category: text("category").notNull(),
   badge: text("badge"),
   imageUrl: text("image_url"),
   fileFormat: text("file_format").notNull(),
   fileSize: text("file_size"),
   color: text("color").notNull(),
+  status: text("status").notNull().default("published"),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
 });
 
 export const orders = pgTable("orders", {
@@ -134,6 +139,7 @@ export const insertLessonProgressSchema = createInsertSchema(lessonProgress).omi
 
 export const insertAssetSchema = createInsertSchema(assets).omit({
   id: true,
+  createdAt: true,
 });
 
 export const insertOrderSchema = createInsertSchema(orders).omit({
