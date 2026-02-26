@@ -86,37 +86,39 @@ export function Navbar() {
 
               <div className="flex items-center gap-4">
                 {user ? (
-                  <DropdownMenu>
-                    <DropdownMenuTrigger asChild>
-                      <div className="w-10 h-10 rounded-full bg-gray-800 border border-white/20 overflow-hidden relative cursor-pointer hover:border-electricBlue transition-colors" data-testid="avatar-user">
-                           <div className="absolute inset-0 bg-gradient-to-br from-blue-900 to-black"></div>
-                           <span className="absolute inset-0 flex items-center justify-center font-header text-white text-xs">{initials}</span>
-                      </div>
-                    </DropdownMenuTrigger>
-                    <DropdownMenuContent align="end" className="w-48 bg-obsidian border-white/10">
-                      <DropdownMenuItem className="text-gray-400 text-xs font-mono cursor-default focus:bg-transparent">
-                        <User className="mr-2 h-4 w-4" />
-                        {user.username}
-                      </DropdownMenuItem>
-                      <DropdownMenuSeparator className="bg-white/10" />
-                      <DropdownMenuItem 
-                        onClick={() => setLocation("/dashboard")}
-                        className="text-white text-xs font-header cursor-pointer focus:bg-white/10"
-                        data-testid="menu-dashboard"
-                      >
-                        <LayoutDashboard className="mr-2 h-4 w-4" />
-                        Dashboard
-                      </DropdownMenuItem>
-                      <DropdownMenuItem 
-                        onClick={handleLogout}
-                        className="text-red-400 text-xs font-header cursor-pointer focus:bg-white/10 focus:text-red-400"
-                        data-testid="menu-logout"
-                      >
-                        <LogOut className="mr-2 h-4 w-4" />
-                        Logout
-                      </DropdownMenuItem>
-                    </DropdownMenuContent>
-                  </DropdownMenu>
+                  <div className="hidden md:block">
+                    <DropdownMenu>
+                      <DropdownMenuTrigger asChild>
+                        <div className="w-10 h-10 rounded-full bg-gray-800 border border-white/20 overflow-hidden relative cursor-pointer hover:border-electricBlue transition-colors" data-testid="avatar-user">
+                             <div className="absolute inset-0 bg-gradient-to-br from-blue-900 to-black"></div>
+                             <span className="absolute inset-0 flex items-center justify-center font-header text-white text-xs">{initials}</span>
+                        </div>
+                      </DropdownMenuTrigger>
+                      <DropdownMenuContent align="end" className="w-48 bg-obsidian border-white/10">
+                        <DropdownMenuItem className="text-gray-400 text-xs font-mono cursor-default focus:bg-transparent">
+                          <User className="mr-2 h-4 w-4" />
+                          {user.username}
+                        </DropdownMenuItem>
+                        <DropdownMenuSeparator className="bg-white/10" />
+                        <DropdownMenuItem 
+                          onClick={() => setLocation("/dashboard")}
+                          className="text-white text-xs font-header cursor-pointer focus:bg-white/10"
+                          data-testid="menu-dashboard"
+                        >
+                          <LayoutDashboard className="mr-2 h-4 w-4" />
+                          Dashboard
+                        </DropdownMenuItem>
+                        <DropdownMenuItem 
+                          onClick={handleLogout}
+                          className="text-red-400 text-xs font-header cursor-pointer focus:bg-white/10 focus:text-red-400"
+                          data-testid="menu-logout"
+                        >
+                          <LogOut className="mr-2 h-4 w-4" />
+                          Logout
+                        </DropdownMenuItem>
+                      </DropdownMenuContent>
+                    </DropdownMenu>
+                  </div>
                 ) : (
                   <Link href="/login" className="hidden md:inline text-xs font-header font-bold text-gray-400 hover:text-white transition-colors tracking-widest cursor-pointer" data-testid="link-login">LOGIN</Link>
                 )}
