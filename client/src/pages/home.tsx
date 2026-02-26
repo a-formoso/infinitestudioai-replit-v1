@@ -60,7 +60,7 @@ export default function Home() {
     queryFn: getFeaturedVideos,
   });
   const featuredCourses = (coursesData?.data?.courses || []).filter((c: any) => c.status === "published").slice(0, 2);
-  const dbVideos = videosData?.data?.videos || [];
+  const dbVideos = (videosData?.data?.videos || []).filter((v: any) => v.status === "published");
   const projects = dbVideos.length > 0 ? dbVideos : fallbackProjects;
 
   const nextSlide = () => {
