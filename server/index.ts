@@ -15,6 +15,16 @@ process.exit = function (code?: number) {
   return originalExit.call(process, code);
 } as typeof process.exit;
 
+for (const sig of ["SIGTERM", "SIGINT", "SIGHUP", "SIGUSR1", "SIGUSR2"] as const) {
+  process.on(sig, () => {
+    console.error(`Received signal: ${sig}`);
+  });
+}
+
+process.on("beforeExit", (code) => {
+  console.error(`beforeExit with code: ${code}`);
+});
+
 process.on("uncaughtException", (err) => {
   console.error("Uncaught Exception:", err);
 });
@@ -88,7 +98,8 @@ app.use((req, res, next) => {
     if (path.startsWith("/api")) {
       let logLine = `${req.method} ${path} ${res.statusCode} in ${duration}ms`;
       if (capturedJsonResponse) {
-        logLine += ` :: ${JSON.stringify(capturedJsonResponse)}`;
+        const jsonStr = JSON.stringify(capturedJsonResponse);
+        logLine += ` :: ${jsonStr.length > 200 ? jsonStr.substring(0, 200) + '...' : jsonStr}`;
       }
 
       log(logLine);
