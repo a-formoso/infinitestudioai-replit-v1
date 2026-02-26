@@ -3,7 +3,7 @@ import { createServer, type Server } from "http";
 import { storage } from "./storage";
 import bcrypt from "bcryptjs";
 import { nanoid } from "nanoid";
-import { insertUserSchema, insertEnrollmentSchema, insertLessonProgressSchema, insertOrderSchema, insertOrderItemSchema, insertFeaturedVideoSchema } from "@shared/schema";
+import { insertUserSchema, insertEnrollmentSchema, insertLessonProgressSchema, insertOrderSchema, insertOrderItemSchema, insertFeaturedVideoSchema, insertHeroVideoSchema } from "@shared/schema";
 import { z } from "zod";
 import { sendVerificationEmail, sendPasswordResetEmail } from "./email";
 import { registerObjectStorageRoutes } from "./replit_integrations/object_storage";
@@ -895,6 +895,37 @@ export async function registerRoutes(
       res.json({ message: "Featured video deleted" });
     } catch (error) {
       res.status(500).json({ message: "Failed to delete featured video" });
+    }
+  });
+
+  // ===== Hero Video Routes =====
+
+  app.get("/api/hero-video", async (req, res) => {
+    try {
+      const video = await storage.getHeroVideo();
+      res.json({ heroVideo: video || null });
+    } catch (error) {
+      res.status(500).json({ message: "Failed to fetch hero video" });
+    }
+  });
+
+  app.put("/api/hero-video", async (req, res) => {
+    if (!req.session.userId) {
+      return res.status(401).json({ message: "Not authenticated" });
+    }
+    const user = await storage.getUser(req.session.userId);
+    if (!user?.isAdmin) {
+      return res.status(403).json({ message: "Admin access required" });
+    }
+    try {
+      const parsed = insertHeroVideoSchema.parse(req.body);
+      const video = await storage.upsertHeroVideo(parsed);
+      res.json({ heroVideo: video });
+    } catch (error) {
+      if (error instanceof z.ZodError) {
+        return res.status(400).json({ message: "Invalid input", errors: error.errors });
+      }
+      res.status(500).json({ message: "Failed to update hero video" });
     }
   });
 

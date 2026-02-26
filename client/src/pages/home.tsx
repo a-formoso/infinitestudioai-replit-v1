@@ -4,7 +4,7 @@ import { Footer } from "@/components/footer";
 import { Play, ChevronLeft, ChevronRight } from "lucide-react";
 import { Link } from "wouter";
 import { useQuery } from "@tanstack/react-query";
-import { getCourses, getFeaturedVideos } from "@/lib/api";
+import { getCourses, getFeaturedVideos, getHeroVideo } from "@/lib/api";
 
 const fallbackProjects = [
   {
@@ -59,6 +59,11 @@ export default function Home() {
     queryKey: ["featuredVideos"],
     queryFn: getFeaturedVideos,
   });
+  const { data: heroVideoData } = useQuery({
+    queryKey: ["heroVideo"],
+    queryFn: getHeroVideo,
+  });
+  const hero = heroVideoData?.data?.heroVideo;
   const featuredCourses = (coursesData?.data?.courses || []).filter((c: any) => c.status === "published").slice(0, 2);
   const dbVideos = (videosData?.data?.videos || []).filter((v: any) => v.status === "published");
   const projects = dbVideos.length > 0 ? dbVideos : fallbackProjects;
@@ -83,28 +88,38 @@ export default function Home() {
                   
                   {/* MAIN SHOWREEL (Top Left - 60%) */}
                   <div className="md:col-span-8 glass-panel relative overflow-hidden group h-[400px] md:h-full border border-white/10 hover:border-electricBlue/30 transition-colors duration-500">
-                      {/* Placeholder for Video */}
                       <div className="absolute inset-0 bg-gradient-to-br from-gray-900 to-black flex items-center justify-center group-hover:scale-105 transition-transform duration-700">
-                          {/* Simulating a video loop */}
+                          {hero?.thumbnailUrl ? (
+                            <div
+                              className="absolute inset-0 bg-cover bg-center opacity-40 group-hover:opacity-30 transition-opacity duration-500"
+                              style={{ backgroundImage: `url(${hero.thumbnailUrl})` }}
+                            />
+                          ) : null}
+                          {hero?.videoUrl ? (
+                            <video
+                              className="absolute inset-0 w-full h-full object-cover opacity-40 group-hover:opacity-30 transition-opacity duration-500"
+                              src={hero.videoUrl}
+                              autoPlay
+                              muted
+                              loop
+                              playsInline
+                            />
+                          ) : null}
                           <div className="text-center opacity-30 group-hover:opacity-50 transition-opacity duration-500">
                               <div className="text-6xl mb-4 text-electricBlue animate-pulse">▶</div>
-                              <p className="font-header tracking-widest text-xs md:text-sm">SHOWREEL_2025.MP4</p>
+                              <p className="font-header tracking-widest text-xs md:text-sm">{hero?.overlayText || "SHOWREEL_2025.MP4"}</p>
                           </div>
-                          {/* Decorative UI elements mimicking software */}
                           <div className="absolute top-4 left-4 text-[10px] font-mono text-electricBlue flex items-center gap-2">
                               <div className="w-2 h-2 bg-red-500 rounded-full animate-ping"></div> REC ● [00:01:24:12]
                           </div>
-                          <div className="absolute bottom-4 right-4 text-[10px] font-mono text-white opacity-50">VEO 3.1 RENDER</div>
+                          <div className="absolute bottom-4 right-4 text-[10px] font-mono text-white opacity-50">{hero?.badgeText || "VEO 3.1 RENDER"}</div>
                           <div className="absolute inset-0 border border-white/5 m-4 pointer-events-none"></div>
-                          
-                           {/* Scanlines Overlay */}
                           <div className="absolute inset-0 bg-[linear-gradient(rgba(18,16,16,0)_50%,rgba(0,0,0,0.25)_50%),linear-gradient(90deg,rgba(255,0,0,0.06),rgba(0,255,0,0.02),rgba(0,0,255,0.06))] z-10 bg-[length:100%_2px,3px_100%] pointer-events-none opacity-20"></div>
                       </div>
                       
-                      {/* Overlay Text */}
                       <div className="absolute bottom-0 left-0 p-8 md:p-12 z-20">
                           <h1 className="font-header text-4xl md:text-6xl font-bold text-white leading-tight glitch-hover cursor-default drop-shadow-lg">
-                              DIRECT THE<br /><span className="text-transparent bg-clip-text bg-gradient-to-r from-electricBlue to-purple-600">ALGORITHM</span>
+                              {hero?.title || "DIRECT THE"}<br /><span className="text-transparent bg-clip-text bg-gradient-to-r from-electricBlue to-purple-600">{hero?.subtitle || "ALGORITHM"}</span>
                           </h1>
                       </div>
                   </div>

@@ -52,6 +52,7 @@ Preferred communication style: Simple, everyday language.
   - `order_items` — individual items within orders
   - `site_content` — page-level editable content (page, key, value) with unique constraint on (page, key). Allows admins to edit text directly on live pages.
   - `featured_videos` — id (UUID), title, category, description, thumbnailUrl, videoUrl, duration, year, accentColor, sortOrder, status, createdAt. Managed by admins via the "Videos" tab in the admin dashboard. Displayed on the homepage Production carousel.
+  - `hero_video` — id (UUID), title, subtitle, videoUrl, thumbnailUrl, overlayText, badgeText, isActive, updatedAt. Single-row table for the homepage hero section showreel. Managed by admins via "EDIT HERO" button in the Videos tab. Upsert pattern (only one row).
 - **Validation**: Zod schemas auto-generated from Drizzle schema via `drizzle-zod` (`createInsertSchema`)
 - **Seeding**: `server/seed.ts` contains seed data for courses, lessons, and assets — needs to be run to populate the database
 

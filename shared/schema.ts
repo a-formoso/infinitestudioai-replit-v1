@@ -165,6 +165,23 @@ export const insertFeaturedVideoSchema = createInsertSchema(featuredVideos).omit
   createdAt: true,
 });
 
+export const heroVideo = pgTable("hero_video", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  title: text("title").notNull(),
+  subtitle: text("subtitle").notNull(),
+  videoUrl: text("video_url"),
+  thumbnailUrl: text("thumbnail_url"),
+  overlayText: text("overlay_text"),
+  badgeText: text("badge_text"),
+  isActive: boolean("is_active").notNull().default(true),
+  updatedAt: timestamp("updated_at").defaultNow().notNull(),
+});
+
+export const insertHeroVideoSchema = createInsertSchema(heroVideo).omit({
+  id: true,
+  updatedAt: true,
+});
+
 export type InsertUser = z.infer<typeof insertUserSchema>;
 export type User = typeof users.$inferSelect;
 
@@ -194,4 +211,7 @@ export type OrderItem = typeof orderItems.$inferSelect;
 
 export type InsertFeaturedVideo = z.infer<typeof insertFeaturedVideoSchema>;
 export type FeaturedVideo = typeof featuredVideos.$inferSelect;
+
+export type InsertHeroVideo = z.infer<typeof insertHeroVideoSchema>;
+export type HeroVideo = typeof heroVideo.$inferSelect;
 

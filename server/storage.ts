@@ -9,6 +9,7 @@ import {
   orders,
   orderItems,
   featuredVideos,
+  heroVideo,
   type User,
   type InsertUser,
   type Course,
@@ -29,6 +30,8 @@ import {
   type InsertOrderItem,
   type FeaturedVideo,
   type InsertFeaturedVideo,
+  type HeroVideo,
+  type InsertHeroVideo,
 } from "@shared/schema";
 import { db } from "./db";
 import { eq, and, sql, desc } from "drizzle-orm";
@@ -99,6 +102,10 @@ export interface IStorage {
   createFeaturedVideo(video: InsertFeaturedVideo): Promise<FeaturedVideo>;
   updateFeaturedVideo(id: string, data: Partial<InsertFeaturedVideo>): Promise<FeaturedVideo | undefined>;
   deleteFeaturedVideo(id: string): Promise<boolean>;
+
+  // Hero video operations
+  getHeroVideo(): Promise<HeroVideo | undefined>;
+  upsertHeroVideo(data: InsertHeroVideo): Promise<HeroVideo>;
 
 }
 
@@ -429,6 +436,21 @@ export class DatabaseStorage implements IStorage {
   async deleteFeaturedVideo(id: string): Promise<boolean> {
     const result = await db.delete(featuredVideos).where(eq(featuredVideos.id, id)).returning();
     return result.length > 0;
+  }
+
+  async getHeroVideo(): Promise<HeroVideo | undefined> {
+    const [video] = await db.select().from(heroVideo).where(eq(heroVideo.isActive, true)).limit(1);
+    return video || undefined;
+  }
+
+  async upsertHeroVideo(data: InsertHeroVideo): Promise<HeroVideo> {
+    const existing = await db.select().from(heroVideo).limit(1);
+    if (existing.length > 0) {
+      const [updated] = await db.update(heroVideo).set({ ...data, updatedAt: new Date() }).where(eq(heroVideo.id, existing[0].id)).returning();
+      return updated;
+    }
+    const [created] = await db.insert(heroVideo).values(data).returning();
+    return created;
   }
 
 }

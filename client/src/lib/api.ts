@@ -199,6 +199,18 @@ export async function deleteFeaturedVideo(id: string) {
   });
 }
 
+// Hero Video
+export async function getHeroVideo() {
+  return apiFetch<{ heroVideo: any }>('/hero-video');
+}
+
+export async function updateHeroVideo(data: Record<string, any>) {
+  return apiFetch<{ heroVideo: any }>('/hero-video', {
+    method: 'PUT',
+    body: JSON.stringify(data),
+  });
+}
+
 // Assets
 export async function getAssets() {
   return apiFetch<{ assets: any[] }>('/assets');

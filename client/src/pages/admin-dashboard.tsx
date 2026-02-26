@@ -7,7 +7,7 @@ import PipelineContent from "./pipeline";
 import { Navbar } from "@/components/navbar";
 import { Footer } from "@/components/footer";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { getCourses, createCourse as apiCreateCourse, updateCourse as apiUpdateCourse, deleteCourse as apiDeleteCourse, getCourseTiers, createCourseTier as apiCreateCourseTier, updateCourseTier as apiUpdateCourseTier, deleteCourseTier as apiDeleteCourseTier, getCourseBySlug, saveCourseLessons, getFeaturedVideos, createFeaturedVideo as apiCreateFeaturedVideo, updateFeaturedVideo as apiUpdateFeaturedVideo, deleteFeaturedVideo as apiDeleteFeaturedVideo } from "@/lib/api";
+import { getCourses, createCourse as apiCreateCourse, updateCourse as apiUpdateCourse, deleteCourse as apiDeleteCourse, getCourseTiers, createCourseTier as apiCreateCourseTier, updateCourseTier as apiUpdateCourseTier, deleteCourseTier as apiDeleteCourseTier, getCourseBySlug, saveCourseLessons, getFeaturedVideos, createFeaturedVideo as apiCreateFeaturedVideo, updateFeaturedVideo as apiUpdateFeaturedVideo, deleteFeaturedVideo as apiDeleteFeaturedVideo, getHeroVideo, updateHeroVideo as apiUpdateHeroVideo } from "@/lib/api";
 import { useUpload } from "@/hooks/use-upload";
 
 const INITIAL_LESSONS = {
@@ -300,6 +300,71 @@ export default function AdminDashboard() {
 
   const handleDeleteFeaturedVideo = async (id: string) => {
     await deleteFeaturedVideoMutation.mutateAsync(id);
+  };
+
+  const { data: heroVideoData } = useQuery({
+    queryKey: ["heroVideo"],
+    queryFn: getHeroVideo,
+  });
+  const dbHeroVideo = heroVideoData?.data?.heroVideo || null;
+
+  const updateHeroVideoMutation = useMutation({
+    mutationFn: (data: Record<string, any>) => apiUpdateHeroVideo(data),
+    onSuccess: () => { queryClient.invalidateQueries({ queryKey: ["heroVideo"] }); },
+  });
+
+  const [isHeroVideoModalOpen, setIsHeroVideoModalOpen] = useState(false);
+  const [heroVideoForm, setHeroVideoForm] = useState({
+    title: "DIRECT THE",
+    subtitle: "ALGORITHM",
+    videoUrl: "",
+    thumbnailUrl: "",
+    overlayText: "SHOWREEL_2025.MP4",
+    badgeText: "VEO 3.1 RENDER",
+    isActive: true,
+  });
+
+  const { uploadFile: uploadHeroThumbnailFile, isUploading: isHeroThumbnailUploading } = useUpload({
+    onSuccess: (response) => {
+      setHeroVideoForm(prev => ({ ...prev, thumbnailUrl: response.objectPath }));
+    },
+  });
+
+  const { uploadFile: uploadHeroVideoFile, isUploading: isHeroVideoUploading } = useUpload({
+    onSuccess: (response) => {
+      setHeroVideoForm(prev => ({ ...prev, videoUrl: response.objectPath }));
+    },
+  });
+
+  const handleOpenHeroVideoModal = () => {
+    if (dbHeroVideo) {
+      setHeroVideoForm({
+        title: dbHeroVideo.title || "DIRECT THE",
+        subtitle: dbHeroVideo.subtitle || "ALGORITHM",
+        videoUrl: dbHeroVideo.videoUrl || "",
+        thumbnailUrl: dbHeroVideo.thumbnailUrl || "",
+        overlayText: dbHeroVideo.overlayText || "SHOWREEL_2025.MP4",
+        badgeText: dbHeroVideo.badgeText || "VEO 3.1 RENDER",
+        isActive: dbHeroVideo.isActive ?? true,
+      });
+    } else {
+      setHeroVideoForm({
+        title: "DIRECT THE",
+        subtitle: "ALGORITHM",
+        videoUrl: "",
+        thumbnailUrl: "",
+        overlayText: "SHOWREEL_2025.MP4",
+        badgeText: "VEO 3.1 RENDER",
+        isActive: true,
+      });
+    }
+    setIsHeroVideoModalOpen(true);
+  };
+
+  const handleSaveHeroVideo = async () => {
+    if (!heroVideoForm.title || !heroVideoForm.subtitle) return;
+    await updateHeroVideoMutation.mutateAsync(heroVideoForm);
+    setIsHeroVideoModalOpen(false);
   };
 
   const [studentsList, setStudentsList] = useState<Student[]>([
@@ -3084,7 +3149,57 @@ export default function AdminDashboard() {
   ];
 
   const renderFeaturedVideos = () => (
-    <div className="relative z-10 space-y-6">
+    <div className="relative z-10 space-y-10">
+      <div className="space-y-4">
+        <div>
+          <h1 className="text-xl sm:text-2xl font-header font-bold text-white tracking-widest" data-testid="heading-hero-video">HERO VIDEO</h1>
+          <p className="text-xs text-gray-500 font-mono mt-1">Configure the main showreel displayed in the homepage hero section.</p>
+        </div>
+
+        <div className="glass-panel border border-white/10 hover:border-electricBlue/30 transition-colors p-4 flex flex-col sm:flex-row gap-4 items-start sm:items-center" data-testid="hero-video-card">
+          <div className="w-full sm:w-64 h-36 bg-gray-900 relative overflow-hidden flex-shrink-0 border border-white/5">
+            {dbHeroVideo?.thumbnailUrl ? (
+              <div
+                className="w-full h-full bg-cover bg-center opacity-70"
+                style={{ backgroundImage: `url(${dbHeroVideo.thumbnailUrl})` }}
+              />
+            ) : (
+              <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-gray-900 to-black">
+                <div className="text-center opacity-50">
+                  <div className="text-3xl mb-2 text-electricBlue">▶</div>
+                  <p className="font-header tracking-widest text-[10px] text-gray-500">{dbHeroVideo?.overlayText || "SHOWREEL_2025.MP4"}</p>
+                </div>
+              </div>
+            )}
+            <div className="absolute top-2 left-2 text-[10px] font-mono text-electricBlue flex items-center gap-1">
+              <div className="w-1.5 h-1.5 bg-red-500 rounded-full"></div> REC
+            </div>
+            <div className="absolute bottom-2 right-2 text-[10px] font-mono text-white/50">{dbHeroVideo?.badgeText || "VEO 3.1 RENDER"}</div>
+          </div>
+
+          <div className="flex-grow min-w-0">
+            <h3 className="font-header text-lg text-white mb-1">
+              {dbHeroVideo?.title || "DIRECT THE"} <span className="text-transparent bg-clip-text bg-gradient-to-r from-electricBlue to-purple-600">{dbHeroVideo?.subtitle || "ALGORITHM"}</span>
+            </h3>
+            <div className="space-y-1 mt-2">
+              <p className="text-[10px] text-gray-500 font-mono">Overlay: {dbHeroVideo?.overlayText || "SHOWREEL_2025.MP4"}</p>
+              <p className="text-[10px] text-gray-500 font-mono">Badge: {dbHeroVideo?.badgeText || "VEO 3.1 RENDER"}</p>
+              <p className="text-[10px] text-gray-500 font-mono">Video: {dbHeroVideo?.videoUrl ? "Uploaded" : "No video file"}</p>
+              <p className="text-[10px] text-gray-500 font-mono">Status: {dbHeroVideo?.isActive !== false ? "Active" : "Inactive"}</p>
+            </div>
+          </div>
+
+          <button
+            onClick={handleOpenHeroVideoModal}
+            className="bg-electricBlue text-white px-4 py-2 text-xs font-header font-bold flex items-center gap-2 hover:bg-white hover:text-black transition-colors flex-shrink-0"
+            data-testid="btn-edit-hero-video"
+          >
+            <Edit2 className="w-3 h-3" /> EDIT HERO
+          </button>
+        </div>
+      </div>
+
+      <div className="border-t border-white/10 pt-8 space-y-6">
       <div className="flex flex-col sm:flex-row justify-between sm:items-center gap-4">
         <div>
           <h1 className="text-xl sm:text-2xl font-header font-bold text-white tracking-widest" data-testid="heading-featured-videos">FEATURED VIDEOS</h1>
@@ -3177,6 +3292,7 @@ export default function AdminDashboard() {
           })}
         </div>
       )}
+      </div>
 
     </div>
   );
@@ -3473,6 +3589,180 @@ export default function AdminDashboard() {
                   data-testid="btn-save-video"
                 >
                   {editingFeaturedVideo ? "UPDATE VIDEO" : "ADD VIDEO"}
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>,
+        document.body
+      )}
+
+      {isHeroVideoModalOpen && createPortal(
+        <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/80 backdrop-blur-sm animate-in fade-in duration-200 p-4">
+          <div className="bg-[#0a0a0a] border border-white/10 p-6 max-w-lg w-full shadow-2xl relative max-h-[90vh] overflow-y-auto">
+            <button
+              onClick={() => setIsHeroVideoModalOpen(false)}
+              className="absolute top-4 right-4 text-gray-500 hover:text-white"
+              data-testid="btn-close-hero-modal"
+            >
+              <X className="w-4 h-4" />
+            </button>
+
+            <h3 className="font-header text-lg text-white mb-6">EDIT HERO VIDEO</h3>
+
+            <div className="space-y-4">
+              <div className="grid grid-cols-2 gap-3">
+                <div>
+                  <label className="block text-[10px] font-mono text-gray-500 uppercase mb-1">Title Line 1 *</label>
+                  <input
+                    type="text"
+                    value={heroVideoForm.title}
+                    onChange={(e) => setHeroVideoForm(prev => ({ ...prev, title: e.target.value }))}
+                    placeholder="e.g. DIRECT THE"
+                    className="bg-black/50 border border-white/10 text-white text-xs px-4 py-3 w-full focus:border-electricBlue outline-none font-mono"
+                    data-testid="input-hero-title"
+                  />
+                </div>
+                <div>
+                  <label className="block text-[10px] font-mono text-gray-500 uppercase mb-1">Title Line 2 (Gradient) *</label>
+                  <input
+                    type="text"
+                    value={heroVideoForm.subtitle}
+                    onChange={(e) => setHeroVideoForm(prev => ({ ...prev, subtitle: e.target.value }))}
+                    placeholder="e.g. ALGORITHM"
+                    className="bg-black/50 border border-white/10 text-white text-xs px-4 py-3 w-full focus:border-electricBlue outline-none font-mono"
+                    data-testid="input-hero-subtitle"
+                  />
+                </div>
+              </div>
+
+              <div className="grid grid-cols-2 gap-3">
+                <div>
+                  <label className="block text-[10px] font-mono text-gray-500 uppercase mb-1">Overlay Text</label>
+                  <input
+                    type="text"
+                    value={heroVideoForm.overlayText}
+                    onChange={(e) => setHeroVideoForm(prev => ({ ...prev, overlayText: e.target.value }))}
+                    placeholder="e.g. SHOWREEL_2025.MP4"
+                    className="bg-black/50 border border-white/10 text-white text-xs px-4 py-3 w-full focus:border-electricBlue outline-none font-mono"
+                    data-testid="input-hero-overlay"
+                  />
+                </div>
+                <div>
+                  <label className="block text-[10px] font-mono text-gray-500 uppercase mb-1">Badge Text</label>
+                  <input
+                    type="text"
+                    value={heroVideoForm.badgeText}
+                    onChange={(e) => setHeroVideoForm(prev => ({ ...prev, badgeText: e.target.value }))}
+                    placeholder="e.g. VEO 3.1 RENDER"
+                    className="bg-black/50 border border-white/10 text-white text-xs px-4 py-3 w-full focus:border-electricBlue outline-none font-mono"
+                    data-testid="input-hero-badge"
+                  />
+                </div>
+              </div>
+
+              <div>
+                <label className="block text-[10px] font-mono text-gray-500 uppercase mb-1">Thumbnail / Background Image</label>
+                <div className="flex gap-2">
+                  <input
+                    type="text"
+                    value={heroVideoForm.thumbnailUrl}
+                    onChange={(e) => setHeroVideoForm(prev => ({ ...prev, thumbnailUrl: e.target.value }))}
+                    placeholder="Paste URL or upload..."
+                    className="bg-black/50 border border-white/10 text-white text-xs px-4 py-3 flex-1 focus:border-electricBlue outline-none font-mono"
+                    data-testid="input-hero-thumbnail"
+                  />
+                  <div className="relative">
+                    <input
+                      type="file"
+                      id="hero-thumbnail-upload"
+                      className="hidden"
+                      accept="image/*"
+                      onChange={(e) => {
+                        const file = e.target.files?.[0];
+                        if (file) uploadHeroThumbnailFile(file);
+                      }}
+                    />
+                    <label
+                      htmlFor="hero-thumbnail-upload"
+                      className={`h-full bg-white/5 border border-white/10 text-white hover:bg-white/10 px-4 flex items-center justify-center cursor-pointer transition-colors ${isHeroThumbnailUploading ? 'opacity-50' : ''}`}
+                      data-testid="btn-upload-hero-thumbnail"
+                    >
+                      <Upload className="w-4 h-4" />
+                    </label>
+                  </div>
+                </div>
+                {heroVideoForm.thumbnailUrl && (
+                  <div className="mt-2 h-32 w-full bg-gray-900 border border-white/5 overflow-hidden">
+                    <div
+                      className="w-full h-full bg-cover bg-center opacity-70"
+                      style={{ backgroundImage: `url(${heroVideoForm.thumbnailUrl})` }}
+                    />
+                  </div>
+                )}
+              </div>
+
+              <div>
+                <label className="block text-[10px] font-mono text-gray-500 uppercase mb-1">Video URL</label>
+                <div className="flex gap-2">
+                  <input
+                    type="text"
+                    value={heroVideoForm.videoUrl}
+                    onChange={(e) => setHeroVideoForm(prev => ({ ...prev, videoUrl: e.target.value }))}
+                    placeholder="Video file URL or upload..."
+                    className="bg-black/50 border border-white/10 text-white text-xs px-4 py-3 flex-1 focus:border-electricBlue outline-none font-mono"
+                    data-testid="input-hero-video-url"
+                  />
+                  <div className="relative">
+                    <input
+                      type="file"
+                      id="hero-video-upload"
+                      className="hidden"
+                      accept="video/*"
+                      onChange={(e) => {
+                        const file = e.target.files?.[0];
+                        if (file) uploadHeroVideoFile(file);
+                      }}
+                    />
+                    <label
+                      htmlFor="hero-video-upload"
+                      className={`h-full bg-white/5 border border-white/10 text-white hover:bg-white/10 px-4 flex items-center justify-center cursor-pointer transition-colors ${isHeroVideoUploading ? 'opacity-50' : ''}`}
+                      data-testid="btn-upload-hero-video"
+                    >
+                      <Upload className="w-4 h-4" />
+                    </label>
+                  </div>
+                </div>
+              </div>
+
+              <div>
+                <label className="block text-[10px] font-mono text-gray-500 uppercase mb-1">Status</label>
+                <select
+                  value={heroVideoForm.isActive ? "active" : "inactive"}
+                  onChange={(e) => setHeroVideoForm(prev => ({ ...prev, isActive: e.target.value === "active" }))}
+                  className="bg-black/50 border border-white/10 text-white text-xs px-4 py-3 w-full focus:border-electricBlue outline-none"
+                  data-testid="select-hero-status"
+                >
+                  <option value="active">Active</option>
+                  <option value="inactive">Inactive</option>
+                </select>
+              </div>
+
+              <div className="pt-4 flex gap-3">
+                <button
+                  onClick={() => setIsHeroVideoModalOpen(false)}
+                  className="flex-1 py-3 text-xs font-header font-bold text-gray-400 bg-white/5 hover:bg-white/10 transition-colors"
+                  data-testid="btn-cancel-hero"
+                >
+                  CANCEL
+                </button>
+                <button
+                  onClick={handleSaveHeroVideo}
+                  disabled={!heroVideoForm.title || !heroVideoForm.subtitle}
+                  className="flex-1 py-3 text-xs font-header font-bold text-white bg-electricBlue hover:bg-white hover:text-black transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                  data-testid="btn-save-hero"
+                >
+                  SAVE HERO VIDEO
                 </button>
               </div>
             </div>
