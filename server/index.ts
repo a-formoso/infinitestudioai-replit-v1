@@ -6,25 +6,6 @@ import session from "express-session";
 import { pool } from "./db";
 import connectPg from "connect-pg-simple";
 
-const originalExit = process.exit;
-process.exit = function (code?: number) {
-  if (code !== 0) {
-    console.error(`process.exit(${code}) called, stack:`, new Error().stack);
-    return undefined as never;
-  }
-  return originalExit.call(process, code);
-} as typeof process.exit;
-
-for (const sig of ["SIGTERM", "SIGINT", "SIGHUP", "SIGUSR1", "SIGUSR2"] as const) {
-  process.on(sig, () => {
-    console.error(`Received signal: ${sig}`);
-  });
-}
-
-process.on("beforeExit", (code) => {
-  console.error(`beforeExit with code: ${code}`);
-});
-
 process.on("uncaughtException", (err) => {
   console.error("Uncaught Exception:", err);
 });
