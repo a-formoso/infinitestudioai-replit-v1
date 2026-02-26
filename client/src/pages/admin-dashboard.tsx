@@ -3261,7 +3261,6 @@ export default function AdminDashboard() {
     { id: "featured", label: "VIDEOS", icon: Film },
     { id: "students", label: "STUDENTS", icon: Users },
     { id: "store", label: "ASSETS", icon: ShoppingBag },
-    { id: "analytics", label: "ANALYTICS", icon: BarChart2 },
     { id: "pipeline", label: "PIPELINE", icon: Workflow },
   ];
 
@@ -3319,7 +3318,6 @@ export default function AdminDashboard() {
           {activeTab === "featured" && renderFeaturedVideos()}
           {activeTab === "students" && renderStudents()}
           {activeTab === "store" && renderAssetStore()}
-          {activeTab === "analytics" && renderAnalytics()}
           {activeTab === "pipeline" && <PipelineContent />}
         </div>
 
