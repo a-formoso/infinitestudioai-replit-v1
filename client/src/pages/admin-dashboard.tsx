@@ -3428,31 +3428,6 @@ export default function AdminDashboard() {
             <div className="space-y-4">
               <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <label className="block text-[10px] font-mono text-gray-500 uppercase mb-1">Title Line 1 *</label>
-                  <input
-                    type="text"
-                    value={heroVideoForm.title}
-                    onChange={(e) => setHeroVideoForm(prev => ({ ...prev, title: e.target.value }))}
-                    placeholder="e.g. DIRECT THE"
-                    className="bg-black/50 border border-white/10 text-white text-xs px-4 py-3 w-full focus:border-electricBlue outline-none font-mono"
-                    data-testid="input-hero-title"
-                  />
-                </div>
-                <div>
-                  <label className="block text-[10px] font-mono text-gray-500 uppercase mb-1">Title Line 2 (Gradient) *</label>
-                  <input
-                    type="text"
-                    value={heroVideoForm.subtitle}
-                    onChange={(e) => setHeroVideoForm(prev => ({ ...prev, subtitle: e.target.value }))}
-                    placeholder="e.g. ALGORITHM"
-                    className="bg-black/50 border border-white/10 text-white text-xs px-4 py-3 w-full focus:border-electricBlue outline-none font-mono"
-                    data-testid="input-hero-subtitle"
-                  />
-                </div>
-              </div>
-
-              <div className="grid grid-cols-2 gap-3">
-                <div>
                   <label className="block text-[10px] font-mono text-gray-500 uppercase mb-1">Overlay Text</label>
                   <input
                     type="text"
@@ -3573,7 +3548,7 @@ export default function AdminDashboard() {
                 </button>
                 <button
                   onClick={handleSaveHeroVideo}
-                  disabled={!heroVideoForm.title || !heroVideoForm.subtitle}
+                  disabled={false}
                   className="flex-1 py-3 text-xs font-header font-bold text-white bg-electricBlue hover:bg-white hover:text-black transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                   data-testid="btn-save-hero"
                 >
