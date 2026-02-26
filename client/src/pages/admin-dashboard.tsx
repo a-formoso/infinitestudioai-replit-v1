@@ -2984,23 +2984,18 @@ export default function AdminDashboard() {
               <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-gray-900 to-black">
                 <div className="text-center opacity-50">
                   <div className="text-3xl mb-2 text-electricBlue">▶</div>
-                  <p className="font-header tracking-widest text-[10px] text-gray-500">{dbHeroVideo?.overlayText || "SHOWREEL_2025.MP4"}</p>
                 </div>
               </div>
             )}
             <div className="absolute top-2 left-2 text-[10px] font-mono text-electricBlue flex items-center gap-1">
               <div className="w-1.5 h-1.5 bg-red-500 rounded-full"></div> REC
             </div>
-            <div className="absolute bottom-2 right-2 text-[10px] font-mono text-white/50">{dbHeroVideo?.badgeText || "VEO 3.1 RENDER"}</div>
           </div>
 
           <div className="flex-grow min-w-0">
-            <h3 className="font-header text-lg text-white mb-1">
-              {dbHeroVideo?.title || "DIRECT THE"} <span className="text-transparent bg-clip-text bg-gradient-to-r from-electricBlue to-purple-600">{dbHeroVideo?.subtitle || "ALGORITHM"}</span>
-            </h3>
+            <h3 className="font-header text-lg text-white mb-1">HERO SHOWREEL</h3>
             <div className="space-y-1 mt-2">
-              <p className="text-[10px] text-gray-500 font-mono">Overlay: {dbHeroVideo?.overlayText || "SHOWREEL_2025.MP4"}</p>
-              <p className="text-[10px] text-gray-500 font-mono">Badge: {dbHeroVideo?.badgeText || "VEO 3.1 RENDER"}</p>
+              <p className="text-[10px] text-gray-500 font-mono">Thumbnail: {dbHeroVideo?.thumbnailUrl ? "Uploaded" : "No image"}</p>
               <p className="text-[10px] text-gray-500 font-mono">Video: {dbHeroVideo?.videoUrl ? "Uploaded" : "No video file"}</p>
               <p className="text-[10px] text-gray-500 font-mono">Status: {dbHeroVideo?.isActive !== false ? "Active" : "Inactive"}</p>
             </div>
