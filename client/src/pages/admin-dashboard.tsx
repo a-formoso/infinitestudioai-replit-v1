@@ -3178,8 +3178,120 @@ export default function AdminDashboard() {
         </div>
       )}
 
-      {isFeaturedVideoModalOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm animate-in fade-in duration-200 p-4">
+    </div>
+  );
+
+  const tabs = [
+    { id: "dashboard", label: "OVERVIEW", icon: LayoutDashboard },
+    { id: "courses", label: "COURSES", icon: BookOpen },
+    { id: "featured", label: "VIDEOS", icon: Film },
+    { id: "students", label: "STUDENTS", icon: Users },
+    { id: "store", label: "ASSETS", icon: ShoppingBag },
+    { id: "analytics", label: "ANALYTICS", icon: BarChart2 },
+    { id: "pipeline", label: "PIPELINE", icon: Workflow },
+  ];
+
+  return (
+    <div className="min-h-screen bg-obsidian text-offWhite font-body antialiased selection:bg-electricBlue selection:text-white overflow-x-hidden flex flex-col">
+      
+      <div className="fixed inset-0 bg-grid-pattern bg-[size:40px_40px] opacity-20 pointer-events-none z-0"></div>
+
+      <Navbar />
+
+      <main className="flex-grow pt-24 sm:pt-32 pb-20 px-3 sm:px-6 max-w-7xl mx-auto w-full z-10">
+        
+        <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-8 gap-4">
+          <div>
+            <div className="flex items-center gap-3 mb-2">
+              <span className="text-electricBlue text-xl font-header">∞</span>
+              <h1 className="font-header text-3xl md:text-4xl text-white">ADMIN PANEL</h1>
+            </div>
+            <p className="text-sm text-gray-400 font-mono">System management and content control.</p>
+          </div>
+        </div>
+
+        <div className="flex gap-0.5 sm:gap-1 mb-6 sm:mb-8 border-b border-white/10 overflow-x-auto no-scrollbar">
+          {tabs.map((tab) => {
+            const Icon = tab.icon;
+            return (
+              <button
+                key={tab.id}
+                onClick={() => {
+                  setActiveTab(tab.id);
+                  if (tab.id === "courses") setCourseView("list");
+                }}
+                data-testid={`tab-${tab.id}`}
+                className={`flex items-center gap-1.5 sm:gap-2 px-2.5 sm:px-5 py-2.5 sm:py-3 text-[10px] sm:text-xs font-header font-bold whitespace-nowrap border-b-2 transition-colors ${
+                  activeTab === tab.id
+                    ? "text-white border-electricBlue"
+                    : "text-gray-500 hover:text-white border-transparent hover:border-white/20"
+                }`}
+              >
+                <Icon className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
+                <span className="hidden sm:inline">{tab.label}</span>
+                <span className="sm:hidden">{tab.label.slice(0, 4)}</span>
+              </button>
+            );
+          })}
+        </div>
+
+        <div className={`${activeTab === "pipeline" ? "flex flex-col" : ""}`}>
+          {activeTab === "dashboard" && renderDashboard()}
+          {activeTab === "courses" && (
+            courseView === "list" ? renderCourseList() : 
+            courseView === "preview" ? renderCoursePreview() : 
+            renderCourseEditor()
+          )}
+          {activeTab === "featured" && renderFeaturedVideos()}
+          {activeTab === "students" && renderStudents()}
+          {activeTab === "store" && renderAssetStore()}
+          {activeTab === "analytics" && renderAnalytics()}
+          {activeTab === "pipeline" && <PipelineContent />}
+        </div>
+
+        {deleteConfirmation?.isOpen && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm animate-in fade-in duration-200">
+            <div className="bg-[#0a0a0a] border border-white/10 p-6 max-w-sm w-full shadow-2xl relative">
+              <button 
+                onClick={() => setDeleteConfirmation(null)}
+                className="absolute top-4 right-4 text-gray-500 hover:text-white"
+              >
+                <X className="w-4 h-4" />
+              </button>
+              
+              <div className="flex flex-col items-center text-center mb-6">
+                <div className="w-12 h-12 bg-red-500/10 rounded-full flex items-center justify-center mb-4 text-red-500 border border-red-500/20">
+                  <Trash2 className="w-6 h-6" />
+                </div>
+                <h3 className="font-header text-lg text-white mb-2">CONFIRM DELETION</h3>
+                <p className="text-xs font-mono text-gray-400">
+                  Are you sure you want to delete <span className="text-white font-bold">"{deleteConfirmation.title}"</span>? This action cannot be undone.
+                </p>
+              </div>
+
+              <div className="flex gap-3">
+                <button 
+                  onClick={() => setDeleteConfirmation(null)}
+                  className="flex-1 py-3 text-xs font-header font-bold text-gray-400 bg-white/5 hover:bg-white/10 transition-colors"
+                >
+                  CANCEL
+                </button>
+                <button 
+                  onClick={confirmDelete}
+                  className="flex-1 py-3 text-xs font-header font-bold text-black bg-red-500 hover:bg-white transition-colors"
+                >
+                  DELETE
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
+      </main>
+
+      <Footer />
+
+      {isFeaturedVideoModalOpen && createPortal(
+        <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/80 backdrop-blur-sm animate-in fade-in duration-200 p-4">
           <div className="bg-[#0a0a0a] border border-white/10 p-6 max-w-lg w-full shadow-2xl relative max-h-[90vh] overflow-y-auto">
             <button
               onClick={() => setIsFeaturedVideoModalOpen(false)}
@@ -3365,119 +3477,9 @@ export default function AdminDashboard() {
               </div>
             </div>
           </div>
-        </div>
+        </div>,
+        document.body
       )}
-    </div>
-  );
-
-  const tabs = [
-    { id: "dashboard", label: "OVERVIEW", icon: LayoutDashboard },
-    { id: "courses", label: "COURSES", icon: BookOpen },
-    { id: "featured", label: "VIDEOS", icon: Film },
-    { id: "students", label: "STUDENTS", icon: Users },
-    { id: "store", label: "ASSETS", icon: ShoppingBag },
-    { id: "analytics", label: "ANALYTICS", icon: BarChart2 },
-    { id: "pipeline", label: "PIPELINE", icon: Workflow },
-  ];
-
-  return (
-    <div className="min-h-screen bg-obsidian text-offWhite font-body antialiased selection:bg-electricBlue selection:text-white overflow-x-hidden flex flex-col">
-      
-      <div className="fixed inset-0 bg-grid-pattern bg-[size:40px_40px] opacity-20 pointer-events-none z-0"></div>
-
-      <Navbar />
-
-      <main className="flex-grow pt-24 sm:pt-32 pb-20 px-3 sm:px-6 max-w-7xl mx-auto w-full z-10">
-        
-        <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-8 gap-4">
-          <div>
-            <div className="flex items-center gap-3 mb-2">
-              <span className="text-electricBlue text-xl font-header">∞</span>
-              <h1 className="font-header text-3xl md:text-4xl text-white">ADMIN PANEL</h1>
-            </div>
-            <p className="text-sm text-gray-400 font-mono">System management and content control.</p>
-          </div>
-        </div>
-
-        <div className="flex gap-0.5 sm:gap-1 mb-6 sm:mb-8 border-b border-white/10 overflow-x-auto no-scrollbar">
-          {tabs.map((tab) => {
-            const Icon = tab.icon;
-            return (
-              <button
-                key={tab.id}
-                onClick={() => {
-                  setActiveTab(tab.id);
-                  if (tab.id === "courses") setCourseView("list");
-                }}
-                data-testid={`tab-${tab.id}`}
-                className={`flex items-center gap-1.5 sm:gap-2 px-2.5 sm:px-5 py-2.5 sm:py-3 text-[10px] sm:text-xs font-header font-bold whitespace-nowrap border-b-2 transition-colors ${
-                  activeTab === tab.id
-                    ? "text-white border-electricBlue"
-                    : "text-gray-500 hover:text-white border-transparent hover:border-white/20"
-                }`}
-              >
-                <Icon className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
-                <span className="hidden sm:inline">{tab.label}</span>
-                <span className="sm:hidden">{tab.label.slice(0, 4)}</span>
-              </button>
-            );
-          })}
-        </div>
-
-        <div className={`${activeTab === "pipeline" ? "flex flex-col" : ""}`}>
-          {activeTab === "dashboard" && renderDashboard()}
-          {activeTab === "courses" && (
-            courseView === "list" ? renderCourseList() : 
-            courseView === "preview" ? renderCoursePreview() : 
-            renderCourseEditor()
-          )}
-          {activeTab === "featured" && renderFeaturedVideos()}
-          {activeTab === "students" && renderStudents()}
-          {activeTab === "store" && renderAssetStore()}
-          {activeTab === "analytics" && renderAnalytics()}
-          {activeTab === "pipeline" && <PipelineContent />}
-        </div>
-
-        {deleteConfirmation?.isOpen && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm animate-in fade-in duration-200">
-            <div className="bg-[#0a0a0a] border border-white/10 p-6 max-w-sm w-full shadow-2xl relative">
-              <button 
-                onClick={() => setDeleteConfirmation(null)}
-                className="absolute top-4 right-4 text-gray-500 hover:text-white"
-              >
-                <X className="w-4 h-4" />
-              </button>
-              
-              <div className="flex flex-col items-center text-center mb-6">
-                <div className="w-12 h-12 bg-red-500/10 rounded-full flex items-center justify-center mb-4 text-red-500 border border-red-500/20">
-                  <Trash2 className="w-6 h-6" />
-                </div>
-                <h3 className="font-header text-lg text-white mb-2">CONFIRM DELETION</h3>
-                <p className="text-xs font-mono text-gray-400">
-                  Are you sure you want to delete <span className="text-white font-bold">"{deleteConfirmation.title}"</span>? This action cannot be undone.
-                </p>
-              </div>
-
-              <div className="flex gap-3">
-                <button 
-                  onClick={() => setDeleteConfirmation(null)}
-                  className="flex-1 py-3 text-xs font-header font-bold text-gray-400 bg-white/5 hover:bg-white/10 transition-colors"
-                >
-                  CANCEL
-                </button>
-                <button 
-                  onClick={confirmDelete}
-                  className="flex-1 py-3 text-xs font-header font-bold text-black bg-red-500 hover:bg-white transition-colors"
-                >
-                  DELETE
-                </button>
-              </div>
-            </div>
-          </div>
-        )}
-      </main>
-
-      <Footer />
     </div>
   );
 }
