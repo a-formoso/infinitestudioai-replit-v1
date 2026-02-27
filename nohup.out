@@ -1933,3 +1933,4 @@ Uncaught Exception: Error: listen EADDRINUSE: address already in use 0.0.0.0:500
 7:09:44 AM [express] POST /api/auth/logout 200 in 4ms :: {"message":"Logged out successfully"}
 7:09:44 AM [express] GET /api/auth/me 401 in 1ms :: {"message":"Not authenticated"}
 7:09:44 AM [express] GET /api/enrollments 401 in 0ms :: {"message":"Not authenticated"}
+7:12:37 AM [vite] (client) hmr update /src/pages/login.tsx, /src/index.css

@@ -72,7 +72,7 @@ export default function Login() {
         <div className="hidden lg:flex w-1/2 bg-black relative items-center justify-center overflow-hidden">
             {/* Video Background Placeholder */}
             <img src={loginBg} alt="" className="absolute inset-0 w-full h-full object-cover opacity-80" />
-            <div className="absolute inset-0 bg-gradient-to-r from-black/60 to-transparent"></div>
+            <div className="absolute inset-0 bg-gradient-to-r from-black/60 to-[#0a0a0a]"></div>
         </div>
 
         {/* RIGHT: LOGIN FORM */}
