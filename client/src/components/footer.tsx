@@ -102,6 +102,23 @@ export function Footer() {
               </div>
           </div>
 
+          {/* THE LIVE TERMINAL */}
+          <div className="w-full bg-[#050505] border border-white/10 p-2 md:p-4 font-mono text-[8px] md:text-xs text-green-500 h-32 overflow-hidden relative shadow-inner shadow-black/50 rounded-sm mb-8">
+              <div className="absolute top-2 right-3 text-white/20 text-[8px] tracking-widest border border-white/10 px-1">LIVE SYSTEM LOG // V.2.4.1</div>
+              <div className="absolute top-2 left-3 text-electricBlue/50 text-[8px] tracking-widest">SERVER: LON-01</div>
+              
+              <div id="terminal-output" className="flex flex-col justify-end h-full pt-6" ref={terminalRef}>
+                  {lines.map((line, index) => (
+                      <div key={index} className="mb-1 leading-tight whitespace-nowrap">
+                          <span className="opacity-30 mr-2 text-[8px]">[ {line.time} ]</span>
+                          <span className={line.colorClass}>{line.content}</span>
+                      </div>
+                  ))}
+              </div>
+                {/* CRT Scanline effect for terminal */}
+                <div className="absolute inset-0 bg-[linear-gradient(rgba(18,16,16,0)_50%,rgba(0,0,0,0.1)_50%),linear-gradient(90deg,rgba(255,0,0,0.06),rgba(0,255,0,0.02),rgba(0,0,255,0.06))] pointer-events-none z-20 bg-[length:100%_2px,3px_100%] opacity-30"></div>
+          </div>
+
           <div className="border-t border-white/5 pt-6 flex flex-col md:flex-row justify-between items-center gap-4">
               <div className="text-[10px] text-gray-600 font-mono">
                   © 2025 INFINITE STUDIO. ALL SYSTEMS NOMINAL.
