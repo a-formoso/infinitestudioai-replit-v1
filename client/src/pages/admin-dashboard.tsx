@@ -850,7 +850,7 @@ export default function AdminDashboard() {
     setCourseView('list');
   };
 
-  const [deleteConfirmation, setDeleteConfirmation] = useState<{ isOpen: boolean; type: 'module' | 'lesson' | 'course'; id: string; title: string; parentId?: string } | null>(null);
+  const [deleteConfirmation, setDeleteConfirmation] = useState<{ isOpen: boolean; type?: 'module' | 'lesson' | 'course'; id?: string; title: string; parentId?: string; onConfirm?: () => Promise<void> } | null>(null);
   
   const [editingModuleId, setEditingModuleId] = useState<string | null>(null);
 
@@ -916,8 +916,13 @@ export default function AdminDashboard() {
     });
   };
 
-  const confirmDelete = () => {
+  const confirmDelete = async () => {
     if (!deleteConfirmation) return;
+
+    if (deleteConfirmation.onConfirm) {
+      await deleteConfirmation.onConfirm();
+      return;
+    }
 
     if (deleteConfirmation.type === 'lesson' && deleteConfirmation.parentId) {
        const moduleId = deleteConfirmation.parentId;
