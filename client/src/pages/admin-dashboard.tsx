@@ -161,6 +161,7 @@ export default function AdminDashboard() {
 
   const [isCourseModalOpen, setIsCourseModalOpen] = useState(false);
   const [courseFormPage, setCourseFormPage] = useState(1);
+  const [courseSlugManuallyEdited, setCourseSlugManuallyEdited] = useState(false);
   const [editingDbCourse, setEditingDbCourse] = useState<any>(null);
   const [courseForm, setCourseForm] = useState({
     title: "",
@@ -613,6 +614,7 @@ export default function AdminDashboard() {
   });
 
   const [isAssetModalOpen, setIsAssetModalOpen] = useState(false);
+  const [assetSlugManuallyEdited, setAssetSlugManuallyEdited] = useState(false);
   const [editingAsset, setEditingAsset] = useState<any>(null);
   const [selectedAssetCategory, setSelectedAssetCategory] = useState<string>("ALL");
   const [assetForm, setAssetForm] = useState({
@@ -640,6 +642,7 @@ export default function AdminDashboard() {
   const handleOpenAssetModal = (asset?: any) => {
     if (asset) {
       setEditingAsset(asset);
+      setAssetSlugManuallyEdited(true);
       setAssetForm({
         title: asset.title || "",
         slug: asset.slug || "",
@@ -657,6 +660,7 @@ export default function AdminDashboard() {
       });
     } else {
       setEditingAsset(null);
+      setAssetSlugManuallyEdited(false);
       setAssetForm({
         title: "",
         slug: "",
@@ -722,6 +726,7 @@ export default function AdminDashboard() {
       prerequisiteNote: "",
       syllabus: [],
     });
+    setCourseSlugManuallyEdited(false);
     setCourseFormPage(1);
     setIsCourseModalOpen(true);
   };
@@ -768,6 +773,7 @@ export default function AdminDashboard() {
       prerequisiteNote: course.prerequisiteNote || "",
       syllabus,
     });
+    setCourseSlugManuallyEdited(true);
     setCourseFormPage(1);
     setIsCourseModalOpen(true);
   };
@@ -1214,7 +1220,11 @@ export default function AdminDashboard() {
                   <input 
                     type="text" 
                     value={courseForm.title}
-                    onChange={(e) => setCourseForm({ ...courseForm, title: e.target.value })}
+                    onChange={(e) => {
+                      const newTitle = e.target.value;
+                      const autoSlug = newTitle.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
+                      setCourseForm({ ...courseForm, title: newTitle, ...(!courseSlugManuallyEdited ? { slug: autoSlug } : {}) });
+                    }}
                     className="bg-black/50 border border-white/10 text-white text-xs px-4 py-3 w-full focus:border-electricBlue outline-none font-bold"
                     data-testid="input-course-title"
                   />
@@ -1225,8 +1235,11 @@ export default function AdminDashboard() {
                   <input 
                     type="text" 
                     value={courseForm.slug}
-                    onChange={(e) => setCourseForm({ ...courseForm, slug: e.target.value })}
-                    placeholder={courseForm.title ? courseForm.title.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "") : "auto-generated-from-title"}
+                    onChange={(e) => {
+                      setCourseSlugManuallyEdited(true);
+                      setCourseForm({ ...courseForm, slug: e.target.value });
+                    }}
+                    placeholder="auto-generated-from-title"
                     className="bg-black/50 border border-white/10 text-white text-xs px-4 py-3 w-full focus:border-electricBlue outline-none font-mono"
                     data-testid="input-course-slug"
                   />
@@ -2694,7 +2707,11 @@ export default function AdminDashboard() {
                 <input 
                   type="text" 
                   value={assetForm.title}
-                  onChange={(e) => setAssetForm(prev => ({ ...prev, title: e.target.value }))}
+                  onChange={(e) => {
+                    const newTitle = e.target.value;
+                    const autoSlug = newTitle.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
+                    setAssetForm(prev => ({ ...prev, title: newTitle, ...(!assetSlugManuallyEdited ? { slug: autoSlug } : {}) }));
+                  }}
                   className="bg-black/50 border border-white/10 text-white text-xs px-4 py-3 w-full focus:border-neonPurple outline-none uppercase font-bold"
                   data-testid="input-asset-title"
                 />
@@ -2705,7 +2722,10 @@ export default function AdminDashboard() {
                 <input 
                   type="text" 
                   value={assetForm.slug}
-                  onChange={(e) => setAssetForm(prev => ({ ...prev, slug: e.target.value }))}
+                  onChange={(e) => {
+                    setAssetSlugManuallyEdited(true);
+                    setAssetForm(prev => ({ ...prev, slug: e.target.value }));
+                  }}
                   placeholder="auto-generated-from-title"
                   className="bg-black/50 border border-white/10 text-white text-xs px-4 py-3 w-full focus:border-neonPurple outline-none font-mono"
                   data-testid="input-asset-slug"

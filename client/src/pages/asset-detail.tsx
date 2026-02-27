@@ -40,6 +40,7 @@ export default function AssetDetail() {
 
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [isDeleteConfirmOpen, setIsDeleteConfirmOpen] = useState(false);
+  const [detailSlugManuallyEdited, setDetailSlugManuallyEdited] = useState(false);
   const [editForm, setEditForm] = useState({
     title: "",
     slug: "",
@@ -87,6 +88,7 @@ export default function AssetDetail() {
 
   const handleOpenEdit = () => {
     if (!asset) return;
+    setDetailSlugManuallyEdited(true);
     setEditForm({
       title: asset.title || "",
       slug: asset.slug || "",
@@ -393,7 +395,11 @@ export default function AssetDetail() {
                 <input
                   type="text"
                   value={editForm.title}
-                  onChange={(e) => setEditForm(prev => ({ ...prev, title: e.target.value }))}
+                  onChange={(e) => {
+                    const newTitle = e.target.value;
+                    const autoSlug = newTitle.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
+                    setEditForm(prev => ({ ...prev, title: newTitle, ...(!detailSlugManuallyEdited ? { slug: autoSlug } : {}) }));
+                  }}
                   className="bg-black/50 border border-white/10 text-white text-xs px-4 py-3 w-full focus:border-neonPurple outline-none uppercase font-bold"
                   data-testid="input-edit-title"
                 />
@@ -404,7 +410,10 @@ export default function AssetDetail() {
                 <input
                   type="text"
                   value={editForm.slug}
-                  onChange={(e) => setEditForm(prev => ({ ...prev, slug: e.target.value }))}
+                  onChange={(e) => {
+                    setDetailSlugManuallyEdited(true);
+                    setEditForm(prev => ({ ...prev, slug: e.target.value }));
+                  }}
                   className="bg-black/50 border border-white/10 text-white text-xs px-4 py-3 w-full focus:border-neonPurple outline-none font-mono"
                   data-testid="input-edit-slug"
                 />
