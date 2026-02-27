@@ -5,6 +5,7 @@ import { login, forgotPassword } from "@/lib/api";
 import { useToast } from "@/hooks/use-toast";
 import { useQueryClient } from "@tanstack/react-query";
 import { Eye, EyeOff } from "lucide-react";
+import loginBg from "@assets/1)_Couple_1772164792533.jpeg";
 
 export default function Login() {
   const [, setLocation] = useLocation();
@@ -70,7 +71,7 @@ export default function Login() {
         {/* LEFT: CINEMATIC SIDEBAR (Hidden on Mobile) */}
         <div className="hidden lg:flex w-1/2 bg-black relative items-center justify-center overflow-hidden">
             {/* Video Background Placeholder */}
-            <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=2564&auto=format&fit=crop')] bg-cover bg-center opacity-60"></div>
+            <div className="absolute inset-0 bg-cover bg-center opacity-60" style={{ backgroundImage: `url(${loginBg})` }}></div>
             <div className="absolute inset-0 bg-gradient-to-r from-black/80 to-transparent"></div>
             
             <div className="relative z-10 max-w-md p-12">
