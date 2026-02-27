@@ -1,0 +1,31 @@
+I need to add a new premium digital product to our Asset Store page. The product is called "DIRECTOR's KIT". It is a high-ticket "Business in a Box" template bundle for AI filmmakers.
+
+Please create or update the Asset Store product listing/detail page with the following specifications. Match the existing dark, cyberpunk, premium aesthetic (black backgrounds, high contrast, neon accents, clean sans-serif and monospace fonts).
+
+### 1. Product Metadata & UI Structure
+- **Product Title:** DIRECTOR's KIT
+- **Price:** $149
+- **Badge/Tag:** Add a small neon purple or blue badge that says "PRO SYSTEM"
+- **Primary CTA Button:** "ADD TO CART +" (Make it a solid, high-contrast button)
+- **Layout:** Standard premium e-commerce split. Product Image on the left (or top on mobile), and the Title, Price, Copy, and CTA on the right.
+
+### 2. Exact Copywriting (Insert this exactly)
+
+**[Subtitle / Intro]**
+Stop Prompting. Start Architecting. 
+Get the exact algorithmic workflows, JSON schemas, and documentation we use to direct Veo 3.1 and Nano Banana with Hollywood-level precision.
+
+**[The Problem Hook]**
+Generating one cool image is easy. Generating 50 consistent shots with the same character, accurate physics, and matching emotional tone is a nightmare. Most AI filmmakers rely on luck. We rely on DIRECTOR's KIT.
+
+**[Feature List / What's Inside]**
+Please format these as a clean bulleted list with subtle tech-themed icons (like files, code brackets, etc.):
+* **The AI Director’s Operations Guide (13-Page PDF):** The master playbook. Learn how to turn ChatGPT/Claude into your "Production Partner" using our Rule of One Motion and Variable Mapping Logic.
+* **The Universal Character Sheet Formula (10-Page PDF):** The ultimate "Single Source of Truth." Learn to define characters by Tactics and Vector Rotations so Nano Banana never hallucinates their face again.
+* **Production-Ready JSON Schemas:** Stop using messy documents. Get our exact `SceneBreakdown_Template_v1.json` code to structure your scripts, metadata, and lip-sync dialogue for immediate AI ingestion.
+* **Blank Markdown Templates:** Ready-to-use `.md` files to immediately start building your own cinematic lexicons and shot lists.
+
+**[Important Callout / Blockquote]**
+Please style this specific paragraph as a highlighted blockquote or a bordered "Callout Box" with a slightly lighter dark-gray background to make it stand out:
+
+"The AI landscape shifts rapidly, but architecture is timeless. Models will update (Veo 4, etc.), but the principles of breaking a scene into variables, locking character traits into JSON, and isolating camera motion will always apply. This O.S. is designed to scale with the technology."

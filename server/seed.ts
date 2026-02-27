@@ -521,6 +521,21 @@ async function seed() {
         color: "electricBlue",
         status: "draft",
       },
+      {
+        title: "DIRECTOR's KIT",
+        slug: "directors-kit",
+        description: `Stop Prompting. Start Architecting.\nGet the exact algorithmic workflows, JSON schemas, and documentation we use to direct Veo 3.1 and Nano Banana with Hollywood-level precision.\n\n[The Problem]\nGenerating one cool image is easy. Generating 50 consistent shots with the same character, accurate physics, and matching emotional tone is a nightmare. Most AI filmmakers rely on luck. We rely on DIRECTOR's KIT.\n\n[What's Inside]\n* **The AI Director's Operations Guide (13-Page PDF):** The master playbook. Learn how to turn ChatGPT/Claude into your "Production Partner" using our Rule of One Motion and Variable Mapping Logic.\n* **The Universal Character Sheet Formula (10-Page PDF):** The ultimate "Single Source of Truth." Learn to define characters by Tactics and Vector Rotations so Nano Banana never hallucinates their face again.\n* **Production-Ready JSON Schemas:** Stop using messy documents. Get our exact SceneBreakdown_Template_v1.json code to structure your scripts, metadata, and lip-sync dialogue for immediate AI ingestion.\n* **Blank Markdown Templates:** Ready-to-use .md files to immediately start building your own cinematic lexicons and shot lists.\n\n> "The AI landscape shifts rapidly, but architecture is timeless. Models will update (Veo 4, etc.), but the principles of breaking a scene into variables, locking character traits into JSON, and isolating camera motion will always apply. This O.S. is designed to scale with the technology."`,
+        shortDescription: "Stop Prompting. Start Architecting. The exact algorithmic workflows, JSON schemas, and documentation we use to direct Veo 3.1 with Hollywood-level precision.",
+        price: "149.00",
+        originalPrice: "199.00",
+        category: "PRODUCTION SYSTEMS",
+        badge: "PRO SYSTEM",
+        imageUrl: "https://images.unsplash.com/photo-1485846234645-a62644f84728?q=80&w=2670&auto=format&fit=crop",
+        fileFormat: "PDF + JSON + MD",
+        fileSize: "48MB",
+        color: "neonPurple",
+        status: "published",
+      },
     ]);
 
     console.log("✅ Created assets");

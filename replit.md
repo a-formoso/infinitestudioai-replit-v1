@@ -21,7 +21,7 @@ Preferred communication style: Simple, everyday language.
 - **Fonts**: Syncopate (headings) and Inter (body text)
 - **Design System**: Dark theme with brand colors — Electric Blue (#2962FF), Signal Orange (#FF3D00), Purple (#a855f7), Gold (#FFD700), Obsidian (#0A0A0A) background
 - **API Layer**: Custom `apiFetch` wrapper in `client/src/lib/api.ts` that hits `/api/*` endpoints with credentials included
-- **Key Pages**: Home, Academy, Course Detail (Level 1 & 2), Course Player, Dashboard, Asset Store, Checkout, Admin Dashboard, Hire, Support, About, Login, Register, Links, Privacy, Terms, Pipeline (AI Production Control Center)
+- **Key Pages**: Home, Academy, Course Detail (Level 1 & 2), Course Player, Dashboard, Asset Store, Asset Detail (`/store/:slug`), Checkout, Admin Dashboard, Hire, Support, About, Login, Register, Links, Privacy, Terms, Pipeline (AI Production Control Center)
 
 ### Backend Architecture
 - **Runtime**: Node.js with TypeScript, using `tsx` for dev execution
@@ -47,7 +47,7 @@ Preferred communication style: Simple, everyday language.
   - `lessons` — id (UUID), courseId (FK), moduleNumber, moduleName, lessonNumber, title, videoUrl, duration
   - `enrollments` — id (UUID), userId (FK), courseId (FK), enrolledAt
   - `lesson_progress` — id (UUID), enrollmentId (FK), lessonId (FK), completed
-  - `assets` — for store items (textures, character sheets, LUT packs)
+  - `assets` — id (UUID), title, slug (unique), description, shortDescription, price, originalPrice, category, badge, imageUrl, fileFormat, fileSize, color, status (published/draft/archived), createdAt. Full CRUD managed by admin dashboard Assets tab. Public store page shows only published assets. Each asset has a detail page at `/store/:slug`.
   - `orders` — purchase records
   - `order_items` — individual items within orders
   - `site_content` — page-level editable content (page, key, value) with unique constraint on (page, key). Allows admins to edit text directly on live pages.

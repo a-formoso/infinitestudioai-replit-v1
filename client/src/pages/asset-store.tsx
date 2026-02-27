@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Link } from "wouter";
 import { Footer } from "@/components/footer";
 import { Navbar } from "@/components/navbar";
 import { useQuery } from "@tanstack/react-query";
@@ -125,10 +126,11 @@ export default function AssetStore() {
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
               {filteredAssets.map((asset: any) => (
-                <div
+                <Link
                   key={asset.id}
+                  href={`/store/${asset.slug}`}
                   data-testid={`card-store-asset-${asset.id}`}
-                  className={`glass-panel p-0 group cursor-pointer ${getHoverBorderClass(asset.color)} transition-all duration-300 overflow-hidden`}
+                  className={`glass-panel p-0 group cursor-pointer ${getHoverBorderClass(asset.color)} transition-all duration-300 overflow-hidden block`}
                 >
                   <div className="aspect-[16/9] bg-gray-800 relative overflow-hidden">
                     {asset.imageUrl ? (
@@ -168,12 +170,12 @@ export default function AssetStore() {
                     </p>
                     <div className="flex justify-between items-center">
                       <span className="text-[10px] text-gray-500 font-header">{asset.fileFormat}</span>
-                      <button className={`text-xs font-bold text-white ${getButtonHoverClass(asset.color)} transition-colors flex items-center gap-1 cursor-pointer`} data-testid={`btn-add-to-cart-${asset.id}`}>
-                        ADD TO CART <span>+</span>
-                      </button>
+                      <span className={`text-xs font-bold text-white ${getButtonHoverClass(asset.color)} transition-colors flex items-center gap-1`} data-testid={`btn-view-asset-${asset.id}`}>
+                        VIEW DETAILS →
+                      </span>
                     </div>
                   </div>
-                </div>
+                </Link>
               ))}
             </div>
           )}

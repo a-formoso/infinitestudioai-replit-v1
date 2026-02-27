@@ -22,6 +22,7 @@ import Terms from "@/pages/terms";
 import Mentorship from "@/pages/mentorship";
 import ResetPassword from "@/pages/reset-password";
 import CourseDetail from "@/pages/course-detail";
+import AssetDetail from "@/pages/asset-detail";
 
 const SCROLL_RESTORED_PATHS = [
   "/dashboard",
@@ -57,6 +58,7 @@ function Router() {
       <Route path="/register" component={Register} />
       <Route path="/admin">{() => <Redirect to="/dashboard" />}</Route>
       <Route path="/store" component={AssetStore} />
+      <Route path="/store/:slug" component={AssetDetail} />
       <Route path="/checkout" component={Checkout} />
       <Route path="/support" component={Support} />
       <Route path="/academy" component={Academy} />
