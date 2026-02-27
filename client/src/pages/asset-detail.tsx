@@ -406,20 +406,6 @@ export default function AssetDetail() {
               </div>
 
               <div>
-                <label className="block text-[10px] font-mono text-gray-500 mb-2 uppercase">Slug</label>
-                <input
-                  type="text"
-                  value={editForm.slug}
-                  onChange={(e) => {
-                    setDetailSlugManuallyEdited(true);
-                    setEditForm(prev => ({ ...prev, slug: e.target.value }));
-                  }}
-                  className="bg-black/50 border border-white/10 text-white text-xs px-4 py-3 w-full focus:border-neonPurple outline-none font-mono"
-                  data-testid="input-edit-slug"
-                />
-              </div>
-
-              <div>
                 <label className="block text-[10px] font-mono text-gray-500 mb-2 uppercase">Short Description</label>
                 <input
                   type="text"
