@@ -71,24 +71,8 @@ export default function Login() {
         {/* LEFT: CINEMATIC SIDEBAR (Hidden on Mobile) */}
         <div className="hidden lg:flex w-1/2 bg-black relative items-center justify-center overflow-hidden">
             {/* Video Background Placeholder */}
-            <div className="absolute inset-0 bg-cover bg-center opacity-60" style={{ backgroundImage: `url(${loginBg})` }}></div>
-            <div className="absolute inset-0 bg-gradient-to-r from-black/80 to-transparent"></div>
-            
-            <div className="relative z-10 max-w-md p-12">
-                <div className="font-header font-bold text-4xl text-white mb-6 leading-tight">
-                    DIRECT THE<br />
-                    <span className="text-transparent bg-clip-text bg-gradient-to-r from-electricBlue to-cyan-400">ALGORITHM</span>
-                </div>
-                <p className="text-lg text-gray-300 font-light italic border-l-2 border-electricBlue pl-6">
-                    "The camera is an instrument that teaches people how to see without a camera."
-                </p>
-                <p className="text-xs text-gray-500 mt-4 font-mono pl-6">— Dorothea Lange (Reimagined for AI)</p>
-            </div>
-
-            {/* Decorative Overlay Elements */}
-            <div className="absolute bottom-8 left-8 text-[10px] font-mono text-electricBlue animate-pulse">
-                SYSTEM STATUS: ONLINE
-            </div>
+            <img src={loginBg} alt="" className="absolute inset-0 w-full h-full object-cover opacity-80" />
+            <div className="absolute inset-0 bg-gradient-to-r from-black/60 to-transparent"></div>
         </div>
 
         {/* RIGHT: LOGIN FORM */}
