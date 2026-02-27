@@ -5,7 +5,7 @@ import { login, forgotPassword } from "@/lib/api";
 import { useToast } from "@/hooks/use-toast";
 import { useQueryClient } from "@tanstack/react-query";
 import { Eye, EyeOff } from "lucide-react";
-import loginBg from "@assets/1)_Couple_1772164792533.jpeg";
+import loginBg from "@assets/1)_Couple_1772173261589.jpeg";
 
 export default function Login() {
   const [, setLocation] = useLocation();
