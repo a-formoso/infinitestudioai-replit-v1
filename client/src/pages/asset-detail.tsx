@@ -279,10 +279,6 @@ export default function AssetDetail() {
                     <p className="text-[10px] font-mono text-gray-500 uppercase mb-1">Category</p>
                     <p className="text-sm text-white font-mono" data-testid="text-category">{asset.category}</p>
                   </div>
-                  <div>
-                    <p className="text-[10px] font-mono text-gray-500 uppercase mb-1">Slug</p>
-                    <p className="text-sm text-gray-400 font-mono">{asset.slug}</p>
-                  </div>
                 </div>
               </div>
             </div>
