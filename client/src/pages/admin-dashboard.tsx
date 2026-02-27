@@ -1223,7 +1223,7 @@ export default function AdminDashboard() {
                     onChange={(e) => {
                       const newTitle = e.target.value;
                       const autoSlug = newTitle.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
-                      setCourseForm({ ...courseForm, title: newTitle, ...(!courseSlugManuallyEdited ? { slug: autoSlug } : {}) });
+                      setCourseForm({ ...courseForm, title: newTitle, slug: autoSlug });
                     }}
                     className="bg-black/50 border border-white/10 text-white text-xs px-4 py-3 w-full focus:border-electricBlue outline-none font-bold"
                     data-testid="input-course-title"
@@ -2710,7 +2710,7 @@ export default function AdminDashboard() {
                   onChange={(e) => {
                     const newTitle = e.target.value;
                     const autoSlug = newTitle.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
-                    setAssetForm(prev => ({ ...prev, title: newTitle, ...(!assetSlugManuallyEdited ? { slug: autoSlug } : {}) }));
+                    setAssetForm(prev => ({ ...prev, title: newTitle, slug: autoSlug }));
                   }}
                   className="bg-black/50 border border-white/10 text-white text-xs px-4 py-3 w-full focus:border-neonPurple outline-none uppercase font-bold"
                   data-testid="input-asset-title"
