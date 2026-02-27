@@ -331,11 +331,8 @@ export default function Home() {
                                 <span className="font-mono text-xs text-green-500 opacity-50">{asset.fileFormat}</span>
                               </div>
                             )}
-                            {index === 0 && (
-                              <div className="absolute top-2 right-2 bg-purple-600 text-white text-[10px] font-bold px-2 py-1">NEW</div>
-                            )}
-                            {asset.badge && index !== 0 && (
-                              <div className="absolute top-2 right-2 bg-purple-600/80 text-white text-[10px] font-bold px-2 py-1">{asset.badge}</div>
+                            {asset.badge && (
+                              <div className="absolute top-2 right-2 bg-purple-600 text-white text-[10px] font-bold px-2 py-1">{asset.badge}</div>
                             )}
                           </div>
                           <h3 className="font-header text-sm text-white mb-1">{asset.title}</h3>
