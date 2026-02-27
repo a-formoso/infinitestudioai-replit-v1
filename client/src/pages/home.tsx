@@ -4,7 +4,7 @@ import { Footer } from "@/components/footer";
 import { Play, ChevronLeft, ChevronRight } from "lucide-react";
 import { Link } from "wouter";
 import { useQuery } from "@tanstack/react-query";
-import { getCourses, getFeaturedVideos, getHeroVideo } from "@/lib/api";
+import { getCourses, getFeaturedVideos, getHeroVideo, getAssets } from "@/lib/api";
 
 const fallbackProjects = [
   {
@@ -63,9 +63,17 @@ export default function Home() {
     queryKey: ["heroVideo"],
     queryFn: getHeroVideo,
   });
+  const { data: assetsData } = useQuery({
+    queryKey: ["assets"],
+    queryFn: getAssets,
+  });
   const hero = heroVideoData?.data?.heroVideo;
   const featuredCourses = (coursesData?.data?.courses || []).filter((c: any) => c.status === "published").slice(0, 2);
   const dbVideos = (videosData?.data?.videos || []).filter((v: any) => v.status === "published");
+  const storeAssets = (assetsData?.data?.assets || [])
+    .filter((a: any) => a.status === "published")
+    .sort((a: any, b: any) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
+    .slice(0, 3);
   const projects = dbVideos.length > 0 ? dbVideos : fallbackProjects;
 
   const nextSlide = () => {
@@ -313,45 +321,43 @@ export default function Home() {
                   </div>
 
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                      {/* Asset 1 */}
-                      <div className="glass-panel p-6 hover:border-purple-500/50 transition-all duration-300 group cursor-pointer">
+                      {storeAssets.map((asset: any, index: number) => (
+                        <Link key={asset.id} href={`/store/${asset.slug}`} className="glass-panel p-6 hover:border-purple-500/50 transition-all duration-300 group cursor-pointer block" data-testid={`card-store-asset-${asset.id}`}>
                           <div className="aspect-video bg-gray-800 mb-4 overflow-hidden relative">
-                               <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1563089145-599997674d42?q=80&w=2670&auto=format&fit=crop')] bg-cover bg-center opacity-60 group-hover:scale-110 transition-transform duration-500"></div>
-                               <div className="absolute top-2 right-2 bg-purple-600 text-white text-[10px] font-bold px-2 py-1">NEW</div>
+                            {asset.imageUrl ? (
+                              <div className="absolute inset-0 bg-cover bg-center opacity-60 group-hover:scale-110 transition-transform duration-500" style={{ backgroundImage: `url('${asset.imageUrl}')` }}></div>
+                            ) : (
+                              <div className="absolute inset-0 bg-gradient-to-br from-gray-900 to-black flex items-center justify-center">
+                                <span className="font-mono text-xs text-green-500 opacity-50">{asset.fileFormat}</span>
+                              </div>
+                            )}
+                            {index === 0 && (
+                              <div className="absolute top-2 right-2 bg-purple-600 text-white text-[10px] font-bold px-2 py-1">NEW</div>
+                            )}
+                            {asset.badge && index !== 0 && (
+                              <div className="absolute top-2 right-2 bg-purple-600/80 text-white text-[10px] font-bold px-2 py-1">{asset.badge}</div>
+                            )}
                           </div>
-                          <h3 className="font-header text-sm text-white mb-1">CYBERPUNK TEXTURES VOL. 1</h3>
-                          <p className="text-xs text-gray-500 font-mono mb-4">50+ Nano Banana Generated Surfaces</p>
+                          <h3 className="font-header text-sm text-white mb-1">{asset.title}</h3>
+                          <p className="text-xs text-gray-500 font-mono mb-4">{asset.shortDescription || asset.category}</p>
                           <div className="flex justify-between items-center">
-                              <span className="text-white font-bold">$29</span>
-                              <span className="text-[10px] text-purple-400 group-hover:translate-x-1 transition-transform">GET PACK →</span>
+                            <span className="text-white font-bold">${parseFloat(asset.price).toFixed(0)}</span>
+                            <span className="text-[10px] text-purple-400 group-hover:translate-x-1 transition-transform">VIEW DETAILS →</span>
                           </div>
-                      </div>
-
-                      {/* Asset 2 */}
-                      <div className="glass-panel p-6 hover:border-purple-500/50 transition-all duration-300 group cursor-pointer">
-                          <div className="aspect-video bg-gray-800 mb-4 overflow-hidden relative">
-                              <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1535905557558-afc4877a26fc?q=80&w=2574&auto=format&fit=crop')] bg-cover bg-center opacity-60 group-hover:scale-110 transition-transform duration-500"></div>
-                          </div>
-                          <h3 className="font-header text-sm text-white mb-1">SCI-FI CHARACTER SHEETS</h3>
-                          <p className="text-xs text-gray-500 font-mono mb-4">Ready-to-use 'Ingredients' for Veo</p>
-                          <div className="flex justify-between items-center">
-                              <span className="text-white font-bold">$49</span>
-                              <span className="text-[10px] text-purple-400 group-hover:translate-x-1 transition-transform">GET PACK →</span>
-                          </div>
-                      </div>
-
-                      {/* Asset 3 */}
-                      <div className="glass-panel p-6 hover:border-purple-500/50 transition-all duration-300 group cursor-pointer">
-                          <div className="aspect-video bg-gray-800 mb-4 overflow-hidden relative">
-                              <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1511379938547-c1f69419868d?q=80&w=2670&auto=format&fit=crop')] bg-cover bg-center opacity-60 group-hover:scale-110 transition-transform duration-500"></div>
-                          </div>
-                          <h3 className="font-header text-sm text-white mb-1">CINEMATIC LUTS PACK</h3>
-                          <p className="text-xs text-gray-500 font-mono mb-4">Color grading for AI video output</p>
-                          <div className="flex justify-between items-center">
-                              <span className="text-white font-bold">$19</span>
-                              <span className="text-[10px] text-purple-400 group-hover:translate-x-1 transition-transform">GET PACK →</span>
-                          </div>
-                      </div>
+                        </Link>
+                      ))}
+                      {storeAssets.length === 0 && (
+                        <>
+                          {[1, 2, 3].map(i => (
+                            <div key={i} className="glass-panel p-6 animate-pulse">
+                              <div className="aspect-video bg-gray-800 mb-4"></div>
+                              <div className="h-4 bg-gray-800 w-2/3 mb-2"></div>
+                              <div className="h-3 bg-gray-800/50 w-1/2 mb-4"></div>
+                              <div className="h-4 bg-gray-800 w-1/4"></div>
+                            </div>
+                          ))}
+                        </>
+                      )}
                   </div>
               </div>
               
