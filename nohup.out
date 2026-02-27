@@ -1901,3 +1901,23 @@ Uncaught Exception: Error: listen EADDRINUSE: address already in use 0.0.0.0:500
 7:02:09 AM [express] GET /api/assets 200 in 5ms :: {"assets":[{"id":"650817fd-03ff-4cdd-9791-c105c28ce5bb","title":"SCI-FI CHARACTERS VOL. 1","slug":"sci-fi-characters-vol-1","description":"50+ Consistent Character Sheets (Front/Side/45) ready for Veo...
 7:02:13 AM [express] GET /api/assets 304 in 4ms :: {"assets":[{"id":"650817fd-03ff-4cdd-9791-c105c28ce5bb","title":"SCI-FI CHARACTERS VOL. 1","slug":"sci-fi-characters-vol-1","description":"50+ Consistent Character Sheets (Front/Side/45) ready for Veo...
 7:03:24 AM [vite] (client) hmr update /src/pages/home.tsx, /src/index.css
+
+> rest-express@1.0.0 dev
+> NODE_ENV=development tsx server/index.ts
+
+
+> rest-express@1.0.0 dev
+> NODE_ENV=development tsx server/index.ts
+
+7:09:30 AM [express] serving on port 5000
+Uncaught Exception: Error: listen EADDRINUSE: address already in use 0.0.0.0:5000
+    at Server.setupListenHandle [as _listen2] (node:net:1908:16)
+    at listenInCluster (node:net:1965:12)
+    at doListen (node:net:2139:7)
+    at process.processTicksAndRejections (node:internal/process/task_queues:83:21) {
+  code: 'EADDRINUSE',
+  errno: -98,
+  syscall: 'listen',
+  address: '0.0.0.0',
+  port: 5000
+}
