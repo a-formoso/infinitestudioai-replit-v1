@@ -14,7 +14,9 @@ export default function AssetStore() {
   });
 
   const allAssets = assetsData?.data?.assets || [];
-  const publishedAssets = allAssets.filter((a: any) => a.status === "published");
+  const publishedAssets = allAssets
+    .filter((a: any) => a.status === "published")
+    .sort((a: any, b: any) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
   const categories = Array.from(new Set(publishedAssets.map((a: any) => a.category).filter(Boolean)));
   const filteredAssets = selectedCategory === "ALL"
     ? publishedAssets
