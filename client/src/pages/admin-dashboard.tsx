@@ -2617,7 +2617,8 @@ export default function AdminDashboard() {
         </div>
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {dbAssets
+          {[...dbAssets]
+            .sort((a: any, b: any) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
             .filter((a: any) => selectedAssetCategory === "ALL" || a.category === selectedAssetCategory)
             .map((asset: any) => (
             <div key={asset.id} data-testid={`card-asset-${asset.id}`} className={`glass-panel p-0 overflow-hidden border border-white/10 ${asset.status === 'published' ? 'hover:border-neonPurple/50' : 'hover:border-white/30 opacity-70'} transition-colors group relative`}>
