@@ -164,6 +164,7 @@ export default function AdminDashboard() {
   const [editingDbCourse, setEditingDbCourse] = useState<any>(null);
   const [courseForm, setCourseForm] = useState({
     title: "",
+    slug: "",
     shortDescription: "",
     description: "",
     price: "0",
@@ -703,6 +704,7 @@ export default function AdminDashboard() {
     setEditingDbCourse(null);
     setCourseForm({
       title: "",
+      slug: "",
       shortDescription: "",
       description: "",
       price: "0",
@@ -748,6 +750,7 @@ export default function AdminDashboard() {
     const tierColor = dbTiers.find((t: any) => t.name === (course.level || "Foundation"))?.color || '#2962FF';
     setCourseForm({
       title: course.title || "",
+      slug: course.slug || "",
       shortDescription: course.shortDescription || "",
       description: course.description || "",
       price: course.price || "0",
@@ -773,8 +776,10 @@ export default function AdminDashboard() {
     const filteredOutcomes = courseForm.learningOutcomes.filter(o => o.title.trim() || o.description.trim());
     const filteredFeatures = courseForm.features.filter(f => f.trim());
     const { syllabus, ...rest } = courseForm;
+    const slugVal = courseForm.slug || courseForm.title.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
     const payload = {
       ...rest,
+      slug: slugVal,
       originalPrice: courseForm.originalPrice ? String(Number(String(courseForm.originalPrice).replace(/[$,\s]/g, ""))) : null,
       learningOutcomes: filteredOutcomes.length > 0 ? JSON.stringify(filteredOutcomes) : null,
       features: filteredFeatures.length > 0 ? JSON.stringify(filteredFeatures) : null,
@@ -1212,6 +1217,18 @@ export default function AdminDashboard() {
                     onChange={(e) => setCourseForm({ ...courseForm, title: e.target.value })}
                     className="bg-black/50 border border-white/10 text-white text-xs px-4 py-3 w-full focus:border-electricBlue outline-none font-bold"
                     data-testid="input-course-title"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-[10px] font-mono text-gray-500 mb-2 uppercase">Slug</label>
+                  <input 
+                    type="text" 
+                    value={courseForm.slug}
+                    onChange={(e) => setCourseForm({ ...courseForm, slug: e.target.value })}
+                    placeholder={courseForm.title ? courseForm.title.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "") : "auto-generated-from-title"}
+                    className="bg-black/50 border border-white/10 text-white text-xs px-4 py-3 w-full focus:border-electricBlue outline-none font-mono"
+                    data-testid="input-course-slug"
                   />
                 </div>
 
